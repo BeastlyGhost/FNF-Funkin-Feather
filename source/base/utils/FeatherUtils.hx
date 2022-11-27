@@ -56,10 +56,10 @@ class FeatherUtils
 	**/
 	public static function coolSongFormatter(song:String):String
 	{
-    	var song = song.split('_').join(' ');
+		var song = song.split('_').join(' ');
 		var words:Array<String> = song.toLowerCase().split(" ");
 
-		for (i in 0...words.length) 
+		for (i in 0...words.length)
 		{
 			words[i] = words[i].charAt(0).toUpperCase() + words[i].substr(1);
 		}
