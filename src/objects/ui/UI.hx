@@ -11,7 +11,7 @@ import flixel.util.FlxColor;
 class UI extends FlxSpriteGroup
 {
 	public var scoreBar:FlxText;
-	public var tempVersionTxt:FlxText;
+	public var tempVersionTxt:FlxText; // "temp" means i'm probably removing this as a whole later lol
 
 	public var healthBG:FlxSprite;
 	public var healthBar:FlxBar;
