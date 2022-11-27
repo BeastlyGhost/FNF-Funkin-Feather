@@ -169,6 +169,73 @@ class PlayState extends MusicBeatState
 		startCountdown();
 	}
 
+	var posCount:Int = 0;
+	var posSong:Int = 4;
+
+	public function startCountdown()
+	{
+		countdownWasActive = true;
+		// canPause = true;
+
+		Conductor.songPosition = -(Conductor.crochet * 5);
+
+		if (skipCountdown)
+		{
+			Conductor.songPosition = -(Conductor.crochet * 1);
+			startSong();
+			return;
+		}
+
+		var introGraphicNames:Array<String> = ['prepare', 'ready', 'set', 'go'];
+		var introSoundNames:Array<String> = ['intro3', 'intro2', 'intro1', 'introGo'];
+
+		var introGraphics:Array<FlxGraphic> = [];
+		var introSounds:Array<Sound> = [];
+
+		for (graphic in introGraphicNames)
+			introGraphics.push(AssetHandler.grabAsset(graphic, IMAGE, "images/ui/default"));
+
+		for (sound in introSoundNames)
+			introSounds.push(AssetHandler.grabAsset(sound, SOUND, "sounds/ui/default"));
+
+		var introSprite:FlxSprite;
+		var introSound:Sound;
+
+		new FlxTimer().start(Conductor.crochet / 1000, function(tmr:FlxTimer)
+		{
+			if (introGraphics[posCount] != null)
+			{
+				introSprite = new FlxSprite().loadGraphic(introGraphics[posCount]);
+				introSprite.scrollFactor.set();
+				introSprite.updateHitbox();
+				introSprite.screenCenter();
+				add(introSprite);
+
+				FlxTween.tween(introSprite, {y: introSprite.y += 50, alpha: 0}, Conductor.crochet / 1000, {
+					ease: FlxEase.cubeInOut,
+					onComplete: function(twn:FlxTween)
+					{
+						introSprite.destroy();
+					}
+				});
+			}
+
+			if (introSounds[posCount] != null)
+			{
+				introSound = introSounds[posCount];
+				introSound.play();
+			}
+
+			// bop with countdown;
+			charDancing();
+
+			Conductor.songPosition = -(Conductor.crochet * posSong);
+
+			posSong--;
+			posCount++;
+		}, 5);
+	}
+
 	function startSong()
 	{
 		Conductor.playSong(songName);
@@ -255,6 +322,20 @@ class PlayState extends MusicBeatState
 		}
 	}
 
+	public function updateSectionCamera()
+	{
+		if (song.notes[Std.int(curStep / 16)] == null)
+			return;
+
+		var isMustHit:Bool = song.notes[Std.int(curStep / 16)].mustHitSection;
+		var char:Character = isMustHit ? player : opponent;
+
+		var pointX:Float = isMustHit ? char.getGraphicMidpoint().x - 100 : char.getGraphicMidpoint().x + 150;
+		var pointY:Float = char.getMidpoint().y - 100;
+
+		camFollow.setPosition(pointX + char.camOffset.x, pointY + char.camOffset.y);
+	}
+
 	public function addNote(note:Note)
 	{
 		storedNotes.add(note);
@@ -315,87 +396,6 @@ class PlayState extends MusicBeatState
 		super.endSong();
 
 		MusicState.switchState(new PlayState());
-	}
-
-	public function updateSectionCamera()
-	{
-		if (song.notes[Std.int(curStep / 16)] == null)
-			return;
-
-		var isMustHit:Bool = song.notes[Std.int(curStep / 16)].mustHitSection;
-		var char:Character = isMustHit ? player : opponent;
-
-		var pointX:Float = isMustHit ? char.getGraphicMidpoint().x - 100 : char.getGraphicMidpoint().x + 150;
-		var pointY:Float = char.getMidpoint().y - 100;
-
-		camFollow.setPosition(pointX + char.camOffset.x, pointY + char.camOffset.y);
-	}
-
-	var posCount:Int = 0;
-	var posSong:Int = 4;
-
-	public function startCountdown()
-	{
-		countdownWasActive = true;
-		// canPause = true;
-
-		Conductor.songPosition = -(Conductor.crochet * 5);
-
-		if (skipCountdown)
-		{
-			Conductor.songPosition = -(Conductor.crochet * 1);
-			startSong();
-			return;
-		}
-
-		var introGraphicNames:Array<String> = ['prepare', 'ready', 'set', 'go'];
-		var introSoundNames:Array<String> = ['intro3', 'intro2', 'intro1', 'introGo'];
-
-		var introGraphics:Array<FlxGraphic> = [];
-		var introSounds:Array<Sound> = [];
-
-		for (graphic in introGraphicNames)
-			introGraphics.push(AssetHandler.grabAsset(graphic, IMAGE, "images/ui/default"));
-
-		for (sound in introSoundNames)
-			introSounds.push(AssetHandler.grabAsset(sound, SOUND, "sounds/ui/default"));
-
-		var introSprite:FlxSprite;
-		var introSound:Sound;
-
-		new FlxTimer().start(Conductor.crochet / 1000, function(tmr:FlxTimer)
-		{
-			if (introGraphics[posCount] != null)
-			{
-				introSprite = new FlxSprite().loadGraphic(introGraphics[posCount]);
-				introSprite.scrollFactor.set();
-				introSprite.updateHitbox();
-				introSprite.screenCenter();
-				add(introSprite);
-
-				FlxTween.tween(introSprite, {y: introSprite.y += 50, alpha: 0}, Conductor.crochet / 1000, {
-					ease: FlxEase.cubeInOut,
-					onComplete: function(twn:FlxTween)
-					{
-						introSprite.destroy();
-					}
-				});
-			}
-
-			if (introSounds[posCount] != null)
-			{
-				introSound = introSounds[posCount];
-				introSound.play();
-			}
-
-			// bop with countdown;
-			charDancing();
-
-			Conductor.songPosition = -(Conductor.crochet * posSong);
-
-			posSong--;
-			posCount++;
-		}, 5);
 	}
 
 	public function keyEventTrigger(action:String, key:Int, state:KeyState)
