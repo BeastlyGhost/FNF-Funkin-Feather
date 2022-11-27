@@ -122,7 +122,7 @@ class PlayState extends MusicBeatState
 
 		Conductor.songPosition = -(Conductor.crochet * 5);
 
-		generateSong('virus');
+		generateSong('erectployed');
 
 		strumsGroup = new FlxTypedGroup<Strum>();
 		strumsGroup.cameras = [camHUD];
