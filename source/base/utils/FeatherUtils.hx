@@ -56,45 +56,15 @@ class FeatherUtils
 	**/
 	public static function coolSongFormatter(song:String):String
 	{
-		function coolReplace(string, sub, by)
+    	var song = song.split('_').join(' ');
+		var words:Array<String> = song.toLowerCase().split(" ");
+
+		for (i in 0...words.length) 
 		{
-			return string.split(sub).join(by);
+			words[i] = words[i].charAt(0).toUpperCase() + words[i].substr(1);
 		}
 
-		var swag:String = coolReplace(song, '-', ' ');
-		var splitSong:Array<String> = swag.split(' ');
-
-		for (i in 0...splitSong.length)
-		{
-			var firstLetter = splitSong[i].substring(0, 1);
-			var coolSong:String = coolReplace(splitSong[i], firstLetter, firstLetter.toUpperCase());
-			var splitCoolSong:Array<String> = coolSong.split('');
-
-			coolSong = Std.string(splitCoolSong[0]).toUpperCase();
-
-			for (e in 0...splitCoolSong.length)
-				coolSong += Std.string(splitCoolSong[e + 1]).toLowerCase();
-
-			coolSong = coolReplace(coolSong, 'null', '');
-
-			for (a in 0...splitSong.length)
-			{
-				var stringSong:String = Std.string(splitSong[a + 1]);
-				var splitStringSong = stringSong.split('');
-				stringSong = Std.string(splitStringSong[0]).toUpperCase();
-
-				for (l in 0...splitStringSong.length)
-					stringSong += Std.string(splitStringSong[l + 1]).toLowerCase();
-
-				stringSong = coolReplace(stringSong, 'null', '');
-
-				coolSong += ' $stringSong';
-			}
-
-			return coolSong.replace(' Null', '');
-		}
-
-		return swag;
+		return words.join(" ");
 	}
 }
 
