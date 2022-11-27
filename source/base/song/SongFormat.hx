@@ -1,6 +1,6 @@
 package base.song;
 
-typedef CyndaSection =
+typedef SectionBody =
 {
 	var time:Float; // strum time
 	var index:Int; // note data
@@ -17,7 +17,7 @@ typedef CyndaSong = // no idea for a name so here's my favorite pokémon starter
 	var speed:Float;
 	var bpm:Int;
 	//
-	var notes:Array<CyndaSection>;
+	var notes:Array<SectionBody>;
 	var events:Array<TimedEvent>; // just uses my outdated event format which I will likely change later
 	//
 	var player:String;

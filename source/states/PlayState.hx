@@ -17,11 +17,15 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxSort;
 import flixel.util.FlxTimer;
+import haxe.Json;
 import objects.Character;
 import objects.Stage;
 import objects.ui.*;
 import objects.ui.Strum.BabyArrow;
+import openfl.events.Event;
+import openfl.events.IOErrorEvent;
 import openfl.media.Sound;
+import openfl.net.FileReference;
 
 enum GameModes
 {
@@ -246,6 +250,22 @@ class PlayState extends MusicBeatState
 			isEndingSong = true;
 			Conductor.stopSong();
 			MusicState.switchState(new PlayState());
+		}
+
+		if (FlxG.keys.pressed.THREE)
+		{
+			var _file:FileReference;
+			var json = {
+				"song": song
+			};
+
+			var data:String = Json.stringify(json, '\t');
+
+			if ((data != null) && (data.length > 0))
+			{
+				_file = new FileReference();
+				_file.save(data.trim(), song.name.toLowerCase() + ".json");
+			}
 		}
 
 		super.update(elapsed);

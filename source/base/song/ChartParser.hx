@@ -7,6 +7,13 @@ import haxe.Json;
 import objects.ui.Note;
 import sys.FileSystem;
 
+enum DataFormat
+{
+	BASE;
+	PSYCH;
+	FEATHER;
+}
+
 class ChartParser
 {
 	public static var difficultyMap:Map<Int, String> = [0 => "-easy", 1 => "", 2 => "-hard",];
@@ -21,69 +28,79 @@ class ChartParser
 		return song;
 	}
 
-	public static function loadChartData(songName:String, songDiff:Int, format:String = 'base')
+	public static function loadChartData(songName:String, songDiff:Int)
 	{
-		switch (format)
+		var timeBegin:Float = Sys.time();
+		var dataSong = AssetHandler.grabAsset(songName + difficultyMap.get(songDiff), JSON, 'songs/' + songName);
+		var funkinSong:SwagSong = cast Json.parse(dataSong).song;
+
+		// get the FNF Chart Style and convert it to the new format
+		var finalSong:CyndaSong = {
+			name: funkinSong.song,
+			displayName: songName,
+			speed: funkinSong.speed,
+			bpm: funkinSong.bpm,
+			notes: [],
+			events: [],
+			player: funkinSong.player1,
+			opponent: funkinSong.player2,
+			spectator: funkinSong.gfVersion, // i mean the original chart format didn't have it, but most engines do.
+		};
+
+		// with that out of the way, let's convert the notes!
+		for (section in funkinSong.notes)
 		{
-			case "base":
-				var timeBegin:Float = Sys.time();
-				var dataSong = AssetHandler.grabAsset(songName + difficultyMap.get(songDiff), JSON, 'songs/' + songName);
-				var funkinSong:SwagSong = cast Json.parse(dataSong).song;
+			for (songNotes in section.sectionNotes)
+			{
+				var daStrumTime:Float = songNotes[0];
+				var daNoteData:Int = Std.int(songNotes[1] % 4);
+				var daHoldLength:Float = songNotes[2];
+				var daNoteType:String = 'default';
 
-				// get the FNF Chart Style and convert it to the new format
-				var finalSong:CyndaSong = {
-					name: funkinSong.song,
-					displayName: songName,
-					speed: funkinSong.speed,
-					bpm: funkinSong.bpm,
-					notes: [],
-					events: [],
-					player: funkinSong.player1,
-					opponent: funkinSong.player2,
-					spectator: funkinSong.gfVersion, // i mean the original chart format didn't have it, but most engines do.
-				};
-
-				// with that out of the way, let's convert the notes!
-				for (i in 0...funkinSong.notes.length)
+				if (Std.isOfType(songNotes[3], String))
 				{
-					for (songNotes in funkinSong.notes[i].sectionNotes)
+					// psych conversion
+					switch (songNotes[3])
 					{
-						var daStrumTime:Float = songNotes[0];
-						var daNoteData:Int = Std.int(songNotes[1] % 4);
-						var daHoldLength:Float = songNotes[2];
-						var daNoteType:String = 'default';
-
-						if (songNotes[3] != null && Std.isOfType(songNotes[3], String))
-							daNoteType = songNotes[3];
-
-						if (songNotes[1] >= 0) // if the note data is valid
-						{
-							// create a body for our note
-							var myNote:CyndaSection = {
-								time: daStrumTime,
-								index: daNoteData,
-								type: daNoteType,
-								animation: '',
-								holdLength: daHoldLength,
-								mustHit: !funkinSong.notes[i].mustHitSection,
-							}
-
-							// push the newly converted note to the notes array
-							finalSong.notes.push(myNote);
-						}
+						case "Hurt Note":
+							songNotes[3] = 'mine';
+						case "Hey!":
+							songNotes[3] = 'default';
+							songNotes[5] = 'hey'; // animation
+						case 'Alt Animation':
+							songNotes[3] = 'default';
+							songNotes[4] = '-alt'; // animation string
+						case "GF Sing":
+							songNotes[3] = 'default';
+						default:
+							songNotes[3] = 'default';
 					}
+					daNoteType = songNotes[3];
 				}
 
-				finalSong.notes.sort(function(a:CyndaSection,
-						b:CyndaSection) return a.time < b.time ? FlxSort.ASCENDING : a.time > b.time ? -FlxSort.ASCENDING : 0);
+				if (songNotes[1] >= 0) // if the note data is valid
+				{
+					// create a body for our section note
+					var myNote:SectionBody = {
+						time: daStrumTime,
+						index: daNoteData,
+						type: daNoteType,
+						animation: songNotes[4],
+						holdLength: daHoldLength,
+						mustHit: section.mustHitSection,
+					}
 
-				var timeEnd:Float = Sys.time();
-				trace('parsing took: ${Math.round(timeEnd - timeBegin)}s');
-				return finalSong;
+					// push the newly converted note to the notes array
+					finalSong.notes.push(myNote);
+				}
+			}
 		}
 
-		trace('Loading Failed for Song: $songName at the ${difficultyMap.get(songDiff)} difficulty');
-		return null;
+		finalSong.notes.sort(function(a:SectionBody, b:SectionBody):Int return FlxSort.byValues(FlxSort.ASCENDING, a.time, b.time));
+
+		var timeEnd:Float = Sys.time();
+		trace('parsing took: ${timeEnd - timeBegin}s');
+		return finalSong;
 	}
 
 	public static function loadChartNotes(song:CyndaSong)
@@ -115,14 +132,21 @@ class ChartParser
 
 				var sustainNote:Note = new Note(note.time + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet, note.index, note.type, oldNote, true);
 				sustainNote.scrollFactor.set();
+				sustainNote.mustPress = note.mustHit;
 				dunces.push(sustainNote);
+
+				if (sustainNote.mustPress)
+					sustainNote.x += FlxG.width / 2; // general offset
 			}
 
-			dunces.sort(function(a:Note, b:Note):Int return FlxSort.byValues(FlxSort.ASCENDING, a.strumTime, b.strumTime));
-			return dunces;
+			swagNote.mustPress = note.mustHit;
+
+			if (swagNote.mustPress)
+				swagNote.x += FlxG.width / 2; // general offset
 		}
 
-		return [];
+		dunces.sort(function(a:Note, b:Note):Int return FlxSort.byValues(FlxSort.ASCENDING, a.strumTime, b.strumTime));
+		return dunces;
 	}
 
 	public static function parseChartLegacy(dataSent:SwagSong):Array<Note>
