@@ -62,7 +62,7 @@ class MusicBeatState extends FlxUIState implements IMusicBeat
 	override public function create()
 	{
 		// clear assets cache
-		AssetHandler.clear(true);
+		AssetHandler.clear(true, true);
 
 		// play the transition if we are allowed to
 		if (!FlxTransitionableState.skipNextTransOut)
