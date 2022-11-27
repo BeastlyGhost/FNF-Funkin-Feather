@@ -4,8 +4,8 @@ typedef SectionBody =
 {
 	var time:Float; // strum time
 	var index:Int; // note data
-	var type:String; // note type
-	var animation:String; // note animation string
+	@:optional var type:String; // note type ("default" by default)
+	@:optional var animation:String; // note animation string (null by default)
 	var holdLength:Float; // note sustain length
 	var mustHit:Bool; // whether the player should hit the note
 }

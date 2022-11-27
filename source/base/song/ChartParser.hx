@@ -84,11 +84,14 @@ class ChartParser
 					var myNote:SectionBody = {
 						time: daStrumTime,
 						index: daNoteData,
-						type: daNoteType,
-						animation: songNotes[4],
 						holdLength: daHoldLength,
 						mustHit: section.mustHitSection,
 					}
+
+					if (daNoteType != null && daNoteType != 'default')
+						myNote.type = daNoteType;
+					if (songNotes[4] != null && songNotes[4] != '')
+						myNote.animation = songNotes[4];
 
 					// push the newly converted note to the notes array
 					finalSong.notes.push(myNote);
