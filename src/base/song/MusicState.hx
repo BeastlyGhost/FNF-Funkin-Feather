@@ -105,7 +105,7 @@ class MusicBeatState extends FlxUIState implements IMusicBeat
 	public function updateSongContents()
 	{
 		curBeat = Math.floor(curStep / 4);
-		curSection = Math.floor(curStep / 16);
+		curSection = Math.floor(curBeat / 4);
 
 		// Update Steps
 		var lastChange:BPMChangeEvent = {

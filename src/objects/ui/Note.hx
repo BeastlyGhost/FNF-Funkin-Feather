@@ -5,14 +5,6 @@ import base.utils.FeatherUtils.FeatherSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import objects.ui.Strum.BabyArrow;
 
-typedef NoteBody =
-{
-	var index:Int;
-	var type:String;
-	var animation:String;
-	var holdLength:Float;
-}
-
 class Notefield extends FlxTypedGroup<Note>
 {
 	// TODO: move sorting and looping through note functions here

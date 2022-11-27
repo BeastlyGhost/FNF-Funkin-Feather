@@ -31,6 +31,11 @@ class ScoreUtils
 
 	public static var highestJudgement:Int = 0;
 
+	public static var scoreMap:Map<String, Int> = [];
+	public static var weekScoreMap:Map<String, Int> = [];
+	public static var accuracyMap:Map<String, Float> = [];
+	public static var missesMap:Map<String, Float> = [];
+
 	public static final judgeTable:Array<Judgement> = [
 		{
 			name: "sick",
@@ -100,7 +105,7 @@ class ScoreUtils
 
 		var finalPercent:String = '$floor%';
 		if (curComboGrade != null && curComboGrade != '')
-			finalPercent = '$floor - $curComboGrade';
+			finalPercent = '$floor% - $curComboGrade';
 
 		updateGrade();
 
@@ -126,5 +131,15 @@ class ScoreUtils
 
 		if (misses > 0 && misses < 10)
 			curComboGrade = 'SDCB';
+	}
+
+	public static function increaseCombo()
+	{
+		if (combo < 0)
+			combo = 0;
+		combo += 1;
+
+		score += 350;
+		accuracy = 100;
 	}
 }

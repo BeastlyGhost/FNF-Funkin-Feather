@@ -1,5 +1,37 @@
 package base.song;
 
+typedef CyndaSection =
+{
+	var time:Float; // strum time
+	var index:Int; // note data
+	var type:String; // note type
+	var animation:String; // note animation string
+	var holdLength:Float; // note sustain length
+	var mustHit:Bool; // whether the player should hit the note
+}
+
+typedef CyndaSong = // no idea for a name so here's my favorite pokémon starter lol
+{
+	var name:String;
+	var displayName:String;
+	var speed:Float;
+	var bpm:Int;
+	//
+	var notes:Array<CyndaSection>;
+	var events:Array<TimedEvent>; // just uses my outdated event format which I will likely change later
+	//
+	var player:String;
+	var opponent:String;
+	var spectator:String; // spectator being a fancy way to say "girlfriend"
+}
+
+typedef TimedEvent =
+{
+	var name:String;
+	var step:Float;
+	var values:Array<String>;
+}
+
 typedef SwagSong =
 {
 	var song:String;
@@ -23,15 +55,6 @@ typedef SwagSection =
 	var bpm:Int;
 	var changeBPM:Bool;
 	var altAnim:Bool;
-}
-
-typedef TimedEvent =
-{
-	var name:String;
-	var step:Float;
-	var values:Array<String>;
-	// var color:Array<Int>;
-	// var stack:Array<TimedEvent>;
 }
 
 class SongLegacy

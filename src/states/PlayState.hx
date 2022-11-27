@@ -2,6 +2,7 @@ package states;
 
 import base.song.*;
 import base.song.MusicState.MusicBeatState;
+import base.song.SongFormat.CyndaSong;
 import base.song.SongFormat.SwagSong;
 import base.utils.*;
 import flixel.FlxCamera;
@@ -19,6 +20,7 @@ import flixel.util.FlxTimer;
 import objects.Character;
 import objects.Stage;
 import objects.ui.*;
+import objects.ui.Strum.BabyArrow;
 import openfl.media.Sound;
 
 enum GameModes
@@ -31,9 +33,7 @@ enum GameModes
 class PlayState extends MusicBeatState
 {
 	// Song
-	public static var song:SwagSong;
-
-	public static var songName:String = 'dadbattle';
+	public static var song:CyndaSong;
 
 	// User Interface
 	public var strumsGroup:FlxTypedGroup<Strum>;
@@ -68,24 +68,21 @@ class PlayState extends MusicBeatState
 
 	public var downscroll:Bool = false;
 
-	public function generateSong(data:SwagSong = null):Void
+	public function generateSong(?name:String):Void
 	{
-		if (data == null)
-			data = ChartParser.loadSong('whistles', 1);
+		if (name == null)
+			name = 'bopeebo';
 
-		songName = data.song;
-		trace(songName);
+		song = ChartParser.loadChartData(name, 1);
 
-		Conductor.callVocals(songName);
-		Conductor.changeBPM(data.bpm);
+		spawnedNotes = ChartParser.loadChartNotes(song);
+
+		Conductor.callVocals(song.name);
+		Conductor.changeBPM(song.bpm);
 
 		storedNotes = new FlxTypedGroup<Note>();
 		storedNotes.cameras = [camHUD];
 		add(storedNotes);
-
-		spawnedNotes = ChartParser.parseChart(data);
-
-		spawnedNotes.sort(function(a:Note, b:Note) return a.strumTime < b.strumTime ? FlxSort.ASCENDING : a.strumTime > b.strumTime ? -FlxSort.ASCENDING : 0);
 	}
 
 	override public function create()
@@ -121,15 +118,15 @@ class PlayState extends MusicBeatState
 
 		Conductor.songPosition = -(Conductor.crochet * 5);
 
-		generateSong(song);
+		generateSong('bopeebo');
 
 		strumsGroup = new FlxTypedGroup<Strum>();
 		strumsGroup.cameras = [camHUD];
 
 		var height = (downscroll ? FlxG.height - 170 : 25);
 
-		strumPlayer = new Strum((FlxG.width / 2) - FlxG.width / 4 - 30, height, [player]);
-		strumOpponent = new Strum((FlxG.width / 2) + FlxG.width / 4, height, [opponent]);
+		strumPlayer = new Strum((FlxG.width / 2) + FlxG.width / 4, height, [player]);
+		strumOpponent = new Strum((FlxG.width / 2) - FlxG.width / 4 - 30, height, [opponent]);
 
 		strumsGroup.add(strumPlayer);
 		strumsGroup.add(strumOpponent);
@@ -238,7 +235,7 @@ class PlayState extends MusicBeatState
 
 	function startSong()
 	{
-		Conductor.playSong(songName);
+		Conductor.playSong(song.name);
 		isStartingSong = false;
 	}
 
@@ -269,23 +266,26 @@ class PlayState extends MusicBeatState
 		FeatherUtils.cameraBumpingZooms(camGame, cameraZoom, cameraSpeed);
 		FeatherUtils.cameraBumpingZooms(camHUD, 1);
 
+		while (spawnedNotes[0] != null)
+		{
+			if (spawnedNotes[0].strumTime - Conductor.songPosition > 1800)
+				break;
+
+			storedNotes.add(spawnedNotes[0]);
+			spawnedNotes.shift();
+		}
+
 		if (song != null)
 		{
 			updateSectionCamera();
-
-			if ((spawnedNotes[0] != null) && ((spawnedNotes[0].strumTime - Conductor.songPosition) < 3500))
-			{
-				addNote(spawnedNotes[0]);
-
-				var idx:Int = spawnedNotes.indexOf(spawnedNotes[0]);
-				spawnedNotes.splice(idx, 1);
-			}
 
 			for (strum in strumsGroup)
 			{
 				storedNotes.forEachAlive(function(note:Note)
 				{
 					var roundSpeed = FlxMath.roundDecimal(note.speed, 2);
+
+					note.speed = song.speed;
 
 					note.y = (strum.y - (Conductor.songPosition - note.strumTime) * (0.45 * roundSpeed));
 
@@ -324,22 +324,16 @@ class PlayState extends MusicBeatState
 
 	public function updateSectionCamera()
 	{
-		if (song.notes[Std.int(curStep / 16)] == null)
+		if (song.notes[curSection] == null)
 			return;
 
-		var isMustHit:Bool = song.notes[Std.int(curStep / 16)].mustHitSection;
+		var isMustHit:Bool = song.notes[curSection].mustHit;
 		var char:Character = isMustHit ? player : opponent;
 
 		var pointX:Float = isMustHit ? char.getGraphicMidpoint().x - 100 : char.getGraphicMidpoint().x + 150;
 		var pointY:Float = char.getMidpoint().y - 100;
 
 		camFollow.setPosition(pointX + char.camOffset.x, pointY + char.camOffset.y);
-	}
-
-	public function addNote(note:Note)
-	{
-		storedNotes.add(note);
-		storedNotes.sort(FlxSort.byY, !downscroll ? FlxSort.DESCENDING : FlxSort.ASCENDING);
 	}
 
 	public function killNote(note:Note)
@@ -405,8 +399,67 @@ class PlayState extends MusicBeatState
 			case "left" | "down" | "up" | "right":
 				var actions = ["left", "down", "up", "right"];
 				var index = actions.indexOf(action);
-				strumPlayer.babyArrows.members[index].playAnim(state == PRESSED ? 'pressed' : 'static');
+				inputSystem(index, state);
 		}
+	}
+
+	var keysHeld:Array<Bool> = [];
+
+	public function inputSystem(idx:Int, state:KeyState)
+	{
+		keysHeld[idx] = (state == PRESSED);
+		// trace(keysHeld);
+
+		if (state == PRESSED)
+		{
+			if (song != null)
+			{
+				var noteList:Array<Note> = [];
+				var notePresses:Array<Note> = [];
+
+				storedNotes.forEachAlive(function(note:Note)
+				{
+					if ((note.index == idx) && note.mustPress && note.canBeHit && !note.isSustain && !note.tooLate && !note.wasGoodHit)
+						noteList.push(note);
+				});
+				noteList.sort((a, b) -> Std.int(a.strumTime - b.strumTime));
+
+				if (noteList.length > 0)
+				{
+					for (note in noteList)
+					{
+						noteHit(note, strumPlayer);
+						notePresses.push(note);
+					}
+				}
+			}
+
+			if (strumPlayer.babyArrows.members[idx] != null && strumPlayer.babyArrows.members[idx].animation.curAnim.name != 'confirm')
+				strumPlayer.babyArrows.members[idx].playAnim('pressed');
+		}
+		else
+		{
+			if (idx >= 0 && strumPlayer.babyArrows.members[idx] != null)
+				strumPlayer.babyArrows.members[idx].playAnim('static');
+		}
+	}
+
+	public function noteHit(note:Note, strum:Strum)
+	{
+		if (!note.wasGoodHit)
+		{
+			note.wasGoodHit = true;
+			strum.babyArrows.members[note.index].playAnim('confirm', true);
+
+			for (c in strum.characters)
+			{
+				if (c != null)
+					c.playAnim(c.defaultSingAnims[note.index], true);
+			}
+			ScoreUtils.increaseCombo();
+		}
+
+		gameUI.updateScoreBar();
 	}
 
 	override public function destroy()
