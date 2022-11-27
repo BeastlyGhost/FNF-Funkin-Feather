@@ -19,6 +19,12 @@ interface IMusicBeat
 class FeatherUtils
 {
 	/**
+		@author Shadow_Mario_
+	**/
+	inline public static function boundTo(value:Float, minValue:Float, maxValue:Float):Float
+		return Math.max(minValue, Math.min(maxValue, value));
+
+	/**
 	 * hehe funny variable names
 	 * 
 	 * Handles camera zooming events

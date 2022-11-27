@@ -4,6 +4,11 @@ import base.song.Conductor;
 import base.song.MusicState;
 import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.addons.transition.FlxTransitionableState;
+import flixel.graphics.frames.FlxFrame;
+import flixel.math.FlxMath;
+import flixel.tweens.FlxEase;
+import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import objects.Alphabet;
 
@@ -42,7 +47,13 @@ class TitleState extends MusicBeatState
 	var skipped:Bool = false;
 
 	var gfDance:FlxSprite;
+
 	var titleEnter:FlxSprite;
+	var titleEnterColors:Array<FlxColor> = [0xFF33FFFF, 0xFF3333CC];
+	var titleEnterSines:Array<Float> = [1, .64];
+
+	var newTitle:Bool = false;
+	var titleTimer:Float = 0;
 
 	override function create()
 	{
@@ -56,8 +67,13 @@ class TitleState extends MusicBeatState
 			FlxG.sound.music.persist = true;
 
 			FlxG.sound.music.fadeIn(4, 0, 0.7);
+			Conductor.changeBPM(102);
+
 			started = true;
 		}
+
+		// guh
+		persistentUpdate = true;
 
 		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, 0xFF000000);
 		bg.scrollFactor.set();
@@ -71,6 +87,31 @@ class TitleState extends MusicBeatState
 		gfDance.animation.addByIndices('danceRight', 'gfDance', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
 		gfDance.antialiasing = introLines.gfAntialias;
 		add(gfDance);
+
+		titleEnter = new FlxSprite(100, FlxG.height * 0.8);
+		titleEnter.frames = AssetHandler.grabAsset('title/titleEnter', SPARROW, "images/menus");
+		var animFrames:Array<FlxFrame> = [];
+		@:privateAccess {
+			titleEnter.animation.findByPrefix(animFrames, "ENTER IDLE");
+			titleEnter.animation.findByPrefix(animFrames, "ENTER FREEZE");
+		}
+
+		if (animFrames.length > 0)
+		{
+			newTitle = true;
+			titleEnter.animation.addByPrefix('static', "ENTER IDLE", 24);
+			titleEnter.animation.addByPrefix('confirm', Start.getPref("Flashing Lights") ? "ENTER PRESSED" : "ENTER FREEZE", 24);
+		}
+		else
+		{
+			newTitle = false;
+			titleEnter.animation.addByPrefix('static', "Press Enter to Begin", 24);
+			titleEnter.animation.addByPrefix('confirm', "ENTER PRESSED", 24);
+		}
+		titleEnter.antialiasing = introLines.bgAntialias;
+		titleEnter.animation.play('static');
+		titleEnter.updateHitbox();
+		add(titleEnter);
 	}
 
 	override function update(elapsed:Float)
@@ -80,18 +121,48 @@ class TitleState extends MusicBeatState
 
 		super.update(elapsed);
 
+		if (newTitle)
+		{
+			titleTimer += FeatherUtils.boundTo(elapsed, 0, 1);
+			if (titleTimer > 2)
+				titleTimer -= 2;
+		}
+
+		if (!skipped)
+		{
+			if (newTitle)
+			{
+				var timer:Float = titleTimer;
+				if (timer >= 1)
+					timer = (-timer) + 2;
+
+				timer = FlxEase.quadInOut(timer);
+
+				titleEnter.color = FlxColor.interpolate(titleEnterColors[0], titleEnterColors[1], timer);
+				titleEnter.alpha = FlxMath.lerp(titleEnterSines[0], titleEnterSines[1], timer);
+			}
+		}
+
 		if (Controls.getPressEvent("accept"))
 		{
+			transIn = FlxTransitionableState.defaultTransIn;
+			transOut = FlxTransitionableState.defaultTransOut;
+
+			titleEnter.color = FlxColor.WHITE;
+			titleEnter.alpha = 1;
+			titleEnter.animation.play('confirm');
+
 			FlxG.sound.play(AssetHandler.grabAsset("confirmMenu", SOUND, "sounds/ui/menus"));
 			skipped = true;
-			/*
-				titleEnter.playAnim('confirm');
-			**/
 
-			new FlxTimer().start(0.5, t ->
+			new FlxTimer().start(1, t ->
 			{
 				FlxG.sound.music.fadeOut(0.3);
-				PlayState.generateSong('erectployed');
+
+				PlayState.songName = "erectployed";
+				PlayState.gameplayMode = FREEPLAY;
+				PlayState.difficulty = 1;
+
 				MusicState.switchState(new PlayState());
 			});
 		}

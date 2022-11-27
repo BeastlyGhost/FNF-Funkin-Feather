@@ -39,6 +39,9 @@ class PlayState extends MusicBeatState
 	// Song
 	public static var song:CyndaSong;
 
+	public static var songName:String;
+	public static var difficulty:Int;
+
 	// User Interface
 	public static var strumsGroup:FlxTypedGroup<Strum>;
 
@@ -74,10 +77,13 @@ class PlayState extends MusicBeatState
 
 	public var downscroll:Bool = false;
 
-	public static function generateSong(?name:String):Void
+	public static function generateSong(?name:String, ?diff:Int):Void
 	{
 		if (name == null)
 			name = 'bopeebo';
+
+		if (diff < 0 || diff == null)
+			diff = 1;
 
 		// clear notes prior to storing new ones
 		if (storedNotes != null)
@@ -123,7 +129,7 @@ class PlayState extends MusicBeatState
 		player.setCharacter(770, 450, 'bf');
 		add(player);
 
-		Conductor.songPosition = -(Conductor.crochet * 5);
+		generateSong(songName, difficulty);
 
 		storedNotes = new FlxTypedGroup<Note>();
 		strumsGroup = new FlxTypedGroup<Strum>();
@@ -415,7 +421,7 @@ class PlayState extends MusicBeatState
 	{
 		super.endSong();
 
-		MusicState.switchState(new PlayState());
+		MusicState.switchState(new TitleState());
 	}
 
 	public function keyEventTrigger(action:String, key:Int, state:KeyState)

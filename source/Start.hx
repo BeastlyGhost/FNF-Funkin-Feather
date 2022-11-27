@@ -3,6 +3,7 @@ package;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
+import flixel.addons.transition.FlxTransitionableState;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 
@@ -21,6 +22,7 @@ class Start extends FlxState
 		"Anti Aliasing" => true,
 		"Auto Pause" => false,
 		"Downscroll" => false,
+		"Flashing Lights" => true,
 		"Show Framerate" => true,
 		"Show Memory" => true,
 		"Show Objects" => true,
@@ -89,6 +91,7 @@ class Start extends FlxState
 		if (FlxG.save.data.seenSplash != null)
 			Main.game.skipSplash = FlxG.save.data.seenSplash;
 
+		FlxTransitionableState.skipNextTransIn = true;
 		triggerSplash(Main.game.skipSplash);
 	}
 
