@@ -50,6 +50,22 @@ class FeatherUtils
 		if ((leCam.zoom < 1.35 && curBeat % speedVal == 0))
 			leCam.zoom += resetVal;
 	}
+
+	/**
+		Formats the song. Example: ``'world_machine' -> 'World Machine'``.
+	**/
+	public static function coolSongFormatter(song:String):String
+	{
+    	var song = song.split('_').join(' ');
+		var words:Array<String> = song.toLowerCase().split(" ");
+
+		for (i in 0...words.length) 
+		{
+			words[i] = words[i].charAt(0).toUpperCase() + words[i].substr(1);
+		}
+
+		return words.join(" ");
+	}
 }
 
 /**

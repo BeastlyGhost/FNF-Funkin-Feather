@@ -121,17 +121,14 @@ class TitleState extends MusicBeatState
 
 		super.update(elapsed);
 
-		if (newTitle)
-		{
-			titleTimer += FeatherUtils.boundTo(elapsed, 0, 1);
-			if (titleTimer > 2)
-				titleTimer -= 2;
-		}
-
 		if (!skipped)
 		{
 			if (newTitle)
 			{
+				titleTimer += FeatherUtils.boundTo(elapsed, 0, 1);
+				if (titleTimer > 2)
+					titleTimer -= 2;
+
 				var timer:Float = titleTimer;
 				if (timer >= 1)
 					timer = (-timer) + 2;
@@ -141,30 +138,30 @@ class TitleState extends MusicBeatState
 				titleEnter.color = FlxColor.interpolate(titleEnterColors[0], titleEnterColors[1], timer);
 				titleEnter.alpha = FlxMath.lerp(titleEnterSines[0], titleEnterSines[1], timer);
 			}
-		}
 
-		if (Controls.getPressEvent("accept"))
-		{
-			transIn = FlxTransitionableState.defaultTransIn;
-			transOut = FlxTransitionableState.defaultTransOut;
-
-			titleEnter.color = FlxColor.WHITE;
-			titleEnter.alpha = 1;
-			titleEnter.animation.play('confirm');
-
-			FlxG.sound.play(AssetHandler.grabAsset("confirmMenu", SOUND, "sounds/ui/menus"));
-			skipped = true;
-
-			new FlxTimer().start(1, t ->
+			if (Controls.getPressEvent("accept"))
 			{
-				FlxG.sound.music.fadeOut(0.3);
+				transIn = FlxTransitionableState.defaultTransIn;
+				transOut = FlxTransitionableState.defaultTransOut;
 
-				PlayState.songName = "erectployed";
-				PlayState.gameplayMode = FREEPLAY;
-				PlayState.difficulty = 1;
+				titleEnter.color = FlxColor.WHITE;
+				titleEnter.alpha = 1;
+				titleEnter.animation.play('confirm');
 
-				MusicState.switchState(new PlayState());
-			});
+				FlxG.sound.play(AssetHandler.grabAsset("confirmMenu", SOUND, "sounds/ui/menus"));
+				skipped = true;
+
+				new FlxTimer().start(1, t ->
+				{
+					FlxG.sound.music.fadeOut(0.3);
+
+					PlayState.songName = "erectployed";
+					PlayState.gameplayMode = FREEPLAY;
+					PlayState.difficulty = 1;
+
+					MusicState.switchState(new PlayState());
+				});
+			}
 		}
 	}
 

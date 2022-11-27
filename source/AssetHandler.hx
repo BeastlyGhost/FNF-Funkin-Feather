@@ -213,9 +213,24 @@ class AssetHandler
 	 * [Simply put, this clears all tracked assets that exist on the `trackedAssets` array]
 	 * @param clearMappedImages whether images should also be cleared along with sounds
 	**/
-	public static function clear(clearMappedImages:Bool)
+	public static function clear(clearUnusedImages:Bool, ?clearMappedImages:Bool)
 	{
 		if (clearMappedImages)
+		{
+			@:privateAccess
+			for (asset in FlxG.bitmap._cache.keys())
+			{
+				var image = FlxG.bitmap._cache.get(asset);
+				if (image != null && !mappedAssets[IMAGE].exists(asset))
+				{
+					openfl.Assets.cache.removeBitmapData(asset);
+					FlxG.bitmap._cache.remove(asset);
+					image.destroy();
+				}
+			}
+		}
+
+		if (clearUnusedImages)
 		{
 			for (asset in mappedAssets[IMAGE].keys())
 			{

@@ -3,7 +3,6 @@ package states;
 import base.song.*;
 import base.song.MusicState.MusicBeatState;
 import base.song.SongFormat.CyndaSong;
-import base.song.SongFormat.SwagSong;
 import base.utils.*;
 import flixel.FlxCamera;
 import flixel.FlxG;
@@ -13,17 +12,16 @@ import flixel.graphics.FlxGraphic;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxMath;
 import flixel.math.FlxRect;
+import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
-import flixel.util.FlxSort;
+import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import haxe.Json;
 import objects.Character;
 import objects.Stage;
 import objects.ui.*;
-import objects.ui.Strum.BabyArrow;
 import openfl.events.Event;
-import openfl.events.IOErrorEvent;
 import openfl.media.Sound;
 import openfl.net.FileReference;
 
@@ -63,6 +61,7 @@ class PlayState extends MusicBeatState
 	// Camera
 	public var camGame:FlxCamera;
 	public var camHUD:FlxCamera;
+	public var camOther:FlxCamera;
 
 	private var camFollow:FlxObject;
 
@@ -112,9 +111,12 @@ class PlayState extends MusicBeatState
 		camGame = new FlxCamera();
 		camHUD = new FlxCamera();
 		camHUD.bgColor.alpha = 0;
+		camOther = new FlxCamera();
+		camOther.bgColor.alpha = 0;
 
 		FlxG.cameras.reset(camGame);
 		FlxG.cameras.add(camHUD, false);
+		FlxG.cameras.add(camOther, false);
 		FlxG.cameras.setDefaultDrawTarget(camGame, true);
 
 		gameStage = new Stage();
@@ -245,6 +247,55 @@ class PlayState extends MusicBeatState
 
 			posSong--;
 			posCount++;
+
+			if (posCount == 4)
+			{
+				var blackBy, byText;
+				blackBy = new FlxSprite().loadGraphic(AssetHandler.grabAsset('infobox', IMAGE, 'images/ui/default'));
+				blackBy.screenCenter();
+				blackBy.x -= FlxG.width;
+				blackBy.alpha = 0.7;
+				blackBy.y = FlxG.height - 120;
+				blackBy.cameras = [camOther];
+				byText = new FlxText(0, 0, 425);
+				byText.cameras = [camOther];
+				byText.setFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 28, FlxColor.WHITE, CENTER);
+				// byText.borderSize *= 1.25;
+				// byText.borderQuality *= 1.25;
+				byText.screenCenter();
+				byText.x -= FlxG.width;
+				byText.y = FlxG.height - 80.5;
+				byText.text = FeatherUtils.coolSongFormatter(song.name);
+				byText.text += '\n By: ${song.author}';
+
+				blackBy.setGraphicSize(Std.int(byText.width - 20), Std.int(byText.height + 105));
+				blackBy.updateHitbox();
+				add(blackBy);
+				add(byText);
+				FlxTween.tween(blackBy, {x: 0}, 3, {ease: FlxEase.expoInOut});
+				FlxTween.tween(byText, {x: -40}, 3, {ease: FlxEase.expoInOut});
+				new FlxTimer().start(4.75, function(tmr:FlxTimer)
+				{
+					FlxTween.tween(blackBy, {x: -700}, 1.6, {
+						ease: FlxEase.expoInOut,
+						onComplete: function(twn:FlxTween)
+						{
+							remove(blackBy);
+							blackBy.kill();
+							blackBy.destroy();
+						}
+					});
+					FlxTween.tween(byText, {x: -650}, 1.6, {
+						ease: FlxEase.expoInOut,
+						onComplete: function(twn:FlxTween)
+						{
+							remove(byText);
+							byText.kill();
+							byText.destroy();
+						}
+					});
+				});
+			}
 		}, 5);
 	}
 

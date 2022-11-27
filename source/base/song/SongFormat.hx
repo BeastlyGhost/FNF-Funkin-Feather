@@ -14,6 +14,7 @@ typedef CyndaSong = // no idea for a name so here's my favorite pokémon starter
 {
 	var name:String;
 	var internalName:String;
+	var author:String;
 	var speed:Float;
 	var bpm:Int;
 	//
@@ -44,6 +45,7 @@ typedef SwagSong =
 	var player2:String;
 	var player3:String;
 	var gfVersion:String;
+	var songAuthor:String;
 	var validScore:Bool;
 }
 
