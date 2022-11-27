@@ -76,8 +76,6 @@ class BabyArrow extends FeatherSprite
 	{
 		super.playAnim(AnimName);
 
-		alpha = AnimName == 'confirm' ? 1 : defaultAlpha;
-
 		centerOffsets();
 		centerOrigin();
 	}

@@ -133,13 +133,12 @@ class ScoreUtils
 			curComboGrade = 'SDCB';
 	}
 
-	public static function increaseCombo()
+	public static function increaseScore()
 	{
+		score += 350;
+
 		if (combo < 0)
 			combo = 0;
 		combo += 1;
-
-		score += 350;
-		accuracy = 100;
 	}
 }

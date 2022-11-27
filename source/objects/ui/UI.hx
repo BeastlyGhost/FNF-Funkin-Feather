@@ -4,9 +4,14 @@ import base.utils.ScoreUtils;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
+import flixel.math.FlxMath;
 import flixel.text.FlxText;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
 import flixel.ui.FlxBar;
 import flixel.util.FlxColor;
+import flixel.util.FlxTimer;
+import states.PlayState;
 
 class UI extends FlxSpriteGroup
 {
@@ -15,6 +20,9 @@ class UI extends FlxSpriteGroup
 
 	public var healthBG:FlxSprite;
 	public var healthBar:FlxBar;
+
+	public var iconP1:Icon;
+	public var iconP2:Icon;
 
 	public function new()
 	{
@@ -30,15 +38,23 @@ class UI extends FlxSpriteGroup
 		healthBar.scrollFactor.set();
 		add(healthBar);
 
+		iconP1 = new Icon('bf', true);
+		iconP1.y = healthBar.y - (iconP1.height / 2);
+		add(iconP1);
+
+		iconP2 = new Icon('bf', false);
+		iconP2.y = healthBar.y - (iconP2.height / 2);
+		add(iconP2);
+
 		scoreBar = new FlxText(healthBG.x + healthBG.width - 190, healthBG.y + 30, 0, '', 20);
 		scoreBar.setFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 20, FlxColor.WHITE, RIGHT, SHADOW, FlxColor.BLACK);
-		scoreBar.shadowOffset.set(3, 3);
+		scoreBar.shadowOffset.set(2, 3);
 		scoreBar.scrollFactor.set();
 		add(scoreBar);
 
 		tempVersionTxt = new FlxText(0, FlxG.height - 30, 0, 'Feather ${Main.game.version}', 20);
 		tempVersionTxt.setFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 20, FlxColor.WHITE, RIGHT, SHADOW, FlxColor.BLACK);
-		tempVersionTxt.shadowOffset.set(3, 3);
+		tempVersionTxt.shadowOffset.set(2, 3);
 		tempVersionTxt.scrollFactor.set();
 		add(tempVersionTxt);
 
@@ -49,6 +65,21 @@ class UI extends FlxSpriteGroup
 	override function update(elapsed:Float)
 	{
 		healthBar.percent = (ScoreUtils.health * 50);
+
+		// attach to health
+		iconP1.setGraphicSize(Std.int(FlxMath.lerp(150, iconP1.width, 0.85)));
+		iconP2.setGraphicSize(Std.int(FlxMath.lerp(150, iconP2.width, 0.85)));
+
+		iconP1.updateHitbox();
+		iconP2.updateHitbox();
+
+		var iconOffset:Int = 26;
+
+		iconP1.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01) - iconOffset);
+		iconP2.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01)) - (iconP2.width - iconOffset);
+
+		iconP1.updateFrame(healthBar.percent);
+		iconP2.updateFrame(100 - healthBar.percent);
 
 		super.update(elapsed);
 	}
@@ -72,5 +103,61 @@ class UI extends FlxSpriteGroup
 		healthBar.createFilledBar(0xFFFF0000, 0xFF66FF33);
 		healthBar.updateBar();
 		healthBar.scrollFactor.set();
+	}
+
+	public function updateIconScale()
+	{
+		iconP1.setGraphicSize(Std.int(iconP1.width + 30));
+		iconP1.updateHitbox();
+
+		iconP2.setGraphicSize(Std.int(iconP2.width + 30));
+		iconP2.updateHitbox();
+	}
+
+	public function showInfoCard()
+	{
+		var blackBy, byText;
+		blackBy = new FlxSprite().loadGraphic(AssetHandler.grabAsset('infobox', IMAGE, 'images/ui/default'));
+		blackBy.screenCenter();
+		blackBy.x -= FlxG.width;
+		blackBy.alpha = 0.7;
+		blackBy.y = FlxG.height - 120;
+		byText = new FlxText(0, 0, 425);
+		byText.setFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 28, FlxColor.WHITE, CENTER);
+		// byText.borderSize *= 1.25;
+		// byText.borderQuality *= 1.25;
+		byText.screenCenter();
+		byText.x -= FlxG.width;
+		byText.y = FlxG.height - 80.5;
+		byText.text = FeatherUtils.coolSongFormatter(PlayState.song.name);
+		byText.text += '\n By: ${PlayState.song.author}';
+
+		blackBy.setGraphicSize(Std.int(byText.width - 20), Std.int(byText.height + 105));
+		blackBy.updateHitbox();
+		add(blackBy);
+		add(byText);
+		FlxTween.tween(blackBy, {x: 0}, 3, {ease: FlxEase.expoInOut});
+		FlxTween.tween(byText, {x: -40}, 3, {ease: FlxEase.expoInOut});
+		new FlxTimer().start(4.75, function(tmr:FlxTimer)
+		{
+			FlxTween.tween(blackBy, {x: -700}, 1.6, {
+				ease: FlxEase.expoInOut,
+				onComplete: function(twn:FlxTween)
+				{
+					remove(blackBy);
+					blackBy.kill();
+					blackBy.destroy();
+				}
+			});
+			FlxTween.tween(byText, {x: -650}, 1.6, {
+				ease: FlxEase.expoInOut,
+				onComplete: function(twn:FlxTween)
+				{
+					remove(byText);
+					byText.kill();
+					byText.destroy();
+				}
+			});
+		});
 	}
 }
