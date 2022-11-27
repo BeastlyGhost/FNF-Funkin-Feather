@@ -252,43 +252,49 @@ class PlayState extends MusicBeatState
 			{
 				var blackBy, byText;
 				blackBy = new FlxSprite().loadGraphic(AssetHandler.grabAsset('infobox', IMAGE, 'images/ui/default'));
-						blackBy.screenCenter();
-						blackBy.x -= FlxG.width;
-						blackBy.alpha = 0.7;
-						blackBy.y = FlxG.height - 120;
-						blackBy.cameras = [camOther];
-						byText = new FlxText(0, 0, 425);
-						byText.cameras = [camOther];
-						byText.setFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 28, FlxColor.WHITE, CENTER);
-						//byText.borderSize *= 1.25;
-						//byText.borderQuality *= 1.25;
-						byText.screenCenter();
-						byText.x -= FlxG.width;
-						byText.y = FlxG.height - 80.5;
-						byText.text = "Winter Horrorland";
-						byText.text += '\n By: Kawaii Sprite';
-						
-						blackBy.setGraphicSize(Std.int(byText.width - 20), Std.int(byText.height + 105));
-						blackBy.updateHitbox();
-						add(blackBy);
-						add(byText);
-						FlxTween.tween(blackBy, {x: 0}, 3, {ease: FlxEase.expoInOut});
-						FlxTween.tween(byText, {x: -40}, 3, {ease: FlxEase.expoInOut});
-						new FlxTimer().start(4.75, function(tmr:FlxTimer)
+				blackBy.screenCenter();
+				blackBy.x -= FlxG.width;
+				blackBy.alpha = 0.7;
+				blackBy.y = FlxG.height - 120;
+				blackBy.cameras = [camOther];
+				byText = new FlxText(0, 0, 425);
+				byText.cameras = [camOther];
+				byText.setFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 28, FlxColor.WHITE, CENTER);
+				// byText.borderSize *= 1.25;
+				// byText.borderQuality *= 1.25;
+				byText.screenCenter();
+				byText.x -= FlxG.width;
+				byText.y = FlxG.height - 80.5;
+				byText.text = FeatherUtils.coolSongFormatter(song.name);
+				byText.text += '\n By: ${song.author}';
+
+				blackBy.setGraphicSize(Std.int(byText.width - 20), Std.int(byText.height + 105));
+				blackBy.updateHitbox();
+				add(blackBy);
+				add(byText);
+				FlxTween.tween(blackBy, {x: 0}, 3, {ease: FlxEase.expoInOut});
+				FlxTween.tween(byText, {x: -40}, 3, {ease: FlxEase.expoInOut});
+				new FlxTimer().start(4.75, function(tmr:FlxTimer)
+				{
+					FlxTween.tween(blackBy, {x: -700}, 1.6, {
+						ease: FlxEase.expoInOut,
+						onComplete: function(twn:FlxTween)
 						{
-							FlxTween.tween(blackBy, {x: -700}, 1.6, {ease: FlxEase.expoInOut, onComplete: function(twn:FlxTween)
-							{
-								remove(blackBy);
-								blackBy.kill();
-								blackBy.destroy();
-							}});
-							FlxTween.tween(byText, {x: -650}, 1.6, {ease: FlxEase.expoInOut, onComplete: function(twn:FlxTween)
-							{
-								remove(byText);
-								byText.kill();
-								byText.destroy();
-							}});
-						});
+							remove(blackBy);
+							blackBy.kill();
+							blackBy.destroy();
+						}
+					});
+					FlxTween.tween(byText, {x: -650}, 1.6, {
+						ease: FlxEase.expoInOut,
+						onComplete: function(twn:FlxTween)
+						{
+							remove(byText);
+							byText.kill();
+							byText.destroy();
+						}
+					});
+				});
 			}
 		}, 5);
 	}

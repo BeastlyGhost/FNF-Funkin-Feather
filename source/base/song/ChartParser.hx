@@ -39,6 +39,9 @@ class ChartParser
 		if (funkinSong.notes != null)
 			chartDataType = SWAG;
 
+		if (cyndaSong.author == null || cyndaSong.author.length < 1)
+			cyndaSong.author = '???';
+
 		if (chartDataType != null && chartDataType == SWAG)
 		{
 			if (funkinSong.gfVersion == null)
@@ -49,10 +52,14 @@ class ChartParser
 					funkinSong.gfVersion = 'gf';
 			}
 
+			if (funkinSong.songAuthor == null || funkinSong.songAuthor.length < 1)
+				funkinSong.songAuthor = '???';
+
 			// get the FNF Chart Style and convert it to the new format
 			cyndaSong = {
 				name: songName,
 				internalName: funkinSong.song,
+				author: funkinSong.songAuthor,
 				speed: funkinSong.speed,
 				bpm: funkinSong.bpm,
 				sectionNotes: [],
