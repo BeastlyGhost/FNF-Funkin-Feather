@@ -34,17 +34,25 @@ class ChartParser
 		var dataSong = AssetHandler.grabAsset(songName + difficultyMap.get(songDiff), JSON, 'songs/' + songName);
 		var funkinSong:SwagSong = cast Json.parse(dataSong).song;
 
+		if (funkinSong.gfVersion == null)
+		{
+			if (funkinSong.player3 != null)
+				funkinSong.gfVersion = funkinSong.player3;
+			else
+				funkinSong.gfVersion = 'gf';
+		}
+
 		// get the FNF Chart Style and convert it to the new format
-		var finalSong:CyndaSong = {
-			name: funkinSong.song,
-			displayName: songName,
+		var cyndaSong:CyndaSong = {
+			name: songName,
+			internalName: funkinSong.song,
 			speed: funkinSong.speed,
 			bpm: funkinSong.bpm,
-			notes: [],
-			events: [],
+			sectionNotes: [],
+			sectionEvents: [],
 			player: funkinSong.player1,
 			opponent: funkinSong.player2,
-			spectator: funkinSong.gfVersion, // i mean the original chart format didn't have it, but most engines do.
+			crowd: funkinSong.gfVersion, // while the original chart format didn't have it, most engines do.
 		};
 
 		// with that out of the way, let's convert the notes!
@@ -78,14 +86,14 @@ class ChartParser
 					daNoteType = songNotes[3];
 				}
 
-				if (songNotes[1] >= 0) // if the note data is valid
+				if (songNotes[1] >= 0) // if the note data is valid (AKA not a old psych event)
 				{
 					// create a body for our section note
 					var myNote:SectionBody = {
 						time: daStrumTime,
 						index: daNoteData,
 						holdLength: daHoldLength,
-						mustHit: section.mustHitSection,
+						cameraPoint: section.mustHitSection ? "player" : "opponent",
 					}
 
 					if (daNoteType != null && daNoteType != 'default')
@@ -94,23 +102,43 @@ class ChartParser
 						myNote.animation = songNotes[4];
 
 					// push the newly converted note to the notes array
-					finalSong.notes.push(myNote);
+					cyndaSong.sectionNotes.push(myNote);
 				}
 			}
 		}
 
-		finalSong.notes.sort(function(a:SectionBody, b:SectionBody):Int return FlxSort.byValues(FlxSort.ASCENDING, a.time, b.time));
+		// events
+		var timedEvents:Array<TimedEvent> = [];
+
+		if (cyndaSong.sectionEvents.length > 0)
+		{
+			for (i in 0...cyndaSong.sectionEvents.length)
+			{
+				var newEvent:TimedEvent = cast {
+					name: cyndaSong.sectionEvents[i].name,
+					step: cyndaSong.sectionEvents[i].step,
+					values: cyndaSong.sectionEvents[i].values,
+					/*colors: cyndaSong.sectionEvents[2][1],*/
+				};
+				timedEvents.push(newEvent);
+
+				if (cyndaSong.sectionEvents.length > 1) // no need to sort if there's a single one or none
+					timedEvents.sort(function(a:TimedEvent, b:TimedEvent):Int return FlxSort.byValues(FlxSort.ASCENDING, a.step, b.step));
+			}
+		}
+
+		cyndaSong.sectionNotes.sort(function(a:SectionBody, b:SectionBody):Int return FlxSort.byValues(FlxSort.ASCENDING, a.time, b.time));
 
 		var timeEnd:Float = Sys.time();
 		trace('parsing took: ${timeEnd - timeBegin}s');
-		return finalSong;
+		return cyndaSong;
 	}
 
 	public static function loadChartNotes(song:CyndaSong)
 	{
 		var dunces:Array<Note> = [];
 
-		for (note in song.notes)
+		for (note in song.sectionNotes)
 		{
 			var oldNote:Note;
 			if (dunces.length > 0)
@@ -135,14 +163,14 @@ class ChartParser
 
 				var sustainNote:Note = new Note(note.time + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet, note.index, note.type, oldNote, true);
 				sustainNote.scrollFactor.set();
-				sustainNote.mustPress = note.mustHit;
+				sustainNote.mustPress = note.cameraPoint == "bf";
 				dunces.push(sustainNote);
 
 				if (sustainNote.mustPress)
 					sustainNote.x += FlxG.width / 2; // general offset
 			}
 
-			swagNote.mustPress = note.mustHit;
+			swagNote.mustPress = note.cameraPoint == "bf";
 
 			if (swagNote.mustPress)
 				swagNote.x += FlxG.width / 2; // general offset

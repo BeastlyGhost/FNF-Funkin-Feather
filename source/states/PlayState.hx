@@ -122,7 +122,7 @@ class PlayState extends MusicBeatState
 
 		Conductor.songPosition = -(Conductor.crochet * 5);
 
-		generateSong('bopeebo');
+		generateSong('virus');
 
 		strumsGroup = new FlxTypedGroup<Strum>();
 		strumsGroup.cameras = [camHUD];
@@ -297,7 +297,16 @@ class PlayState extends MusicBeatState
 
 		if (song != null)
 		{
-			updateSectionCamera();
+			if (song.sectionNotes != null && song.sectionNotes[curSection] != null)
+			{
+				var isMustHit:Bool = song.sectionNotes[curSection].cameraPoint == "player";
+
+				var char:Character = isMustHit ? player : opponent;
+				var pointX:Float = isMustHit ? char.getGraphicMidpoint().x - 100 : char.getGraphicMidpoint().x + 150;
+				var pointY:Float = char.getMidpoint().y - 100;
+
+				camFollow.setPosition(pointX + char.camOffset.x, pointY + char.camOffset.y);
+			}
 
 			for (strum in strumsGroup)
 			{
@@ -340,20 +349,6 @@ class PlayState extends MusicBeatState
 				});
 			}
 		}
-	}
-
-	public function updateSectionCamera()
-	{
-		if (song.notes[curSection] == null)
-			return;
-
-		var isMustHit:Bool = song.notes[curSection].mustHit;
-		var char:Character = isMustHit ? player : opponent;
-
-		var pointX:Float = isMustHit ? char.getGraphicMidpoint().x - 100 : char.getGraphicMidpoint().x + 150;
-		var pointY:Float = char.getMidpoint().y - 100;
-
-		camFollow.setPosition(pointX + char.camOffset.x, pointY + char.camOffset.y);
 	}
 
 	public function killNote(note:Note)

@@ -7,22 +7,22 @@ typedef SectionBody =
 	@:optional var type:String; // note type ("default" by default)
 	@:optional var animation:String; // note animation string (null by default)
 	var holdLength:Float; // note sustain length
-	var mustHit:Bool; // whether the player should hit the note
+	var cameraPoint:String; // whether the player should hit the note
 }
 
 typedef CyndaSong = // no idea for a name so here's my favorite pokémon starter lol
 {
 	var name:String;
-	var displayName:String;
+	var internalName:String;
 	var speed:Float;
 	var bpm:Int;
 	//
-	var notes:Array<SectionBody>;
-	var events:Array<TimedEvent>; // just uses my outdated event format which I will likely change later
+	var sectionNotes:Array<SectionBody>;
+	var sectionEvents:Array<TimedEvent>; // just uses my outdated event format which I will likely change later
 	//
 	var player:String;
 	var opponent:String;
-	var spectator:String; // spectator being a fancy way to say "girlfriend"
+	var crowd:String; // fancy way to say "girlfriend"
 }
 
 typedef TimedEvent =
@@ -42,6 +42,7 @@ typedef SwagSong =
 
 	var player1:String;
 	var player2:String;
+	var player3:String;
 	var gfVersion:String;
 	var validScore:Bool;
 }
