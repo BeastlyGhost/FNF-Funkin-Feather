@@ -46,7 +46,7 @@ class Note extends FeatherSprite
 		// MAKE SURE ITS DEFINITELY OFF SCREEN?
 		y -= 2000;
 
-		generateNote();
+		// generateNote();
 	}
 
 	public function generateNote()

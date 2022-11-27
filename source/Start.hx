@@ -97,7 +97,7 @@ class Start extends FlxState
 		if (skip)
 			return FlxG.switchState(cast Type.createInstance(Main.game.initialState, []));
 
-		var bianca:FlxSprite = new FlxSprite().loadGraphic(AssetHandler.grabAsset("biancaSplash", IMAGE, "images/menus"));
+		var bianca:FlxSprite = new FlxSprite().loadGraphic(AssetHandler.grabAsset("boot/biancaSplash", IMAGE, "images/menus"));
 		bianca.setGraphicSize(Std.int(bianca.width * 0.6));
 		bianca.screenCenter(XY);
 		bianca.x -= 20;

@@ -40,10 +40,12 @@ class PlayState extends MusicBeatState
 	public static var song:CyndaSong;
 
 	// User Interface
-	public var strumsGroup:FlxTypedGroup<Strum>;
-	public var storedNotes:FlxTypedGroup<Note>;
-	public var spawnedNotes:Array<Note>;
-	public var gameUI:UI;
+	public static var strumsGroup:FlxTypedGroup<Strum>;
+
+	public static var storedNotes:FlxTypedGroup<Note>;
+	public static var spawnedNotes:Array<Note>;
+
+	public static var gameUI:UI;
 
 	public var strumPlayer:Strum;
 	public var strumOpponent:Strum;
@@ -72,21 +74,22 @@ class PlayState extends MusicBeatState
 
 	public var downscroll:Bool = false;
 
-	public function generateSong(?name:String):Void
+	public static function generateSong(?name:String):Void
 	{
 		if (name == null)
 			name = 'bopeebo';
+
+		// clear notes prior to storing new ones
+		if (storedNotes != null)
+			storedNotes.destroy();
+		spawnedNotes = [];
 
 		song = ChartParser.loadChartData(name, 1);
 
 		spawnedNotes = ChartParser.loadChartNotes(song);
 
-		Conductor.callVocals(song.name);
+		Conductor.callVocals(name);
 		Conductor.changeBPM(song.bpm);
-
-		storedNotes = new FlxTypedGroup<Note>();
-		storedNotes.cameras = [camHUD];
-		add(storedNotes);
 	}
 
 	override public function create()
@@ -122,9 +125,10 @@ class PlayState extends MusicBeatState
 
 		Conductor.songPosition = -(Conductor.crochet * 5);
 
-		generateSong('erectployed');
-
+		storedNotes = new FlxTypedGroup<Note>();
 		strumsGroup = new FlxTypedGroup<Strum>();
+
+		storedNotes.cameras = [camHUD];
 		strumsGroup.cameras = [camHUD];
 
 		var height = (downscroll ? FlxG.height - 170 : 25);
@@ -136,6 +140,7 @@ class PlayState extends MusicBeatState
 		strumsGroup.add(strumOpponent);
 
 		add(strumsGroup);
+		add(storedNotes);
 
 		gameUI = new UI();
 		gameUI.cameras = [camHUD];
@@ -245,6 +250,12 @@ class PlayState extends MusicBeatState
 
 	override public function update(elapsed:Float)
 	{
+		if (FlxG.keys.justPressed.ESCAPE)
+		{
+			Conductor.stopSong();
+			MusicState.switchState(new TitleState());
+		}
+
 		if (FlxG.keys.justPressed.FOUR)
 		{
 			isEndingSong = true;
