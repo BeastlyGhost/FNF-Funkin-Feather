@@ -13,9 +13,15 @@ typedef TitleIntroText =
 	var bgAntialias:Bool;
 	var gfAntialias:Bool;
 
+	var stepText:IntroLines;
+	var linesRandom:Array<String>; // replaces "introText.txt"
+}
+
+typedef IntroLines =
+{
 	var steps:Array<Int>;
 	var lines:Array<String>;
-	var linesRandom:Array<String>; // replaces "introText.txt"
+	var showRandom:Bool; // overrides "lines"
 }
 
 class TitleState extends MusicBeatState
