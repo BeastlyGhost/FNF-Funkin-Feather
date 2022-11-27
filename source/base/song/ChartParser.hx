@@ -9,13 +9,13 @@ import sys.FileSystem;
 
 enum DataFormat
 {
-	BASE;
-	PSYCH;
-	FEATHER;
+	SWAG; // Base Game
+	CYNDA; // Custom Format
 }
 
 class ChartParser
 {
+	public static var chartDataType:DataFormat = CYNDA;
 	public static var difficultyMap:Map<Int, String> = [0 => "-easy", 1 => "", 2 => "-hard",];
 
 	public static function loadSong(songName:String, diff:Int):SwagSong
@@ -32,77 +32,85 @@ class ChartParser
 	{
 		var timeBegin:Float = Sys.time();
 		var dataSong = AssetHandler.grabAsset(songName + difficultyMap.get(songDiff), JSON, 'songs/' + songName);
+
 		var funkinSong:SwagSong = cast Json.parse(dataSong).song;
+		var cyndaSong:CyndaSong = cast Json.parse(dataSong).song;
 
-		if (funkinSong.gfVersion == null)
+		if (funkinSong.notes != null)
+			chartDataType = SWAG;
+
+		if (chartDataType != null && chartDataType == SWAG)
 		{
-			if (funkinSong.player3 != null)
-				funkinSong.gfVersion = funkinSong.player3;
-			else
-				funkinSong.gfVersion = 'gf';
-		}
-
-		// get the FNF Chart Style and convert it to the new format
-		var cyndaSong:CyndaSong = {
-			name: songName,
-			internalName: funkinSong.song,
-			speed: funkinSong.speed,
-			bpm: funkinSong.bpm,
-			sectionNotes: [],
-			sectionEvents: [],
-			player: funkinSong.player1,
-			opponent: funkinSong.player2,
-			crowd: funkinSong.gfVersion, // while the original chart format didn't have it, most engines do.
-		};
-
-		// with that out of the way, let's convert the notes!
-		for (section in funkinSong.notes)
-		{
-			for (songNotes in section.sectionNotes)
+			if (funkinSong.gfVersion == null)
 			{
-				var daStrumTime:Float = songNotes[0];
-				var daNoteData:Int = Std.int(songNotes[1] % 4);
-				var daHoldLength:Float = songNotes[2];
-				var daNoteType:String = 'default';
+				if (funkinSong.player3 != null)
+					funkinSong.gfVersion = funkinSong.player3;
+				else
+					funkinSong.gfVersion = 'gf';
+			}
 
-				if (Std.isOfType(songNotes[3], String))
+			// get the FNF Chart Style and convert it to the new format
+			cyndaSong = {
+				name: songName,
+				internalName: funkinSong.song,
+				speed: funkinSong.speed,
+				bpm: funkinSong.bpm,
+				sectionNotes: [],
+				sectionEvents: [],
+				player: funkinSong.player1,
+				opponent: funkinSong.player2,
+				crowd: funkinSong.gfVersion, // while the original chart format didn't have it, most engines do.
+			};
+
+			// with that out of the way, let's convert the notes!
+			for (section in funkinSong.notes)
+			{
+				for (songNotes in section.sectionNotes)
 				{
-					// psych conversion
-					switch (songNotes[3])
+					var daStrumTime:Float = songNotes[0];
+					var daNoteData:Int = Std.int(songNotes[1] % 4);
+					var daHoldLength:Float = songNotes[2];
+					var daNoteType:String = 'default';
+
+					if (Std.isOfType(songNotes[3], String))
 					{
-						case "Hurt Note":
-							songNotes[3] = 'mine';
-						case "Hey!":
-							songNotes[3] = 'default';
-							songNotes[5] = 'hey'; // animation
-						case 'Alt Animation':
-							songNotes[3] = 'default';
-							songNotes[4] = '-alt'; // animation string
-						case "GF Sing":
-							songNotes[3] = 'default';
-						default:
-							songNotes[3] = 'default';
-					}
-					daNoteType = songNotes[3];
-				}
-
-				if (songNotes[1] >= 0) // if the note data is valid (AKA not a old psych event)
-				{
-					// create a body for our section note
-					var myNote:SectionBody = {
-						time: daStrumTime,
-						index: daNoteData,
-						holdLength: daHoldLength,
-						cameraPoint: section.mustHitSection ? "player" : "opponent",
+						// psych conversion
+						switch (songNotes[3])
+						{
+							case "Hurt Note":
+								songNotes[3] = 'mine';
+							case "Hey!":
+								songNotes[3] = 'default';
+								songNotes[5] = 'hey'; // animation
+							case 'Alt Animation':
+								songNotes[3] = 'default';
+								songNotes[4] = '-alt'; // animation string
+							case "GF Sing":
+								songNotes[3] = 'default';
+							default:
+								songNotes[3] = 'default';
+						}
+						daNoteType = songNotes[3];
 					}
 
-					if (daNoteType != null && daNoteType != 'default')
-						myNote.type = daNoteType;
-					if (songNotes[4] != null && songNotes[4] != '')
-						myNote.animation = songNotes[4];
+					if (songNotes[1] >= 0) // if the note data is valid (AKA not a old psych event)
+					{
+						// create a body for our section note
+						var myNote:SectionBody = {
+							time: daStrumTime,
+							index: daNoteData,
+							holdLength: daHoldLength,
+							cameraPoint: section.mustHitSection ? "player" : "opponent",
+						}
 
-					// push the newly converted note to the notes array
-					cyndaSong.sectionNotes.push(myNote);
+						if (daNoteType != null && daNoteType != 'default')
+							myNote.type = daNoteType;
+						if (songNotes[4] != null && songNotes[4] != '')
+							myNote.animation = songNotes[4];
+
+						// push the newly converted note to the notes array
+						cyndaSong.sectionNotes.push(myNote);
+					}
 				}
 			}
 		}
