@@ -2,7 +2,7 @@ package base.song;
 
 import base.Transition;
 import base.song.Conductor.BPMChangeEvent;
-import base.utils.FeatherInterfaces.IMusicBeat;
+import base.utils.FeatherUtils.IMusicBeat;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.FlxSubState;
