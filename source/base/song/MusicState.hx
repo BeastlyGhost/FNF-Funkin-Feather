@@ -10,6 +10,8 @@ import flixel.addons.transition.FlxTransitionableState;
 import flixel.addons.ui.FlxUIState;
 import flixel.math.FlxMath;
 import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
+import flixel.util.FlxTimer;
 import states.PlayState;
 
 /**
@@ -39,6 +41,20 @@ class MusicState
 			FlxTransitionableState.skipNextTransOut = false;
 			FlxG.switchState(state);
 		}
+	}
+
+	public static function resetState(?skipTransition:Bool)
+	{
+		if (!skipTransition)
+		{
+			Transition.start(0.3, true, Fade, FlxEase.linear, function()
+			{
+				FlxG.resetState();
+			});
+			return;
+		}
+		else
+			FlxG.resetState();
 	}
 }
 
@@ -98,6 +114,21 @@ class MusicBeatState extends FlxUIState implements IMusicBeat
 	{
 		if (!isEndingSong)
 			Conductor.resyncVocals();
+
+		FlxTimer.globalManager.forEach(function(tmr:FlxTimer)
+		{
+			if (!tmr.finished)
+				tmr.active = true;
+		});
+
+		FlxTween.globalManager.forEach(function(twn:FlxTween)
+		{
+			if (!twn.finished)
+				twn.active = true;
+		});
+
+		// clear assets cache
+		AssetHandler.clear(true, false);
 
 		super.closeSubState();
 	}

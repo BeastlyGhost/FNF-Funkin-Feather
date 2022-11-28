@@ -7,6 +7,7 @@ import flixel.FlxSprite;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.graphics.frames.FlxFrame;
 import flixel.math.FlxMath;
+import flixel.system.FlxSound;
 import flixel.tweens.FlxEase;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
@@ -55,19 +56,24 @@ class TitleState extends MusicBeatState
 	var newTitle:Bool = false;
 	var titleTimer:Float = 0;
 
+	var soundMusic:FlxSound;
+
 	override function create()
 	{
 		super.create();
 
 		if (!started)
 		{
-			FlxG.sound.playMusic(AssetHandler.grabAsset("freakyMenu", SOUND, "music"));
-			FlxG.sound.music.volume = 0;
-			FlxG.sound.music.looped = true;
-			FlxG.sound.music.persist = true;
+			soundMusic = new FlxSound().loadEmbedded(AssetHandler.grabAsset("freakyMenu", SOUND, "music"));
+			soundMusic.volume = 0;
 
-			FlxG.sound.music.fadeIn(4, 0, 0.7);
+			soundMusic.fadeIn(4, 0, 0.7);
 			Conductor.changeBPM(102);
+
+			soundMusic.looped = true;
+
+			// testing
+			FlxG.sound.music = soundMusic;
 
 			started = true;
 		}
@@ -100,7 +106,7 @@ class TitleState extends MusicBeatState
 		{
 			newTitle = true;
 			titleEnter.animation.addByPrefix('static', "ENTER IDLE", 24);
-			titleEnter.animation.addByPrefix('confirm', Start.getPref("Flashing Lights") ? "ENTER PRESSED" : "ENTER FREEZE", 24);
+			titleEnter.animation.addByPrefix('confirm', GameSettings.getPref("Flashing Lights") ? "ENTER PRESSED" : "ENTER FREEZE", 24);
 		}
 		else
 		{
@@ -148,14 +154,14 @@ class TitleState extends MusicBeatState
 				titleEnter.alpha = 1;
 				titleEnter.animation.play('confirm');
 
-				FlxG.sound.play(AssetHandler.grabAsset("confirmMenu", SOUND, "sounds/ui/menus"));
+				FlxG.sound.play(AssetHandler.grabAsset("confirmMenu", SOUND, "sounds/menus"));
 				skipped = true;
 
 				new FlxTimer().start(1, t ->
 				{
-					FlxG.sound.music.fadeOut(0.3);
+					soundMusic.fadeOut(0.3);
 
-					PlayState.songName = "erectployed";
+					PlayState.songName = "bopeebo";
 					PlayState.gameplayMode = FREEPLAY;
 					PlayState.difficulty = 1;
 

@@ -34,7 +34,7 @@ class FeatherUtils
 	 */
 	inline public static function cameraBumpingZooms(leCam:FlxCamera, daZaza:Float = 1.05, zazaSpeed:Float = 1)
 	{
-		var easeLerp = 1 - MusicState.boundFramerate(0.05) * zazaSpeed;
+		var easeLerp = 1 - MusicState.boundFramerate(0.15) * zazaSpeed;
 		if (leCam != null)
 		{
 			// camera stuffs

@@ -1,5 +1,6 @@
 package objects;
 
+import base.song.Conductor;
 import base.utils.FeatherUtils.FeatherSprite;
 import flixel.math.FlxPoint;
 
@@ -11,14 +12,20 @@ class Character extends FeatherSprite
 	public var character:String;
 
 	public var player:Bool = false;
+
+	public var bopTimer:Float = 2;
 	public var holdTimer:Float = 0;
+	public var heyTimer:Float = 0;
 	public var dadVar:Float = 4;
 
+	public var onSpecial:Bool = false;
+	public var hasMissAnims:Bool = false;
 	public var isQuickDancer:Bool = false;
+	public var danceIdle:Bool = false;
 
 	public var idleSuffix:String = '';
 
-	public var defaultSingAnims:Array<String> = ['singLEFT', 'singDOWN', 'singUP', 'singRIGHT'];
+	public var singAnims:Array<String> = ['singLEFT', 'singDOWN', 'singUP', 'singRIGHT'];
 
 	public var defaultIdle:String = 'idle';
 
@@ -37,7 +44,10 @@ class Character extends FeatherSprite
 		camOffset = new FlxPoint(0, 0);
 
 		if (isQuickDancer)
+		{
 			defaultIdle = 'danceRight';
+			danceIdle = true;
+		}
 
 		switch (character)
 		{
@@ -45,48 +55,195 @@ class Character extends FeatherSprite
 				frames = AssetHandler.grabAsset("BOYFRIEND", SPARROW, "data/characters/bf");
 
 				animation.addByPrefix('idle', 'BF idle dance', 24, false);
+				animation.addByPrefix('singUP', 'BF NOTE UP0', 24, false);
+				animation.addByPrefix('singLEFT', 'BF NOTE LEFT0', 24, false);
+				animation.addByPrefix('singRIGHT', 'BF NOTE RIGHT0', 24, false);
+				animation.addByPrefix('singDOWN', 'BF NOTE DOWN0', 24, false);
+				animation.addByPrefix('singUPmiss', 'BF NOTE UP MISS', 24, false);
+				animation.addByPrefix('singLEFTmiss', 'BF NOTE LEFT MISS', 24, false);
+				animation.addByPrefix('singRIGHTmiss', 'BF NOTE RIGHT MISS', 24, false);
+				animation.addByPrefix('singDOWNmiss', 'BF NOTE DOWN MISS', 24, false);
+				animation.addByPrefix('hey', 'BF HEY', 24, false);
 
 				addOffset('idle', -5);
 				playAnim('idle');
 
 				if (!player)
-					y += 320;
+					charOffset.y += 320;
 
 				flipX = true;
 		}
 
+		for (anim in singAnims)
+		{
+			if (animOffsets.exists(anim + 'miss'))
+				hasMissAnims = true;
+		}
+
+		// "Preloads" animations so they dont lag in the song
+		// author @DiogoTV
+		var allAnims:Array<String> = animation.getNameList();
+		for (anim in allAnims)
+			playAnim(anim);
+
+		recalcDance();
 		dance();
 
 		if (player)
 			flipX = !flipX;
 
-		/*
-			x += charOffset.x;
-			y += (charOffset.y - (frameHeight * scale.y));
+		if (player) // fuck you ninjamuffin lmao
+		{
+			// Doesn't flip for BF, since his are already in the right place???
+			if (!character.startsWith('bf'))
+				flipLeftRight();
+			//
+		}
+		else if (character.startsWith('bf'))
+			flipLeftRight();
 
-			this.x = x;
-			this.y = y;
-		 */
+		this.x += charOffset.x;
+		this.y += (charOffset.y - (frameHeight * scale.y));
 
 		setPosition(x, y);
 
 		return this;
 	}
 
+	function flipLeftRight():Void
+	{
+		// get the old right sprite
+		var oldRight = animation.getByName('singRIGHT').frames;
+
+		// set the right to the left
+		animation.getByName('singRIGHT').frames = animation.getByName('singLEFT').frames;
+
+		// set the left to the old right
+		animation.getByName('singLEFT').frames = oldRight;
+
+		if (animation.getByName('singRIGHTmiss') != null)
+		{
+			var oldMiss = animation.getByName('singRIGHTmiss').frames;
+			animation.getByName('singRIGHTmiss').frames = animation.getByName('singLEFTmiss').frames;
+			animation.getByName('singLEFTmiss').frames = oldMiss;
+		}
+	}
+
+	override function update(elapsed:Float)
+	{
+		if (animation.curAnim != null)
+		{
+			/**
+			 * Special Animation Behavior Code
+			 * @author Shadow_Mario_
+			 */
+			if (heyTimer > 0)
+			{
+				heyTimer -= elapsed;
+				if (heyTimer <= 0)
+				{
+					if (onSpecial && animation.curAnim.name == 'hey' || animation.curAnim.name == 'cheer')
+					{
+						onSpecial = false;
+						dance();
+					}
+					heyTimer = 0;
+				}
+			}
+			else if (onSpecial && animation.curAnim.finished)
+			{
+				onSpecial = false;
+				dance();
+			}
+
+			if (!player && !onSpecial)
+			{
+				if (animation.curAnim.name.startsWith('sing'))
+					holdTimer += elapsed;
+
+				if (holdTimer >= Conductor.stepCrochet * dadVar * 0.001)
+				{
+					dance();
+					holdTimer = 0;
+				}
+			}
+		}
+
+		super.update(elapsed);
+	}
+
 	private var isRight:Bool = false;
 
 	public function dance()
 	{
-		if (isQuickDancer)
+		if (animation.curAnim != null || !onSpecial)
 		{
-			isRight = !isRight;
+			onSpecial = false;
 
-			var directionTo:String = (isRight ? "Right" : "Left");
+			if (isQuickDancer)
+			{
+				isRight = !isRight;
 
-			if (animOffsets.exists("dance" + directionTo + idleSuffix))
-				playAnim("dance" + directionTo + idleSuffix);
+				var directionTo:String = (isRight ? "Right" : "Left");
+
+				if (animOffsets.exists("dance" + directionTo + idleSuffix))
+					playAnim("dance" + directionTo + idleSuffix);
+			}
+			else
+				playAnim("idle" + idleSuffix);
 		}
+	}
+
+	private var settingCharacterUp:Bool = true;
+
+	/**
+	 * Recalculates Character Headbop Speed, used by GF-Like Characters;
+	 * @author Shadow_Mario_
+	**/
+	public function recalcDance()
+	{
+		var lastDanceIdle:Bool = danceIdle;
+		danceIdle = (animation.getByName('danceLeft' + idleSuffix) != null && animation.getByName('danceRight' + idleSuffix) != null);
+
+		if (settingCharacterUp)
+			bopTimer = (danceIdle ? 1 : 2);
+		else if (lastDanceIdle != danceIdle)
+		{
+			var calc:Float = bopTimer;
+			if (danceIdle)
+				calc /= 2;
+			else
+				calc *= 2;
+
+			bopTimer = Math.round(Math.max(calc, 1));
+		}
+		settingCharacterUp = false;
+	}
+}
+
+/*
+	Placeholder
+**/
+class Player extends Character
+{
+	public var stunned:Bool = false;
+
+	public function new()
+		super(true);
+
+	override function update(elapsed:Float)
+	{
+		if (animation.curAnim.name.startsWith('sing'))
+			holdTimer += elapsed;
 		else
-			playAnim("idle" + idleSuffix);
+			holdTimer = 0;
+
+		if (animation.curAnim.name.endsWith('miss') && animation.curAnim.finished)
+			playAnim('idle', true, false, 10);
+
+		if (animation.curAnim.name == 'firstDeath' && animation.curAnim.finished)
+			playAnim('deathLoop');
+
+		super.update(elapsed);
 	}
 }

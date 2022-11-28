@@ -167,6 +167,8 @@ class ChartParser
 			swagNote.type = note.type;
 			swagNote.scrollFactor.set(0, 0);
 
+			swagNote.mustPress = (note.cameraPoint == "player");
+
 			var susLength:Float = swagNote.sustainLength;
 
 			susLength = susLength / Conductor.stepCrochet;
@@ -178,17 +180,13 @@ class ChartParser
 
 				var sustainNote:Note = new Note(note.time + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet, note.index, note.type, oldNote, true);
 				sustainNote.scrollFactor.set();
-				sustainNote.mustPress = note.cameraPoint == "bf";
+				sustainNote.mustPress = (note.cameraPoint == "player");
 				dunces.push(sustainNote);
 
-				if (sustainNote.mustPress)
-					sustainNote.x += FlxG.width / 2; // general offset
+				sustainNote.x += 15;
 			}
 
-			swagNote.mustPress = note.cameraPoint == "bf";
-
-			if (swagNote.mustPress)
-				swagNote.x += FlxG.width / 2; // general offset
+			swagNote.x += 15;
 		}
 
 		dunces.sort(function(a:Note, b:Note):Int return FlxSort.byValues(FlxSort.ASCENDING, a.strumTime, b.strumTime));

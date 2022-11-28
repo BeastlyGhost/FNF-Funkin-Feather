@@ -45,7 +45,7 @@ class AssetHandler
 	/*
 		Stores only user-preferred assets that should not be cleared when `clear` is called
 	**/
-	public static var persistentAssets:Array<String> = [];
+	public static var persistentAssets:Array<String> = ['alphabet'];
 
 	/*
 		Stores Tracked Assets on a Map
@@ -84,19 +84,13 @@ class AssetHandler
 		{
 			case JSON:
 				var json:String = File.getContent(path);
-
 				while (!json.endsWith("}"))
 					json = json.substr(0, json.length - 1);
-
 				return json;
 			case SPARROW:
-				var graphicPath:String = grabRoot('$directory/$asset', IMAGE);
-				var graphic:FlxGraphic = grabGraphic(graphicPath);
-				return FlxAtlasFrames.fromSparrow(graphic, File.getContent(path));
+				return FlxAtlasFrames.fromSparrow(grabAsset(asset, IMAGE, directory), File.getContent(path));
 			case PACKER:
-				var graphicPath:String = grabRoot('$directory/$asset', IMAGE);
-				var graphic:FlxGraphic = grabGraphic(graphicPath);
-				return FlxAtlasFrames.fromSpriteSheetPacker(graphic, File.getContent(path));
+				return FlxAtlasFrames.fromSpriteSheetPacker(grabAsset(asset, IMAGE, directory), File.getContent(path));
 			case IMAGE:
 				return grabGraphic(path);
 			case SOUND:
@@ -116,9 +110,12 @@ class AssetHandler
 	**/
 	public static function grabGraphic(outputDir:String)
 	{
-		var myGraphic:FlxGraphic = FlxGraphic.fromAssetKey(outputDir, false, null, false);
 		if (!mappedAssets[IMAGE].exists(outputDir))
+		{
+			var myGraphic:FlxGraphic = FlxGraphic.fromAssetKey(outputDir, false, null, false);
 			mappedAssets[IMAGE].set(outputDir, {type: IMAGE, data: myGraphic});
+			trackedAssets.push(outputDir);
+		}
 		return returnGraphic(outputDir);
 	}
 
@@ -220,12 +217,12 @@ class AssetHandler
 			@:privateAccess
 			for (asset in FlxG.bitmap._cache.keys())
 			{
-				var image = FlxG.bitmap._cache.get(asset);
-				if (image != null && !mappedAssets[IMAGE].exists(asset))
+				var bitmap = FlxG.bitmap._cache.get(asset);
+				if (bitmap != null && !mappedAssets[IMAGE].exists(asset))
 				{
-					openfl.Assets.cache.removeBitmapData(asset);
+					Assets.cache.removeBitmapData(asset);
 					FlxG.bitmap._cache.remove(asset);
-					image.destroy();
+					bitmap.destroy();
 				}
 			}
 		}
@@ -237,27 +234,23 @@ class AssetHandler
 				if (!persistentAssets.contains(asset) && !trackedAssets.contains(asset))
 				{
 					// grab the image asset
-					var image = mappedAssets[IMAGE].get(asset);
-					if (image != null)
+					var bitmap = mappedAssets[IMAGE].get(asset);
+					if (bitmap != null)
 					{
 						@:privateAccess
-						if (Assets.cache.hasBitmapData(image.data))
+						if (Assets.cache.hasBitmapData(bitmap.data))
 						{
-							// remove it from the assets cache if it exists
-							Assets.cache.removeBitmapData(image.data);
-							FlxG.bitmap._cache.remove(image.data);
+							// remove it from the assets cache if it exists, then destroy it
+							Assets.cache.removeBitmapData(bitmap.data);
+							FlxG.bitmap._cache.remove(bitmap.data);
+							bitmap.data.destroy();
 						}
 
 						// and remove it from the mapped assets
-						if (image.data != null)
-							image.data.destroy();
 						mappedAssets[IMAGE].remove(asset);
 					}
 				}
 			}
-
-			// run the system garbage collector
-			System.gc();
 		}
 
 		for (asset in mappedAssets[SOUND].keys())
@@ -270,5 +263,8 @@ class AssetHandler
 
 			trackedAssets = [];
 		}
+
+		// run the system garbage collector
+		System.gc();
 	}
 }

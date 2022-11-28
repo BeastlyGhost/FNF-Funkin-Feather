@@ -16,7 +16,6 @@ import states.PlayState;
 class UI extends FlxSpriteGroup
 {
 	public var scoreBar:FlxText;
-	public var tempVersionTxt:FlxText; // "temp" means i'm probably removing this as a whole later lol
 
 	public var healthBG:FlxSprite;
 	public var healthBar:FlxBar;
@@ -51,12 +50,6 @@ class UI extends FlxSpriteGroup
 		scoreBar.shadowOffset.set(2, 3);
 		scoreBar.scrollFactor.set();
 		add(scoreBar);
-
-		tempVersionTxt = new FlxText(0, FlxG.height - 30, 0, 'Feather ${Main.game.version}', 20);
-		tempVersionTxt.setFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 20, FlxColor.WHITE, RIGHT, SHADOW, FlxColor.BLACK);
-		tempVersionTxt.shadowOffset.set(2, 3);
-		tempVersionTxt.scrollFactor.set();
-		add(tempVersionTxt);
 
 		updateScoreBar();
 		updateHealthBar();

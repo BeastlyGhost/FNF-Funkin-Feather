@@ -4,6 +4,7 @@ import base.song.Conductor;
 import base.utils.FeatherUtils.FeatherSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import objects.ui.Strum.BabyArrow;
+import states.PlayState;
 
 class Notefield extends FlxTypedGroup<Note>
 {
@@ -17,6 +18,9 @@ class Note extends FeatherSprite
 	public var wasGoodHit:Bool = false;
 	public var canDie:Bool = true;
 	public var tooLate:Bool = false;
+
+	public var ignoreNote:Bool = false;
+	public var isMine:Bool = false;
 
 	public var type:String = 'default';
 	public var prevNote:Note;
@@ -52,25 +56,49 @@ class Note extends FeatherSprite
 	public function generateNote()
 	{
 		var babyArrow:BabyArrow = new BabyArrow(index);
+		var stringSect = babyArrow.getColor(index);
 
-		frames = AssetHandler.grabAsset('NOTE_assets', SPARROW, 'images/ui/default');
+		switch (PlayState.assetSkin)
+		{
+			case "pixel":
+				var indexPixel:Array<Int> = [4, 5, 6, 7];
 
-		animation.addByPrefix(babyArrow.getColor(index) + 'Scroll', babyArrow.getColor(index) + '0');
-		animation.addByPrefix(babyArrow.getColor(index) + 'hold', babyArrow.getColor(index) + ' hold piece');
-		animation.addByPrefix(babyArrow.getColor(index) + 'holdend', babyArrow.getColor(index) + ' hold end');
+				if (!isSustain)
+				{
+					loadGraphic(AssetHandler.grabAsset('NOTE_assets', IMAGE, 'images/ui/pixel'));
+					animation.add(stringSect + 'Scroll', [indexPixel[index]], 12);
+				}
+				else
+				{
+					loadGraphic(AssetHandler.grabAsset('HOLD_assets', IMAGE, 'images/ui/pixel'));
+					animation.add(stringSect + 'holdend', [indexPixel[index]]);
+					animation.add(stringSect + 'hold', [indexPixel[index] - 4]);
+				}
 
-		// i'm going after phantomarcade @BeastlyGhost
-		animation.addByPrefix('purpleholdend', 'pruple end hold');
+				babyArrow.setGraphicSize(Std.int(babyArrow.width * PlayState.pixelAssetSize));
+				babyArrow.updateHitbox();
+				babyArrow.antialiasing = false;
 
-		antialiasing = true;
+			default:
+				frames = AssetHandler.grabAsset('NOTE_assets', SPARROW, 'images/ui/default');
+
+				animation.addByPrefix(stringSect + 'Scroll', stringSect + '0');
+				animation.addByPrefix(stringSect + 'hold', stringSect + ' hold piece');
+				animation.addByPrefix(stringSect + 'holdend', stringSect + ' hold end');
+
+				// i'm going after phantomarcade @BeastlyGhost
+				animation.addByPrefix('purpleholdend', 'pruple end hold');
+
+				setGraphicSize(Std.int(width * 0.7));
+				antialiasing = true;
+		}
 
 		x += babyArrow.swagWidth * index;
 
-		setGraphicSize(Std.int(width * 0.7));
 		updateHitbox();
 
 		if (!isSustain)
-			playAnim(babyArrow.getColor(index) + "Scroll");
+			playAnim(stringSect + "Scroll");
 
 		if (isSustain && prevNote != null)
 		{
@@ -79,12 +107,12 @@ class Note extends FeatherSprite
 			speed = prevNote.speed;
 
 			x += width / 2;
-			playAnim(babyArrow.getColor(index) + 'holdend');
+			playAnim(stringSect + 'holdend');
 			updateHitbox();
 
 			if (prevNote.isSustain)
 			{
-				prevNote.playAnim(babyArrow.getColor(index) + 'hold');
+				prevNote.playAnim(stringSect + 'hold');
 				// prevNote.scale.y *= Conductor.stepCrochet / 100 * 1.5 * PlayState.song.speed;
 				prevNote.updateHitbox();
 			}

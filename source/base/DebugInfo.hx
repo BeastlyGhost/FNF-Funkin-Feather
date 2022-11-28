@@ -64,9 +64,9 @@ class DebugInfo extends TextField
 		if (visible)
 		{
 			text = ""
-				+ (Start.getPref("Show Framerate") ? 'FPS: ${times.length}\n' : '')
-				+ (Start.getPref("Show Memory") ? 'MEM: ${getInterval(memory)} // ${getInterval(memoryTotal)}\n' : '')
-				+ (Start.getPref("Show Objects") ? 'OBJECT COUNTER: ${flixel.FlxG.state.members.length}\n' : '');
+				+ (GameSettings.getPref("Show Framerate") ? 'FPS: ${times.length}\n' : '')
+				+ (GameSettings.getPref("Show Memory") ? 'MEM: ${getInterval(memory)} // ${getInterval(memoryTotal)}\n' : '')
+				+ (GameSettings.getPref("Show Objects") ? 'OBJECT COUNTER: ${flixel.FlxG.state.members.length}\n' : '');
 		}
 	}
 }
