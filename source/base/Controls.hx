@@ -49,16 +49,7 @@ class Controls
 	// thing to sort by key ID idk i'm a dummy -gabi
 	// I was gonna try & optimize it via inlining but nvm it's not done yet -memehoovy
 	public static var actionSort:Map<String, Int> = [
-		"left" => 0,
-		"down" => 1,
-		"up" => 2,
-		"right" => 3,
-		"ui_left" => 5,
-		"ui_down" => 6,
-		"ui_up" => 7,
-		"ui_right" => 8,
-		"accept" => 10,
-		"pause" => 11,
+		"left" => 0, "down" => 1, "up" => 2, "right" => 3, "ui_left" => 5, "ui_down" => 6, "ui_up" => 7, "ui_right" => 8, "accept" => 10, "pause" => 11,
 		"back" => 12,
 	];
 

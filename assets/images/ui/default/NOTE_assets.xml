@@ -56,7 +56,6 @@
   <SubTexture name="right confirm0002" x="466" y="224" width="216" height="218" frameX="-3" frameY="-5" frameWidth="226" frameHeight="230" />
   <SubTexture name="right confirm0004" x="466" y="2" width="218" height="218" frameX="-2" frameY="-4" frameWidth="226" frameHeight="230" />
 
-
   <!-- _________________________________________ NOTES _________________________________________ -->
 
   <SubTexture name="purple0" x="2" y="851" width="154" height="157" frameX="-0" frameY="-0" frameWidth="154" frameHeight="157" />
