@@ -37,6 +37,10 @@ class Controls
 		"down" => [Keyboard.DOWN, Keyboard.F],
 		"up" => [Keyboard.UP, Keyboard.J],
 		"right" => [Keyboard.RIGHT, Keyboard.K],
+		"ui_left" => [Keyboard.LEFT, Keyboard.A],
+		"ui_down" => [Keyboard.DOWN, Keyboard.S],
+		"ui_up" => [Keyboard.UP, Keyboard.W],
+		"ui_right" => [Keyboard.RIGHT, Keyboard.D],
 		"accept" => [Keyboard.ENTER, Keyboard.SPACE],
 		"pause" => [Keyboard.ENTER, Keyboard.P],
 		"back" => [Keyboard.ESCAPE, Keyboard.BACKSPACE],
@@ -49,9 +53,13 @@ class Controls
 		"down" => 1,
 		"up" => 2,
 		"right" => 3,
-		"accept" => 5,
-		"pause" => 6,
-		"back" => 7,
+		"ui_left" => 5,
+		"ui_down" => 6,
+		"ui_up" => 7,
+		"ui_right" => 8,
+		"accept" => 10,
+		"pause" => 11,
+		"back" => 12,
 	];
 
 	public static var actions:Map<String, Array<Key>> = [];

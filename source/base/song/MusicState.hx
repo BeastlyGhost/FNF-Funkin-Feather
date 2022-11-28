@@ -84,6 +84,9 @@ class MusicBeatState extends FlxUIState implements IMusicBeat
 		if (!FlxTransitionableState.skipNextTransOut)
 			Transition.start(0.3, false, Fade, FlxEase.linear);
 
+		transIn = FlxTransitionableState.defaultTransIn;
+		transOut = FlxTransitionableState.defaultTransOut;
+
 		super.create();
 	}
 

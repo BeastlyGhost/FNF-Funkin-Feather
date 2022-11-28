@@ -1,7 +1,9 @@
 package base.utils;
 
+import base.song.Conductor;
 import base.song.MusicState;
 import flixel.FlxCamera;
+import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.math.FlxMath;
 
@@ -63,7 +65,7 @@ class FeatherUtils
 	/**
 		Formats the song. Example: ``'world_machine' -> 'World Machine'``.
 	**/
-	public static function coolSongFormatter(song:String):String
+	inline public static function coolSongFormatter(song:String):String
 	{
 		var song = song.split('_').join(' ');
 		var words:Array<String> = song.toLowerCase().split(" ");
@@ -74,6 +76,24 @@ class FeatherUtils
 		}
 
 		return words.join(" ");
+	}
+
+	/**
+		Checks if the Main Menu Song is playing, if it isn't, then play it!
+		@param volumeReset if the song should fade in on a successful song reset
+	**/
+	inline public static function menuMusicCheck(volumeReset:Bool = false)
+	{
+		if ((FlxG.sound.music == null || !FlxG.sound.music.playing))
+		{
+			FlxG.sound.playMusic(AssetHandler.grabAsset("freakyMenu", SOUND, "music"));
+			if (volumeReset)
+			{
+				FlxG.sound.music.volume = 0;
+				FlxG.sound.music.fadeIn(4, 0, 0.7);
+			}
+			Conductor.changeBPM(102);
+		}
 	}
 }
 

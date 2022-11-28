@@ -41,6 +41,8 @@ class Transition
 
 		switch (type)
 		{
+			case Slide_UpDown:
+			//
 			default:
 				var bgSpr:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, 0xFF000000);
 				bgSpr.alpha = (transIn ? 0 : 1);

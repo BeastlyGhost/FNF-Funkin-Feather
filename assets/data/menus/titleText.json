@@ -1,7 +1,7 @@
 {
     "bg": null,
-    "gf": "title/gfDanceTitle",
-    "ng": "title/newgroundsLogo",
+    "gf": "titleScreen/gfDanceTitle",
+    "ng": "titleScreen/newgroundsLogo",
     "bgFolder": null,
     "gfFolder": "images/menus",
     "ngFolder": "images/menus",

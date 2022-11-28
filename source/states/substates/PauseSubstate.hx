@@ -65,9 +65,9 @@ class PauseSubstate extends MusicBeatSubstate
 
 	override function update(elapsed:Float)
 	{
-		if (Controls.getPressEvent("up"))
+		if (Controls.getPressEvent("ui_up"))
 			updateSelection(-1);
-		if (Controls.getPressEvent("down"))
+		if (Controls.getPressEvent("ui_down"))
 			updateSelection(1);
 
 		if (Controls.getPressEvent("accept"))
@@ -79,7 +79,7 @@ class PauseSubstate extends MusicBeatSubstate
 				case "Restart Song":
 					MusicState.resetState();
 				case "Exit to menu":
-					MusicState.switchState(new states.TitleState());
+					MusicState.switchState(new states.menus.MainMenu());
 			}
 		}
 

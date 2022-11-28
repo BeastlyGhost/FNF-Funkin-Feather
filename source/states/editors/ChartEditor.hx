@@ -146,8 +146,8 @@ class ChartEditor extends MusicBeatState
 
 		var tabs = [
 			{name: "Song", label: 'Song Data'},
-			// {name: "Section", label: 'Section Data'},
-			// {name: "Note", label: 'Note Data'}
+			{name: "Section", label: 'Section Data'},
+			{name: "Note", label: 'Note Data'}
 		];
 
 		boxUI = new FlxUITabMenu(null, tabs, true);
@@ -168,6 +168,8 @@ class ChartEditor extends MusicBeatState
 		tab_group_song.name = "Song";
 
 		var songName = new FlxUIInputText(10, 10, 70, song.name, 8);
+
+		tab_group_song.add(new FlxText(songName.x, songName.y - 15, 0, "Song Name:"));
 		tab_group_song.add(songName);
 
 		boxUI.addGroup(tab_group_song);
@@ -193,6 +195,15 @@ class ChartEditor extends MusicBeatState
 				mouseHighlight.y = FlxG.mouse.y;
 			else
 				mouseHighlight.y = Math.floor(FlxG.mouse.y / gridSize) * gridSize;
+		}
+		
+		if (FlxG.keys.justPressed.ESCAPE)
+		{
+			PlayState.songName = "bopeebo";
+			PlayState.gameplayMode = CHARTING;
+			PlayState.difficulty = 1;
+
+			MusicState.switchState(new PlayState());
 		}
 	}
 }

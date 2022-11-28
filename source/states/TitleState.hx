@@ -9,6 +9,7 @@ import flixel.graphics.frames.FlxFrame;
 import flixel.math.FlxMath;
 import flixel.system.FlxSound;
 import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import objects.Alphabet;
@@ -44,7 +45,7 @@ class TitleState extends MusicBeatState
 {
 	// temporary, this is gonna be a json on the assets folder later
 	var introLines:TitleIntroText = {
-		gf: "title/gfDanceTitle",
+		gf: "titleScreen/gfDanceTitle",
 		gfFolder: "images/menus",
 		bgAntialias: true,
 		gfAntialias: true,
@@ -55,6 +56,7 @@ class TitleState extends MusicBeatState
 	var skipped:Bool = false;
 
 	var gfDance:FlxSprite;
+	var logoBump:FlxSprite;
 
 	var titleEnter:FlxSprite;
 	var titleEnterColors:Array<FlxColor> = [0xFF33FFFF, 0xFF3333CC];
@@ -71,20 +73,7 @@ class TitleState extends MusicBeatState
 
 		if (!started)
 		{
-			transIn = FlxTransitionableState.defaultTransIn;
-			transOut = FlxTransitionableState.defaultTransOut;
-
-			soundMusic = new FlxSound().loadEmbedded(AssetHandler.grabAsset("freakyMenu", SOUND, "music"));
-			soundMusic.volume = 0;
-
-			soundMusic.fadeIn(4, 0, 0.7);
-			Conductor.changeBPM(102);
-
-			soundMusic.looped = true;
-
-			// testing
-			FlxG.sound.music = soundMusic;
-
+			FeatherUtils.menuMusicCheck();
 			DiscordRPC.update("TITLE SCREEN", "Navigating through the Main Menus");
 
 			started = true;
@@ -107,7 +96,7 @@ class TitleState extends MusicBeatState
 		add(gfDance);
 
 		titleEnter = new FlxSprite(100, FlxG.height * 0.8);
-		titleEnter.frames = AssetHandler.grabAsset('title/titleEnter', SPARROW, "images/menus");
+		titleEnter.frames = AssetHandler.grabAsset('titleScreen/titleEnter', SPARROW, "images/menus");
 		var animFrames:Array<FlxFrame> = [];
 		@:privateAccess {
 			titleEnter.animation.findByPrefix(animFrames, "ENTER IDLE");
@@ -130,6 +119,10 @@ class TitleState extends MusicBeatState
 		titleEnter.animation.play('static');
 		titleEnter.updateHitbox();
 		add(titleEnter);
+
+		logoBump = new FlxSprite(-10, 10);
+		logoBump.loadGraphic(AssetHandler.grabAsset('logo', IMAGE, "images/menus/titleScreen"));
+		add(logoBump);
 	}
 
 	override function update(elapsed:Float)
@@ -168,19 +161,14 @@ class TitleState extends MusicBeatState
 
 				new FlxTimer().start(1, t ->
 				{
-					soundMusic.fadeOut(0.3);
-
-					PlayState.songName = "bopeebo";
-					PlayState.gameplayMode = FREEPLAY;
-					PlayState.difficulty = 1;
-
-					MusicState.switchState(new PlayState());
+					MusicState.switchState(new states.menus.MainMenu());
 				});
 			}
 		}
 	}
 
 	var isRight:Bool = false;
+	var logoTween:FlxTween;
 
 	override function beatHit()
 	{
@@ -190,6 +178,14 @@ class TitleState extends MusicBeatState
 		{
 			isRight = !isRight;
 			gfDance.animation.play('dance' + (isRight ? 'Right' : 'Left'));
+		}
+
+		if (logoBump != null)
+		{
+			if (logoTween != null)
+				logoTween.cancel();
+			logoBump.scale.set(1, 1);
+			logoTween = FlxTween.tween(logoBump, {'scale.x': 0.9, 'scale.y': 0.9}, 60 / Conductor.bpm, {ease: FlxEase.expoOut});
 		}
 	}
 }
