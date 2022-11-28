@@ -15,17 +15,17 @@ import objects.Alphabet;
 
 typedef TitleIntroText =
 {
-	@:optional var bg:String;
-	@:optional var gf:String;
-	@:optional var ng:String;
-	@:optional var bgFolder:String;
-	@:optional var gfFolder:String;
-	@:optional var ngFolder:String;
-	@:optional var bgAntialias:Bool;
-	@:optional var gfAntialias:Bool;
+	var ?bg:String;
+	var ?gf:String;
+	var ?ng:String;
+	var ?bgFolder:String;
+	var ?gfFolder:String;
+	var ?ngFolder:String;
+	var ?bgAntialias:Bool;
+	var ?gfAntialias:Bool;
 
-	@:optional var stepText:IntroLines;
-	@:optional var linesRandom:Array<Array<String>>; // replaces "introText.txt"
+	var ?stepText:IntroLines;
+	var ?linesRandom:Array<Array<String>>; // replaces "introText.txt"
 }
 
 typedef IntroLines =
