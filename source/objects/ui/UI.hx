@@ -93,6 +93,9 @@ class UI extends FlxSpriteGroup
 
 		scoreBar.text = tempScore;
 		scoreBar.screenCenter(X);
+
+		PlayState.lineRPC1 = scoreBar.text;
+		PlayState.changePresence(false);
 	}
 
 	public function updateHealthBar()

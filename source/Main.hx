@@ -31,7 +31,10 @@ class Main extends Sprite
 		super();
 
 		// initialize the game controls for later use
-		base.Controls.init();
+		Controls.init();
+
+		// initialize the discord rich presence wrapper
+		DiscordRPC.init();
 
 		// define the state bounds
 		var stageWidth:Int = Lib.current.stage.stageWidth;

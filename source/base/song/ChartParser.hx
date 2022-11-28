@@ -19,22 +19,18 @@ enum DataFormat
 class ChartParser
 {
 	public static var chartDataType:DataFormat = CYNDA;
-	public static var difficultyMap:Map<Int, String> = [0 => "-easy", 1 => "", 2 => "-hard",];
-
-	public static function loadSong(songName:String, diff:Int):SwagSong
-	{
-		var dataSong = AssetHandler.grabAsset(songName + difficultyMap.get(diff), JSON, 'songs/' + songName);
-
-		var song:SwagSong = Json.parse(dataSong).song;
-		song.validScore = true;
-
-		return song;
-	}
+	public static var difficultyMap:Map<Int, String> = [0 => "-easy", 1 => "-normal", 2 => "-hard",];
 
 	public static function loadChartData(songName:String, songDiff:Int)
 	{
 		var timeBegin:Float = Sys.time();
-		var dataSong = AssetHandler.grabAsset(songName + difficultyMap.get(songDiff), JSON, 'songs/' + songName);
+
+		var songDiff:String = difficultyMap.get(songDiff);
+
+		if (songDiff == "-normal")
+			songDiff = '';
+
+		var dataSong = AssetHandler.grabAsset(songName + songDiff, JSON, 'songs/' + songName);
 
 		var funkinSong:SwagSong = cast Json.parse(dataSong).song;
 		var cyndaSong:CyndaSong = cast Json.parse(dataSong).song;

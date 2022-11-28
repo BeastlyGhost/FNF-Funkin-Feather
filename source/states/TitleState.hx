@@ -82,6 +82,8 @@ class TitleState extends MusicBeatState
 			// testing
 			FlxG.sound.music = soundMusic;
 
+			DiscordRPC.update("TITLE SCREEN", "Navigating through the Main Menus");
+
 			started = true;
 		}
 

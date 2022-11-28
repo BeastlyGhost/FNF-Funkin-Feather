@@ -80,6 +80,10 @@ class PlayState extends MusicBeatState
 	// Gameplay and Events
 	public static var gameplayMode:GameModes;
 
+	// Discord RPC variables
+	public static var lineRPC1:String = '';
+	public static var lineRPC2:String = '';
+
 	public var downscroll:Bool = false;
 
 	public static function generateSong(?name:String, ?diff:Int):Void
@@ -180,6 +184,29 @@ class PlayState extends MusicBeatState
 		Controls.keyEventTrigger.add(keyEventTrigger);
 
 		songCutscene();
+		changePresence(isPaused);
+	}
+
+	public static function changePresence(paused:Bool)
+	{
+		var mode:String = 'Freeplay';
+
+		switch (gameplayMode)
+		{
+			case STORY:
+				mode = "Story Mode";
+			case FREEPLAY | CHARTING:
+				mode = "Freeplay";
+		}
+
+		var stringDiff = ChartParser.difficultyMap.get(difficulty);
+
+		lineRPC2 = '${FeatherUtils.coolSongFormatter(PlayState.song.name)} [${stringDiff.replace('-', '').toUpperCase()}]';
+
+		if (paused)
+			DiscordRPC.update("Paused - " + lineRPC1, mode + ' - ' + lineRPC2);
+		else
+			DiscordRPC.update(lineRPC1, mode + ' - ' + lineRPC2);
 	}
 
 	public var canPause:Bool = false;
