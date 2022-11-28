@@ -37,6 +37,9 @@ typedef IntroLines =
 	var showRandom:Bool; // overrides "lines"
 }
 
+/**
+	the game's titlescreen, not much is going on about it aside from some wacky letter stuffs!
+**/
 class TitleState extends MusicBeatState
 {
 	// temporary, this is gonna be a json on the assets folder later
