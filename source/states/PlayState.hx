@@ -323,6 +323,15 @@ class PlayState extends MusicBeatState
 			}
 		}
 
+		if (gameplayMode != STORY)
+		{
+			if (FlxG.keys.justPressed.SEVEN)
+			{
+				Conductor.stopSong();
+				MusicState.switchState(new states.editors.ChartEditor());
+			}
+		}
+
 		super.update(elapsed);
 
 		if (!isPaused)
