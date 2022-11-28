@@ -3,6 +3,9 @@ package states.menus;
 import base.data.OptionsMeta;
 import base.song.MusicState;
 
+/**
+	the Options Menu, used for managing game options
+**/
 class OptionsMenu extends MusicBeatState
 {
 	var categories:Map<String, Array<CategoryMetadata>> = [

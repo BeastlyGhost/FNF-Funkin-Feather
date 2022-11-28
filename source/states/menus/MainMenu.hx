@@ -11,7 +11,8 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 
 /**
-	the Main Menu
+	the Main Menu, for now it will remain the same as the base game's,
+	do as you wish and customize this to your liking!
 **/
 class MainMenu extends MusicBeatState
 {
