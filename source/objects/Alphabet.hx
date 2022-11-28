@@ -6,8 +6,8 @@ import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxMath;
 
 /**
- * Loosley based on FlxTypeText lolol
- */
+	Loosley based on FlxTypeText lolol
+**/
 class Alphabet extends FlxSpriteGroup
 {
 	public var delay:Float = 0.05;

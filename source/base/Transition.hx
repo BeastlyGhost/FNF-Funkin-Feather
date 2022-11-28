@@ -17,8 +17,8 @@ enum TransType
 }
 
 /**
- * Custom-made transition substate for transitioning from a class to another
- * based on this https://github.com/EyeDaleHim/CrowEngine/blob/dev/source/backend/Transitions.hx
+	Custom-made transition substate for transitioning from a class to another,
+	based on this https://github.com/EyeDaleHim/CrowEngine/blob/dev/source/backend/Transitions.hx
 **/
 class Transition
 {

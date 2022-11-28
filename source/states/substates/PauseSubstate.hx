@@ -9,6 +9,10 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import objects.Alphabet;
 
+/**
+	a Subclass for when you `pause` on `PlayState`
+	initializes simple options with simple functions
+**/
 class PauseSubstate extends MusicBeatSubstate
 {
 	var items:Array<String> = ["Resume Song", "Restart Song", "Exit to menu"];

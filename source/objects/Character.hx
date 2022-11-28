@@ -4,6 +4,10 @@ import base.song.Conductor;
 import base.utils.FeatherUtils.FeatherSprite;
 import flixel.math.FlxPoint;
 
+/**
+	Character class, initializes all characters that are present during gameplay
+	and handles their animations
+**/
 class Character extends FeatherSprite
 {
 	public var charOffset:FlxPoint;

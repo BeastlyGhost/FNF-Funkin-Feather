@@ -6,6 +6,9 @@ import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import states.PlayState;
 
+/**
+	a Stage Class, used *specifically* for stage spawning during gameplay
+**/
 class Stage extends FlxTypedGroup<FlxBasic>
 {
 	public var curStage:String;

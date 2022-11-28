@@ -5,6 +5,9 @@ import flixel.FlxCamera;
 import flixel.FlxSprite;
 import flixel.math.FlxMath;
 
+/**
+	Handles variales used on the `MusicBeatState`
+**/
 interface IMusicBeat
 {
 	public var curBeat:Int; // Defines the Current Beat on the Current Song
@@ -16,6 +19,12 @@ interface IMusicBeat
 	public function endSong():Void; // a Function to decide what to do when a song ends
 }
 
+/**
+	-- @BeastlyGhost --
+
+	this is basically my own custom made `CoolUtil` class from the base game
+	it serves the exact same purpose, giving useful tools to work with
+**/
 class FeatherUtils
 {
 	/**

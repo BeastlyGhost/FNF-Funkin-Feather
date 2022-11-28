@@ -29,6 +29,10 @@ enum GameModes
 	CHARTING;
 }
 
+/**
+	basically the "heart" of the game, `PlayState` tends to get functions from a existing class,
+	and actually give it a proper purpose, like playing a song and displaying the scrolling notes
+**/
 class PlayState extends MusicBeatState
 {
 	// Song

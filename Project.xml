@@ -3,7 +3,11 @@
 
 	<!-- _________________________ Application Settings _________________________ -->
 
-	<app title="Friday Night Funkin': Feather" file="Feather" main="Main" version="1.0.0" company="BeastlyGhost" />
+	<!-- Title and Executable Name -->
+	<app title="Funkin' Feather" file="Project-Feather" />
+
+	<!-- Metadata, Version Name and Company (Save Folder) Name-->
+	<app main="Main" version="1.0.0" company="BeastlyGhost" />
 
 	<!--The flixel preloader is not accurate in Chrome. You can use it regularly if you embed the swf into a html file
 		or you can set the actual size of your file manually at "FlxPreloaderBase-onUpdate-bytesTotal"-->
@@ -44,6 +48,8 @@
 	<haxelib name="flixel-addons" />
 	<haxelib name="flixel-ui" />
 
+	<haxelib name="discord_rpc" if="DISCORD_RPC" />
+
 	<haxelib name="hxcpp-debug-server" if="debug" />
 
 	<!-- ______________________________ Haxedefines _____________________________ -->
@@ -61,6 +67,8 @@
 	<haxedef name="NAPE_RELEASE_BUILD" unless="debug" />
 
 	<!-- _________________________________ Custom _______________________________ -->
+
+	<define name="DISCORD_RPC" if="desktop" unless="web || neko" />
 
 	<!--Place custom nodes like icons here (higher priority to override the HaxeFlixel icon)-->
 </project>

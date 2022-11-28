@@ -9,8 +9,8 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 
 /**
- * Starting Class for the game
- * used to set up useful functions and variables for the main game!
+	Starting Class for the game
+	used to set up useful functions and variables for the main game!
 **/
 class Start extends FlxState
 {

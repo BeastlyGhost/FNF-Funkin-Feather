@@ -6,11 +6,18 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import objects.ui.Strum.BabyArrow;
 import states.PlayState;
 
+/**
+	Notefield class, initializes *scrolling* note handling,
+	like spawning, sorting, and sprite clipping
+**/
 class Notefield extends FlxTypedGroup<Note>
 {
 	// TODO: move sorting and looping through note functions here
 }
 
+/**
+	Note class, initializes *scrolling* notes for the main game
+**/
 class Note extends FeatherSprite
 {
 	public var canBeHit:Bool = false;

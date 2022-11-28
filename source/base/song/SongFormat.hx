@@ -1,5 +1,11 @@
 package base.song;
 
+/**
+	-- @BeastlyGhost --
+
+	this section body is used as a replacement for "SwagSection",
+	I tried to make it as readable as possible when exporting to JSONs
+**/
 typedef SectionBody =
 {
 	var time:Float; // strum time
@@ -10,7 +16,14 @@ typedef SectionBody =
 	var cameraPoint:String; // whether the player should hit the note
 }
 
-typedef CyndaSong = // no idea for a name so here's my favorite pokémon starter lol
+/**
+	-- @BeastlyGhost--
+
+	`CyndaSong` is my custom made chart format for the game,
+	I made it mainly because I was having issues parsing the base one,
+	but also just because I thought i could make something cleaner and more readable
+**/
+typedef CyndaSong =
 {
 	var name:String;
 	var internalName:String;
@@ -19,13 +32,19 @@ typedef CyndaSong = // no idea for a name so here's my favorite pokémon starter
 	var bpm:Int;
 	//
 	var sectionNotes:Array<SectionBody>;
-	var sectionEvents:Array<TimedEvent>; // just uses my outdated event format which I will likely change later
+	var sectionEvents:Array<TimedEvent>;
 	//
 	var player:String;
 	var opponent:String;
 	var crowd:String; // fancy way to say "girlfriend"
 }
 
+/**
+	-- @BeastlyGhost --
+
+	quick and dirty Song Event format,
+	those events trigger every time the `step` that the event needs is reached on a song
+**/
 typedef TimedEvent =
 {
 	var name:String;
@@ -33,6 +52,9 @@ typedef TimedEvent =
 	var values:Array<String>;
 }
 
+/**
+	Friday Night Funkin' 0.2.7.1/0.2.8 Song Format
+**/
 typedef SwagSong =
 {
 	var song:String;
@@ -49,6 +71,9 @@ typedef SwagSong =
 	var validScore:Bool;
 }
 
+/**
+	Friday Night Funkin' 0.2.7.1/0.2.8 Section Format
+**/
 typedef SwagSection =
 {
 	var sectionNotes:Array<Dynamic>;
@@ -58,42 +83,4 @@ typedef SwagSection =
 	var bpm:Int;
 	var changeBPM:Bool;
 	var altAnim:Bool;
-}
-
-class SongLegacy
-{
-	public var song:String;
-	public var notes:Array<SwagSection>;
-	public var bpm:Float;
-	public var needsVoices:Bool = true;
-	public var speed:Float = 1;
-
-	public var player1:String = 'bf';
-	public var player2:String = 'dad';
-
-	public function new(song, notes, bpm)
-	{
-		this.song = song;
-		this.notes = notes;
-		this.bpm = bpm;
-	}
-}
-
-class SectionLegacy
-{
-	public var sectionNotes:Array<Dynamic> = [];
-
-	public var lengthInSteps:Int = 16;
-	public var typeOfSection:Int = 0;
-	public var mustHitSection:Bool = true;
-
-	/**
-	 *	Copies the first section into the second section!
-	 */
-	public static var COPYCAT:Int = 0;
-
-	public function new(lengthInSteps:Int = 16)
-	{
-		this.lengthInSteps = lengthInSteps;
-	}
 }

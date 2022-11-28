@@ -4,6 +4,10 @@ import flixel.FlxSprite;
 import flixel.graphics.FlxGraphic;
 import sys.FileSystem;
 
+/**
+	the Icon class handles the little icons that appear bouncing on the User Interface,
+	they often show up following the Health Bar
+**/
 class Icon extends FlxSprite
 {
 	public var parentSprite:FlxSprite;

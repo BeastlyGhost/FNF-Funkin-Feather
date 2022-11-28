@@ -12,8 +12,8 @@ import sys.FileSystem;
 import sys.io.File;
 
 /**
- * Enumerator for Asset Types, right now, there isn't much going on with this
- * it just defines what Asset Type we are dealing with, and gives extensions to said asset type
+	Enumerator for Asset Types, right now, there isn't much going on with this
+	it just defines what Asset Type we are dealing with, and gives extensions to said asset type
 **/
 enum AssetType
 {
@@ -28,8 +28,8 @@ enum AssetType
 }
 
 /**
- * Typedefine for Cached Assets, simply put, it defines what `type` an asset is, and what data it comes with
- * data can be anything, as we are going to use it to later `grab` it in order to manage said data
+	Typedefine for Cached Assets, simply put, it defines what `type` an asset is, and what data it comes with
+	data can be anything, as we are going to use it to later `grab` it in order to manage said data
 **/
 typedef CacheableAsset =
 {
@@ -38,24 +38,24 @@ typedef CacheableAsset =
 }
 
 /**
- * This is the Assets Class, meant to allow access to assets, and manage used ones
+	This is the Assets Class, meant to allow access to assets, and manage used ones
 **/
 class AssetHandler
 {
-	/*
+	/**
 		Stores only user-preferred assets that should not be cleared when `clear` is called
 	**/
 	public static var persistentAssets:Array<String> = ['alphabet'];
 
-	/*
+	/**
 		Stores Tracked Assets on a Map
 
-		-----------------------
+		-- @BeastlyGhost --
+
 		I have yet to understand how asset managment works properly
 		so if this looks weird, that's because it might be, i've decided that
 		instead of creating multiple maps for various type of assets
 		having a single one could be somewhat easier to manage
-		@BeastlyGhost
 	**/
 	public static var mappedAssets:Map<AssetType, Map<String, CacheableAsset>> = [
 		//
@@ -64,17 +64,17 @@ class AssetHandler
 		VIDEO => new Map<String, CacheableAsset>(),
 	];
 
-	/*
+	/**
 		Stores every tracked asset in an Array, useful for cleaning up later on
 	**/
 	public static var trackedAssets:Array<String> = [];
 
 	/**
-	 * [Returns a specified asset]
-	 * @param asset the asset name
-	 * @param type the asset type (like: IMAGE, SOUND, FONT for example)
-	 * @param directory the directory we should look for the specified asset name
-	 * @return your asset path along with the asset and its extensions (if null, then nothing)
+		Returns a specified asset
+		@param asset the asset name
+		@param type the asset type (like: IMAGE, SOUND, FONT for example)
+		@param directory the directory we should look for the specified asset name
+		@return your asset path along with the asset and its extensions (if null, then nothing)
 	**/
 	public static function grabAsset(asset:String, type:AssetType, directory:String):Dynamic
 	{
@@ -104,9 +104,9 @@ class AssetHandler
 	}
 
 	/**
-	 * [Stores a graphic asset from the specified directory, then returns it]
-	 * @param outputDir the directory we should look for
-	 * @return uses FlxGraphic's `fromBitmapData` function to return your graphic asset
+		Stores a graphic asset from the specified directory, then returns it
+		@param outputDir the directory we should look for
+		@return uses FlxGraphic's `fromBitmapData` function to return your graphic asset
 	**/
 	public static function grabGraphic(outputDir:String)
 	{
@@ -120,9 +120,9 @@ class AssetHandler
 	}
 
 	/**
-	 * [Returns a graphic asset from the specified directory]
-	 * @param outputDir the directory we should look for
-	 * @return the output graphic from within the mapped assets map
+		Returns a graphic asset from the specified directory
+		@param outputDir the directory we should look for
+		@return the output graphic from within the mapped assets map
 	**/
 	public static function returnGraphic(outputDir:String):FlxGraphic
 	{
@@ -136,9 +136,9 @@ class AssetHandler
 	}
 
 	/**
-	 * [Returns a sound from the specified directory]
-	 * @param outputDir the directory we should look for
-	 * @return uses OpenFL's sound feature to return a sound from the specified directory
+		Returns a sound from the specified directory
+		@param outputDir the directory we should look for
+		@return uses OpenFL's sound feature to return a sound from the specified directory
 	**/
 	public static function grabSound(outputDir:String):Sound
 	{
@@ -149,10 +149,10 @@ class AssetHandler
 	}
 
 	/**
-	 * [Returns the main assets directory]
-	 * @param directory folder that we should return along with the main assets folder
-	 * @param type the type of asset you need, leave it as blank for returning a directory instead
-	 * @return the main assets directory with a specified subdirectory (and extension, if type is given)
+		Returns the main assets directory
+		@param directory folder that we should return along with the main assets folder
+		@param type the type of asset you need, leave it as blank for returning a directory instead
+		@return the main assets directory with a specified subdirectory (and extension, if type is given)
 	**/
 	public static function grabRoot(directory:String, ?type:AssetType):String
 	{
@@ -164,10 +164,10 @@ class AssetHandler
 	}
 
 	/**
-	 * [Filters through asset types and returns extensions for said assets]
-	 * @param dir the directory we should get the extension from
-	 * @param type the asset type (like: image, font, sound)
-	 * @return if extension is valid, returns your path with the extension, else only the path
+		Filters through asset types and returns extensions for said assets
+		@param dir the directory we should get the extension from
+		@param type the asset type (like: image, font, sound)
+		 @return if extension is valid, returns your path with the extension, else only the path
 	**/
 	public static function getExtensions(dir:String, type:AssetType):String
 	{
@@ -207,8 +207,8 @@ class AssetHandler
 	}
 
 	/**
-	 * [Simply put, this clears all tracked assets that exist on the `trackedAssets` array]
-	 * @param clearMappedImages whether images should also be cleared along with sounds
+		Simply put, this clears all tracked assets that exist on the `trackedAssets` array
+		@param clearMappedImages whether images should also be cleared along with sounds
 	**/
 	public static function clear(clearUnusedImages:Bool, ?clearMappedImages:Bool)
 	{

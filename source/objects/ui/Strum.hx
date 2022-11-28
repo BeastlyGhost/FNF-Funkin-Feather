@@ -5,6 +5,10 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import states.PlayState;
 
+/**
+	Strum class, initializes the gray notes at the top / bottom of the screen,
+	it also comes with a set of functions for handling said notes
+**/
 class Strum extends FlxSpriteGroup
 {
 	public var babyArrows:FlxTypedSpriteGroup<BabyArrow>;
@@ -74,6 +78,10 @@ class Strum extends FlxSpriteGroup
 	}
 }
 
+/**
+	`BabyArrow`s are sprites that are attached to your `Strum`line,
+	this class simply initializes said `BabyArrow`s
+**/
 class BabyArrow extends FeatherSprite
 {
 	public var index:Int = 0;

@@ -32,7 +32,7 @@ typedef IntroLines =
 {
 	var step:Int;
 	var lines:Array<String>;
-	var function:String;
+	var func:String;
 	var ngVisible:Bool;
 	var showRandom:Bool; // overrides "lines"
 }

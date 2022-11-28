@@ -13,6 +13,10 @@ import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import states.PlayState;
 
+/**
+	User Interface class so we don't have to create it on PlayState,
+	get as expressive as you can with this, create your own UI if you wish!
+**/
 class UI extends FlxSpriteGroup
 {
 	public var scoreBar:FlxText;

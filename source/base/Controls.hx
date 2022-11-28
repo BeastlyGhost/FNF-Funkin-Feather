@@ -18,8 +18,8 @@ typedef BindCall = (String, Int, KeyState) -> Void; // Name, ID in Array, State 
 typedef Key = Null<Int>; // for convenience
 
 /**
- * the Controls Class manages the main inputs for the game
- * it can be used by every other class for any type of event
+	the Controls Class manages the main inputs for the game,
+	it can be used by every other class for any type of event
 **/
 class Controls
 {

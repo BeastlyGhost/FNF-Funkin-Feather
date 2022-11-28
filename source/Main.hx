@@ -6,6 +6,10 @@ import flixel.FlxGame;
 import openfl.Lib;
 import openfl.display.Sprite;
 
+/**
+	the `Main` class actually initializes our game,
+	you may not find use for it unless you wanna change existing variales on it
+**/
 class Main extends Sprite
 {
 	public static var game = {

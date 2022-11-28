@@ -3,7 +3,7 @@ package base.utils;
 import flixel.FlxG;
 
 /**
- * a class that stores every game setting, along with functions to control game settings
+ * a Class that stores every game setting, along with functions to control game settings
 **/
 class GameSettings
 {

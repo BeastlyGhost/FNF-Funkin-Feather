@@ -12,6 +12,14 @@ typedef BPMChangeEvent =
 	var bpm:Int;
 }
 
+/**
+
+	the Conductor class is responsible for managing song variables and song playing in general,
+	not only it initializes songs, but it also calculates Beats per Second (BPM) Changes and resyncs vocal tracks
+	if they are off-sync
+
+	currently similar to the base game structure with only song playing changes
+**/
 class Conductor
 {
 	public static var bpm:Int = 100; // Defines the Song BPM

@@ -13,6 +13,10 @@ typedef Judgement =
 	var comboReturn:String;
 }
 
+/**
+	ScoreUtils handles the main "competitive" structure of the engine
+	it initializes things like score counters, handles accuracy, and handles judgements
+ */
 class ScoreUtils
 {
 	public static var score:Int = 0;

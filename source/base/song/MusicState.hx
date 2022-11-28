@@ -15,10 +15,10 @@ import flixel.util.FlxTimer;
 import states.PlayState;
 
 /**
- * Music State is a simple class in which doesn't extend anything
- * it is meant only for storing useful functions
- * 
- * however, in the HX file, we also keep `MusicBeatState` and `MusicBeatSubstate` 
+	Music State is a simple class in which doesn't extend anything
+	it is meant only for storing useful functions
+
+	however, in the HX file, we also keep `MusicBeatState` and `MusicBeatSubstate` 
 **/
 class MusicState
 {
@@ -59,8 +59,8 @@ class MusicState
 }
 
 /**
- * a State that is widely used by the other game states
- * it contains useful tools that can be used by every other state
+	a State that is widely used by the other game states
+	it contains useful tools for song control that can be used by every other state
 **/
 class MusicBeatState extends FlxUIState implements IMusicBeat
 {

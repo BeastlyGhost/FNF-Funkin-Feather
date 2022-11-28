@@ -13,6 +13,9 @@ enum DataFormat
 	CYNDA; // Custom Format
 }
 
+/**
+	Chart Parser class for initializing song charts and notes
+**/
 class ChartParser
 {
 	public static var chartDataType:DataFormat = CYNDA;
