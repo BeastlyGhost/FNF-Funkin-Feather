@@ -71,6 +71,9 @@ class TitleState extends MusicBeatState
 
 		if (!started)
 		{
+			transIn = FlxTransitionableState.defaultTransIn;
+			transOut = FlxTransitionableState.defaultTransOut;
+
 			soundMusic = new FlxSound().loadEmbedded(AssetHandler.grabAsset("freakyMenu", SOUND, "music"));
 			soundMusic.volume = 0;
 
@@ -156,9 +159,6 @@ class TitleState extends MusicBeatState
 
 			if (Controls.getPressEvent("accept"))
 			{
-				transIn = FlxTransitionableState.defaultTransIn;
-				transOut = FlxTransitionableState.defaultTransOut;
-
 				titleEnter.color = FlxColor.WHITE;
 				titleEnter.alpha = 1;
 				titleEnter.animation.play('confirm');
