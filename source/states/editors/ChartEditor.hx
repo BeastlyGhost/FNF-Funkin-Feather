@@ -10,6 +10,7 @@ import flixel.addons.ui.FlxUI;
 import flixel.addons.ui.FlxUIInputText;
 import flixel.addons.ui.FlxUITabMenu;
 import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import objects.ui.Icon;
 import objects.ui.Note;
@@ -105,13 +106,9 @@ class ChartEditor extends MusicBeatState
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
 
-		// generateEditorGrid();
-		gridMain = FlxGridOverlay.create(gridSize, gridSize, gridSize * 8, gridSize * 16);
-		gridMain.screenCenter(XY);
-		add(gridMain);
+		FlxG.mouse.visible = true;
 
-		var gridBlackLine:FlxSprite = new FlxSprite(gridMain.x + gridMain.width / 2).makeGraphic(2, Std.int(gridMain.height), 0xFF000000);
-		add(gridBlackLine);
+		generateEditorGrid();
 
 		/*
 			iconP1 = new Icon('bf');
@@ -137,12 +134,13 @@ class ChartEditor extends MusicBeatState
 		// Conductor.changeBPM(song.bpm);
 		// Conductor.mapBPMChanges(song);
 
-		infoText = new FlxText(0, FlxG.height, 0, "", 16);
+		infoText = new FlxText(0, FlxG.height, 0, "SONG: " + song.name, 16);
 		infoText.scrollFactor.set();
 		add(infoText);
 
 		mouseHighlight = new FlxSprite().makeGraphic(gridSize, gridSize);
-		// add(mouseHighlight);
+		mouseHighlight.screenCenter(XY);
+		add(mouseHighlight);
 
 		var tabs = [
 			{name: "Song", label: 'Song Data'},
@@ -159,7 +157,7 @@ class ChartEditor extends MusicBeatState
 
 		addSongUI();
 
-		FlxG.mouse.visible = true;
+		mousePosUpdate();
 	}
 
 	function addSongUI()
@@ -178,25 +176,20 @@ class ChartEditor extends MusicBeatState
 
 	function generateEditorGrid()
 	{
-		//
+		gridMain = FlxGridOverlay.create(gridSize, gridSize, gridSize * 8, gridSize * 16);
+		gridMain.screenCenter(XY);
+		add(gridMain);
+
+		var gridBlackLine:FlxSprite = new FlxSprite(gridMain.x + gridMain.width / 2).makeGraphic(2, Std.int(gridMain.height), 0xFF000000);
+		add(gridBlackLine);
 	}
 
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
 
-		if (FlxG.mouse.x > gridMain.x
-			&& FlxG.mouse.x < gridMain.x + gridMain.width
-			&& FlxG.mouse.y > gridMain.y
-			&& FlxG.mouse.y < gridMain.y)
-		{
-			mouseHighlight.x = Math.floor(FlxG.mouse.x / gridSize) * gridSize;
-			if (FlxG.keys.pressed.SHIFT)
-				mouseHighlight.y = FlxG.mouse.y;
-			else
-				mouseHighlight.y = Math.floor(FlxG.mouse.y / gridSize) * gridSize;
-		}
-		
+		mousePosUpdate();
+
 		if (FlxG.keys.justPressed.ESCAPE)
 		{
 			PlayState.songName = "bopeebo";
@@ -206,4 +199,25 @@ class ChartEditor extends MusicBeatState
 			MusicState.switchState(new PlayState());
 		}
 	}
+
+	function mousePosUpdate()
+	{
+		if (FlxG.mouse.x > gridMain.x
+			&& FlxG.mouse.x < (gridMain.x + gridMain.width)
+			&& FlxG.mouse.y > 0
+			&& FlxG.mouse.y < getYfromStrum(FlxG.sound.music.length))
+		{
+			mouseHighlight.x = (Math.floor((FlxG.mouse.x - gridMain.x) / gridSize) * gridSize) + gridMain.x;
+			if (FlxG.keys.pressed.SHIFT)
+				mouseHighlight.y = FlxG.mouse.y;
+			else
+				mouseHighlight.y = Math.floor(FlxG.mouse.y / gridSize) * gridSize;
+		}
+	}
+
+	function getStrumTime(yPos:Float):Float
+		return FlxMath.remapToRange(yPos, gridMain.y, gridMain.y + gridMain.height, 0, 16 * Conductor.stepCrochet);
+
+	function getYfromStrum(strumTime:Float):Float
+		return FlxMath.remapToRange(strumTime, 0, 16 * Conductor.stepCrochet, gridMain.y, gridMain.y + gridMain.height);
 }
