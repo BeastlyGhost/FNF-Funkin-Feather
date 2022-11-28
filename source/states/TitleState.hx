@@ -107,7 +107,7 @@ class TitleState extends MusicBeatState
 		{
 			newTitle = true;
 			titleEnter.animation.addByPrefix('static', "ENTER IDLE", 24);
-			titleEnter.animation.addByPrefix('confirm', GameSettings.getPref("Flashing Lights") ? "ENTER PRESSED" : "ENTER FREEZE", 24);
+			titleEnter.animation.addByPrefix('confirm', OptionsMeta.getPref("Flashing Lights") ? "ENTER PRESSED" : "ENTER FREEZE", 24);
 		}
 		else
 		{

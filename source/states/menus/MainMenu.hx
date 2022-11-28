@@ -110,7 +110,7 @@ class MainMenu extends MusicBeatState
 				FlxG.sound.play(AssetHandler.grabAsset('confirmMenu', SOUND, "sounds/menus"));
 				lockedMovement = true;
 
-				if (GameSettings.getPref("Flashing Lights"))
+				if (OptionsMeta.getPref("Flashing Lights"))
 					FlxFlicker.flicker(menuFlash, 1.1, 0.15, false);
 
 				itemContainer.forEach(function(spr:FlxSprite)
