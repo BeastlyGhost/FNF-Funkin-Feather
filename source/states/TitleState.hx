@@ -17,19 +17,23 @@ typedef TitleIntroText =
 {
 	@:optional var bg:String;
 	@:optional var gf:String;
+	@:optional var ng:String;
 	@:optional var bgFolder:String;
 	@:optional var gfFolder:String;
+	@:optional var ngFolder:String;
 	@:optional var bgAntialias:Bool;
 	@:optional var gfAntialias:Bool;
 
 	@:optional var stepText:IntroLines;
-	@:optional var linesRandom:Array<String>; // replaces "introText.txt"
+	@:optional var linesRandom:Array<Array<String>>; // replaces "introText.txt"
 }
 
 typedef IntroLines =
 {
-	var steps:Array<Int>;
+	var step:Int;
 	var lines:Array<String>;
+	var function:String;
+	var ngVisible:Bool;
 	var showRandom:Bool; // overrides "lines"
 }
 
