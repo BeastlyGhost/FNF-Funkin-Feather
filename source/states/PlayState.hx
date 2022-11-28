@@ -503,7 +503,7 @@ class PlayState extends MusicBeatState
 				}
 				else
 				{
-					if (!GameSettings.getPref("Ghost Tapping"))
+					if (!OptionsMeta.getPref("Ghost Tapping"))
 					{
 						for (char in strumsP1.characters)
 							if (char != null)

@@ -1,6 +1,5 @@
 package;
 
-import base.utils.GameSettings;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
@@ -18,7 +17,7 @@ class Start extends FlxState
 	{
 		super.create();
 
-		GameSettings.loadPrefs();
+		OptionsMeta.loadPrefs();
 
 		FlxG.fixedTimestep = true;
 		FlxG.mouse.useSystemCursor = true;
