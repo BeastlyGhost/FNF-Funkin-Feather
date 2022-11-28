@@ -358,6 +358,7 @@ class PlayState extends MusicBeatState
 			isPaused = true;
 			Conductor.pauseSong();
 			globalManagerPause();
+			changePresence(true);
 			openSubState(new states.substates.PauseSubstate(player.getScreenPosition().x, player.getScreenPosition().y));
 		}
 
@@ -683,6 +684,7 @@ class PlayState extends MusicBeatState
 	override function closeSubState()
 	{
 		isPaused = false;
+		changePresence(false);
 		super.closeSubState();
 	}
 
