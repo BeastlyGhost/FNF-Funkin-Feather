@@ -6,3 +6,4 @@ flashFolder: "images/menus"
 flashColor: 0xFFfd719b
 
 list: ["story mode", "freeplay", "options"]
+listSpacing: 220
