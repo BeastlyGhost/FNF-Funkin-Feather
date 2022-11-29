@@ -24,7 +24,7 @@ class TitleState extends MusicBeatState
 	var introTxt:FlxGroup;
 	var txtRandom:Array<String> = [];
 
-	static var started:Bool = false;
+	var started:Bool = false;
 	var skipped:Bool = false;
 
 	var gfDance:FlxSprite;
@@ -43,11 +43,11 @@ class TitleState extends MusicBeatState
 	{
 		super.create();
 
-		FeatherUtils.menuMusicCheck(!started);
-		DiscordRPC.update("TITLE SCREEN", "Navigating through the Main Menus");
-
 		if (!started)
 		{
+			FeatherUtils.menuMusicCheck(true);
+			DiscordRPC.update("TITLE SCREEN", "Navigating through the Main Menus");
+
 			introLines = yaml.Yaml.read(AssetHandler.grabAsset("titleText", YAML, "data/menus"));
 			// trace(introLines.get("stepText"));
 
