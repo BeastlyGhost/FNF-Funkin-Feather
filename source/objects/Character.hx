@@ -70,6 +70,16 @@ class Character extends FeatherSprite
 				animation.addByPrefix('hey', 'BF HEY', 24, false);
 
 				addOffset('idle', -5);
+				addOffset('hey', -3, 5);
+				addOffset('singLEFT', 5, -6);
+				addOffset('singDOWN', -20, -51);
+				addOffset('singUP', -46, 27);
+				addOffset('singRIGHT', -48, -7);
+				addOffset('singLEFTmiss', 7, 19);
+				addOffset('singDOWNmiss', -15, -19);
+				addOffset('singUPmiss', -46, 27);
+				addOffset('singRIGHTmiss', -44, 22);
+
 				playAnim('idle');
 
 				if (!player)
@@ -93,15 +103,11 @@ class Character extends FeatherSprite
 		recalcDance();
 		dance();
 
-		if (player)
-			flipX = !flipX;
-
 		if (player) // fuck you ninjamuffin lmao
 		{
-			// Doesn't flip for BF, since his are already in the right place???
+			flipX = !flipX;
 			if (!character.startsWith('bf'))
 				flipLeftRight();
-			//
 		}
 		else if (character.startsWith('bf'))
 			flipLeftRight();

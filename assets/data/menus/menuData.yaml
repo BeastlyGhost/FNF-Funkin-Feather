@@ -7,4 +7,4 @@ flashColor: 0xFFfd719b
 
 list: ["story mode", "freeplay", "options"]
 listSpacing: 230
-listY: 45
+listY: 55

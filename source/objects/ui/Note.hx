@@ -2,6 +2,7 @@ package objects.ui;
 
 import base.song.Conductor;
 import base.utils.FeatherUtils.FeatherSprite;
+import base.utils.ScoreUtils;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import objects.ui.Strum.BabyArrow;
 import states.PlayState;
@@ -26,6 +27,7 @@ class Note extends FeatherSprite
 	public var canDie:Bool = true;
 	public var tooLate:Bool = false;
 
+	public var lowPriority:Bool = false;
 	public var ignoreNote:Bool = false;
 	public var isMine:Bool = false;
 
@@ -57,7 +59,7 @@ class Note extends FeatherSprite
 		// MAKE SURE ITS DEFINITELY OFF SCREEN?
 		y -= 2000;
 
-		// generateNote();
+		generateNote();
 	}
 
 	public function generateNote()
@@ -100,7 +102,7 @@ class Note extends FeatherSprite
 				antialiasing = true;
 		}
 
-		x += babyArrow.swagWidth * index;
+		x += BabyArrow.swagWidth * index;
 
 		updateHitbox();
 
@@ -120,7 +122,7 @@ class Note extends FeatherSprite
 			if (prevNote.isSustain)
 			{
 				prevNote.playAnim(stringSect + 'hold');
-				// prevNote.scale.y *= Conductor.stepCrochet / 100 * 1.5 * PlayState.song.speed;
+				prevNote.scale.y *= Conductor.stepCrochet / 100 * 1.5 * PlayState.song.speed;
 				prevNote.updateHitbox();
 			}
 		}
@@ -132,26 +134,14 @@ class Note extends FeatherSprite
 
 		if (mustPress)
 		{
-			if (!wasGoodHit)
-			{
-				tooLate = true;
-				canBeHit = false;
-			}
+			if (strumTime > Conductor.songPosition - ScoreUtils.timingThreshold
+				&& strumTime < Conductor.songPosition + ScoreUtils.timingThreshold)
+				canBeHit = true;
 			else
-			{
-				if (strumTime > Conductor.songPosition /* - ScoreUtils.safeZoneOffset*/)
-					if (strumTime < Conductor.songPosition + 0.5 /* * ScoreUtils.safeZoneOffset*/)
-						canBeHit = true;
-					else
-						canBeHit = true;
-			}
+				canBeHit = true;
 		}
 		else
-		{
 			canBeHit = false;
-			if (strumTime <= Conductor.songPosition)
-				wasGoodHit = true;
-		}
 
 		if (tooLate)
 		{

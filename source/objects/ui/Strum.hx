@@ -64,7 +64,7 @@ class Strum extends FlxSpriteGroup
 					babyArrow.antialiasing = true;
 			}
 
-			babyArrow.x += (index - ((4 / 2))) * babyArrow.swagWidth;
+			babyArrow.x += (index - ((4 / 2))) * BabyArrow.swagWidth;
 			babyArrow.y -= 10;
 
 			babyArrow.animation.play('static');
@@ -86,12 +86,14 @@ class BabyArrow extends FeatherSprite
 {
 	public var index:Int = 0;
 
-	public var swagWidth:Float = 160 * 0.7;
+	public static var swagWidth:Float = 160 * 0.7;
 
 	public var actions:Array<String> = ['left', 'down', 'up', 'right'];
 	public var colors:Array<String> = ['purple', 'blue', 'green', 'red'];
 
 	public var defaultAlpha:Float = 0.8;
+
+	public var glowNoteHits:Bool = true;
 
 	public function new(index:Int)
 	{

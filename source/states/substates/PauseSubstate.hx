@@ -5,6 +5,7 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.system.FlxSound;
+import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import objects.Alphabet;
@@ -45,6 +46,19 @@ class PauseSubstate extends MusicBeatSubstate
 		bg.scrollFactor.set();
 		add(bg);
 
+		var stringDiff = base.song.ChartParser.difficultyMap.get(PlayState.difficulty);
+
+		var levelInfo:FlxText = new FlxText(20, 15, 0, "", 32);
+		levelInfo.text = FeatherUtils.coolSongFormatter(PlayState.song.name) + ' [${stringDiff.replace('-', '').toUpperCase()}]';
+		levelInfo.scrollFactor.set();
+		levelInfo.setFormat(Paths.font("vcr.ttf"), 32);
+		levelInfo.updateHitbox();
+		add(levelInfo);
+
+		levelInfo.alpha = 0;
+		levelInfo.x = FlxG.width - (levelInfo.width + 20);
+
+		FlxTween.tween(levelInfo, {alpha: 1, y: 20}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.3});
 		FlxTween.tween(bg, {alpha: 0.6}, 0.4, {ease: FlxEase.quartInOut});
 
 		itemContainer = new FlxTypedGroup<Alphabet>();
@@ -65,6 +79,8 @@ class PauseSubstate extends MusicBeatSubstate
 
 	override function update(elapsed:Float)
 	{
+		super.update(elapsed);
+
 		if (Controls.getPressEvent("ui_up"))
 			updateSelection(-1);
 		if (Controls.getPressEvent("ui_down"))
@@ -77,6 +93,7 @@ class PauseSubstate extends MusicBeatSubstate
 				case "Resume Song":
 					close();
 				case "Restart Song":
+					base.song.Conductor.stopSong();
 					MusicState.resetState();
 				case "Exit to menu":
 					MusicState.switchState(new states.menus.MainMenu());
@@ -93,6 +110,9 @@ class PauseSubstate extends MusicBeatSubstate
 	override public function updateSelection(newSelection:Int = 0)
 	{
 		super.updateSelection(newSelection);
+
+		if (newSelection != 0)
+			FlxG.sound.play(AssetHandler.grabAsset('scrollMenu', SOUND, "sounds/menus"));
 
 		var blah:Int = 0;
 		for (item in itemContainer.members)

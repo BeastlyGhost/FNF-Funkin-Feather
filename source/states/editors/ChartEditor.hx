@@ -12,8 +12,10 @@ import flixel.addons.ui.FlxUITabMenu;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxMath;
 import flixel.text.FlxText;
+import haxe.Json;
 import objects.ui.Icon;
 import objects.ui.Note;
+import openfl.net.FileReference;
 
 enum CharterTheme
 {
@@ -193,6 +195,22 @@ class ChartEditor extends MusicBeatState
 		super.update(elapsed);
 
 		mousePosUpdate();
+
+		if (FlxG.keys.pressed.THREE)
+		{
+			var _file:FileReference;
+			var json = {
+				"song": song
+			};
+
+			var data:String = Json.stringify(json, '\t');
+
+			if ((data != null) && (data.length > 0))
+			{
+				_file = new FileReference();
+				_file.save(data.trim(), song.name.toLowerCase() + ".json");
+			}
+		}
 
 		if (FlxG.keys.justPressed.ESCAPE)
 		{

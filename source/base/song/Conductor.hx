@@ -69,13 +69,14 @@ class Conductor
 
 	public static function callVocals(name:String)
 	{
+		AssetHandler.grabAsset("Inst", SOUND, "songs/" + name);
 		songVocals = new FlxSound().loadEmbedded(AssetHandler.grabAsset("Voices", SOUND, "songs/" + name));
 		FlxG.sound.list.add(songVocals);
 	}
 
-	public static function playSong(songName:String)
+	public static function playSong(name:String)
 	{
-		FlxG.sound.playMusic(AssetHandler.grabAsset("Inst", SOUND, "songs/" + songName));
+		FlxG.sound.playMusic(AssetHandler.grabAsset("Inst", SOUND, "songs/" + name));
 		if (songVocals != null)
 			songVocals.play();
 	}

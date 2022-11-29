@@ -36,7 +36,8 @@ class ScoreUtils
 	public static var curComboGrade:String;
 	public static var curGrade:String;
 
-	public static var highestJudgement:Int = 0;
+	public static var greatestJudgement:Int = 0;
+	public static var timingThreshold:Float = 0;
 
 	public static var scoreMap:Map<String, Int> = [];
 	public static var weekScoreMap:Map<String, Int> = [];
@@ -99,8 +100,14 @@ class ScoreUtils
 
 		totalNotesHit = 0;
 		totalMinesHit = 0;
-		highestJudgement = 0;
+		greatestJudgement = 0;
 		noteRatingMod = 0.0001;
+
+		var greatestT:Float = 0;
+		for (i in 0...judgeTable.length)
+			if (judgeTable[i].timingMod > greatestT)
+				greatestT = judgeTable[i].timingMod;
+		timingThreshold = greatestT;
 
 		curComboGrade = "";
 		curGrade = "N/A";
@@ -143,8 +150,8 @@ class ScoreUtils
 
 		curComboGrade = "";
 		// Update FC Display;
-		if (judgeTable[highestJudgement].comboReturn != null)
-			curComboGrade = judgeTable[highestJudgement].comboReturn;
+		if (judgeTable[greatestJudgement].comboReturn != null)
+			curComboGrade = judgeTable[greatestJudgement].comboReturn;
 
 		if (misses > 0)
 			curComboGrade = (misses < 10 ? 'SDCB' : '');

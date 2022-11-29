@@ -51,7 +51,7 @@ class OptionsMeta
 			name: "Ghost Tapping",
 			description: "If you should be able to spam when there's no notes to hit during gameplay.",
 			type: BOOLEAN,
-			value: false
+			value: true
 		},
 		{
 			name: "Show Grades",
@@ -87,7 +87,7 @@ class OptionsMeta
 			name: "Show Objects",
 			description: "If the current state object count should be shown on the Info Counter.",
 			type: BOOLEAN,
-			value: true
+			value: false
 		}
 	];
 

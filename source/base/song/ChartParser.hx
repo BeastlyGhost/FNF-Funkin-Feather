@@ -99,6 +99,10 @@ class ChartParser
 						daNoteType = songNotes[3];
 					}
 
+					var daMustHit:Bool = section.mustHitSection;
+					if (songNotes[1] > 3)
+						daMustHit = !section.mustHitSection;
+
 					if (songNotes[1] >= 0) // if the note data is valid (AKA not a old psych event)
 					{
 						// create a body for our section note
@@ -106,7 +110,7 @@ class ChartParser
 							time: daStrumTime,
 							index: daNoteData,
 							holdLength: daHoldLength,
-							cameraPoint: section.mustHitSection ? "player" : "opponent",
+							cameraPoint: daMustHit ? "player" : "opponent",
 						}
 
 						if (daNoteType != null && daNoteType != 'default')
@@ -167,8 +171,6 @@ class ChartParser
 			swagNote.type = note.type;
 			swagNote.scrollFactor.set(0, 0);
 
-			swagNote.mustPress = (note.cameraPoint == "player");
-
 			var susLength:Float = swagNote.sustainLength;
 
 			susLength = susLength / Conductor.stepCrochet;
@@ -180,12 +182,24 @@ class ChartParser
 
 				var sustainNote:Note = new Note(note.time + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet, note.index, note.type, oldNote, true);
 				sustainNote.scrollFactor.set();
-				sustainNote.mustPress = (note.cameraPoint == "player");
 				dunces.push(sustainNote);
 
+				sustainNote.mustPress = note.cameraPoint == "player";
+
+				if (sustainNote.mustPress)
+				{
+					sustainNote.x += FlxG.width / 2; // general offset
+					sustainNote.x += 25;
+				}
 				sustainNote.x += 15;
 			}
 
+			swagNote.mustPress = note.cameraPoint == "player";
+			if (swagNote.mustPress)
+			{
+				swagNote.x += FlxG.width / 2; // general offset
+				swagNote.x += 25;
+			}
 			swagNote.x += 15;
 		}
 

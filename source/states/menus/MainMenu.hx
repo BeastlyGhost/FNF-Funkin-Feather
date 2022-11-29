@@ -141,10 +141,7 @@ class MainMenu extends MusicBeatState
 									PlayState.difficulty = 1;
 									MusicState.switchState(new PlayState());
 								case "freeplay":
-									PlayState.songName = "bopeebo";
-									PlayState.gameplayMode = FREEPLAY;
-									PlayState.difficulty = 1;
-									MusicState.switchState(new PlayState());
+									MusicState.switchState(new FreeplayMenu());
 								case "options":
 									PlayState.songName = "bopeebo";
 									PlayState.gameplayMode = FREEPLAY;
