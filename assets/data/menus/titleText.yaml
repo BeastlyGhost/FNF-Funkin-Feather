@@ -8,45 +8,45 @@ bgAntialias: true
 gfAntialias: true
 
 stepText:
-    - step: 4,
-      lines: ["ninjamuffin99", "phantomArcade", "kawaisprite", "evilsk8er"]
-      func: "create"
-    - step: 12,
-      lines: ["PRESENT"]
-      func: "add"
-    - step: 16,
-      func: "delete"
-    - step: 20,
-      lines: ["In association", "with"]
-      func: "create"
-    - step: 28,
-      lines: ["Newgrounds"]
-      func: "add"
-      ngVisible: true
-    - step: 32,
-      func: "delete"
-      ngVisible: false
-    - step: 36
-      func: "create"
-      showRandom: true
-    - step: 44
-      func: "add"
-      showRandom: true
-    - step: 48,
-      func: "delete"
-      showRandom: false
-      ngVisible: false
-    - step: 52,
-      lines: ["Friday"]
-      func: "add"
-    - step: 56
-      lines: ["Night"]
-      func: "add"
-    - step: 60,
-      lines: ["Funkin"]
-      func: "add"
-    - step: 64
-      func: "end"
+  - step: 4,
+    lines: ["ninjamuffin99", "phantomArcade", "kawaisprite", "evilsk8er"]
+    func: "create"
+  - step: 12,
+    lines: ["PRESENT"]
+    func: "add"
+  - step: 16,
+    func: "delete"
+  - step: 20,
+    lines: ["In association", "with"]
+    func: "create"
+  - step: 28,
+    lines: ["Newgrounds"]
+    func: "add"
+    ngVisible: true
+  - step: 32,
+    func: "delete"
+    ngVisible: false
+  - step: 36
+    func: "create"
+    showRandom: true
+  - step: 44
+    func: "add"
+    showRandom: true
+  - step: 48,
+    func: "delete"
+    showRandom: false
+    ngVisible: false
+  - step: 52,
+    lines: ["Friday"]
+    func: "add"
+  - step: 56
+    lines: ["Night"]
+    func: "add"
+  - step: 60,
+    lines: ["Funkin"]
+    func: "add"
+  - step: 64
+    func: "end"
 
 randomText:
   - ["shoutouts to tom fulp", "lmao"]

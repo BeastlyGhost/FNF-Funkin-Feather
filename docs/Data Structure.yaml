@@ -7,12 +7,12 @@ comments: >
   Currently, YAML files are used for
   - Title Screen Introduction Texts
   - Main Menu with very simple Data Functions to control background and menu items
-  
+
   in the future, YAML files will be used to handle Week Data and (if enough support is given) full song charts!
 
   I highly encourage you to try and learn the syntax for this format as it can be very useful
   if you are going to work with the engine in the future
-  
+
   - https://docs.ansible.com/ansible/latest/reference_appendices/YAMLSyntax.html
 
   @BeastlyGhost
