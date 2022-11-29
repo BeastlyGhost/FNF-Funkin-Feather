@@ -34,7 +34,7 @@ class MainMenu extends MusicBeatState
 
 		DiscordRPC.update("MAIN MENU", "Navigating through the Main Menus");
 
-		FeatherUtils.menuMusicCheck();
+		FeatherUtils.menuMusicCheck(false);
 
 		wrappableGroup = menuData.get("list");
 
