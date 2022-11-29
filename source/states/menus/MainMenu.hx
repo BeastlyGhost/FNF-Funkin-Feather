@@ -65,7 +65,7 @@ class MainMenu extends MusicBeatState
 
 		for (i in 0...menuData.get("list").length)
 		{
-			var item:FlxSprite = new FlxSprite(0, 60 + (i * menuData.get("listSpacing")));
+			var item:FlxSprite = new FlxSprite(0, menuData.get("listY") + (i * menuData.get("listSpacing")));
 			item.frames = AssetHandler.grabAsset(menuData.get("list")[i], SPARROW, "images/menus/attachements");
 
 			item.animation.addByPrefix('idle', menuData.get("list")[i] + " basic", 24);
