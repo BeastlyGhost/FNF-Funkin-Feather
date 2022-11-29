@@ -17,7 +17,6 @@ import flixel.tweens.FlxTween;
 class MainMenu extends MusicBeatState
 {
 	var itemContainer:FlxTypedGroup<FlxSprite>;
-	var itemList:Array<String> = ['story mode', 'freeplay', 'options'];
 
 	var menuData:Dynamic;
 
@@ -37,7 +36,7 @@ class MainMenu extends MusicBeatState
 
 		FeatherUtils.menuMusicCheck();
 
-		wrappableGroup = itemList;
+		wrappableGroup = menuData.get("list");
 
 		persistentUpdate = persistentDraw = true;
 
