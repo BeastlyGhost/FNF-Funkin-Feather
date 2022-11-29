@@ -17,14 +17,17 @@ import sys.io.File;
 **/
 enum AssetType
 {
-	IMAGE;
-	MODULE;
-	JSON;
+	DIRECTORY;
 	SPARROW;
 	PACKER;
 	VIDEO;
 	SOUND;
 	FONT;
+	MODULE;
+	IMAGE;
+	JSON;
+	TEXT;
+	YAML;
 }
 
 /**
@@ -87,6 +90,9 @@ class AssetHandler
 				while (!json.endsWith("}"))
 					json = json.substr(0, json.length - 1);
 				return json;
+			case YAML:
+				var yaml:String = yaml.Yaml.parse(path);
+				return yaml;
 			case SPARROW:
 				return FlxAtlasFrames.fromSparrow(grabAsset(asset, IMAGE, directory), File.getContent(path));
 			case PACKER:
@@ -184,9 +190,11 @@ class AssetHandler
 				extensions = ['.ogg', '.wav'];
 			case JSON:
 				extensions = ['.json'];
+			case YAML:
+				extensions = ['.yaml'];
 			case SPARROW:
 				extensions = ['.xml'];
-			case PACKER:
+			case PACKER | TEXT:
 				extensions = ['.txt'];
 			case MODULE:
 				extensions = ['.hx', '.hxs', '.hxc', '.hscript'];

@@ -2,7 +2,7 @@ package states;
 
 import base.song.*;
 import base.song.MusicState.MusicBeatState;
-import base.song.SongFormat.CyndaSong;
+import base.song.SongFormat.FeatherSong;
 import base.utils.*;
 import flixel.FlxCamera;
 import flixel.FlxG;
@@ -36,7 +36,7 @@ enum GameModes
 class PlayState extends MusicBeatState
 {
 	// Song
-	public static var song:CyndaSong;
+	public static var song:FeatherSong;
 
 	public static var songName:String;
 	public static var difficulty:Int;

@@ -33,13 +33,13 @@ class ChartParser
 		var dataSong = AssetHandler.grabAsset(songName + songDiff, JSON, 'songs/' + songName);
 
 		var funkinSong:SwagSong = cast Json.parse(dataSong).song;
-		var cyndaSong:CyndaSong = cast Json.parse(dataSong).song;
+		var featherSong:FeatherSong = cast Json.parse(dataSong).song;
 
 		if (funkinSong.notes != null)
 			chartDataType = SWAG;
 
-		if (cyndaSong.author == null || cyndaSong.author.length < 1)
-			cyndaSong.author = '???';
+		if (featherSong.author == null || featherSong.author.length < 1)
+			featherSong.author = '???';
 
 		if (chartDataType != null && chartDataType == SWAG)
 		{
@@ -55,7 +55,7 @@ class ChartParser
 				funkinSong.songAuthor = '???';
 
 			// get the FNF Chart Style and convert it to the new format
-			cyndaSong = {
+			featherSong = {
 				name: songName,
 				internalName: funkinSong.song,
 				author: funkinSong.songAuthor,
@@ -115,7 +115,7 @@ class ChartParser
 							myNote.animation = songNotes[4];
 
 						// push the newly converted note to the notes array
-						cyndaSong.sectionNotes.push(myNote);
+						featherSong.sectionNotes.push(myNote);
 					}
 				}
 			}
@@ -124,31 +124,32 @@ class ChartParser
 		// events
 		var timedEvents:Array<TimedEvent> = [];
 
-		if (cyndaSong.sectionEvents.length > 0)
+		if (featherSong.sectionEvents.length > 0)
 		{
-			for (i in 0...cyndaSong.sectionEvents.length)
+			for (i in 0...featherSong.sectionEvents.length)
 			{
 				var newEvent:TimedEvent = cast {
-					name: cyndaSong.sectionEvents[i].name,
-					step: cyndaSong.sectionEvents[i].step,
-					values: cyndaSong.sectionEvents[i].values,
-					/*colors: cyndaSong.sectionEvents[2][1],*/
+					name: featherSong.sectionEvents[i].name,
+					step: featherSong.sectionEvents[i].step,
+					values: featherSong.sectionEvents[i].values,
+					/*colors: featherSong.sectionEvents[2][1],*/
 				};
 				timedEvents.push(newEvent);
 
-				if (cyndaSong.sectionEvents.length > 1) // no need to sort if there's a single one or none
+				if (featherSong.sectionEvents.length > 1) // no need to sort if there's a single one or none
 					timedEvents.sort(function(a:TimedEvent, b:TimedEvent):Int return FlxSort.byValues(FlxSort.ASCENDING, a.step, b.step));
 			}
 		}
 
-		cyndaSong.sectionNotes.sort(function(a:SectionBody, b:SectionBody):Int return FlxSort.byValues(FlxSort.ASCENDING, a.time, b.time));
+		if (featherSong.sectionNotes.length > 1)
+			featherSong.sectionNotes.sort(function(a:SectionBody, b:SectionBody):Int return FlxSort.byValues(FlxSort.ASCENDING, a.time, b.time));
 
 		var timeEnd:Float = Sys.time();
 		trace('parsing took: ${timeEnd - timeBegin}s');
-		return cyndaSong;
+		return featherSong;
 	}
 
-	public static function loadChartNotes(song:CyndaSong)
+	public static function loadChartNotes(song:FeatherSong)
 	{
 		var dunces:Array<Note> = [];
 

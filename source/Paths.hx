@@ -17,6 +17,12 @@ class Paths
 	inline public static function font(key:String, ?library:String)
 		return AssetHandler.grabAsset(key, FONT, "data/fonts");
 
+	inline public static function txt(key:String, ?library:String)
+		return AssetHandler.grabAsset(key, TEXT, null);
+
+	inline public static function json(key:String, ?library:String)
+		return AssetHandler.grabAsset(key, JSON, null);
+
 	inline public static function sound(key:String, ?library:String)
 		return AssetHandler.grabAsset(key, SOUND, "sounds");
 

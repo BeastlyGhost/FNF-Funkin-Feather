@@ -2,7 +2,7 @@ package states.editors;
 
 import base.song.Conductor;
 import base.song.MusicState;
-import base.song.SongFormat.CyndaSong;
+import base.song.SongFormat.FeatherSong;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.display.FlxGridOverlay;
@@ -85,7 +85,7 @@ class ChartEditor extends MusicBeatState
 	var uiStyle:CharterTheme = FLIXEL_WHITE;
 	var boxUI:FlxUITabMenu;
 
-	var song:CyndaSong;
+	var song:FeatherSong;
 
 	var gridMain:FlxSprite;
 	var gridSize:Int = 45;

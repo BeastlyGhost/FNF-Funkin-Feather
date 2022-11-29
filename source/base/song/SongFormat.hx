@@ -19,11 +19,11 @@ typedef SectionBody =
 /**
 	-- @BeastlyGhost--
 
-	`CyndaSong` is my custom made chart format for the game,
+	`FeatherSong` is my custom made chart format for the game,
 	I made it mainly because I was having issues parsing the base one,
 	but also just because I thought i could make something cleaner and more readable
 **/
-typedef CyndaSong =
+typedef FeatherSong =
 {
 	var name:String;
 	var internalName:String;

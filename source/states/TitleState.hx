@@ -6,6 +6,7 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.graphics.frames.FlxFrame;
+import flixel.group.FlxGroup;
 import flixel.math.FlxMath;
 import flixel.system.FlxSound;
 import flixel.tweens.FlxEase;
@@ -14,43 +15,14 @@ import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import objects.Alphabet;
 
-typedef TitleIntroText =
-{
-	var ?bg:String;
-	var ?gf:String;
-	var ?ng:String;
-	var ?bgFolder:String;
-	var ?gfFolder:String;
-	var ?ngFolder:String;
-	var ?bgAntialias:Bool;
-	var ?gfAntialias:Bool;
-
-	var ?stepText:IntroLines;
-	var ?linesRandom:Array<Array<String>>; // replaces "introText.txt"
-}
-
-typedef IntroLines =
-{
-	var step:Int;
-	var lines:Array<String>;
-	var func:String;
-	var ngVisible:Bool;
-	var showRandom:Bool; // overrides "lines"
-}
-
 /**
 	the game's titlescreen, not much is going on about it aside from some wacky letter stuffs!
 **/
 class TitleState extends MusicBeatState
 {
-	// temporary, this is gonna be a json on the assets folder later
-	var introLines:TitleIntroText = {
-		gf: "titleScreen/gfDanceTitle",
-		gfFolder: "images/menus",
-		bgAntialias: true,
-		gfAntialias: true,
-	};
-	var introTxt:Array<Alphabet>;
+	var introLines:Dynamic;
+	var introTxt:FlxGroup;
+	var txtRandom:Array<String> = [];
 
 	var started:Bool = false;
 	var skipped:Bool = false;
@@ -76,6 +48,9 @@ class TitleState extends MusicBeatState
 			FeatherUtils.menuMusicCheck();
 			DiscordRPC.update("TITLE SCREEN", "Navigating through the Main Menus");
 
+			introLines = yaml.Yaml.read(AssetHandler.grabAsset("titleText", YAML, "data/menus"));
+			// trace(introLines.get("stepText"));
+
 			started = true;
 		}
 
@@ -84,15 +59,15 @@ class TitleState extends MusicBeatState
 
 		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, 0xFF000000);
 		bg.scrollFactor.set();
-		bg.antialiasing = introLines.bgAntialias;
+		bg.antialiasing = introLines.get("bgAntialias");
 		add(bg);
 
 		// gf
 		gfDance = new FlxSprite(FlxG.width * 0.4, FlxG.height * 0.07);
-		gfDance.frames = AssetHandler.grabAsset(introLines.gf, SPARROW, introLines.gfFolder);
+		gfDance.frames = AssetHandler.grabAsset(introLines.get("gf"), SPARROW, introLines.get("gfFolder"));
 		gfDance.animation.addByIndices('danceLeft', 'gfDance', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
 		gfDance.animation.addByIndices('danceRight', 'gfDance', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
-		gfDance.antialiasing = introLines.gfAntialias;
+		gfDance.antialiasing = introLines.get("gfAntialias");
 		add(gfDance);
 
 		titleEnter = new FlxSprite(100, FlxG.height * 0.8);
@@ -115,7 +90,7 @@ class TitleState extends MusicBeatState
 			titleEnter.animation.addByPrefix('static', "Press Enter to Begin", 24);
 			titleEnter.animation.addByPrefix('confirm', "ENTER PRESSED", 24);
 		}
-		titleEnter.antialiasing = introLines.bgAntialias;
+		titleEnter.antialiasing = introLines.get("bgAntialias");
 		titleEnter.animation.play('static');
 		titleEnter.updateHitbox();
 		add(titleEnter);

@@ -19,6 +19,8 @@ class MainMenu extends MusicBeatState
 	var itemContainer:FlxTypedGroup<FlxSprite>;
 	var itemList:Array<String> = ['story mode', 'freeplay', 'options'];
 
+	var menuData:Dynamic;
+
 	var menuBG:FlxSprite;
 	var menuFlash:FlxSprite;
 	var camFollow:FlxObject;
@@ -29,6 +31,8 @@ class MainMenu extends MusicBeatState
 	{
 		super.create();
 
+		menuData = yaml.Yaml.read(AssetHandler.grabAsset("menuData", YAML, "data/menus"));
+
 		DiscordRPC.update("MAIN MENU", "Navigating through the Main Menus");
 
 		FeatherUtils.menuMusicCheck();
@@ -37,15 +41,15 @@ class MainMenu extends MusicBeatState
 
 		persistentUpdate = persistentDraw = true;
 
-		menuBG = new FlxSprite(-80).loadGraphic(AssetHandler.grabAsset('menuBG', IMAGE, "images/menus"));
+		menuBG = new FlxSprite(-80).loadGraphic(AssetHandler.grabAsset(menuData.get("bg"), IMAGE, menuData.get("bgFolder")));
 		add(menuBG);
 
 		camFollow = new FlxObject(0, 0, 1, 1);
 		add(camFollow);
 
-		menuFlash = new FlxSprite(-80).loadGraphic(AssetHandler.grabAsset('menuDesat', IMAGE, "images/menus"));
+		menuFlash = new FlxSprite(-80).loadGraphic(AssetHandler.grabAsset(menuData.get("flash"), IMAGE, menuData.get("flashFolder")));
 		menuFlash.visible = false;
-		menuFlash.color = 0xFFfd719b;
+		menuFlash.color = menuData.get("flashColor");
 		add(menuFlash);
 
 		for (bg in [menuBG, menuFlash])
@@ -60,13 +64,13 @@ class MainMenu extends MusicBeatState
 		itemContainer = new FlxTypedGroup<FlxSprite>();
 		add(itemContainer);
 
-		for (i in 0...itemList.length)
+		for (i in 0...menuData.get("list").length)
 		{
 			var item:FlxSprite = new FlxSprite(0, 80 + (i * 220));
-			item.frames = AssetHandler.grabAsset(itemList[i], SPARROW, "images/menus/attachements");
+			item.frames = AssetHandler.grabAsset(menuData.get("list")[i], SPARROW, "images/menus/attachements");
 
-			item.animation.addByPrefix('idle', itemList[i] + " basic", 24);
-			item.animation.addByPrefix('selected', itemList[i] + " white", 24);
+			item.animation.addByPrefix('idle', menuData.get("list")[i] + " basic", 24);
+			item.animation.addByPrefix('selected', menuData.get("list")[i] + " white", 24);
 			item.animation.play('idle');
 
 			item.ID = i;
@@ -130,7 +134,7 @@ class MainMenu extends MusicBeatState
 					{
 						FlxFlicker.flicker(spr, 1, 0.1, false, false, function(flick:FlxFlicker)
 						{
-							switch (itemList[selection])
+							switch (menuData.get("list")[selection])
 							{
 								case "story mode":
 									PlayState.songName = "bopeebo";
@@ -147,6 +151,8 @@ class MainMenu extends MusicBeatState
 									PlayState.gameplayMode = FREEPLAY;
 									PlayState.difficulty = 1;
 									MusicState.switchState(new PlayState());
+								default:
+									MusicState.switchState(new states.TitleState());
 							}
 						});
 					}
