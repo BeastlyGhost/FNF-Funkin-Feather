@@ -99,9 +99,18 @@ class ChartParser
 						daNoteType = songNotes[3];
 					}
 
+					var pointer:String = 'opponent';
 					var daMustHit:Bool = section.mustHitSection;
 					if (songNotes[1] > 3)
 						daMustHit = !section.mustHitSection;
+
+					pointer = daMustHit ? "player" : "opponent";
+
+					if (section.altAnim)
+						songNotes[4] = '-alt';
+
+					if (section.gfSection)
+						pointer = "crowd";
 
 					if (songNotes[1] >= 0) // if the note data is valid (AKA not a old psych event)
 					{
@@ -110,7 +119,7 @@ class ChartParser
 							time: daStrumTime,
 							index: daNoteData,
 							holdLength: daHoldLength,
-							cameraPoint: daMustHit ? "player" : "opponent",
+							cameraPoint: pointer,
 						}
 
 						if (daNoteType != null && daNoteType != 'default')

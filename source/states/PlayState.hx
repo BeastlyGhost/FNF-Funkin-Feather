@@ -11,7 +11,6 @@ import flixel.FlxSprite;
 import flixel.graphics.FlxGraphic;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxMath;
-import flixel.math.FlxRect;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxSort;
@@ -19,7 +18,7 @@ import flixel.util.FlxTimer;
 import objects.Character;
 import objects.Stage;
 import objects.ui.*;
-import objects.ui.Strum.BabyArrow;
+import objects.ui.Note.Notefield;
 import openfl.media.Sound;
 
 enum GameModes
@@ -44,8 +43,8 @@ class PlayState extends MusicBeatState
 		if (newSong != null && song != newSong)
 		{
 			// clear notes prior to storing new ones
-			if (storedNotes != null)
-				storedNotes.destroy();
+			if (notesGroup != null)
+				notesGroup.destroy();
 			spawnedNotes = [];
 
 			song = newSong;
@@ -71,7 +70,7 @@ class PlayState extends MusicBeatState
 	// User Interface
 	public static var strumsGroup:FlxTypedGroup<Strum>;
 
-	public static var storedNotes:FlxTypedGroup<Note>;
+	public static var notesGroup:Notefield;
 	public static var spawnedNotes:Array<Note>;
 
 	public static var gameUI:UI;
@@ -86,7 +85,7 @@ class PlayState extends MusicBeatState
 
 	// Characters
 	public var player:Player;
-	public var spectator:Character;
+	public var crowd:Character;
 	public var opponent:Character;
 
 	public var gameStage:Stage;
@@ -151,10 +150,10 @@ class PlayState extends MusicBeatState
 		add(player);
 
 		strumsGroup = new FlxTypedGroup<Strum>();
-		storedNotes = new FlxTypedGroup<Note>();
+		notesGroup = new Notefield();
 
 		strumsGroup.cameras = [camHUD];
-		storedNotes.cameras = [camHUD];
+		notesGroup.cameras = [camHUD];
 
 		var height = (downscroll ? FlxG.height - 170 : 25);
 
@@ -165,7 +164,7 @@ class PlayState extends MusicBeatState
 		strumsGroup.add(strumsP2);
 
 		add(strumsGroup);
-		add(storedNotes);
+		add(notesGroup);
 
 		gameUI = new UI();
 		gameUI.cameras = [camHUD];
@@ -355,7 +354,7 @@ class PlayState extends MusicBeatState
 			if (spawnedNotes[0].strumTime - Conductor.songPosition > 1800)
 				break;
 
-			storedNotes.add(spawnedNotes[0]);
+			notesGroup.add(spawnedNotes[0]);
 			spawnedNotes.shift();
 		}
 
@@ -363,7 +362,7 @@ class PlayState extends MusicBeatState
 		{
 			for (strum in strumsGroup)
 			{
-				storedNotes.forEachAlive(function(note:Note)
+				notesGroup.forEachAlive(function(note:Note)
 				{
 					for (babyArrow in strum.babyArrows)
 					{
@@ -373,35 +372,19 @@ class PlayState extends MusicBeatState
 
 					note.speed = songSpeed;
 
-					note.y = (strum.y - (Conductor.songPosition - note.strumTime) * (0.45 * note.speed));
-
-					// i am so fucking sorry for this if condition
-					if (note.isSustain
-						&& note.y + note.offset.y <= strum.y + BabyArrow.swagWidth / 2
-						&& (!note.mustPress || (note.wasGoodHit || (note.prevNote.wasGoodHit && !note.canBeHit))))
-					{
-						var swagRect = new FlxRect(0, strum.y + BabyArrow.swagWidth / 2 - note.y, note.width * 2, note.height * 2);
-						swagRect.y /= note.scale.y;
-						swagRect.height -= swagRect.y;
-
-						note.clipRect = swagRect;
-					}
+					notesGroup.updateRects(note, strum);
 
 					if (strum.autoplay)
 					{
 						if (!note.mustPress && note.strumTime <= Conductor.songPosition)
-						{
-							for (char in strum.characters)
-								noteHit(note, strum, char);
-						}
+							noteHit(note, strum);
 					}
 					else if (!strum.autoplay)
 					{
 						if (keysHeld.contains(true))
 						{
 							if (note.canBeHit && note.mustPress && !note.tooLate && note.isSustain && keysHeld[note.index])
-								for (char in strum.characters)
-									noteHit(note, strum, char);
+								noteHit(note, strum);
 						}
 					}
 
@@ -434,7 +417,7 @@ class PlayState extends MusicBeatState
 					// kill offscreen notes
 					if (note.y < deathRange)
 					{
-						killNote(note);
+						notesGroup.removeNote(note);
 						spawnedNotes.remove(note);
 					}
 				});
@@ -471,7 +454,7 @@ class PlayState extends MusicBeatState
 				var noteList:Array<Note> = [];
 				var notePresses:Array<Note> = [];
 
-				storedNotes.forEachAlive(function(note:Note)
+				notesGroup.forEachAlive(function(note:Note)
 				{
 					if ((note.index == idx) && !note.isSustain && !note.tooLate && !note.wasGoodHit && note.mustPress && note.canBeHit)
 						noteList.push(note);
@@ -493,7 +476,7 @@ class PlayState extends MusicBeatState
 
 						if (notePossible)
 						{
-							noteHit(note, strumsP1, player);
+							noteHit(note, strumsP1);
 							notePresses.push(note);
 						}
 					}
@@ -514,7 +497,7 @@ class PlayState extends MusicBeatState
 		{
 			if (idx >= 0 && strumsP1.babyArrows.members[idx] != null)
 				strumsP1.babyArrows.members[idx].playAnim('static');
-			if (player.holdTimer > Conductor.stepCrochet * 4 * 0.0001 && !keysHeld.contains(true))
+			if (player.holdTimer > Conductor.stepCrochet * 4 * 0.001 && !keysHeld.contains(true))
 			{
 				if (player.animation.curAnim.name.startsWith('sing') && !player.animation.curAnim.name.endsWith('miss'))
 					player.dance();
@@ -536,7 +519,7 @@ class PlayState extends MusicBeatState
 		return FlxSort.byValues(FlxSort.ASCENDING, a.strumTime, b.strumTime);
 	}
 
-	public function noteHit(note:Note, strum:Strum, char:Character)
+	public function noteHit(note:Note, strum:Strum)
 	{
 		if (!note.wasGoodHit)
 		{
@@ -545,10 +528,21 @@ class PlayState extends MusicBeatState
 			if (strum.babyArrows.members[note.index].glowNoteHits)
 				strum.babyArrows.members[note.index].playAnim('confirm', true);
 
-			if (char != null)
+			var stringAnim:String = '';
+			var section = song.sectionNotes[curSection];
+
+			// paunful if statement
+			if (section != null)
+				if (section.animation != null && section.animation != '')
+					stringAnim = section.animation;
+
+			for (char in strum.characters)
 			{
-				char.playAnim(char.singAnims[note.index], true);
-				char.holdTimer = 0;
+				if (char != null)
+				{
+					char.playAnim(char.singAnims[note.index] + stringAnim, true);
+					char.holdTimer = 0;
+				}
 			}
 
 			var lowestDiff:Float = Math.POSITIVE_INFINITY;
@@ -583,7 +577,7 @@ class PlayState extends MusicBeatState
 
 			if (!note.isSustain)
 			{
-				killNote(note);
+				notesGroup.removeNote(note);
 				spawnedNotes.remove(note);
 			}
 		}
@@ -591,30 +585,22 @@ class PlayState extends MusicBeatState
 
 	public function noteMiss(idx:Int, strum:Strum)
 	{
+		if (crowd != null)
+		{
+			if (ScoreUtils.combo >= 5)
+				if (crowd.animOffsets.exists("sad"))
+					crowd.playAnim("sad");
+		}
+
 		for (char in strum.characters)
 		{
-			if (char.hasMissAnims)
+			if (char != null && char.hasMissAnims)
 				char.playAnim(char.singAnims[idx] + 'miss');
 		}
 		FlxG.sound.play(AssetHandler.grabAsset("miss" + FlxG.random.int(1, 3), SOUND, "sounds/" + assetSkin), FlxG.random.float(0.1, 0.2));
 
 		ScoreUtils.decreaseScore();
 		gameUI.updateScoreBar();
-	}
-
-	public function killNote(note:Note)
-	{
-		if (!note.canDie)
-			return;
-
-		note.active = false;
-		note.exists = false;
-
-		if (storedNotes.members.contains(note))
-			storedNotes.remove(note, true);
-
-		note.kill();
-		note.destroy();
 	}
 
 	public function popUpScore(myRating:String = 'sick', preload:Bool = false)

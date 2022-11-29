@@ -196,7 +196,7 @@ class ChartEditor extends MusicBeatState
 
 		mousePosUpdate();
 
-		if (FlxG.keys.pressed.THREE)
+		if (FlxG.keys.pressed.CTRL && FlxG.keys.justPressed.S)
 		{
 			var _file:FileReference;
 			var json = {
