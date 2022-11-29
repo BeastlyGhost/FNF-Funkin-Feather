@@ -40,12 +40,14 @@ enum CharterTheme
 	both the grid and UI Boxes will be customizable depending on your set UI Style
 
 	-- UI Box Sections
+
 		- SONG
 		- SECTION
 		- NOTES
 		- EVENTS
 
 	-- Section Contents
+
 		[SONG]
 		- Song Name Box
 		- Song BPM Changer
@@ -54,7 +56,7 @@ enum CharterTheme
 		- Save Chart and Chart Events Buttons
 		- Mute Instrumental Checkbox
 		- Mute Vocals Checkbox
-		
+
 		[SECTION]
 		- Copy Notes Button
 		- Paste Notes Button
@@ -82,6 +84,8 @@ enum CharterTheme
 **/
 class ChartEditor extends MusicBeatState
 {
+	var defaultUIStyle:CharterTheme = FLIXEL_WHITE; // fallback in case the theme fails to load
+
 	var uiStyle:CharterTheme = FLIXEL_WHITE;
 	var boxUI:FlxUITabMenu;
 

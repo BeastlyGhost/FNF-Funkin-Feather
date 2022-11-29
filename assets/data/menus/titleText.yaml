@@ -1,7 +1,7 @@
 bg: null
 gf: "titleScreen/gfDanceTitle"
 ng: "titleScreen/newgroundsLogo"
-bgFolder: null,
+bgFolder: null
 gfFolder: "images/menus"
 ngFolder: "images/menus"
 bgAntialias: true

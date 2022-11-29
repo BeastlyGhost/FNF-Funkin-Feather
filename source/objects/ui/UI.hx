@@ -50,8 +50,8 @@ class UI extends FlxSpriteGroup
 		add(iconP2);
 
 		scoreBar = new FlxText(healthBG.x + healthBG.width - 190, healthBG.y + 30, 0, '', 20);
-		scoreBar.setFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 20, FlxColor.WHITE, RIGHT, SHADOW, FlxColor.BLACK);
-		scoreBar.shadowOffset.set(2, 3);
+		scoreBar.setFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 20, FlxColor.WHITE, CENTER, SHADOW, FlxColor.BLACK);
+		scoreBar.shadowOffset.set(2, 2);
 		scoreBar.scrollFactor.set();
 		add(scoreBar);
 
@@ -88,8 +88,12 @@ class UI extends FlxSpriteGroup
 		var tempScore:String;
 
 		tempScore = "Score: " + ScoreUtils.score;
-		tempScore += separator + "Misses: " + ScoreUtils.misses;
-		tempScore += separator + "Grade: " + ScoreUtils.curGrade + ScoreUtils.returnGradePercent();
+
+		if (OptionsMeta.getPref("Show Grades"))
+		{
+			tempScore += separator + "Misses: " + ScoreUtils.misses;
+			tempScore += separator + "Grade: " + ScoreUtils.curGrade + ScoreUtils.returnGradePercent();
+		}
 
 		scoreBar.text = tempScore;
 		scoreBar.screenCenter(X);

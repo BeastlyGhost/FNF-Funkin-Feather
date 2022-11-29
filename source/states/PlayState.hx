@@ -720,7 +720,9 @@ class PlayState extends MusicBeatState
 		switch (gameplayMode)
 		{
 			default:
-				MusicState.switchState(new TitleState());
+				if (FlxG.sound.music != null)
+					FlxG.sound.music.stop();
+				MusicState.switchState(new states.menus.MainMenu());
 		}
 	}
 

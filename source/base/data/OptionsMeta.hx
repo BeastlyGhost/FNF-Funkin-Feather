@@ -54,6 +54,12 @@ class OptionsMeta
 			value: false
 		},
 		{
+			name: "Show Grades",
+			description: "If misses, accuracy and grades should be shown during gameplay.",
+			type: BOOLEAN,
+			value: true
+		},
+		{
 			name: "Downscroll",
 			description: "If the notes should go from top to bottom.",
 			type: BOOLEAN,

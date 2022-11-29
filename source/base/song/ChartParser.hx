@@ -9,8 +9,8 @@ import sys.FileSystem;
 
 enum DataFormat
 {
-	SWAG; // Base Game
-	CYNDA; // Custom Format
+	VANILLA; // Base Game
+	FEATHER; // Custom Format
 }
 
 /**
@@ -18,7 +18,7 @@ enum DataFormat
 **/
 class ChartParser
 {
-	public static var chartDataType:DataFormat = CYNDA;
+	public static var chartDataType:DataFormat = FEATHER;
 	public static var difficultyMap:Map<Int, String> = [0 => "-easy", 1 => "-normal", 2 => "-hard",];
 
 	public static function loadChartData(songName:String, songDiff:Int)
@@ -36,12 +36,12 @@ class ChartParser
 		var featherSong:FeatherSong = cast Json.parse(dataSong).song;
 
 		if (funkinSong.notes != null)
-			chartDataType = SWAG;
+			chartDataType = VANILLA;
 
 		if (featherSong.author == null || featherSong.author.length < 1)
 			featherSong.author = '???';
 
-		if (chartDataType != null && chartDataType == SWAG)
+		if (chartDataType != null && chartDataType == VANILLA)
 		{
 			if (funkinSong.gfVersion == null)
 			{
@@ -197,8 +197,6 @@ class ChartParser
 	{
 		var arrayNotes:Array<Note> = [];
 
-		var timeBegin:Float = Sys.time();
-
 		for (section in dataSent.notes)
 		{
 			for (songNotes in section.sectionNotes)
@@ -244,10 +242,7 @@ class ChartParser
 			}
 		}
 
-		arrayNotes.sort(function(a:Note, b:Note) return a.strumTime < b.strumTime ? FlxSort.ASCENDING : a.strumTime > b.strumTime ? -FlxSort.ASCENDING : 0);
-
-		var timeEnd:Float = Sys.time();
-		trace('parsing took: ${Math.round(timeEnd - timeBegin)}s');
+		arrayNotes.sort(function(a:Note, b:Note):Int return FlxSort.byValues(FlxSort.ASCENDING, a.strumTime, b.strumTime));
 		return arrayNotes;
 	}
 }
