@@ -13,7 +13,7 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
-import objects.Alphabet;
+import objects.ui.Alphabet;
 
 /**
 	the game's titlescreen, not much is going on about it aside from some wacky letter stuffs!

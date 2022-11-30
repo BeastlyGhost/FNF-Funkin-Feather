@@ -10,6 +10,7 @@ typedef Judgement =
 	var health:Float;
 	var timingMod:Float;
 	var percentMod:Float;
+	var noteSplash:Bool;
 	var comboReturn:String;
 }
 
@@ -52,6 +53,7 @@ class PlayerUtils
 			health: 100,
 			percentMod: 100,
 			timingMod: 33.33, // BASED ON FNF BASE GAME TIMING WINDOWS!!! -- https://twitter.com/kade0912/status/1511477162469113859
+			noteSplash: true,
 			comboReturn: "SFC"
 		},
 		{
@@ -60,6 +62,7 @@ class PlayerUtils
 			health: 50,
 			percentMod: 85,
 			timingMod: 91.67,
+			noteSplash: false,
 			comboReturn: "GFC"
 		},
 		{
@@ -68,6 +71,7 @@ class PlayerUtils
 			health: -50,
 			percentMod: 50,
 			timingMod: 133.33,
+			noteSplash: false,
 			comboReturn: "FC"
 		},
 		{
@@ -76,6 +80,7 @@ class PlayerUtils
 			health: -100,
 			percentMod: 0,
 			timingMod: 166.67,
+			noteSplash: false,
 			comboReturn: null
 		}
 	];

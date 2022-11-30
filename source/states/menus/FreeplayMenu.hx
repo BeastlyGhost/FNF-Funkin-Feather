@@ -8,7 +8,7 @@ import flixel.math.FlxMath;
 import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
-import objects.Alphabet;
+import objects.ui.Alphabet;
 import sys.thread.Mutex;
 
 typedef SongData =

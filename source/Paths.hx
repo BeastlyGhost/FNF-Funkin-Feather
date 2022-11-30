@@ -32,6 +32,13 @@ class Paths
 	inline public static function music(key:String, ?library:String)
 		return AssetHandler.grabAsset(key, SOUND, "music");
 
+	inline public static function module(key:String, folder:String = null, ?library:String)
+	{
+		if (folder == null || folder.length > 1)
+			folder = 'scripts';
+		return AssetHandler.grabAsset(key, MODULE, folder);
+	}
+
 	inline public static function getSparrowAtlas(key:String, ?library:String)
 		return AssetHandler.grabAsset(key, SPARROW, "images");
 

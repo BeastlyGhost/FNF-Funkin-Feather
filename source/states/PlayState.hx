@@ -18,6 +18,7 @@ import flixel.util.FlxTimer;
 import objects.Character;
 import objects.Stage;
 import objects.ui.*;
+import objects.ui.Note.NoteSplash;
 import objects.ui.Note.Notefield;
 import openfl.media.Sound;
 
@@ -34,6 +35,8 @@ enum GameModes
 **/
 class PlayState extends MusicBeatState
 {
+	public static var main:PlayState;
+
 	// Song
 	public static var song(default, set):FeatherSong;
 	@:isVar public static var songSpeed(get, default):Float = 1; // this needs to be a `get, set` later
@@ -69,14 +72,15 @@ class PlayState extends MusicBeatState
 
 	// User Interface
 	public static var strumsGroup:FlxTypedGroup<Strum>;
-
 	public static var notesGroup:Notefield;
+	public static var splashGroup:FlxTypedGroup<NoteSplash>;
 	public static var spawnedNotes:Array<Note>;
 
 	public static var gameUI:UI;
 
 	public var strumsP1:Strum;
 	public var strumsP2:Strum;
+	public var playerStrum:Array<Strum> = [];
 
 	public static var assetSkin:String = 'default';
 
@@ -114,6 +118,8 @@ class PlayState extends MusicBeatState
 	{
 		super.create();
 
+		main = this;
+
 		FlxG.mouse.visible = false;
 		if (FlxG.sound.music != null && FlxG.sound.music.playing)
 			FlxG.sound.music.stop();
@@ -150,9 +156,11 @@ class PlayState extends MusicBeatState
 		add(player);
 
 		strumsGroup = new FlxTypedGroup<Strum>();
+		splashGroup = new FlxTypedGroup<NoteSplash>();
 		notesGroup = new Notefield();
 
 		strumsGroup.cameras = [camHUD];
+		splashGroup.cameras = [camHUD];
 		notesGroup.cameras = [camHUD];
 
 		var height = (downscroll ? FlxG.height - 170 : 25);
@@ -163,8 +171,14 @@ class PlayState extends MusicBeatState
 		strumsGroup.add(strumsP1);
 		strumsGroup.add(strumsP2);
 
+		playerStrum = [strumsP1];
+
 		add(strumsGroup);
+		add(splashGroup);
 		add(notesGroup);
+
+		var firework:NoteSplash = new NoteSplash(100, 100, 0);
+		splashGroup.add(firework);
 
 		gameUI = new UI();
 		gameUI.cameras = [camHUD];
@@ -374,14 +388,6 @@ class PlayState extends MusicBeatState
 						if (!note.mustPress && note.strumTime <= Conductor.songPosition)
 							noteHit(note, strum);
 					}
-					else if (!strum.autoplay)
-					{
-						if (keysHeld.contains(true))
-						{
-							if (note.canBeHit && note.mustPress && !note.tooLate && note.isSustain && keysHeld[note.index])
-								noteHit(note, strum);
-						}
-					}
 
 					if (note.y > FlxG.height)
 					{
@@ -407,10 +413,10 @@ class PlayState extends MusicBeatState
 						}
 					}
 
-					var deathRange = (downscroll ? FlxG.height + note.height : -note.height);
+					var killNote:Bool = (downscroll ? note.y > FlxG.height : note.y < -note.height);
 
 					// kill offscreen notes
-					if (note.y < deathRange)
+					if (killNote)
 					{
 						notesGroup.removeNote(note);
 						spawnedNotes.remove(note);
@@ -446,9 +452,6 @@ class PlayState extends MusicBeatState
 
 	public function keyEventTrigger(action:String, key:Int, state:KeyState)
 	{
-		if (isPaused || strumsP1.autoplay)
-			return;
-
 		switch (action)
 		{
 			case "left" | "down" | "up" | "right":
@@ -466,71 +469,86 @@ class PlayState extends MusicBeatState
 		keysHeld[idx] = (state == PRESSED);
 		// trace(keysHeld);
 
-		if (state == PRESSED)
+		for (strum in playerStrum)
 		{
-			if (song != null && countdownWasActive && !isEndingSong)
+			if (state == PRESSED)
 			{
-				var noteList:Array<Note> = [];
-				var notePresses:Array<Note> = [];
-				var notePossible:Bool = true; // usually, yeah, it should be possible to hit a note
-
-				notesGroup.forEachAlive(function(note:Note)
+				if (song != null && !strum.autoplay && countdownWasActive && !isPaused && !isEndingSong)
 				{
-					if ((note.index == idx) && !note.isSustain && !note.tooLate && !note.wasGoodHit && note.mustPress && note.canBeHit)
-						noteList.push(note);
-					// trace("Stored Note List: " + noteList);
-				});
-				noteList.sort(sortHitNotes);
+					var noteList:Array<Note> = [];
+					var notePresses:Array<Note> = [];
+					var notePossible:Bool = true; // usually, yeah, it should be possible to hit a note
 
-				if (noteList.length > 0)
-				{
-					for (note in noteList)
+					notesGroup.forEachAlive(function(note:Note)
 					{
-						for (pressedNote in notePresses)
+						if ((note.index == idx) && !note.isSustain && !note.tooLate && !note.wasGoodHit && note.mustPress && note.canBeHit)
+							noteList.push(note);
+						// trace("Stored Note List: " + noteList);
+					});
+					noteList.sort(sortHitNotes);
+
+					if (keysHeld.contains(true))
+					{
+						notesGroup.forEachAlive(function(note:Note)
 						{
-							if (Math.abs(pressedNote.strumTime - note.strumTime) < 1)
+							if (note.canBeHit && note.mustPress && !note.tooLate && note.isSustain && keysHeld[note.index])
+								noteHit(note, strum);
+						});
+					}
+
+					if (noteList.length > 0)
+					{
+						for (note in noteList)
+						{
+							for (pressedNote in notePresses)
 							{
-								// kill the note
-								notesGroup.removeNote(pressedNote);
-								spawnedNotes.remove(pressedNote);
+								if (Math.abs(pressedNote.strumTime - note.strumTime) < 1)
+								{
+									// kill the note
+									notesGroup.removeNote(pressedNote);
+									spawnedNotes.remove(pressedNote);
+								}
+								else // declare as not possible to hit
+									notePossible = false;
 							}
-							else // declare as not possible to hit
-								notePossible = false;
-						}
 
-						if (notePossible)
-						{
-							noteHit(note, strumsP1);
-							notePresses.push(note);
+							if (notePossible && note.active)
+							{
+								noteHit(note, strum);
+								notePresses.push(note);
+							}
 						}
 					}
-				}
-				else
-				{
-					if (!OptionsMeta.getPref("Ghost Tapping"))
+					else
 					{
-						noteMiss(idx, strumsP1);
+						if (!OptionsMeta.getPref("Ghost Tapping"))
+						{
+							noteMiss(idx, strum);
+						}
 					}
 				}
-			}
 
-			if (strumsP1.babyArrows.members[idx] != null && strumsP1.babyArrows.members[idx].animation.curAnim.name != 'confirm')
-				strumsP1.babyArrows.members[idx].playAnim('pressed');
-		}
-		else
-		{
-			if (idx >= 0 && strumsP1.babyArrows.members[idx] != null)
-				strumsP1.babyArrows.members[idx].playAnim('static');
-			if (player.holdTimer > Conductor.stepCrochet * 4 * 0.001 && !keysHeld.contains(true))
+				if (strum.babyArrows.members[idx] != null && strum.babyArrows.members[idx].animation.curAnim.name != 'confirm')
+					strum.babyArrows.members[idx].playAnim('pressed');
+			}
+			else
 			{
-				if (player.animation.curAnim.name.startsWith('sing') && !player.animation.curAnim.name.endsWith('miss'))
-					player.dance();
+				if (idx >= 0 && strum.babyArrows.members[idx] != null)
+					strum.babyArrows.members[idx].playAnim('static');
+				for (player in strum.characters)
+				{
+					if (player.holdTimer > Conductor.stepCrochet * 4 * 0.001 && !keysHeld.contains(true))
+					{
+						if (player.animation.curAnim.name.startsWith('sing') && !player.animation.curAnim.name.endsWith('miss'))
+							player.dance();
+					}
+				}
 			}
 		}
 	}
 
 	/**
-		Sort through possible notes
+		Sort through possible hit notes
 		@author Shadow_Mario_
 	**/
 	function sortHitNotes(a:Note, b:Note):Int
@@ -592,6 +610,9 @@ class PlayState extends MusicBeatState
 				{
 					PlayerUtils.increaseScore(ratingInteger);
 					popUpScore(PlayerUtils.judgeTable[ratingInteger].name);
+
+					if (PlayerUtils.judgeTable[ratingInteger].noteSplash)
+						popUpSplash(note.x, note.y, note.index);
 
 					// update scoretext
 					gameUI.updateScoreBar();
@@ -681,6 +702,14 @@ class PlayState extends MusicBeatState
 				startDelay: Conductor.crochet * 0.002
 			});
 		}
+	}
+
+	public function popUpSplash(x:Float, y:Float, index:Int)
+	{
+		//
+		var firework = splashGroup.recycle(NoteSplash);
+		firework.setupNoteSplash(x, y, index);
+		splashGroup.add(firework);
 	}
 
 	public function charDancing(beat:Int)

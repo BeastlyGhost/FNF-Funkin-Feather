@@ -9,7 +9,7 @@ import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
-import objects.Alphabet;
+import objects.ui.Alphabet;
 import sys.thread.Mutex;
 import sys.thread.Thread;
 

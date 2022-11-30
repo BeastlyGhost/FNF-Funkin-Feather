@@ -1,6 +1,6 @@
 package base.data;
 
-#if FEATURE_DISCORD
+#if RPC_ALLOWED
 import discord_rpc.DiscordRpc as RPCWrapper;
 
 /**
