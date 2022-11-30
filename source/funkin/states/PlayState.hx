@@ -865,7 +865,11 @@ class PlayState extends MusicBeatState
 				FeatherUtils.menuMusicCheck(false);
 				MusicState.switchState(new funkin.states.menus.MainMenu());
 			case CHARTING:
-				MusicState.switchState(new funkin.states.editors.ChartEditor());
+				isPaused = true;
+				Conductor.pauseSong();
+				globalManagerPause();
+				changePresence("Finished playing a song - ");
+				openSubState(new funkin.substates.PauseSubstate(player.getScreenPosition().x, player.getScreenPosition().y, "charting"));
 		}
 	}
 

@@ -20,17 +20,25 @@ import sys.thread.Thread;
 **/
 class PauseSubstate extends MusicBeatSubstate
 {
-	var items:Array<String> = ["Resume Song", "Restart Song", "Exit to menu"];
+	var listMap:Map<String, Array<String>> = [
+		"default" => ["Resume Song", "Restart Song", /*"Exit to Options",*/ "Exit to menu"],
+		"charting" => ["Exit to Charter", "Leave Charting Mode", "Exit to menu"],
+		"no-resume" => ["Restart Song", /*"Exit to Options",*/ "Exit to menu"],
+	];
+
 	var itemContainer:FlxTypedGroup<Alphabet>;
+	var currentList:String = "default";
 
 	var pauseMusic:FlxSound;
 	var mutex:Mutex;
 
-	public function new(x:Float, y:Float)
+	public function new(x:Float, y:Float, listName:String = "default")
 	{
 		super();
 
-		wrappableGroup = items;
+		wrappableGroup = listMap.get(listName);
+
+		currentList = listName;
 
 		mutex = new Mutex();
 		Thread.create(function()
@@ -66,9 +74,9 @@ class PauseSubstate extends MusicBeatSubstate
 		itemContainer = new FlxTypedGroup<Alphabet>();
 		add(itemContainer);
 
-		for (i in 0...items.length)
+		for (i in 0...listMap.get(listName).length)
 		{
-			var base:Alphabet = new Alphabet(0, (70 * i) + 30, items[i], true);
+			var base:Alphabet = new Alphabet(0, (70 * i) + 30, listMap.get(listName)[i], true);
 			base.isMenuItem = true;
 			base.targetY = i;
 			itemContainer.add(base);
@@ -90,14 +98,22 @@ class PauseSubstate extends MusicBeatSubstate
 
 		if (Controls.getPressEvent("accept"))
 		{
-			switch (items[selection])
+			switch (listMap.get(currentList)[selection].toLowerCase())
 			{
-				case "Resume Song":
+				case "resume song":
 					close();
-				case "Restart Song":
+				case "restart song":
 					funkin.song.Conductor.stopSong();
 					MusicState.resetState();
-				case "Exit to menu":
+				case "exit to options":
+					//
+				case "exit to charter":
+					MusicState.switchState(new funkin.states.editors.ChartEditor());
+				case "leave charting mode":
+					funkin.song.Conductor.stopSong();
+					PlayState.gameplayMode = FREEPLAY;
+					MusicState.resetState();
+				case "exit to menu":
 					PlayerUtils.deaths = 0;
 
 					if (PlayState.gameplayMode == STORY)
@@ -135,11 +151,6 @@ class PauseSubstate extends MusicBeatSubstate
 
 	override function destroy()
 	{
-		if (itemContainer.members != null)
-		{
-			for (i in 0...itemContainer.members.length)
-				itemContainer.members[i].destroy();
-		}
 		if (pauseMusic != null)
 			pauseMusic.destroy();
 		super.destroy();
