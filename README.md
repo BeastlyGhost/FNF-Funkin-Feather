@@ -13,4 +13,5 @@ Pull Requests and new Issues are greatly appreciated, as I (@BeastlyGhost) wanna
 -------------------------------
 # Social Contacts
 [Twitter - BeastlyGhost](https://twitter.com/BeastlyGabi)
-[DIscord - BeastlyGhost](https://discord.com/users/597124141530742805)
+
+[Discord - BeastlyGhost](https://discord.com/users/597124141530742805)
