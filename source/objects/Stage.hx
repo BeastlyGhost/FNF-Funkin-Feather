@@ -47,19 +47,19 @@ class Stage extends FlxTypedGroup<FlxBasic>
 					case "bopeebo" | "fresh" | "dadbattle" | "dad-battle":
 						dummyStage = "stage";
 					case "spookeez" | "south" | "monster":
-						dummyStage = "spooky";
+						dummyStage = "haunted-house";
 					case "pico" | "philly" | "philly-nice" | "blammed":
-						dummyStage = "philly";
+						dummyStage = "philly-city";
 					case "satin-panties" | "high" | "milf":
 						dummyStage = "highway";
 					case "cocoa" | "eggnog":
 						dummyStage = "mall";
 					case "winter-horrorland":
-						dummyStage = "mallEvil";
+						dummyStage = "mall-illusion";
 					case "senpai" | "roses":
 						dummyStage = "school";
 					case "thorns":
-						dummyStage = "schoolEvil";
+						dummyStage = "school-glitch";
 					case "ugh" | "guns" | "stress":
 						dummyStage = "military";
 				}
@@ -83,9 +83,9 @@ class Stage extends FlxTypedGroup<FlxBasic>
 				{
 					case "highway":
 						dummyCrowd = "gf-car";
-					case "mall" | "mallEvil":
+					case "mall" | "mall-illusion":
 						dummyCrowd = "gf-christmas";
-					case "school" | "schoolEvil":
+					case "school" | "school-glitch":
 						dummyCrowd = "gf-pixel";
 					case "military":
 						if (PlayState.song.internalName.toLowerCase() == "stress")
