@@ -46,8 +46,8 @@ class DiscordRPC
 	static function dc(_code:Int, _message:String):Void
 		trace('Disconnected! $_code : $_message');
 
-	public static function update(detailsMain:String = '', detailsSub:String = '', ?keyBig:String, ?keySmall:String, ?detailsBig:String, ?detailsSmall:String,
-			?timeEnd:Float, ?startTime:Bool):Void
+	public static function update(detailsMain:String = '', detailsSub:String = '', ?keyBig:String = 'fef-logo', ?keySmall:String, ?detailsBig:String,
+			?detailsSmall:String, ?timeEnd:Float, ?startTime:Bool):Void
 	{
 		var timeNow:Float = (startTime ? Date.now().getTime() : 0);
 
