@@ -555,6 +555,12 @@ class PlayState extends MusicBeatState
 						}
 					}
 				}
+
+				if (strum.babyArrows.members[idx] != null && strum.babyArrows.members[idx].animation.curAnim.name != 'confirm')
+				{
+					strum.babyArrows.members[idx].playAnim('pressed');
+					strum.babyArrows.members[idx].centerOffsets();
+				}
 			}
 			else
 			{
