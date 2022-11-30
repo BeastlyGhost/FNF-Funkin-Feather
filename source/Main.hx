@@ -20,7 +20,7 @@ class Main extends Sprite
 		framerate: 120, // the game's default framerate
 		skipSplash: false, // whether the game boot splash should be skipped (defaults to false, changes true when seen once)
 		fullscreen: false, // whether the game should start at fullscreen
-		version: 'PRIVATE PRE-ALPHA', // the engine game version
+		version: 'PUBLIC ALPHA', // the engine game version
 	};
 
 	public static function main():Void
