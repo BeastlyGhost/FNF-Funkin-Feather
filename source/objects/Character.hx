@@ -44,6 +44,8 @@ class Character extends FeatherSprite
 	{
 		antialiasing = true;
 
+		character = char;
+
 		charOffset = new FlxPoint(0, 0);
 		camOffset = new FlxPoint(0, 0);
 
@@ -82,9 +84,6 @@ class Character extends FeatherSprite
 
 				playAnim('idle');
 
-				if (!player)
-					charOffset.y += 320;
-
 				flipX = true;
 		}
 
@@ -94,15 +93,6 @@ class Character extends FeatherSprite
 				hasMissAnims = true;
 		}
 
-		// "Preloads" animations so they dont lag in the song
-		// author @DiogoTV
-		var allAnims:Array<String> = animation.getNameList();
-		for (anim in allAnims)
-			playAnim(anim);
-
-		recalcDance();
-		dance();
-
 		if (player) // fuck you ninjamuffin lmao
 		{
 			flipX = !flipX;
@@ -111,6 +101,15 @@ class Character extends FeatherSprite
 		}
 		else if (character.startsWith('bf'))
 			flipLeftRight();
+
+		// "Preloads" animations so they dont lag in the song
+		// author @DiogoTV
+		var allAnims:Array<String> = animation.getNameList();
+		for (anim in allAnims)
+			playAnim(anim);
+
+		recalcDance();
+		dance();
 
 		this.x += charOffset.x;
 		this.y += (charOffset.y - (frameHeight * scale.y));

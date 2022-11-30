@@ -597,7 +597,7 @@ class PlayState extends MusicBeatState
 
 			var babyArrow = strum.babyArrows.members[note.index];
 
-			if (babyArrow != null && babyArrow.animation.curAnim.name != 'confirm' && babyArrow.glowNoteHits)
+			if (babyArrow != null && babyArrow.animation.curAnim.name != 'confirm')
 			{
 				babyArrow.playAnim('confirm', true);
 				babyArrow.centerOffsets();
