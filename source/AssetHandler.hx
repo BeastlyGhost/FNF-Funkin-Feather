@@ -48,7 +48,7 @@ class AssetHandler
 	/**
 		Stores only user-preferred assets that should not be cleared when `clear` is called
 	**/
-	public static var persistentAssets:Array<String> = ['alphabet'];
+	public static var persistentAssets:Array<String> = ['alphabet', 'menuBG', 'menuDesat'];
 
 	/**
 		Stores Tracked Assets on a Map
@@ -119,6 +119,7 @@ class AssetHandler
 		if (!mappedAssets[IMAGE].exists(outputDir))
 		{
 			var myGraphic:FlxGraphic = FlxGraphic.fromAssetKey(outputDir, false, null, false);
+			myGraphic.persist = true;
 			mappedAssets[IMAGE].set(outputDir, {type: IMAGE, data: myGraphic});
 			trackedAssets.push(outputDir);
 		}
@@ -199,6 +200,7 @@ class AssetHandler
 			case MODULE:
 				extensions = ['.hx', '.hxs', '.hxc', '.hscript'];
 			default:
+				extensions = null;
 		}
 
 		if (extensions != null)
@@ -268,9 +270,9 @@ class AssetHandler
 				Assets.cache.clear(asset);
 				mappedAssets[SOUND].remove(asset);
 			}
-
-			trackedAssets = [];
 		}
+
+		trackedAssets = [];
 
 		// run the system garbage collector
 		System.gc();

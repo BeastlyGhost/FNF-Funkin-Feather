@@ -7,6 +7,7 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxMath;
 import flixel.system.FlxSound;
 import flixel.text.FlxText;
+import flixel.util.FlxColor;
 import objects.Alphabet;
 import sys.thread.Mutex;
 
@@ -68,13 +69,15 @@ class FreeplayMenu extends MusicBeatState
 
 	var mutex:Mutex;
 
+	var tempColors = [0xFFFFB300, 0xFF56AEBD, 0xFF9F5788, 0xFFC35D5D];
+
 	override function create()
 	{
 		super.create();
 
 		DiscordRPC.update("FREEPLAY MENU", "Choosing a Song");
 
-		menuBG = new FlxSprite(-80).loadGraphic(AssetHandler.grabAsset('menuBGBlue', IMAGE, 'images/menus'));
+		menuBG = new FlxSprite(-80).loadGraphic(Paths.image('menus/menuDesat'));
 		menuBG.scrollFactor.set();
 		menuBG.screenCenter(X);
 		add(menuBG);
@@ -119,6 +122,9 @@ class FreeplayMenu extends MusicBeatState
 
 		if (scoreTxt != null)
 			scoreTxt.text = "PERSONAL BEST: 0";
+
+		if (menuBG != null && menuBG.pixels != null)
+			menuBG.color = FlxColor.interpolate(menuBG.color, tempColors[selection]);
 
 		if (FlxG.sound.music.volume < 0.7)
 			FlxG.sound.music.volume += 0.5 * elapsed;

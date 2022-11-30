@@ -232,7 +232,7 @@ class PlayState extends MusicBeatState
 		// cache ratings
 		popUpScore('sick', true);
 
-		if (skipCountdown)
+		if (countdownWasActive && !isPaused && !hasDied && skipCountdown)
 		{
 			Conductor.songPosition = -(Conductor.crochet * 1);
 			startSong();
@@ -284,10 +284,11 @@ class PlayState extends MusicBeatState
 			// bop with countdown;
 			charDancing(curBeat);
 
-			Conductor.songPosition = -(Conductor.crochet * posSong);
+			if (!isPaused && !hasDied)
+				Conductor.songPosition = -(Conductor.crochet * posSong);
 
-			posSong--;
-			posCount++;
+			posSong -= 1;
+			posCount += 1;
 
 			if (posCount == 4)
 				gameUI.showInfoCard();
@@ -296,10 +297,13 @@ class PlayState extends MusicBeatState
 
 	function startSong()
 	{
-		AssetHandler.clear(false, false);
+		if (posCount >= 4 && countdownWasActive && !isEndingSong)
+		{
+			AssetHandler.clear(false, false);
 
-		Conductor.playSong(song.name);
-		isStartingSong = false;
+			Conductor.playSong(song.name);
+			isStartingSong = false;
+		}
 	}
 
 	override public function update(elapsed:Float)
@@ -317,18 +321,13 @@ class PlayState extends MusicBeatState
 
 		if (!isPaused && !hasDied)
 		{
+			Conductor.songPosition += elapsed * 1000;
+			if (Conductor.songPosition >= Conductor.lastSongPos)
+				Conductor.lastSongPos = Conductor.songPosition;
+
 			if (isStartingSong)
-			{
-				Conductor.songPosition += elapsed * 1000;
-				if (Conductor.songPosition >= 0 && posCount >= 4 && countdownWasActive && !isEndingSong)
+				if (Conductor.songPosition >= 0)
 					startSong();
-			}
-			else
-			{
-				Conductor.songPosition += elapsed * 1000;
-				if (Conductor.songPosition >= Conductor.lastSongPos)
-					Conductor.lastSongPos = Conductor.songPosition;
-			}
 		}
 
 		FeatherUtils.cameraBumpingZooms(camGame, cameraZoom, cameraSpeed);
