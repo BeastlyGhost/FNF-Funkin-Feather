@@ -25,6 +25,7 @@ class PlayerUtils
 	public static var combo:Int = 0;
 	public static var health:Float = 1;
 	public static var deaths:Float = 0;
+	public static var validScore:Bool = true;
 
 	public static var noteRatingMod:Float;
 	public static var totalNotesHit:Int;
@@ -103,6 +104,7 @@ class PlayerUtils
 		combo = 0;
 		health = 1;
 		accuracy = 0;
+		validScore = true;
 
 		totalNotesHit = 0;
 		totalMinesHit = 0;

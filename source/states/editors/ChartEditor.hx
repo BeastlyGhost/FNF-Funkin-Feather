@@ -106,6 +106,8 @@ class ChartEditor extends MusicBeatState
 	var renderedHolds:FlxTypedGroup<Note>;
 	var renderedLabels:FlxTypedGroup<FlxText>;
 
+	var noteSelection:Int;
+
 	override function create()
 	{
 		super.create();
@@ -197,6 +199,30 @@ class ChartEditor extends MusicBeatState
 
 		mousePosUpdate();
 
+		if (FlxG.mouse.justPressed)
+		{
+			if (FlxG.mouse.overlaps(renderedNotes))
+			{
+				renderedNotes.forEach(function(note:Note)
+				{
+					if (FlxG.mouse.overlaps(note))
+					{
+						removeNote(note);
+					}
+				});
+			}
+			else
+			{
+				if (FlxG.mouse.x > gridMain.x
+					&& FlxG.mouse.x < (gridMain.x + gridMain.width)
+					&& FlxG.mouse.y > 0
+					&& FlxG.mouse.y < getYfromStrum(FlxG.sound.music.length))
+				{
+					placeNote();
+				}
+			}
+		}
+
 		if (FlxG.keys.pressed.CONTROL && FlxG.keys.justPressed.S)
 		{
 			var _file:FileReference;
@@ -223,6 +249,89 @@ class ChartEditor extends MusicBeatState
 		}
 	}
 
+	function updateGrid():Void
+	{
+		renderedNotes.clear();
+		renderedHolds.clear();
+
+		/*
+			if (song.sectionNotes[curSection].bpm > 0)
+			{
+				Conductor.changeBPM(song.sectionNotes[curSection].bpm);
+				FlxG.log.add('CHANGED BPM!');
+			}
+			else
+			{
+				var daBPM:Float = song.bpm;
+				for (i in 0...curSection)
+					if (song.sectionNotes[i].bpm > 0)
+						daBPM = song.sectionNotes[i].bpm;
+				Conductor.changeBPM(daBPM);
+			}
+		 */
+
+		for (i in song.sectionNotes)
+		{
+			var index:Int = i.index;
+			var time:Float = i.time;
+			var type:String = i.type;
+			var holdLength:Float = i.holdLength;
+
+			var note:Note = new Note(time, index, type, null, false);
+			note.sustainLength = holdLength;
+			note.setGraphicSize(gridSize, gridSize);
+			note.updateHitbox();
+			note.screenCenter(X);
+
+			if (song.sectionNotes != null && song.sectionNotes[curSection] != null)
+			{
+				var isMustPress:Bool = song.sectionNotes[curSection].cameraPoint == "player";
+
+				note.x -= ((gridSize * 6) - (gridSize / 2));
+				note.x += Math.floor((isMustPress ? (index + 4) % 8 : index) * gridSize);
+
+				note.y = Math.floor(getYfromStrum(time));
+
+				renderedNotes.add(note);
+				trace("Added Note at " + Math.floor(getYfromStrum(time)));
+			}
+		}
+	}
+
+	function placeNote()
+	{
+		var time:Float = getStrumTime(mouseHighlight.y) + getSectionStart();
+		var index:Int = Math.floor(FlxG.mouse.x / gridSize);
+		var length:Float = 0;
+
+		// noteSelection = song.sectionNotes[curSection].index;
+
+		updateGrid();
+	}
+
+	function removeNote(note:Note)
+	{
+		var index:Null<Int> = note.index;
+		var isMustPress:Bool = song.sectionNotes[curSection].cameraPoint == "player";
+
+		if (index > -1 && note.mustPress != isMustPress)
+			index += 4;
+
+		if (index > -1)
+		{
+			for (i in song.sectionNotes)
+			{
+				if (i.time == note.step && i.index == note.index)
+				{
+					song.sectionNotes.remove(i);
+					break;
+				}
+			}
+		}
+
+		updateGrid();
+	}
+
 	function mousePosUpdate()
 	{
 		if (FlxG.mouse.x > gridMain.x
@@ -243,4 +352,17 @@ class ChartEditor extends MusicBeatState
 
 	function getYfromStrum(strumTime:Float):Float
 		return FlxMath.remapToRange(strumTime, 0, 16 * Conductor.stepCrochet, gridMain.y, gridMain.y + gridMain.height);
+
+	function getSectionStart():Float
+	{
+		var daBPM:Float = song.bpm;
+		var daPos:Float = 0;
+		for (i in 0...curSection)
+		{
+			if (song.sectionNotes[i].bpm > 0)
+				daBPM = song.sectionNotes[i].bpm;
+			daPos += 4 * (1000 * 60 / daBPM);
+		}
+		return daPos;
+	}
 }

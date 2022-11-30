@@ -14,6 +14,7 @@ typedef SectionBody =
 	var ?animation:String; // note animation string (null by default)
 	var holdLength:Float; // note sustain length
 	var cameraPoint:String; // where should the camera point to
+	var ?bpm:Float;
 }
 
 /**
@@ -29,7 +30,7 @@ typedef FeatherSong =
 	var internalName:String;
 	var author:String;
 	var speed:Float;
-	var bpm:Int;
+	var bpm:Float;
 	//
 	var sectionNotes:Array<SectionBody>;
 	var sectionEvents:Array<TimedEvent>;

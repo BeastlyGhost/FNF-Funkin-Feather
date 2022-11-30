@@ -359,6 +359,8 @@ class PlayState extends MusicBeatState
 		{
 			if (FlxG.keys.justPressed.SEVEN)
 			{
+				PlayerUtils.validScore = false;
+				gameplayMode = CHARTING;
 				Conductor.stopSong();
 				MusicState.switchState(new states.editors.ChartEditor());
 			}
