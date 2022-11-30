@@ -8,10 +8,10 @@ import base.song.MusicState;
 **/
 class OptionsMenu extends MusicBeatState
 {
-	var categories:Map<String, Array<CategoryMetadata>> = [
+	var categories:Map<String, Array<OptionData>> = [
 		"main" => [
-			{name: "preferences", type: "subgroup", description: "Define your Game Preferences."},
-			{name: "keybinds", type: "keybinds", description: "Define your preferred keys for use during Gameplay."}
+			{name: "preferences", type: DYNAMIC, description: "Define your Game Preferences."},
+			{name: "keybinds", type: DYNAMIC, description: "Define your preferred keys for use during Gameplay."}
 		],
 	];
 

@@ -104,6 +104,7 @@ class ChartEditor extends MusicBeatState
 
 	var renderedNotes:FlxTypedGroup<Note>;
 	var renderedHolds:FlxTypedGroup<Note>;
+	var renderedLabels:FlxTypedGroup<FlxText>;
 
 	override function create()
 	{
@@ -214,7 +215,7 @@ class ChartEditor extends MusicBeatState
 
 		if (FlxG.keys.justPressed.ESCAPE)
 		{
-			PlayState.songName = "bopeebo";
+			PlayState.songName = song.name;
 			PlayState.gameplayMode = CHARTING;
 			PlayState.difficulty = 1;
 

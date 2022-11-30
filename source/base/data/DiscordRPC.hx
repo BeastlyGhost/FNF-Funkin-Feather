@@ -9,14 +9,16 @@ import discord_rpc.DiscordRpc as RPCWrapper;
 **/
 class DiscordRPC
 {
-	public static function init(id:String = '814588678700924999'):Void
+	public static function init():Void
 	{
 		RPCWrapper.start({
-			clientID: id,
+			clientID: "1039276324029743234",
 			onReady: ready,
 			onError: catchError,
 			onDisconnected: dc
 		});
+
+		ready();
 
 		lime.app.Application.current.onExit.add(function(e:Dynamic)
 		{
@@ -32,9 +34,10 @@ class DiscordRPC
 		RPCWrapper.presence({
 			details: "",
 			state: null,
-			largeImageKey: 'icon',
+			largeImageKey: 'fef-logo',
 			largeImageText: "Project Feather"
 		});
+		trace("Discord Rich Presence is up and running");
 	}
 
 	static function catchError(_code:Int, _message:String):Void
@@ -74,13 +77,19 @@ class DiscordRPC
 class DiscordRPC
 {
 	public static function init():Void
+	{
 		return trace("Discord Client is not supported on this platform");
+	}
 
 	public static function update(detailsMain:String = '', detailsSub:String = '', ?keyBig:String, ?keySmall:String, ?detailsBig:String, ?detailsSmall:String,
 			?timeEnd:Float, ?startTime:Bool):Void
+	{
 		return;
+	}
 
 	public static function destroy()
+	{
 		return;
+	}
 }
 #end

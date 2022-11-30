@@ -9,17 +9,10 @@ enum OptionType
 	DYNAMIC;
 }
 
-typedef CategoryMetadata =
+typedef OptionData =
 {
 	var name:String;
-	var type:String;
-	var ?description:String;
-}
-
-typedef OptionsMetadata =
-{
-	var name:String;
-	var value:Dynamic;
+	var ?value:Dynamic;
 	var ?description:String;
 	var ?type:OptionType; // defaults to DYNAMIC if null
 }
@@ -33,7 +26,7 @@ class OptionsMeta
 		the Preferences Array sets up settings and default setting parameters
 		it can be used alongside a menu for changing said paramaters to new ones
 	**/
-	public static var preferences:Array<OptionsMetadata> = [
+	public static var preferences:Array<OptionData> = [
 		//
 		{
 			name: "Auto Pause",

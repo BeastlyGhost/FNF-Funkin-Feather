@@ -118,7 +118,7 @@ class PlayState extends MusicBeatState
 		if (FlxG.sound.music != null && FlxG.sound.music.playing)
 			FlxG.sound.music.stop();
 
-		ScoreUtils.resetScore();
+		PlayerUtils.resetScore();
 
 		// initialize main variales
 		camGame = new FlxCamera();
@@ -185,10 +185,10 @@ class PlayState extends MusicBeatState
 		Controls.keyEventTrigger.add(keyEventTrigger);
 
 		songCutscene();
-		changePresence(isPaused);
+		changePresence();
 	}
 
-	public static function changePresence(paused:Bool)
+	public static function changePresence(addString:String = '')
 	{
 		var mode:String = 'Freeplay';
 
@@ -204,10 +204,7 @@ class PlayState extends MusicBeatState
 
 		lineRPC2 = '${FeatherUtils.coolSongFormatter(song.name)} [${stringDiff.replace('-', '').toUpperCase()}]';
 
-		if (paused)
-			DiscordRPC.update("Paused - " + lineRPC1, mode + ' - ' + lineRPC2);
-		else
-			DiscordRPC.update(lineRPC1, mode + ' - ' + lineRPC2);
+		DiscordRPC.update(addString + lineRPC1, mode + ' - ' + lineRPC2);
 	}
 
 	public var canPause:Bool = false;
@@ -301,11 +298,8 @@ class PlayState extends MusicBeatState
 	{
 		AssetHandler.clear(false, false);
 
-		if (!isPaused && countdownWasActive && posCount > 3)
-		{
-			Conductor.playSong(song.name);
-			isStartingSong = false;
-		}
+		Conductor.playSong(song.name);
+		isStartingSong = false;
 	}
 
 	override public function update(elapsed:Float)
@@ -321,12 +315,12 @@ class PlayState extends MusicBeatState
 
 		super.update(elapsed);
 
-		if (!isPaused)
+		if (!isPaused && !hasDied)
 		{
 			if (isStartingSong)
 			{
 				Conductor.songPosition += elapsed * 1000;
-				if (Conductor.songPosition >= 0 && countdownWasActive && !isEndingSong)
+				if (Conductor.songPosition >= 0 && posCount >= 4 && countdownWasActive && !isEndingSong)
 					startSong();
 			}
 			else
@@ -340,12 +334,14 @@ class PlayState extends MusicBeatState
 		FeatherUtils.cameraBumpingZooms(camGame, cameraZoom, cameraSpeed);
 		FeatherUtils.cameraBumpingZooms(camHUD, 1);
 
+		playerDeathCheck();
+
 		if (Controls.getPressEvent("pause") && canPause)
 		{
 			isPaused = true;
 			Conductor.pauseSong();
 			globalManagerPause();
-			changePresence(true);
+			changePresence("Paused - ");
 			openSubState(new states.substates.PauseSubstate(player.getScreenPosition().x, player.getScreenPosition().y));
 		}
 
@@ -399,7 +395,7 @@ class PlayState extends MusicBeatState
 						note.active = true;
 					}
 
-					if (!note.tooLate && !note.wasGoodHit && note.strumTime < Conductor.songPosition - (ScoreUtils.timingThreshold))
+					if (!note.tooLate && !note.wasGoodHit && note.strumTime < Conductor.songPosition - (PlayerUtils.timingThreshold))
 					{
 						if ((!note.tooLate) && (note.mustPress))
 						{
@@ -423,6 +419,30 @@ class PlayState extends MusicBeatState
 				});
 			}
 		}
+	}
+
+	private var hasDied:Bool = false;
+
+	public function playerDeathCheck():Bool
+	{
+		if (PlayerUtils.health <= 0 && !hasDied)
+		{
+			isPaused = true;
+			Conductor.stopSong(); // *beep boops stop*
+			PlayerUtils.deaths++;
+			hasDied = true;
+
+			persistentUpdate = false;
+			persistentDraw = false;
+
+			globalManagerPause();
+
+			FlxG.sound.play(AssetHandler.grabAsset("fnf_loss_sfx", SOUND, "sounds/" + assetSkin));
+
+			changePresence("Dead - ");
+			return true;
+		}
+		return false;
 	}
 
 	public function keyEventTrigger(action:String, key:Int, state:KeyState)
@@ -449,10 +469,11 @@ class PlayState extends MusicBeatState
 
 		if (state == PRESSED)
 		{
-			if (song != null)
+			if (song != null && countdownWasActive && !isEndingSong)
 			{
 				var noteList:Array<Note> = [];
 				var notePresses:Array<Note> = [];
+				var notePossible:Bool = true; // usually, yeah, it should be possible to hit a note
 
 				notesGroup.forEachAlive(function(note:Note)
 				{
@@ -464,13 +485,17 @@ class PlayState extends MusicBeatState
 
 				if (noteList.length > 0)
 				{
-					var notePossible:Bool = true;
-
 					for (note in noteList)
 					{
 						for (pressedNote in notePresses)
 						{
-							if (Math.abs(pressedNote.strumTime - note.strumTime) > 10)
+							if (Math.abs(pressedNote.strumTime - note.strumTime) < 1)
+							{
+								// kill the note
+								notesGroup.removeNote(pressedNote);
+								spawnedNotes.remove(pressedNote);
+							}
+							else // declare as not possible to hit
 								notePossible = false;
 						}
 
@@ -551,24 +576,23 @@ class PlayState extends MusicBeatState
 
 			if (note.mustPress && !strum.autoplay) // being hit by the player
 			{
-				for (i in 0...ScoreUtils.judgeTable.length)
+				for (i in 0...PlayerUtils.judgeTable.length)
 				{
-					var timingMod:Float = ScoreUtils.judgeTable[i].timingMod;
+					var timingMod:Float = PlayerUtils.judgeTable[i].timingMod;
 					if (noteDiff <= timingMod && (timingMod < lowestDiff))
 					{
 						ratingInteger = i;
 						lowestDiff = timingMod;
 					}
 
-					if (i > ScoreUtils.greatestJudgement)
-						ScoreUtils.greatestJudgement = i;
-					// trace("Rating is: " + ratingInteger + " which means " + ScoreUtils.judgeTable[ratingInteger].name);
+					if (i > PlayerUtils.greatestJudgement)
+						PlayerUtils.greatestJudgement = i;
 				}
 
 				if (!note.isSustain)
 				{
-					ScoreUtils.increaseScore(ratingInteger);
-					popUpScore(ScoreUtils.judgeTable[ratingInteger].name);
+					PlayerUtils.increaseScore(ratingInteger);
+					popUpScore(PlayerUtils.judgeTable[ratingInteger].name);
 
 					// update scoretext
 					gameUI.updateScoreBar();
@@ -587,7 +611,7 @@ class PlayState extends MusicBeatState
 	{
 		if (crowd != null)
 		{
-			if (ScoreUtils.combo >= 5)
+			if (PlayerUtils.combo >= 5)
 				if (crowd.animOffsets.exists("sad"))
 					crowd.playAnim("sad");
 		}
@@ -599,13 +623,13 @@ class PlayState extends MusicBeatState
 		}
 		FlxG.sound.play(AssetHandler.grabAsset("miss" + FlxG.random.int(1, 3), SOUND, "sounds/" + assetSkin), FlxG.random.float(0.1, 0.2));
 
-		ScoreUtils.decreaseScore();
+		PlayerUtils.decreaseScore();
 		gameUI.updateScoreBar();
 	}
 
 	public function popUpScore(myRating:String = 'sick', preload:Bool = false)
 	{
-		var rating:FlxSprite = ScoreUtils.generateRating(assetSkin);
+		var rating:FlxSprite = PlayerUtils.generateRating(assetSkin);
 
 		rating.screenCenter();
 		rating.x = (FlxG.width * 0.55) - 40;
@@ -628,12 +652,12 @@ class PlayState extends MusicBeatState
 			startDelay: Conductor.crochet * 0.001
 		});
 
-		var stringCombo:String = Std.string(ScoreUtils.combo);
+		var stringCombo:String = Std.string(PlayerUtils.combo);
 		var splitCombo:Array<String> = stringCombo.split("");
 
 		for (i in 0...splitCombo.length)
 		{
-			var numScore:FlxSprite = ScoreUtils.generateCombo(assetSkin);
+			var numScore:FlxSprite = PlayerUtils.generateCombo(assetSkin);
 
 			numScore.alpha = 1;
 			numScore.screenCenter();
@@ -694,7 +718,7 @@ class PlayState extends MusicBeatState
 	override function closeSubState()
 	{
 		isPaused = false;
-		changePresence(false);
+		changePresence();
 		super.closeSubState();
 	}
 

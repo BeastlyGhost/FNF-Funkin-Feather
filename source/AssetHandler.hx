@@ -91,7 +91,7 @@ class AssetHandler
 					json = json.substr(0, json.length - 1);
 				return json;
 			case YAML:
-				var yaml:String = yaml.Yaml.parse(path);
+				var yaml:String = Yaml.parse(path);
 				return yaml;
 			case SPARROW:
 				return FlxAtlasFrames.fromSparrow(grabAsset(asset, IMAGE, directory), File.getContent(path));
@@ -134,7 +134,7 @@ class AssetHandler
 	{
 		if (FlxG.bitmap.checkCache(outputDir))
 			return FlxG.bitmap.get(outputDir);
-		else if (mappedAssets[IMAGE].exists(outputDir))
+		if (mappedAssets[IMAGE].exists(outputDir))
 			return mappedAssets[IMAGE].get(outputDir).data;
 
 		trace('graphic asset is returning null at $outputDir');

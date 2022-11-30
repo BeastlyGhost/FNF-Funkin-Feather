@@ -10,7 +10,7 @@ import flixel.text.FlxText;
 import objects.Alphabet;
 import sys.thread.Mutex;
 
-typedef SongMetadata =
+typedef SongData =
 {
 	var name:String;
 	var week:Int;
@@ -27,11 +27,11 @@ class FreeplayMenu extends MusicBeatState
 {
 	var itemContainer:FlxTypedGroup<Alphabet>;
 
-	@:isVar var songList(get, default):Array<SongMetadata> = [];
+	@:isVar var songList(get, default):Array<SongData> = [];
 
 	var songNameList:Array<String> = [];
 
-	function get_songList():Array<SongMetadata>
+	function get_songList():Array<SongData>
 	{
 		var songs:Array<String> = [];
 		var songsFolder = sys.FileSystem.readDirectory('assets/songs');
@@ -71,6 +71,8 @@ class FreeplayMenu extends MusicBeatState
 	override function create()
 	{
 		super.create();
+
+		DiscordRPC.update("FREEPLAY MENU", "Choosing a Song");
 
 		menuBG = new FlxSprite(-80).loadGraphic(AssetHandler.grabAsset('menuBGBlue', IMAGE, 'images/menus'));
 		menuBG.scrollFactor.set();

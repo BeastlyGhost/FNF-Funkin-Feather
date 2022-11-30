@@ -1,6 +1,7 @@
 package states.substates;
 
 import base.song.MusicState;
+import base.utils.PlayerUtils;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
@@ -96,7 +97,12 @@ class PauseSubstate extends MusicBeatSubstate
 					base.song.Conductor.stopSong();
 					MusicState.resetState();
 				case "Exit to menu":
-					MusicState.switchState(new states.menus.MainMenu());
+					PlayerUtils.deaths = 0;
+
+					if (PlayState.gameplayMode == STORY)
+						MusicState.switchState(new states.menus.MainMenu());
+					else
+						MusicState.switchState(new states.menus.FreeplayMenu());
 			}
 		}
 

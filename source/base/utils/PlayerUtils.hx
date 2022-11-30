@@ -14,15 +14,16 @@ typedef Judgement =
 }
 
 /**
-	ScoreUtils handles the main "competitive" structure of the engine
+	PlayerUtils handles the main "competitive" structure of the engine
 	it initializes things like score counters, handles accuracy, and handles judgements
  */
-class ScoreUtils
+class PlayerUtils
 {
 	public static var score:Int = 0;
 	public static var misses:Int = 0;
 	public static var combo:Int = 0;
 	public static var health:Float = 1;
+	public static var deaths:Float = 0;
 
 	public static var noteRatingMod:Float;
 	public static var totalNotesHit:Int;
@@ -64,7 +65,7 @@ class ScoreUtils
 		{
 			name: "bad",
 			score: 50,
-			health: 20,
+			health: -50,
 			percentMod: 50,
 			timingMod: 133.33,
 			comboReturn: "FC"
@@ -72,7 +73,7 @@ class ScoreUtils
 		{
 			name: "shit",
 			score: -50,
-			health: -50,
+			health: -100,
 			percentMod: 0,
 			timingMod: 166.67,
 			comboReturn: null
@@ -131,7 +132,7 @@ class ScoreUtils
 		if (accuracy >= 100)
 			accuracy = 100;
 
-		ScoreUtils.totalNotesHit++;
+		PlayerUtils.totalNotesHit++;
 		noteRatingMod += (Math.max(0, id));
 		updateGrade();
 	}
@@ -204,7 +205,7 @@ class ScoreUtils
 			combo = 0;
 		combo += 1;
 
-		ScoreUtils.updateGradePercent(Std.int(judgeTable[rating].percentMod));
+		PlayerUtils.updateGradePercent(Std.int(judgeTable[rating].percentMod));
 
 		if (health > 2)
 			health = 2;
@@ -213,12 +214,12 @@ class ScoreUtils
 	public static function decreaseScore()
 	{
 		score += judgeTable[3].score;
-		health += 0.04 * (judgeTable[3].health) / 100;
+		health += 0.06 * (judgeTable[3].health) / 100;
 		misses += 1;
 
 		combo = 0;
 
-		ScoreUtils.updateGradePercent(Std.int(judgeTable[3].percentMod));
+		PlayerUtils.updateGradePercent(Std.int(judgeTable[3].percentMod));
 
 		if (health < 0)
 			health = 0;

@@ -45,10 +45,13 @@ class TitleState extends MusicBeatState
 
 		if (!started)
 		{
+			transIn = FlxTransitionableState.defaultTransIn;
+			transOut = FlxTransitionableState.defaultTransOut;
+
 			FeatherUtils.menuMusicCheck(true);
 			DiscordRPC.update("TITLE SCREEN", "Navigating through the Main Menus");
 
-			introLines = yaml.Yaml.read(AssetHandler.grabAsset("titleText", YAML, "data/menus"));
+			introLines = Yaml.read(AssetHandler.grabAsset("titleText", YAML, "data/menus"));
 			// trace(introLines.get("stepText"));
 
 			started = true;

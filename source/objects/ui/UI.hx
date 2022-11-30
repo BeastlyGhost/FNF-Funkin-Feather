@@ -1,6 +1,6 @@
 package objects.ui;
 
-import base.utils.ScoreUtils;
+import base.utils.PlayerUtils;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
@@ -61,7 +61,7 @@ class UI extends FlxSpriteGroup
 
 	override function update(elapsed:Float)
 	{
-		healthBar.percent = (ScoreUtils.health * 50);
+		healthBar.percent = (PlayerUtils.health * 50);
 
 		// attach to health
 		iconP1.setGraphicSize(Std.int(FlxMath.lerp(150, iconP1.width, 0.85)));
@@ -87,19 +87,19 @@ class UI extends FlxSpriteGroup
 	{
 		var tempScore:String;
 
-		tempScore = "Score: " + ScoreUtils.score;
+		tempScore = "Score: " + PlayerUtils.score;
 
 		if (OptionsMeta.getPref("Show Grades"))
 		{
-			tempScore += separator + "Misses: " + ScoreUtils.misses;
-			tempScore += separator + "Grade: " + ScoreUtils.curGrade + ScoreUtils.returnGradePercent();
+			tempScore += separator + "Misses: " + PlayerUtils.misses;
+			tempScore += separator + "Grade: " + PlayerUtils.curGrade + PlayerUtils.returnGradePercent();
 		}
 
 		scoreBar.text = tempScore;
 		scoreBar.screenCenter(X);
 
 		PlayState.lineRPC1 = scoreBar.text;
-		PlayState.changePresence(false);
+		PlayState.changePresence();
 	}
 
 	public function updateHealthBar()

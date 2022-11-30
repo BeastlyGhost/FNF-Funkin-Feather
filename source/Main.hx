@@ -54,13 +54,8 @@ class Main extends Sprite
 
 		FlxG.stage.application.window.onClose.add(function()
 		{
-			destroyGame();
+			Controls.destroy();
+			DiscordRPC.destroy();
 		});
-	}
-
-	function destroyGame()
-	{
-		base.Controls.destroy();
-		Sys.exit(1);
 	}
 }

@@ -2,7 +2,7 @@ package objects.ui;
 
 import base.song.Conductor;
 import base.utils.FeatherUtils.FeatherSprite;
-import base.utils.ScoreUtils;
+import base.utils.PlayerUtils;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxRect;
 import objects.ui.Strum.BabyArrow;
@@ -165,8 +165,8 @@ class Note extends FeatherSprite
 
 		if (mustPress)
 		{
-			if (strumTime > Conductor.songPosition - ScoreUtils.timingThreshold
-				&& strumTime < Conductor.songPosition + ScoreUtils.timingThreshold)
+			if (strumTime > Conductor.songPosition - PlayerUtils.timingThreshold
+				&& strumTime < Conductor.songPosition + PlayerUtils.timingThreshold)
 				canBeHit = true;
 			else
 				canBeHit = true;

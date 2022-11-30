@@ -30,7 +30,7 @@ class MainMenu extends MusicBeatState
 	{
 		super.create();
 
-		menuData = yaml.Yaml.read(AssetHandler.grabAsset("menuData", YAML, "data/menus"));
+		menuData = Yaml.read(AssetHandler.grabAsset("menuData", YAML, "data/menus"));
 
 		DiscordRPC.update("MAIN MENU", "Navigating through the Main Menus");
 
@@ -136,17 +136,11 @@ class MainMenu extends MusicBeatState
 							switch (menuData.get("list")[selection])
 							{
 								case "story mode":
-									PlayState.songName = "bopeebo";
-									PlayState.gameplayMode = STORY;
-									PlayState.difficulty = 1;
-									MusicState.switchState(new PlayState());
+									MusicState.switchState(new StoryMenu());
 								case "freeplay":
 									MusicState.switchState(new FreeplayMenu());
 								case "options":
-									PlayState.songName = "bopeebo";
-									PlayState.gameplayMode = FREEPLAY;
-									PlayState.difficulty = 1;
-									MusicState.switchState(new PlayState());
+									MusicState.switchState(new OptionsMenu());
 								default:
 									MusicState.switchState(new states.TitleState());
 							}
