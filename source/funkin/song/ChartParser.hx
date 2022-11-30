@@ -2,7 +2,7 @@ package funkin.song;
 
 import flixel.FlxG;
 import flixel.util.FlxSort;
-import funkin.objects.ui.Note;
+import funkin.objects.ui.notes.Note;
 import funkin.song.SongFormat;
 import haxe.Json;
 import sys.FileSystem;

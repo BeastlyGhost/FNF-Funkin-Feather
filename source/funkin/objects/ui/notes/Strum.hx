@@ -1,4 +1,4 @@
-package funkin.objects.ui;
+package funkin.objects.ui.notes;
 
 import flixel.group.FlxSpriteGroup;
 import flixel.tweens.FlxEase;

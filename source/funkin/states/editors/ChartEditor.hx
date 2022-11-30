@@ -10,7 +10,7 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import funkin.objects.ui.Icon;
-import funkin.objects.ui.Note;
+import funkin.objects.ui.notes.Note;
 import funkin.song.Conductor;
 import funkin.song.MusicState;
 import funkin.song.SongFormat.FeatherSong;

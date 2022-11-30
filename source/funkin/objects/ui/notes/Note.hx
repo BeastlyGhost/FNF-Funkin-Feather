@@ -1,90 +1,13 @@
-package funkin.objects.ui;
+package funkin.objects.ui.notes;
 
 import base.utils.FeatherUtils.FeatherSprite;
 import base.utils.PlayerUtils;
 import flixel.FlxG;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxRect;
-import funkin.objects.ui.Strum.BabyArrow;
+import funkin.objects.ui.notes.Strum.BabyArrow;
 import funkin.song.Conductor;
 import funkin.states.PlayState;
-
-/**
-	Notefield class, initializes *scrolling* note handling,
-	like spawning, sorting, and sprite clipping
-**/
-class Notefield extends FlxTypedGroup<Note>
-{
-	public function updateRects(note:Note, strum:Strum)
-	{
-		note.y = (strum.y - (Conductor.songPosition - note.step) * (0.45 * note.speed));
-
-		// i am so fucking sorry for this if condition
-		if (note.isSustain
-			&& note.y + note.offset.y <= strum.y + BabyArrow.swagWidth / 2
-			&& (!note.mustPress || (note.wasGoodHit || (note.prevNote.wasGoodHit && !note.canBeHit))))
-		{
-			var swagRect = new FlxRect(0, strum.y + BabyArrow.swagWidth / 2 - note.y, note.width * 2, note.height * 2);
-			swagRect.y /= note.scale.y;
-			swagRect.height -= swagRect.y;
-
-			note.clipRect = swagRect;
-		}
-	}
-
-	public function removeNote(note:Note)
-	{
-		if (!note.canDie)
-			return;
-
-		note.active = false;
-		note.exists = false;
-
-		if (members.contains(note))
-			remove(note, true);
-
-		note.kill();
-		note.destroy();
-	}
-}
-
-class NoteSplash extends FeatherSprite
-{
-	public function new(x:Float, y:Float, index:Int = 0)
-	{
-		super(x, y);
-
-		frames = AssetHandler.grabAsset("noteSplashes", SPARROW, "images/ui/default");
-
-		animation.addByPrefix('note1-0', 'note impact 1 blue', 24, false);
-		animation.addByPrefix('note2-0', 'note impact 1 green', 24, false);
-		animation.addByPrefix('note0-0', 'note impact 1 purple', 24, false);
-		animation.addByPrefix('note3-0', 'note impact 1 red', 24, false);
-		animation.addByPrefix('note1-1', 'note impact 2 blue', 24, false);
-		animation.addByPrefix('note2-1', 'note impact 2 green', 24, false);
-		animation.addByPrefix('note0-1', 'note impact 2 purple', 24, false);
-		animation.addByPrefix('note3-1', 'note impact 2 red', 24, false);
-
-		setupNoteSplash(x, y, index);
-	}
-
-	public function setupNoteSplash(x:Float, y:Float, ?index:Int = 0)
-	{
-		setPosition(x, y);
-		animation.play('note' + index + '-' + FlxG.random.int(0, 1), true);
-		animation.curAnim.frameRate += FlxG.random.int(-2, 2);
-		updateHitbox();
-		offset.set(60, 30);
-	}
-
-	override public function update(elapsed:Float)
-	{
-		if (animation.curAnim.finished)
-			kill();
-
-		super.update(elapsed);
-	}
-}
 
 /**
 	Note class, initializes *scrolling* notes for the main game

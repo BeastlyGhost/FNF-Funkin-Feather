@@ -1,6 +1,6 @@
 package funkin.states;
 
-import base.utils.*;
+import base.utils.PlayerUtils;
 import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxObject;
@@ -14,11 +14,11 @@ import flixel.util.FlxSort;
 import flixel.util.FlxTimer;
 import funkin.objects.Character;
 import funkin.objects.Stage;
-import funkin.objects.ui.*;
-import funkin.objects.ui.Note.NoteSplash;
-import funkin.objects.ui.Note.Notefield;
-import funkin.song.*;
-import funkin.song.MusicState.MusicBeatState;
+import funkin.objects.ui.UI;
+import funkin.objects.ui.notes.*;
+import funkin.song.ChartParser;
+import funkin.song.Conductor;
+import funkin.song.MusicState;
 import funkin.song.SongFormat.FeatherSong;
 import openfl.media.Sound;
 
