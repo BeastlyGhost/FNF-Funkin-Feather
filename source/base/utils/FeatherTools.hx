@@ -8,26 +8,12 @@ import funkin.song.Conductor;
 import funkin.song.MusicState;
 
 /**
-	Handles variales used on the `MusicBeatState`
-**/
-interface IMusicBeat
-{
-	public var curBeat:Int; // Defines the Current Beat on the Current Song
-	public var curStep:Int; // Defines the Current Step on the Current Song
-	public var curSection:Int; // Defines the Current Section on the Current Song
-	public function beatHit():Void; // Decides what to do when a Beat is hit
-	public function sectionHit():Void; // Decides what to do when a Section is hit
-	public function stepHit():Void; // Decides what to do when a Step is hit, also updates beats
-	public function endSong():Void; // a Function to decide what to do when a song ends
-}
-
-/**
 	-- @BeastlyGhost --
 
 	this is basically my own custom made `CoolUtil` class from the base game
 	it serves the exact same purpose, giving useful tools to work with
 **/
-class FeatherUtils
+class FeatherTools
 {
 	/**
 		@author Shadow_Mario_
@@ -71,9 +57,7 @@ class FeatherUtils
 		var words:Array<String> = song.toLowerCase().split(" ");
 
 		for (i in 0...words.length)
-		{
 			words[i] = words[i].charAt(0).toUpperCase() + words[i].substr(1);
-		}
 
 		return words.join(" ");
 	}
@@ -98,7 +82,7 @@ class FeatherUtils
 }
 
 /**
- * Flixel Sprite Extension made for characters! 
+	Flixel Sprite Extension made for characters! 
 **/
 class FeatherSprite extends FlxSprite
 {
@@ -108,6 +92,8 @@ class FeatherSprite extends FlxSprite
 	public function new(x:Float, y:Float)
 	{
 		animOffsets = new Map<String, Array<Dynamic>>();
+
+		antialiasing = OptionsMeta.getPref('Anti Aliasing');
 
 		super();
 	}
@@ -125,4 +111,60 @@ class FeatherSprite extends FlxSprite
 
 	public function addOffset(name:String, x:Float = 0, y:Float = 0)
 		animOffsets[name] = [x, y];
+}
+
+/**
+	a Sprite that follows a parent sprite
+**/
+class FeatherAttachedSprite extends FeatherSprite
+{
+	public var parentSprite:FeatherSprite;
+
+	public var addX:Float = 0;
+	public var addY:Float = 0;
+	public var addAngle:Float = 0;
+	public var addAlpha:Float = 0;
+
+	public var copyParentAngle:Bool = false;
+	public var copyParentAlpha:Bool = false;
+	public var copyParentVisib:Bool = false;
+
+	public function new(fileName:String, ?fileFolder:String, ?fileAnim:String, ?looped:Bool = false)
+	{
+		super(x, y);
+
+		if (fileName != null)
+		{
+			if (fileAnim != null)
+			{
+				frames = AssetHandler.grabAsset(fileName, SPARROW, fileFolder);
+				animation.addByPrefix('static', fileAnim, 24, looped);
+				animation.play('static');
+			}
+			else
+				loadGraphic(AssetHandler.grabAsset(fileName, IMAGE, fileFolder));
+			scrollFactor.set();
+		}
+	}
+
+	override function update(elapsed:Float)
+	{
+		super.update(elapsed);
+
+		// set parent sprite stuffs;
+		if (parentSprite != null)
+		{
+			setPosition(parentSprite.x + addX, parentSprite.y + addY);
+			scrollFactor.set(parentSprite.scrollFactor.x, parentSprite.scrollFactor.y);
+
+			if (copyParentAngle)
+				angle = parentSprite.angle + addAngle;
+
+			if (copyParentAlpha)
+				alpha = parentSprite.alpha * addAlpha;
+
+			if (copyParentVisib)
+				visible = parentSprite.visible;
+		}
+	}
 }

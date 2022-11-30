@@ -1,6 +1,6 @@
 package funkin.objects;
 
-import base.utils.FeatherUtils.FeatherSprite;
+import base.utils.FeatherTools.FeatherSprite;
 import flixel.math.FlxPoint;
 import funkin.song.Conductor;
 

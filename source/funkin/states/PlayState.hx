@@ -228,7 +228,7 @@ class PlayState extends MusicBeatState
 
 		var stringDiff = ChartParser.difficultyMap.get(difficulty);
 
-		lineRPC2 = '${FeatherUtils.coolSongFormatter(song.name)} [${stringDiff.replace('-', '').toUpperCase()}]';
+		lineRPC2 = '${FeatherTools.coolSongFormatter(song.name)} [${stringDiff.replace('-', '').toUpperCase()}]';
 
 		DiscordRPC.update(addString + lineRPC1, mode + ' - ' + lineRPC2);
 	}
@@ -381,8 +381,8 @@ class PlayState extends MusicBeatState
 					startSong();
 		}
 
-		FeatherUtils.cameraBumpingZooms(camGame, cameraZoom, cameraSpeed);
-		FeatherUtils.cameraBumpingZooms(camHUD, 1);
+		FeatherTools.cameraBumpingZooms(camGame, cameraZoom, cameraSpeed);
+		FeatherTools.cameraBumpingZooms(camHUD, 1);
 
 		playerDeathCheck();
 
@@ -799,8 +799,8 @@ class PlayState extends MusicBeatState
 	{
 		charDancing(curBeat);
 
-		FeatherUtils.cameraBumpReset(curBeat, camGame, bumpSpeed, 0.015);
-		FeatherUtils.cameraBumpReset(curBeat, camHUD, bumpSpeed, 0.03);
+		FeatherTools.cameraBumpReset(curBeat, camGame, bumpSpeed, 0.015);
+		FeatherTools.cameraBumpReset(curBeat, camHUD, bumpSpeed, 0.03);
 
 		gameUI.updateIconScale();
 
@@ -859,10 +859,10 @@ class PlayState extends MusicBeatState
 		{
 			case STORY:
 				// playlist conditions go here
-				FeatherUtils.menuMusicCheck(false);
+				FeatherTools.menuMusicCheck(false);
 				MusicState.switchState(new funkin.states.menus.MainMenu());
 			case FREEPLAY:
-				FeatherUtils.menuMusicCheck(false);
+				FeatherTools.menuMusicCheck(false);
 				MusicState.switchState(new funkin.states.menus.MainMenu());
 			case CHARTING:
 				isPaused = true;

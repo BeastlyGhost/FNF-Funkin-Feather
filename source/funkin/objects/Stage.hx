@@ -1,6 +1,6 @@
 package funkin.objects;
 
-import base.utils.FeatherUtils.FeatherSprite;
+import base.utils.FeatherTools.FeatherSprite;
 import flixel.FlxBasic;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;

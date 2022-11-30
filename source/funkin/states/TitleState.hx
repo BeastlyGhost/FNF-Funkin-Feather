@@ -48,7 +48,7 @@ class TitleState extends MusicBeatState
 			transIn = FlxTransitionableState.defaultTransIn;
 			transOut = FlxTransitionableState.defaultTransOut;
 
-			FeatherUtils.menuMusicCheck(true);
+			FeatherTools.menuMusicCheck(true);
 			DiscordRPC.update("TITLE SCREEN", "Navigating through the Main Menus");
 
 			introLines = Yaml.read(AssetHandler.grabAsset("titleText", YAML, "data/menus"));
@@ -114,7 +114,7 @@ class TitleState extends MusicBeatState
 		{
 			if (newTitle)
 			{
-				titleTimer += FeatherUtils.boundTo(elapsed, 0, 1);
+				titleTimer += FeatherTools.boundTo(elapsed, 0, 1);
 				if (titleTimer > 2)
 					titleTimer -= 2;
 

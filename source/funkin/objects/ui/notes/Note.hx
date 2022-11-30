@@ -1,6 +1,6 @@
 package funkin.objects.ui.notes;
 
-import base.utils.FeatherUtils.FeatherSprite;
+import base.utils.FeatherTools.FeatherSprite;
 import base.utils.PlayerUtils;
 import flixel.FlxG;
 import flixel.group.FlxGroup.FlxTypedGroup;

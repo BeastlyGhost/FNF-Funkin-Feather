@@ -1,6 +1,6 @@
 package;
 
-import base.backend.DebugInfo;
+import base.backend.FPSOverlay;
 import flixel.FlxG;
 import flixel.FlxGame;
 import openfl.Lib;
@@ -50,7 +50,7 @@ class Main extends Sprite
 		}
 
 		addChild(new FlxGame(game.width, game.height, Start, #if (flixel < "5.0.0") game.zoom, #end game.framerate, game.framerate, true, game.fullscreen));
-		addChild(new DebugInfo(0, 0));
+		addChild(new FPSOverlay(0, 0));
 
 		FlxG.stage.application.window.onClose.add(function()
 		{

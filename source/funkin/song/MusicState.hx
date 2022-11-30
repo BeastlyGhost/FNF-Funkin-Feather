@@ -1,7 +1,7 @@
 package funkin.song;
 
+import base.backend.Interfaces.MusicInterface;
 import base.backend.Transition;
-import base.utils.FeatherUtils.IMusicBeat;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.FlxSubState;
@@ -62,7 +62,7 @@ class MusicState
 	a State that is widely used by the other game states
 	it contains useful tools for song control that can be used by every other state
 **/
-class MusicBeatState extends FlxUIState implements IMusicBeat
+class MusicBeatState extends FlxUIState implements MusicInterface
 {
 	public var curBeat:Int = 0;
 	public var curStep:Int = 0;
@@ -211,7 +211,7 @@ class MusicBeatState extends FlxUIState implements IMusicBeat
 		selection = FlxMath.wrap(Math.floor(selection) + newSelection, 0, wrappableGroup.length - 1);
 }
 
-class MusicBeatSubstate extends FlxSubState implements IMusicBeat
+class MusicBeatSubstate extends FlxSubState implements MusicInterface
 {
 	public var curBeat:Int = 0;
 	public var curStep:Int = 0;

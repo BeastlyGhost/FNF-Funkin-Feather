@@ -59,7 +59,7 @@ class PauseSubstate extends MusicBeatSubstate
 		var stringDiff = funkin.song.ChartParser.difficultyMap.get(PlayState.difficulty);
 
 		var levelInfo:FlxText = new FlxText(20, 15, 0, "", 32);
-		levelInfo.text = FeatherUtils.coolSongFormatter(PlayState.song.name) + ' [${stringDiff.replace('-', '').toUpperCase()}]';
+		levelInfo.text = FeatherTools.coolSongFormatter(PlayState.song.name) + ' [${stringDiff.replace('-', '').toUpperCase()}]';
 		levelInfo.scrollFactor.set();
 		levelInfo.setFormat(Paths.font("vcr.ttf"), 32);
 		levelInfo.updateHitbox();
@@ -106,7 +106,7 @@ class PauseSubstate extends MusicBeatSubstate
 					funkin.song.Conductor.stopSong();
 					MusicState.resetState();
 				case "exit to options":
-					//
+				//
 				case "exit to charter":
 					MusicState.switchState(new funkin.states.editors.ChartEditor());
 				case "leave charting mode":
