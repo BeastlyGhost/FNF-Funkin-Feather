@@ -289,6 +289,8 @@ class MusicBeatSubstate extends FlxSubState implements IMusicBeat
 			beatHit();
 	}
 
+	public function endSong() {}
+
 	public function updateSelection(newSelection:Int = 0)
 		selection = FlxMath.wrap(Math.floor(selection) + newSelection, 0, wrappableGroup.length - 1);
 }

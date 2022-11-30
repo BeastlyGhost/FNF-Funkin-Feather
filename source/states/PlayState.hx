@@ -92,6 +92,8 @@ class PlayState extends MusicBeatState
 	public var crowd:Character;
 	public var opponent:Character;
 
+	public var crowdSpeed:Int = 1;
+
 	public var gameStage:Stage;
 
 	// Camera
@@ -465,6 +467,9 @@ class PlayState extends MusicBeatState
 
 	public function keyEventTrigger(action:String, key:Int, state:KeyState)
 	{
+		if (isPaused || isEndingSong)
+			return;
+
 		switch (action)
 		{
 			case "left" | "down" | "up" | "right":
@@ -486,7 +491,7 @@ class PlayState extends MusicBeatState
 		{
 			if (state == PRESSED)
 			{
-				if (song != null && !strum.autoplay && countdownWasActive && !isPaused && !isEndingSong)
+				if (song != null && !strum.autoplay && countdownWasActive)
 				{
 					/*
 						hold notes
@@ -748,7 +753,9 @@ class PlayState extends MusicBeatState
 		{
 			for (i in strum.characters)
 			{
-				if (beat % i.bopTimer == 0 && i != null && (i.animOffsets.exists(i.defaultIdle)))
+				var boppingBeat = (i.isQuickDancer ? beat % Math.round(crowdSpeed) * i.bopTimer == 0 : beat % i.bopTimer == 0);
+
+				if (i != null && !i.animation.curAnim.name.startsWith("sing") && boppingBeat && (i.animOffsets.exists(i.defaultIdle)))
 					i.dance();
 			}
 		}
@@ -759,7 +766,7 @@ class PlayState extends MusicBeatState
 		charDancing(curBeat);
 
 		FeatherUtils.cameraBumpReset(curBeat, camGame, bumpSpeed, 0.015);
-		FeatherUtils.cameraBumpReset(curBeat, camHUD, bumpSpeed, 0.05);
+		FeatherUtils.cameraBumpReset(curBeat, camHUD, bumpSpeed, 0.03);
 
 		gameUI.updateIconScale();
 
