@@ -139,7 +139,9 @@ class OptionsMeta
 	**/
 	public static function updatePrefs()
 	{
+		#if (flixel >= "5.0.0")
 		flixel.FlxSprite.defaultAntialiasing = getPref('Anti Aliasing');
+		#end
 		FlxG.autoPause = getPref('Auto Pause');
 	}
 }
