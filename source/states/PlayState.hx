@@ -70,6 +70,8 @@ class PlayState extends MusicBeatState
 	public static var songName:String;
 	public static var difficulty:Int;
 
+	public static var songPlaylist:Array<String> = [];
+
 	// User Interface
 	public static var strumsGroup:FlxTypedGroup<Strum>;
 	public static var notesGroup:Notefield;
@@ -813,13 +815,20 @@ class PlayState extends MusicBeatState
 	{
 		super.endSong();
 
+		if (FlxG.sound.music != null)
+			FlxG.sound.music.stop();
+
 		switch (gameplayMode)
 		{
-			default:
-				if (FlxG.sound.music != null)
-					FlxG.sound.music.stop();
+			case STORY:
+				// playlist conditions go here
 				FeatherUtils.menuMusicCheck(false);
 				MusicState.switchState(new states.menus.MainMenu());
+			case FREEPLAY:
+				FeatherUtils.menuMusicCheck(false);
+				MusicState.switchState(new states.menus.MainMenu());
+			case CHARTING:
+				MusicState.switchState(new states.editors.ChartEditor());
 		}
 	}
 
