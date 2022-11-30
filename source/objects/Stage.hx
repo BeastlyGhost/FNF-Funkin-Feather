@@ -12,42 +12,102 @@ import states.PlayState;
 class Stage extends FlxTypedGroup<FlxBasic>
 {
 	public var curStage:String;
-
 	public var cameraZoom:Float = 1.05;
 
 	public function new()
 	{
 		super();
-
-		if (curStage == null)
-			curStage = "stage";
 	}
 
-	public function setStage(curStage:String)
+	public function setStage(?curStage:String)
 	{
+		if (curStage == null)
+			curStage = "unknown";
+
 		switch (curStage)
 		{
 			default:
 				cameraZoom = 0.9;
-
-				var bg:FlxSprite = new FlxSprite(-600, -200);
-				bg.loadGraphic(AssetHandler.grabAsset('stageback', IMAGE, "data/stages/stage/images"));
-				bg.scrollFactor.set(0.9, 0.9);
-				add(bg);
-
-				var stageFront:FlxSprite = new FlxSprite(-650, 600);
-				stageFront.loadGraphic(AssetHandler.grabAsset('stagefront', IMAGE, "data/stages/stage/images"));
-				stageFront.setGraphicSize(Std.int(stageFront.width * 1.1));
-				stageFront.scrollFactor.set(0.9, 0.9);
-				stageFront.updateHitbox();
-				add(stageFront);
-
-				var stageCurtains:FlxSprite = new FlxSprite(-500, -300);
-				stageCurtains.loadGraphic(AssetHandler.grabAsset('stagecurtains', IMAGE, "data/stages/stage/images"));
-				stageCurtains.setGraphicSize(Std.int(stageCurtains.width * 0.9));
-				stageCurtains.scrollFactor.set(1.3, 1.3);
-				stageCurtains.updateHitbox();
-				add(stageCurtains);
 		}
 	}
+
+	public function getStageName()
+	{
+		var dummyStage:String = "unknown";
+
+		if (PlayState.song != null)
+		{
+			if (PlayState.song.stage != null)
+				dummyStage = PlayState.song.stage;
+			else
+			{
+				// ninjamuffin bullshit go!
+				switch (PlayState.song.internalName.toLowerCase())
+				{
+					case "bopeebo" | "fresh" | "dadbattle" | "dad-battle":
+						dummyStage = "stage";
+					case "spookeez" | "south" | "monster":
+						dummyStage = "spooky";
+					case "pico" | "philly" | "philly-nice" | "blammed":
+						dummyStage = "philly";
+					case "satin-panties" | "high" | "milf":
+						dummyStage = "highway";
+					case "cocoa" | "eggnog":
+						dummyStage = "mall";
+					case "winter-horrorland":
+						dummyStage = "mallEvil";
+					case "senpai" | "roses":
+						dummyStage = "school";
+					case "thorns":
+						dummyStage = "schoolEvil";
+					case "ugh" | "guns" | "stress":
+						dummyStage = "military";
+				}
+			}
+		}
+
+		return dummyStage;
+	}
+
+	public function getStageCrowd()
+	{
+		var dummyCrowd:String = 'gf';
+
+		if (PlayState.song != null)
+		{
+			if (PlayState.song.crowd != null)
+				dummyCrowd = PlayState.song.crowd;
+			else
+			{
+				switch (curStage.toLowerCase())
+				{
+					case "highway":
+						dummyCrowd = "gf-car";
+					case "mall" | "mallEvil":
+						dummyCrowd = "gf-christmas";
+					case "school" | "schoolEvil":
+						dummyCrowd = "gf-pixel";
+					case "military":
+						if (PlayState.song.internalName.toLowerCase() == "stress")
+							dummyCrowd = "pico-speaker";
+						else
+							dummyCrowd = "gf-tankmen";
+					default:
+						dummyCrowd = "gf";
+				}
+			}
+		}
+
+		return dummyCrowd;
+	}
+
+	public function stageCountdownTick(count:Int, player:Character, opponent:Character, crowd:Character) {}
+
+	public function stageUpdate(elapsed:Float, player:Character, opponent:Character, crowd:Character) {}
+
+	public function stageStepHit(curStep:Int, player:Character, opponent:Character, crowd:Character) {}
+
+	public function stageBeatHit(curBeat:Int, player:Character, opponent:Character, crowd:Character) {}
+
+	public function stageSectionHit(curSec:Int, player:Character, opponent:Character, crowd:Character) {}
 }

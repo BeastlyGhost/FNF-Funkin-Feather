@@ -33,7 +33,7 @@ class Character extends FeatherSprite
 
 	public var defaultIdle:String = 'idle';
 
-	public function new(player:Bool):Void
+	public function new(player:Bool = false):Void
 	{
 		super(x, y);
 
