@@ -1,5 +1,12 @@
+/**
+	GLOBAL CLASS USINGS
+	THESE *WILL* BE USED IN EVERY CLASS
+**/
+
 using StringTools;
-using base.Controls;
+using base.backend.AssetHandler;
+using base.backend.Controls;
+using base.backend.Paths;
 using base.meta.DiscordRPC;
 using base.meta.OptionsMeta;
 using base.utils.FeatherUtils;

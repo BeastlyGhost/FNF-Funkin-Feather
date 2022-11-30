@@ -1,11 +1,11 @@
 package base.utils;
 
-import base.song.Conductor;
-import base.song.MusicState;
 import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.math.FlxMath;
+import funkin.song.Conductor;
+import funkin.song.MusicState;
 
 /**
 	Handles variales used on the `MusicBeatState`

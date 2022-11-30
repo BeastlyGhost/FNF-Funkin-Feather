@@ -1,7 +1,7 @@
 package base.utils;
 
 import flixel.FlxSprite;
-import states.PlayState;
+import funkin.states.PlayState;
 
 typedef Judgement =
 {

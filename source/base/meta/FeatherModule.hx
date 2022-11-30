@@ -41,13 +41,13 @@ class FeatherModule extends SScript
 		set('Alphabet', objects.ui.Alphabet);
 		set('Player', objects.Character.Player);
 		set('Character', objects.Character);
-		set('Conductor', base.song.Conductor);
+		set('Conductor', funkin.song.Conductor);
 		set('Icon', objects.ui.Icon);
 		set('Strum', objects.ui.Strum);
 		set('BabyArrow', objects.ui.Strum.BabyArrow);
 		set('Note', objects.ui.Note);
-		set('game', states.PlayState.main);
-		set('PlayState', states.PlayState);
+		set('game', funkin.states.PlayState.main);
+		set('PlayState', funkin.states.PlayState);
 		set('Paths', Paths);
 
 		// CLASSES (FEATHER);
