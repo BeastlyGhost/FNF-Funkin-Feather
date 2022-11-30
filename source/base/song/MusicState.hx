@@ -92,7 +92,7 @@ class MusicBeatState extends FlxUIState implements IMusicBeat
 		if (FlxG.sound.music != null && FlxG.sound.music.playing)
 			FlxG.sound.music.onComplete = endSong;
 
-		updateSongContents();
+		updateTime();
 
 		FlxG.watch.add(Conductor, "songPosition");
 		FlxG.watch.add(this, "curBeat");
@@ -133,7 +133,7 @@ class MusicBeatState extends FlxUIState implements IMusicBeat
 		super.closeSubState();
 	}
 
-	public function updateSongContents()
+	public function updateTime()
 	{
 		// Update Steps
 		var lastChange:BPMChangeEvent = {
@@ -232,20 +232,20 @@ class MusicBeatSubstate extends FlxSubState implements IMusicBeat
 
 	override public function update(elapsed:Float)
 	{
-		updateSongContents();
+		updateTime();
 
 		super.update(elapsed);
 	}
 
-	public function updateSongContents()
+	public function updateTime()
 	{
-		var oldStep:Int = curStep;
-
+		// Update Steps
 		var lastChange:BPMChangeEvent = {
 			stepTime: 0,
 			songTime: 0,
 			bpm: 0
 		}
+
 		for (i in 0...Conductor.bpmChangeMap.length)
 		{
 			if (Conductor.songPosition >= Conductor.bpmChangeMap[i].songTime)
@@ -253,33 +253,41 @@ class MusicBeatSubstate extends FlxSubState implements IMusicBeat
 		}
 
 		curStep = lastChange.stepTime + Math.floor((Conductor.songPosition - lastChange.songTime) / Conductor.stepCrochet);
+
+		if (lastStep != curStep)
+		{
+			if (curStep > 0)
+				stepHit();
+			lastStep = curStep;
+
+			if (PlayState.song != null)
+			{
+				if (lastStep < curStep)
+					sectionHit();
+			}
+		}
+
 		curBeat = Math.floor(curStep / 4);
 		curSection = Math.floor(curBeat / 4);
-
-		if (lastStep <= curStep)
-		{
-			lastStep = curStep;
-			stepHit();
-		}
-		if (lastBeat <= curBeat)
-		{
-			lastBeat = curBeat;
-			beatHit();
-		}
-		if (lastSection <= curSection)
-		{
-			lastSection = curSection;
-			sectionHit();
-		}
 	}
 
-	public function sectionHit() {}
+	public function sectionHit()
+	{
+		if (lastSection < curSection)
+			lastSection = curSection;
+	}
 
-	public function beatHit() {}
+	public function beatHit()
+	{
+		if (lastBeat < curBeat)
+			lastBeat = curBeat;
+	}
 
-	public function stepHit() {}
-
-	public function endSong() {}
+	public function stepHit()
+	{
+		if (curStep % 4 == 0)
+			beatHit();
+	}
 
 	public function updateSelection(newSelection:Int = 0)
 		selection = FlxMath.wrap(Math.floor(selection) + newSelection, 0, wrappableGroup.length - 1);
