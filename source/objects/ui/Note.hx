@@ -17,7 +17,7 @@ class Notefield extends FlxTypedGroup<Note>
 {
 	public function updateRects(note:Note, strum:Strum)
 	{
-		note.y = (strum.y - (Conductor.songPosition - note.strumTime) * (0.45 * note.speed));
+		note.y = (strum.y - (Conductor.songPosition - note.step) * (0.45 * note.speed));
 
 		// i am so fucking sorry for this if condition
 		if (note.isSustain
@@ -105,13 +105,13 @@ class Note extends FeatherSprite
 	public var prevNote:Note;
 
 	public var speed:Float = 1;
-	public var strumTime:Float = 0;
+	public var step:Float = 0;
 	public var index:Int = 0;
 
 	public var sustainLength:Float = 0;
 	public var isSustain:Bool = false;
 
-	public function new(strumTime:Float, index:Int, type:String, ?prevNote:Note, isSustain:Bool = false)
+	public function new(step:Float, index:Int, type:String, ?prevNote:Note, isSustain:Bool = false)
 	{
 		super(x, y);
 
@@ -119,7 +119,7 @@ class Note extends FeatherSprite
 			prevNote = this;
 
 		this.type = type;
-		this.strumTime = strumTime;
+		this.step = step;
 		this.index = index;
 
 		this.prevNote = prevNote;
@@ -204,8 +204,7 @@ class Note extends FeatherSprite
 
 		if (mustPress)
 		{
-			if (strumTime > Conductor.songPosition - PlayerUtils.timingThreshold
-				&& strumTime < Conductor.songPosition + PlayerUtils.timingThreshold)
+			if (step > Conductor.songPosition - PlayerUtils.timingThreshold && step < Conductor.songPosition + PlayerUtils.timingThreshold)
 				canBeHit = true;
 			else
 				canBeHit = true;

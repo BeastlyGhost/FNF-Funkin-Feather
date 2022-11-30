@@ -13,7 +13,7 @@ typedef SectionBody =
 	var ?type:String; // note type ("default" by default)
 	var ?animation:String; // note animation string (null by default)
 	var holdLength:Float; // note sustain length
-	var cameraPoint:String; // whether the player should hit the note
+	var cameraPoint:String; // where should the camera point to
 }
 
 /**

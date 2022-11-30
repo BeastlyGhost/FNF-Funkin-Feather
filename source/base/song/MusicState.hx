@@ -84,9 +84,6 @@ class MusicBeatState extends FlxUIState implements IMusicBeat
 		if (!FlxTransitionableState.skipNextTransOut)
 			Transition.start(0.3, false, Fade, FlxEase.linear);
 
-		transIn = FlxTransitionableState.defaultTransIn;
-		transOut = FlxTransitionableState.defaultTransOut;
-
 		super.create();
 	}
 
@@ -138,9 +135,6 @@ class MusicBeatState extends FlxUIState implements IMusicBeat
 
 	public function updateSongContents()
 	{
-		curBeat = Math.floor(curStep / 4);
-		curSection = Math.floor(curBeat / 4);
-
 		// Update Steps
 		var lastChange:BPMChangeEvent = {
 			stepTime: 0,
@@ -168,6 +162,9 @@ class MusicBeatState extends FlxUIState implements IMusicBeat
 					sectionHit();
 			}
 		}
+
+		curBeat = Math.floor(curStep / 4);
+		curSection = Math.floor(curBeat / 4);
 	}
 
 	public function sectionHit()

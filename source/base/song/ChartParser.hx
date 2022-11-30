@@ -212,7 +212,7 @@ class ChartParser
 			swagNote.x += 15;
 		}
 
-		dunces.sort(function(a:Note, b:Note):Int return FlxSort.byValues(FlxSort.ASCENDING, a.strumTime, b.strumTime));
+		dunces.sort(function(a:Note, b:Note):Int return FlxSort.byValues(FlxSort.ASCENDING, a.step, b.step));
 		return dunces;
 	}
 
@@ -265,7 +265,7 @@ class ChartParser
 			}
 		}
 
-		arrayNotes.sort(function(a:Note, b:Note):Int return FlxSort.byValues(FlxSort.ASCENDING, a.strumTime, b.strumTime));
+		arrayNotes.sort(function(a:Note, b:Note):Int return FlxSort.byValues(FlxSort.ASCENDING, a.step, b.step));
 		return arrayNotes;
 	}
 }

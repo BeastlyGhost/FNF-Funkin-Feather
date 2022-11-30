@@ -9,7 +9,9 @@ import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import objects.ui.Alphabet;
+import openfl.media.Sound;
 import sys.thread.Mutex;
+import sys.thread.Thread;
 
 typedef SongData =
 {
@@ -58,7 +60,7 @@ class FreeplayMenu extends MusicBeatState
 		return songList;
 	}
 
-	var difficultySelection:Int = -1;
+	var selDifficulty:Int = -1;
 	var songInst:FlxSound;
 	var songVocals:FlxSound;
 
@@ -67,13 +69,19 @@ class FreeplayMenu extends MusicBeatState
 	var scoreTxt:FlxText;
 	var diffTxt:FlxText;
 
+	var songThread:Thread;
+	var threadActive:Bool = true;
 	var mutex:Mutex;
+	var instPlaying:Sound = null;
+	var selSongPlaying:Int = 0;
 
 	var tempColors = [0xFFFFB300, 0xFF56AEBD, 0xFF9F5788, 0xFFC35D5D];
 
 	override function create()
 	{
 		super.create();
+
+		mutex = new Mutex();
 
 		DiscordRPC.update("FREEPLAY MENU", "Choosing a Song");
 
@@ -83,10 +91,6 @@ class FreeplayMenu extends MusicBeatState
 		add(menuBG);
 
 		generateUI();
-
-		wrappableGroup = songList;
-
-		updateSelection();
 	}
 
 	function generateUI()
@@ -102,6 +106,8 @@ class FreeplayMenu extends MusicBeatState
 			itemContainer.add(songText);
 		}
 
+		wrappableGroup = songList;
+
 		scoreTxt = new FlxText(FlxG.width * 0.7, 5, 0, "", 32);
 		diffTxt = new FlxText(scoreTxt.x, scoreTxt.y + 36, 0, "", 24);
 		scoreBG = new FlxSprite(scoreTxt.x - 6, 0).makeGraphic(1, 66, 0xFF000000);
@@ -114,6 +120,8 @@ class FreeplayMenu extends MusicBeatState
 		add(scoreBG);
 
 		add(diffTxt);
+
+		updateSelection();
 	}
 
 	override function update(elapsed:Float)
@@ -140,16 +148,43 @@ class FreeplayMenu extends MusicBeatState
 			updateDifficulty(1);
 
 		if (Controls.getPressEvent("back"))
+		{
+			threadActive = false;
+			if (!FlxG.keys.pressed.SHIFT)
+			{
+				FlxG.sound.play(Paths.sound('base/menus/cancelMenu'));
+				FlxG.sound.music.stop();
+			}
 			MusicState.switchState(new MainMenu());
+		}
 
 		if (Controls.getPressEvent("accept"))
 		{
 			PlayState.songName = songList[selection].name;
 			PlayState.gameplayMode = FREEPLAY;
-			PlayState.difficulty = difficultySelection;
+			PlayState.difficulty = selDifficulty;
+
+			if (FlxG.sound.music != null)
+				FlxG.sound.music.stop();
+			threadActive = false;
 
 			MusicState.switchState(new PlayState());
 		}
+
+		mutex.acquire();
+		if (instPlaying != null)
+		{
+			FlxG.sound.playMusic(instPlaying);
+
+			if (FlxG.sound.music.fadeTween != null)
+				FlxG.sound.music.fadeTween.cancel();
+
+			FlxG.sound.music.volume = 0.0;
+			FlxG.sound.music.fadeIn(1.0, 0.0, 1.0);
+
+			instPlaying = null;
+		}
+		mutex.release();
 	}
 
 	function repositionScore()
@@ -166,8 +201,7 @@ class FreeplayMenu extends MusicBeatState
 	{
 		super.updateSelection(newSelection);
 
-		if (newSelection != 0)
-			FlxG.sound.play(AssetHandler.grabAsset('scrollMenu', SOUND, "sounds/menus"));
+		FlxG.sound.play(AssetHandler.grabAsset('scrollMenu', SOUND, "sounds/menus"));
 
 		var blah:Int = 0;
 		for (item in itemContainer.members)
@@ -181,15 +215,51 @@ class FreeplayMenu extends MusicBeatState
 		}
 
 		updateDifficulty();
+		updateBackgroundSong();
 	}
 
 	function updateDifficulty(newDifficulty:Int = 0)
 	{
-		difficultySelection = FlxMath.wrap(Math.floor(difficultySelection) + newDifficulty, 0, 2);
+		selDifficulty = FlxMath.wrap(Math.floor(selDifficulty) + newDifficulty, 0, 2);
 
-		var stringDiff = base.song.ChartParser.difficultyMap.get(difficultySelection);
+		var stringDiff = base.song.ChartParser.difficultyMap.get(selDifficulty);
 
 		diffTxt.text = '< ${stringDiff.replace('-', '').toUpperCase()} >';
 		repositionScore();
+	}
+
+	function updateBackgroundSong()
+	{
+		if (songThread == null)
+		{
+			songThread = Thread.create(function()
+			{
+				while (true)
+				{
+					if (!threadActive)
+						return;
+
+					var index:Null<Int> = Thread.readMessage(false);
+					if (index != null)
+					{
+						if (index == selection && index != selSongPlaying)
+						{
+							var inst:Sound = AssetHandler.grabAsset("Inst", SOUND, "songs/" + songList[selection].name);
+
+							if (index == selection && threadActive)
+							{
+								mutex.acquire();
+								instPlaying = inst;
+								mutex.release();
+
+								selSongPlaying = selection;
+							}
+						}
+					}
+				}
+			});
+		}
+
+		songThread.sendMessage(selection);
 	}
 }

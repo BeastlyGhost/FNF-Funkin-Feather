@@ -320,6 +320,26 @@ class PlayState extends MusicBeatState
 		}
 	}
 
+	inline public function cameraMovePoint(character:String = 'player')
+	{
+		var char:Character = opponent;
+
+		switch (character)
+		{
+			case "player", "bf", "boyfriend":
+				char = player;
+			case "crowd", "spectator", "girlfriend", "gf":
+				char = crowd;
+			case "opponent", "dad", "dadOpponent":
+				char = opponent;
+		}
+
+		var pointX = character == "player" ? char.getMidpoint().x - 100 : char.getMidpoint().x + 100;
+		var pointY = char.getMidpoint().y - 100;
+
+		camFollow.setPosition(pointX + char.camOffset.x, pointY + char.camOffset.y);
+	}
+
 	override public function update(elapsed:Float)
 	{
 		if (gameplayMode != STORY)
@@ -360,7 +380,7 @@ class PlayState extends MusicBeatState
 
 		while (spawnedNotes[0] != null)
 		{
-			if (spawnedNotes[0].strumTime - Conductor.songPosition > 1800)
+			if (spawnedNotes[0].step - Conductor.songPosition > 1800)
 				break;
 
 			notesGroup.add(spawnedNotes[0]);
@@ -369,6 +389,9 @@ class PlayState extends MusicBeatState
 
 		if (song != null && countdownWasActive)
 		{
+			if (song.sectionNotes != null && song.sectionNotes[Std.int(curStep / 16)] != null)
+				cameraMovePoint(song.sectionNotes[Std.int(curStep / 16)].cameraPoint);
+
 			for (strum in strumsGroup)
 			{
 				notesGroup.forEachAlive(function(note:Note)
@@ -385,46 +408,36 @@ class PlayState extends MusicBeatState
 
 					if (strum.autoplay)
 					{
-						if (!note.mustPress && note.strumTime <= Conductor.songPosition)
+						if (!note.mustPress && note.step <= Conductor.songPosition)
 							noteHit(note, strum);
 					}
 
-					if (note.y > FlxG.height)
-					{
-						note.active = false;
-						note.visible = false;
-					}
-					else
-					{
-						note.visible = true;
-						note.active = true;
-					}
-
-					if (!note.tooLate && !note.wasGoodHit && note.strumTime < Conductor.songPosition - (PlayerUtils.timingThreshold))
-					{
-						if ((!note.tooLate) && (note.mustPress))
-						{
-							note.tooLate = true;
-
-							if (note.ignoreNote || !note.isMine)
-								return;
-
-							noteMiss(note.index, strum);
-						}
-					}
-
-					var killNote:Bool = (downscroll ? note.y > FlxG.height : note.y < -note.height);
+					var killRangeReached:Bool = (downscroll ? note.y > FlxG.height : note.y < -note.height);
 
 					// kill offscreen notes
-					if (killNote)
+					if (killRangeReached)
 					{
 						notesGroup.removeNote(note);
 						spawnedNotes.remove(note);
+					}
+
+					if (note.step < Conductor.songPosition - (PlayerUtils.timingThreshold) + noteMissOffset)
+					{
+						note.active = false;
+
+						if (!note.isSustain && !note.tooLate && !note.wasGoodHit && !note.isMine && !note.ignoreNote)
+						{
+							note.tooLate = true;
+							noteMiss(note.index, strum);
+						}
 					}
 				});
 			}
 		}
 	}
+
+	var noteMissOffset:Int = 15;
+	var noteHitOffset:Int = 50;
 
 	private var hasDied:Bool = false;
 
@@ -475,6 +488,23 @@ class PlayState extends MusicBeatState
 			{
 				if (song != null && !strum.autoplay && countdownWasActive && !isPaused && !isEndingSong)
 				{
+					/*
+						hold notes
+					**/
+
+					if (keysHeld.contains(true))
+					{
+						notesGroup.forEachAlive(function(note:Note)
+						{
+							if (note.canBeHit && note.mustPress && note.isSustain && !note.tooLate && keysHeld[note.index])
+								noteHit(note, strum);
+						});
+					}
+
+					/*
+						normal notes
+					**/
+
 					var noteList:Array<Note> = [];
 					var notePresses:Array<Note> = [];
 					var notePossible:Bool = true; // usually, yeah, it should be possible to hit a note
@@ -482,40 +512,33 @@ class PlayState extends MusicBeatState
 					notesGroup.forEachAlive(function(note:Note)
 					{
 						if ((note.index == idx) && !note.isSustain && !note.tooLate && !note.wasGoodHit && note.mustPress && note.canBeHit)
+						{
 							noteList.push(note);
+						}
 						// trace("Stored Note List: " + noteList);
 					});
 					noteList.sort(sortHitNotes);
 
-					if (keysHeld.contains(true))
-					{
-						notesGroup.forEachAlive(function(note:Note)
-						{
-							if (note.canBeHit && note.mustPress && !note.tooLate && note.isSustain && keysHeld[note.index])
-								noteHit(note, strum);
-						});
-					}
-
 					if (noteList.length > 0)
 					{
-						for (note in noteList)
+						for (epicNote in noteList)
 						{
-							for (pressedNote in notePresses)
+							for (epicPress in notePresses)
 							{
-								if (Math.abs(pressedNote.strumTime - note.strumTime) < 1)
-								{
-									// kill the note
-									notesGroup.removeNote(pressedNote);
-									spawnedNotes.remove(pressedNote);
-								}
-								else // declare as not possible to hit
+								if (Math.abs(epicPress.step - epicPress.step) < 10)
 									notePossible = false;
+								else if (epicPress.index == epicNote.index && epicNote.step < epicPress.step)
+								{
+									notePresses.remove(epicNote);
+									notePresses.push(epicPress);
+									break;
+								}
 							}
 
-							if (notePossible && note.active)
+							if (notePossible)
 							{
-								noteHit(note, strum);
-								notePresses.push(note);
+								noteHit(epicNote, strum);
+								notePresses.push(epicNote);
 							}
 						}
 					}
@@ -527,14 +550,14 @@ class PlayState extends MusicBeatState
 						}
 					}
 				}
-
-				if (strum.babyArrows.members[idx] != null && strum.babyArrows.members[idx].animation.curAnim.name != 'confirm')
-					strum.babyArrows.members[idx].playAnim('pressed');
 			}
 			else
 			{
 				if (idx >= 0 && strum.babyArrows.members[idx] != null)
+				{
 					strum.babyArrows.members[idx].playAnim('static');
+					strum.babyArrows.members[idx].centerOffsets();
+				}
 				for (player in strum.characters)
 				{
 					if (player.holdTimer > Conductor.stepCrochet * 4 * 0.001 && !keysHeld.contains(true))
@@ -558,7 +581,7 @@ class PlayState extends MusicBeatState
 		else if (!a.lowPriority && b.lowPriority)
 			return -1;
 
-		return FlxSort.byValues(FlxSort.ASCENDING, a.strumTime, b.strumTime);
+		return FlxSort.byValues(FlxSort.ASCENDING, a.step, b.step);
 	}
 
 	public function noteHit(note:Note, strum:Strum)
@@ -567,11 +590,16 @@ class PlayState extends MusicBeatState
 		{
 			note.wasGoodHit = true;
 
-			if (strum.babyArrows.members[note.index].glowNoteHits)
-				strum.babyArrows.members[note.index].playAnim('confirm', true);
+			var babyArrow = strum.babyArrows.members[note.index];
+
+			if (babyArrow != null && babyArrow.animation.curAnim.name != 'confirm' && babyArrow.glowNoteHits)
+			{
+				babyArrow.playAnim('confirm', true);
+				babyArrow.centerOffsets();
+			}
 
 			var stringAnim:String = '';
-			var section = song.sectionNotes[curSection];
+			var section = song.sectionNotes[Std.int(curStep / 16)];
 
 			// paunful if statement
 			if (section != null)
@@ -583,12 +611,13 @@ class PlayState extends MusicBeatState
 				if (char != null)
 				{
 					char.playAnim(char.singAnims[note.index] + stringAnim, true);
+					Conductor.songVocals.volume = 1;
 					char.holdTimer = 0;
 				}
 			}
 
 			var lowestDiff:Float = Math.POSITIVE_INFINITY;
-			var noteDiff:Float = Math.abs(note.strumTime - Conductor.songPosition);
+			var noteDiff:Float = Math.abs(note.step - Conductor.songPosition);
 			var ratingInteger:Int = 3; // 3 is "Shit"
 
 			if (note.mustPress && !strum.autoplay) // being hit by the player
@@ -642,6 +671,7 @@ class PlayState extends MusicBeatState
 				char.playAnim(char.singAnims[idx] + 'miss');
 		}
 		FlxG.sound.play(AssetHandler.grabAsset("miss" + FlxG.random.int(1, 3), SOUND, "sounds/" + assetSkin), FlxG.random.float(0.1, 0.2));
+		Conductor.songVocals.volume = 0;
 
 		PlayerUtils.decreaseScore();
 		gameUI.updateScoreBar();
