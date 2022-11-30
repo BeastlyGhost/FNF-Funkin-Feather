@@ -1,6 +1,6 @@
 package states.menus;
 
-import base.data.OptionsMeta;
+import base.meta.OptionsMeta;
 import base.song.MusicState;
 
 /**

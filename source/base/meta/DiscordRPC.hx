@@ -1,4 +1,4 @@
-package base.data;
+package base.meta;
 
 #if RPC_ALLOWED
 import discord_rpc.DiscordRpc as RPCWrapper;

@@ -1,4 +1,4 @@
-package base.data;
+package base.meta;
 
 class FeatherModule extends SScript
 {

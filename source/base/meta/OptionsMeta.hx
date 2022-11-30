@@ -1,4 +1,4 @@
-package base.data;
+package base.meta;
 
 import flixel.FlxG;
 
