@@ -97,6 +97,7 @@ class PlayState extends MusicBeatState
 	public var crowdSpeed:Int = 1;
 
 	public var gameStage:Stage;
+	public var curStage:String = '';
 
 	// Camera
 	public var camGame:FlxCamera;
@@ -136,7 +137,9 @@ class PlayState extends MusicBeatState
 		camOther = new FlxCamera();
 
 		gameStage = new Stage();
-		opponent = new Character(false);
+
+		opponent = new Character();
+		crowd = new Character();
 		player = new Player();
 
 		camHUD.bgColor.alpha = 0;
@@ -152,6 +155,11 @@ class PlayState extends MusicBeatState
 
 		gameStage.setStage('stage');
 		add(gameStage);
+
+		curStage = gameStage.getStageName();
+
+		crowd.setCharacter(300, 100, 'bf');
+		add(crowd);
 
 		opponent.setCharacter(100, 100, 'bf');
 		add(opponent);
@@ -301,6 +309,7 @@ class PlayState extends MusicBeatState
 
 			// bop with countdown;
 			charDancing(curBeat);
+			gameStage.stageCountdownTick(curBeat, player, opponent, crowd);
 
 			if (!isPaused && !hasDied)
 				Conductor.songPosition = -(Conductor.crochet * posSong);
@@ -354,6 +363,8 @@ class PlayState extends MusicBeatState
 				MusicState.switchState(new states.editors.ChartEditor());
 			}
 		}
+
+		gameStage.stageUpdate(elapsed, player, opponent, crowd);
 
 		super.update(elapsed);
 
@@ -767,6 +778,15 @@ class PlayState extends MusicBeatState
 					i.dance();
 			}
 		}
+
+		var boppingBeat = (crowd.isQuickDancer ? beat % Math.round(crowdSpeed) * crowd.bopTimer == 0 : beat % crowd.bopTimer == 0);
+		if (crowd != null
+			&& !crowd.animation.curAnim.name.startsWith("sing")
+			&& boppingBeat
+			&& (crowd.animOffsets.exists(crowd.defaultIdle)))
+		{
+			crowd.dance();
+		}
 	}
 
 	override function beatHit()
@@ -778,6 +798,8 @@ class PlayState extends MusicBeatState
 
 		gameUI.updateIconScale();
 
+		gameStage.stageBeatHit(curBeat, player, opponent, crowd);
+
 		super.beatHit();
 	}
 
@@ -785,7 +807,16 @@ class PlayState extends MusicBeatState
 	{
 		Conductor.stepResync();
 
+		gameStage.stageStepHit(curStep, player, opponent, crowd);
+
 		super.stepHit();
+	}
+
+	override function sectionHit()
+	{
+		gameStage.stageSectionHit(curBeat, player, opponent, crowd);
+
+		super.sectionHit();
 	}
 
 	override function closeSubState()

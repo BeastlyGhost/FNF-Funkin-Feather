@@ -66,6 +66,7 @@ class ChartParser
 				player: funkinSong.player1,
 				opponent: funkinSong.player2,
 				crowd: funkinSong.gfVersion, // while the original chart format didn't have it, most engines do.
+				stage: funkinSong.stage,
 			};
 
 			// with that out of the way, let's convert the notes!

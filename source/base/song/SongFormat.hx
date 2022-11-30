@@ -17,7 +17,7 @@ typedef SectionBody =
 }
 
 /**
-	-- @BeastlyGhost--
+	-- @BeastlyGhost --
 
 	`FeatherSong` is my custom made chart format for the game,
 	I made it mainly because I was having issues parsing the base one,
@@ -37,6 +37,7 @@ typedef FeatherSong =
 	var player:String;
 	var opponent:String;
 	var crowd:String; // fancy way to say "girlfriend"
+	var stage:String;
 }
 
 /**
@@ -68,6 +69,7 @@ typedef SwagSong =
 	var player3:String;
 	var gfVersion:String;
 	var songAuthor:String;
+	var stage:String;
 	var validScore:Bool;
 }
 
