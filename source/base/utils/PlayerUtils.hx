@@ -11,6 +11,7 @@ typedef Judgement =
 	var timingMod:Float;
 	var percentMod:Float;
 	var noteSplash:Bool;
+	var causesBreak:Bool;
 	var comboReturn:String;
 }
 
@@ -23,6 +24,8 @@ class PlayerUtils
 	public static var score:Int = 0;
 	public static var misses:Int = 0;
 	public static var combo:Int = 0;
+	public static var breaks:Int = 0; // KE players going completely wild now
+	public static var ghostMisses:Int = 0;
 	public static var health:Float = 1;
 	public static var deaths:Float = 0;
 	public static var validScore:Bool = true;
@@ -55,6 +58,7 @@ class PlayerUtils
 			percentMod: 100,
 			timingMod: 33.33, // BASED ON FNF BASE GAME TIMING WINDOWS!!! -- https://twitter.com/kade0912/status/1511477162469113859
 			noteSplash: true,
+			causesBreak: false,
 			comboReturn: "SFC"
 		},
 		{
@@ -64,6 +68,7 @@ class PlayerUtils
 			percentMod: 85,
 			timingMod: 91.67,
 			noteSplash: false,
+			causesBreak: false,
 			comboReturn: "GFC"
 		},
 		{
@@ -73,6 +78,7 @@ class PlayerUtils
 			percentMod: 50,
 			timingMod: 133.33,
 			noteSplash: false,
+			causesBreak: false,
 			comboReturn: "FC"
 		},
 		{
@@ -82,6 +88,7 @@ class PlayerUtils
 			percentMod: 0,
 			timingMod: 166.67,
 			noteSplash: false,
+			causesBreak: true,
 			comboReturn: null
 		}
 	];
@@ -97,11 +104,16 @@ class PlayerUtils
 		"F" => 50,
 	];
 
+	// stores how many judgements you did hit
+	public static var gottenJudges:Map<String, Int> = [];
+
 	public static function resetScore()
 	{
 		score = 0;
 		misses = 0;
+		ghostMisses = 0;
 		combo = 0;
+		breaks = 0;
 		health = 1;
 		accuracy = 0;
 		validScore = true;
@@ -113,8 +125,12 @@ class PlayerUtils
 
 		var greatestT:Float = 0;
 		for (i in 0...judgeTable.length)
+		{
 			if (judgeTable[i].timingMod > greatestT)
 				greatestT = judgeTable[i].timingMod;
+			if (!gottenJudges.exists(judgeTable[i].name))
+				gottenJudges.set(judgeTable[i].name, 0);
+		}
 		timingThreshold = greatestT;
 
 		curComboGrade = "";
@@ -212,6 +228,13 @@ class PlayerUtils
 			combo = 0;
 		combo += 1;
 
+		// increase gotten judges count
+		gottenJudges.set(judgeTable[rating].name, gottenJudges.get(judgeTable[rating].name) + 1);
+
+		// update combo breaks counter
+		if (judgeTable[rating].causesBreak)
+			breaks = misses + gottenJudges.get(judgeTable[rating].name);
+
 		PlayerUtils.updateGradePercent(Std.int(judgeTable[rating].percentMod));
 
 		if (health > 2)
@@ -221,10 +244,14 @@ class PlayerUtils
 	public static function decreaseScore()
 	{
 		score += judgeTable[3].score;
-		health += 0.06 * (judgeTable[3].health) / 100;
+		health += 0.04 * (judgeTable[3].health) / 100;
 		misses += 1;
 
 		combo = 0;
+
+		// update combo breaks counter
+		if (judgeTable[3].causesBreak)
+			breaks = misses + gottenJudges.get(judgeTable[3].name);
 
 		PlayerUtils.updateGradePercent(Std.int(judgeTable[3].percentMod));
 

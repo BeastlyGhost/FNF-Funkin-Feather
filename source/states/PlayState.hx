@@ -567,6 +567,7 @@ class PlayState extends MusicBeatState
 						if (!OptionsMeta.getPref("Ghost Tapping"))
 						{
 							noteMiss(idx, strum);
+							PlayerUtils.ghostMisses++;
 						}
 					}
 				}
@@ -663,6 +664,9 @@ class PlayState extends MusicBeatState
 
 				if (!note.isSustain)
 				{
+					if (PlayerUtils.judgeTable[ratingInteger].causesBreak)
+						PlayerUtils.breaks += 1;
+
 					PlayerUtils.increaseScore(ratingInteger);
 					popUpScore(PlayerUtils.judgeTable[ratingInteger].name);
 
