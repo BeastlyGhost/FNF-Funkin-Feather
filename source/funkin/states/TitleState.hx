@@ -137,6 +137,8 @@ class TitleState extends MusicBeatState
 				FlxG.sound.play(AssetHandler.grabAsset("confirmMenu", SOUND, "sounds/menus"));
 				skipped = true;
 
+				FlxTween.tween(FlxG.camera, {zoom: 1.45, y: 2000}, 2, {ease: FlxEase.expoInOut});
+
 				new FlxTimer().start(1, t ->
 				{
 					MusicState.switchState(new funkin.states.menus.MainMenu());
