@@ -58,6 +58,47 @@ class FeatherModule extends SScript
 		set('FeatherSprite', base.utils.FeatherTools.FeatherSprite);
 		set('Controls', base.backend.Controls);
 	}
+
+	public static function initArray(moduleArray:Array<FeatherModule>):Array<FeatherModule>
+	{
+		// set up the modules folder
+		var dirs:Array<Array<String>> = [
+			FeatherTools.absoluteDirectory('scripts'),
+			FeatherTools.absoluteDirectory('songs/${funkin.states.PlayState.song.name.toLowerCase()}')
+		];
+
+		var pushedModules:Array<String> = [];
+
+		for (directory in dirs)
+		{
+			// it's 2am rn i'm dying give me a break
+			var tempExts = ['.hx', '.hxs', '.hxc', '.hscript'];
+
+			for (script in directory)
+			{
+				for (ext in tempExts)
+				{
+					if (directory != null && directory.length > 0)
+					{
+						if (!pushedModules.contains(script) && script != null && script.endsWith(ext))
+						{
+							moduleArray.push(new FeatherModule(script));
+							// trace('new module loaded: ' + script);
+							pushedModules.push(script);
+						}
+					}
+				}
+			}
+		}
+
+		if (moduleArray != null)
+		{
+			for (i in moduleArray)
+				i.call('scriptCreate', []);
+		}
+
+		return moduleArray;
+	}
 }
 
 class EventModule
