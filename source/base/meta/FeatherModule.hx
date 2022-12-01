@@ -56,6 +56,22 @@ class FeatherModule extends SScript
 		set('FeatherTools', base.utils.FeatherTools);
 		set('FeatherSprite', base.utils.FeatherTools.FeatherSprite);
 		set('Controls', base.backend.Controls);
+
+		#if windows
+		set('platform', 'windows');
+		#elseif linux
+		set('platform', 'linux');
+		#elseif mac
+		set('platform', 'mac');
+		#elseif android
+		set('platform', 'android');
+		#elseif html5
+		set('platform', 'html5');
+		#elseif flash
+		set('platform', 'flash');
+		#else
+		set('platform', 'unknown');
+		#end
 	}
 
 	public static function initArray(moduleArray:Array<FeatherModule>):Array<FeatherModule>
