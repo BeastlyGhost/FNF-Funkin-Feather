@@ -59,7 +59,7 @@ class PauseSubstate extends MusicBeatSubstate
 		var stringDiff = funkin.song.ChartParser.difficultyMap.get(PlayState.difficulty);
 
 		var levelInfo:FlxText = new FlxText(20, 15, 0, "", 32);
-		levelInfo.text = FeatherTools.coolSongFormatter(PlayState.song.name) + ' [${stringDiff.replace('-', '').toUpperCase()}]';
+		levelInfo.text = FeatherTools.formatSong(PlayState.song.name) + ' [${stringDiff.replace('-', '').toUpperCase()}]';
 		levelInfo.scrollFactor.set();
 		levelInfo.setFormat(Paths.font("vcr.ttf"), 32);
 		levelInfo.updateHitbox();

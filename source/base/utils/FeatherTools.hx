@@ -51,7 +51,7 @@ class FeatherTools
 	/**
 		Formats the song. Example: ``'world_machine' -> 'World Machine'``.
 	**/
-	inline public static function coolSongFormatter(song:String):String
+	inline public static function formatSong(song:String):String
 	{
 		var song = song.split('_').join(' ');
 		var words:Array<String> = song.toLowerCase().split(" ");

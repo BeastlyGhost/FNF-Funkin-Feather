@@ -228,7 +228,7 @@ class PlayState extends MusicBeatState
 
 		var stringDiff = ChartParser.difficultyMap.get(difficulty);
 
-		lineRPC2 = '${FeatherTools.coolSongFormatter(song.name)} [${stringDiff.replace('-', '').toUpperCase()}]';
+		lineRPC2 = '${FeatherTools.formatSong(song.name)} [${stringDiff.replace('-', '').toUpperCase()}]';
 
 		DiscordRPC.update(addString + lineRPC1, mode + ' - ' + lineRPC2);
 	}

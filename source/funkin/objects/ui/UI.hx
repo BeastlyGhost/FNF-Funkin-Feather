@@ -133,7 +133,7 @@ class UI extends FlxSpriteGroup
 		byText.screenCenter();
 		byText.x -= FlxG.width;
 		byText.y = FlxG.height - 80.5;
-		byText.text = FeatherTools.coolSongFormatter(PlayState.song.name);
+		byText.text = FeatherTools.formatSong(PlayState.song.name);
 		byText.text += '\n By: ${PlayState.song.author}';
 
 		blackBy.setGraphicSize(Std.int(byText.width - 20), Std.int(byText.height + 105));

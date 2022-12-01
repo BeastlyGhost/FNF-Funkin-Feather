@@ -38,29 +38,29 @@ class FeatherModule extends SScript
 		set('FlxTrail', flixel.addons.effects.FlxTrail);
 
 		// CLASSES (FUNKIN);
-		set('Alphabet', objects.ui.Alphabet);
-		set('Player', objects.Character.Player);
-		set('Character', objects.Character);
+		set('Alphabet', funkin.objects.ui.Alphabet);
+		set('Player', funkin.objects.Character.Player);
+		set('Character', funkin.objects.Character);
 		set('Conductor', funkin.song.Conductor);
-		set('Icon', objects.ui.Icon);
-		set('Strum', objects.ui.Strum);
-		set('BabyArrow', objects.ui.Strum.BabyArrow);
-		set('Note', objects.ui.Note);
+		set('Icon', funkin.objects.ui.Icon);
+		set('Strum', funkin.objects.ui.notes.Strum);
+		set('BabyArrow', funkin.objects.ui.notes.Strum.BabyArrow);
+		set('Note', funkin.objects.ui.notes.Note);
 		set('game', funkin.states.PlayState.main);
 		set('PlayState', funkin.states.PlayState);
 		set('Paths', Paths);
 
 		// CLASSES (FEATHER);
 		set('Main', Main);
-		set('Stage', objects.Stage);
+		set('Stage', funkin.objects.Stage);
 		set('OptionsMeta', OptionsMeta);
 		set('FeatherTools', base.utils.FeatherTools);
 		set('FeatherSprite', base.utils.FeatherTools.FeatherSprite);
-		set('Controls', base.Controls);
+		set('Controls', base.backend.Controls);
 	}
 }
 
-class Events
+class EventModule
 {
 	public static var eventArray:Array<String> = [];
 	public static var needsValue3:Array<String> = [];
