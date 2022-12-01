@@ -8,6 +8,7 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
+import funkin.data.MenuData.MainMenuData;
 import funkin.song.MusicState;
 
 /**
@@ -18,7 +19,7 @@ class MainMenu extends MusicBeatState
 {
 	var itemContainer:FlxTypedGroup<FlxSprite>;
 
-	var menuData:Dynamic;
+	var menuData:MainMenuData;
 
 	var menuBG:FlxSprite;
 	var menuFlash:FlxSprite;
@@ -30,25 +31,25 @@ class MainMenu extends MusicBeatState
 	{
 		super.create();
 
-		menuData = Yaml.read(AssetHandler.grabAsset("menuData", YAML, "data/menus"));
+		menuData = Yaml.read(AssetHandler.grabAsset("menuData", YAML, "data/menus"), yaml.Parser.options().useObjects());
 
 		DiscordRPC.update("MAIN MENU", "Navigating through the Main Menus");
 
 		FeatherTools.menuMusicCheck(false);
 
-		wrappableGroup = menuData.get("list");
+		wrappableGroup = menuData.list;
 
 		persistentUpdate = persistentDraw = true;
 
-		menuBG = new FlxSprite(-80).loadGraphic(AssetHandler.grabAsset(menuData.get("bg"), IMAGE, menuData.get("bgFolder")));
+		menuBG = new FlxSprite(-80).loadGraphic(AssetHandler.grabAsset(menuData.bg, IMAGE, menuData.bgFolder));
 		add(menuBG);
 
 		camFollow = new FlxObject(0, 0, 1, 1);
 		add(camFollow);
 
-		menuFlash = new FlxSprite(-80).loadGraphic(AssetHandler.grabAsset(menuData.get("flash"), IMAGE, menuData.get("flashFolder")));
+		menuFlash = new FlxSprite(-80).loadGraphic(AssetHandler.grabAsset(menuData.flash, IMAGE, menuData.flashFolder));
 		menuFlash.visible = false;
-		menuFlash.color = menuData.get("flashColor");
+		menuFlash.color = menuData.flashColor;
 		add(menuFlash);
 
 		for (bg in [menuBG, menuFlash])
@@ -63,13 +64,13 @@ class MainMenu extends MusicBeatState
 		itemContainer = new FlxTypedGroup<FlxSprite>();
 		add(itemContainer);
 
-		for (i in 0...menuData.get("list").length)
+		for (i in 0...wrappableGroup.length)
 		{
-			var item:FlxSprite = new FlxSprite(0, menuData.get("listY") + (i * menuData.get("listSpacing")));
-			item.frames = AssetHandler.grabAsset(menuData.get("list")[i], SPARROW, "images/menus/attachements");
+			var item:FlxSprite = new FlxSprite(0, menuData.listY + (i * menuData.listSpacing));
+			item.frames = AssetHandler.grabAsset(wrappableGroup[i], SPARROW, "images/menus/attachements");
 
-			item.animation.addByPrefix('idle', menuData.get("list")[i] + " basic", 24);
-			item.animation.addByPrefix('selected', menuData.get("list")[i] + " white", 24);
+			item.animation.addByPrefix('idle', wrappableGroup[i] + " basic", 24);
+			item.animation.addByPrefix('selected', wrappableGroup[i] + " white", 24);
 			item.animation.play('idle');
 
 			item.ID = i;
@@ -133,7 +134,7 @@ class MainMenu extends MusicBeatState
 					{
 						FlxFlicker.flicker(spr, 1, 0.1, false, false, function(flick:FlxFlicker)
 						{
-							switch (menuData.get("list")[selection])
+							switch (wrappableGroup[selection])
 							{
 								case "story mode":
 									MusicState.switchState(new StoryMenu());
@@ -142,7 +143,7 @@ class MainMenu extends MusicBeatState
 								case "options":
 									MusicState.switchState(new OptionsMenu());
 								default:
-									MusicState.switchState(new funkin.states.TitleState());
+									MusicState.resetState();
 							}
 						});
 					}

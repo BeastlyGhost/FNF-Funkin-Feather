@@ -446,11 +446,14 @@ class PlayState extends MusicBeatState
 
 						notesGroup.updateRects(note, strum);
 
-						if (strum.autoplay)
-						{
-							if (note.step <= Conductor.songPosition)
-								noteHit(note, strum);
-						}
+						/*
+							if (strum.autoplay)
+							{
+								if (note.step <= Conductor.songPosition)
+									noteHit(note, strum);
+							}
+							// redoing this later
+						**/
 
 						var killRangeReached:Bool = (strum.downscroll ? note.y > FlxG.height : note.y < -note.height);
 

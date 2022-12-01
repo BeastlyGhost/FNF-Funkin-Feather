@@ -11,6 +11,7 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
+import funkin.data.MenuData.TitleData;
 import funkin.objects.ui.Alphabet;
 import funkin.song.Conductor;
 import funkin.song.MusicState;
@@ -20,7 +21,7 @@ import funkin.song.MusicState;
 **/
 class TitleState extends MusicBeatState
 {
-	var introLines:Dynamic;
+	var introLines:TitleData;
 	var introTxt:FlxGroup;
 	var txtRandom:Array<String> = [];
 
@@ -51,8 +52,8 @@ class TitleState extends MusicBeatState
 			FeatherTools.menuMusicCheck(true);
 			DiscordRPC.update("TITLE SCREEN", "Navigating through the Main Menus");
 
-			introLines = Yaml.read(AssetHandler.grabAsset("titleText", YAML, "data/menus"));
-			// trace(introLines.get("stepText"));
+			introLines = Yaml.read(AssetHandler.grabAsset("titleText", YAML, "data/menus"), yaml.Parser.options().useObjects());
+			// trace(introLines.stepText);
 
 			started = true;
 		}
@@ -62,15 +63,15 @@ class TitleState extends MusicBeatState
 
 		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, 0xFF000000);
 		bg.scrollFactor.set();
-		bg.antialiasing = introLines.get("bgAntialias");
+		bg.antialiasing = introLines.bgAntialias;
 		add(bg);
 
 		// gf
 		gfDance = new FlxSprite(FlxG.width * 0.4, FlxG.height * 0.07);
-		gfDance.frames = AssetHandler.grabAsset(introLines.get("gf"), SPARROW, introLines.get("gfFolder"));
+		gfDance.frames = AssetHandler.grabAsset(introLines.gf, SPARROW, introLines.gfFolder);
 		gfDance.animation.addByIndices('danceLeft', 'gfDance', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
 		gfDance.animation.addByIndices('danceRight', 'gfDance', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
-		gfDance.antialiasing = introLines.get("gfAntialias");
+		gfDance.antialiasing = introLines.gfAntialias;
 		add(gfDance);
 
 		titleEnter = new FlxSprite(100, FlxG.height * 0.8);
@@ -93,7 +94,7 @@ class TitleState extends MusicBeatState
 			titleEnter.animation.addByPrefix('static', "Press Enter to Begin", 24);
 			titleEnter.animation.addByPrefix('confirm', "ENTER PRESSED", 24);
 		}
-		titleEnter.antialiasing = introLines.get("bgAntialias");
+		titleEnter.antialiasing = introLines.bgAntialias;
 		titleEnter.animation.play('static');
 		titleEnter.updateHitbox();
 		add(titleEnter);

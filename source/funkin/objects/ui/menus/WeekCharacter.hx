@@ -41,10 +41,7 @@ class WeekCharacter extends FlxSprite
 		if (yamlRaw == null)
 			return;
 
-		trace(yamlRaw);
-
-		charData = cast Yaml.read(yamlRaw, yaml.Parser.options().useObjects());
-		trace(charData.image);
+		charData = Yaml.read(yamlRaw, yaml.Parser.options().useObjects());
 
 		try
 		{
