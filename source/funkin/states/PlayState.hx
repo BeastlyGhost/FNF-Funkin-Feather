@@ -692,15 +692,15 @@ class PlayState extends MusicBeatState
 						ratingInteger = i;
 						lowestDiff = timingMod;
 					}
-
-					if (i > PlayerUtils.greatestJudgement)
-						PlayerUtils.greatestJudgement = i;
 				}
 
 				if (!note.isSustain)
 				{
 					if (PlayerUtils.judgeTable[ratingInteger].causesBreak)
 						PlayerUtils.breaks += 1;
+
+					if (ratingInteger > PlayerUtils.greatestJudgement)
+						PlayerUtils.greatestJudgement = ratingInteger;
 
 					PlayerUtils.increaseScore(ratingInteger);
 					popUpScore(PlayerUtils.judgeTable[ratingInteger].name);

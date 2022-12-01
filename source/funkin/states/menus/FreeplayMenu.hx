@@ -60,7 +60,8 @@ class FreeplayMenu extends MusicBeatState
 		return songList;
 	}
 
-	var selDifficulty:Int = -1;
+	static var selDifficulty:Int = 1;
+
 	var songInst:FlxSound;
 	var songVocals:FlxSound;
 
@@ -137,6 +138,8 @@ class FreeplayMenu extends MusicBeatState
 		if (FlxG.sound.music.volume < 0.7)
 			FlxG.sound.music.volume += 0.5 * elapsed;
 
+		repositionScore();
+
 		if (Controls.getPressEvent("ui_up"))
 			updateSelection(-1);
 		if (Controls.getPressEvent("ui_down"))
@@ -171,20 +174,23 @@ class FreeplayMenu extends MusicBeatState
 			MusicState.switchState(new PlayState());
 		}
 
-		mutex.acquire();
 		if (instPlaying != null)
 		{
-			FlxG.sound.playMusic(instPlaying);
+			if (FlxG.sound.music != null)
+				FlxG.sound.music.stop();
 
 			if (FlxG.sound.music.fadeTween != null)
 				FlxG.sound.music.fadeTween.cancel();
+
+			mutex.acquire();
+			FlxG.sound.playMusic(instPlaying);
 
 			FlxG.sound.music.volume = 0.0;
 			FlxG.sound.music.fadeIn(1.0, 0.0, 1.0);
 
 			instPlaying = null;
+			mutex.release();
 		}
-		mutex.release();
 	}
 
 	function repositionScore()
@@ -225,7 +231,6 @@ class FreeplayMenu extends MusicBeatState
 		var stringDiff = funkin.song.ChartParser.difficultyMap.get(selDifficulty);
 
 		diffTxt.text = '< ${stringDiff.replace('-', '').toUpperCase()} >';
-		repositionScore();
 	}
 
 	function updateBackgroundSong()

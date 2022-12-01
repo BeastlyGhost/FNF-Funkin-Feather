@@ -88,7 +88,7 @@ class PlayerUtils
 			timingMod: 166.67,
 			noteSplash: false,
 			causesBreak: true,
-			comboReturn: null
+			comboReturn: "FC"
 		}
 	];
 
@@ -138,7 +138,7 @@ class PlayerUtils
 
 		var finalPercent:String = '$floor%';
 		if (curComboGrade != null && curComboGrade != '')
-			finalPercent = '$floor% - $curComboGrade';
+			finalPercent = '$floor% ~ $curComboGrade';
 
 		return ' [$finalPercent]';
 	}
@@ -167,7 +167,6 @@ class PlayerUtils
 			}
 		}
 
-		curComboGrade = "";
 		// Update FC Display;
 		if (judgeTable[greatestJudgement].comboReturn != null)
 			curComboGrade = judgeTable[greatestJudgement].comboReturn;
