@@ -24,6 +24,9 @@ class Note extends FeatherSprite
 	public var ignoreNote:Bool = false;
 	public var isMine:Bool = false;
 
+	// modifiable gameplay variables
+	public var missOffset:Float = 150;
+
 	public var type:String = 'default';
 	public var prevNote:Note;
 
@@ -41,9 +44,9 @@ class Note extends FeatherSprite
 		if (prevNote == null)
 			prevNote = this;
 
-		this.type = type;
 		this.step = step;
 		this.index = index;
+		this.type = type;
 
 		this.prevNote = prevNote;
 		this.isSustain = isSustain;
@@ -127,15 +130,20 @@ class Note extends FeatherSprite
 
 		if (mustPress)
 		{
-			if (step > Conductor.songPosition - PlayerUtils.timingThreshold && step < Conductor.songPosition + PlayerUtils.timingThreshold)
+			if (step > Conductor.songPosition - (Conductor.safeZoneOffset)
+				&& step < Conductor.songPosition + (Conductor.safeZoneOffset * 0.5))
 				canBeHit = true;
 			else
 				canBeHit = true;
 		}
 		else
+		{
 			canBeHit = false;
 
-		if (tooLate)
+			// --hold note condition here--
+		}
+
+		if (tooLate || (prevNote != null && prevNote.isSustain && prevNote.tooLate))
 		{
 			if (alpha > 0.3)
 				alpha = 0.3;

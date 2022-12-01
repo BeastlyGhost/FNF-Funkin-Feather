@@ -43,7 +43,6 @@ class PlayerUtils
 	public static var curGrade:String;
 
 	public static var greatestJudgement:Int = 0;
-	public static var timingThreshold:Float = 0;
 
 	public static var scoreMap:Map<String, Int> = [];
 	public static var weekScoreMap:Map<String, Int> = [];
@@ -123,15 +122,11 @@ class PlayerUtils
 		greatestJudgement = 0;
 		noteRatingMod = 0.0001;
 
-		var greatestT:Float = 0;
 		for (i in 0...judgeTable.length)
 		{
-			if (judgeTable[i].timingMod > greatestT)
-				greatestT = judgeTable[i].timingMod;
 			if (!gottenJudges.exists(judgeTable[i].name))
 				gottenJudges.set(judgeTable[i].name, 0);
 		}
-		timingThreshold = greatestT;
 
 		curComboGrade = "";
 		curGrade = "N/A";

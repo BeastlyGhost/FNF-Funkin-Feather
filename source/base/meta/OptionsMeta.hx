@@ -13,6 +13,7 @@ typedef OptionData =
 {
 	var name:String;
 	var ?value:Dynamic;
+	var ?max:Dynamic;
 	var ?description:String;
 	var ?type:OptionType; // defaults to DYNAMIC if null
 }
@@ -57,6 +58,13 @@ class OptionsMeta
 			description: "If the notes should go from top to bottom.",
 			type: BOOLEAN,
 			value: false
+		},
+		{
+			name: "Safe Frames",
+			description: "Specify the amount of frames you have for hitting notes early / late",
+			type: STRING,
+			value: 10,
+			max: 10
 		},
 		{
 			name: "Flashing Lights",

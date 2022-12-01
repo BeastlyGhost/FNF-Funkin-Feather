@@ -16,6 +16,7 @@ import funkin.objects.Character;
 import funkin.objects.Stage;
 import funkin.objects.ui.UI;
 import funkin.objects.ui.notes.*;
+import funkin.objects.ui.notes.Strum.BabyArrow;
 import funkin.song.ChartParser;
 import funkin.song.Conductor;
 import funkin.song.MusicState;
@@ -55,6 +56,7 @@ class PlayState extends MusicBeatState
 
 			Conductor.callVocals(song.name);
 			Conductor.changeBPM(song.bpm);
+			Conductor.mapBPMChanges(song);
 
 			spawnedNotes = ChartParser.loadChartNotes(song);
 
@@ -190,6 +192,7 @@ class PlayState extends MusicBeatState
 		add(notesGroup);
 
 		var firework:NoteSplash = new NoteSplash(100, 100, 0);
+		firework.alpha = 0.000001;
 		splashGroup.add(firework);
 
 		gameUI = new UI();
@@ -404,57 +407,67 @@ class PlayState extends MusicBeatState
 			spawnedNotes.shift();
 		}
 
-		if (song != null && countdownWasActive)
+		if (song != null)
 		{
 			if (song.sectionNotes != null && song.sectionNotes[Std.int(curStep / 16)] != null)
 				cameraMovePoint(song.sectionNotes[Std.int(curStep / 16)].cameraPoint);
 
-			for (strum in strumsGroup)
+			if (countdownWasActive)
 			{
+				for (strum in strumsGroup)
+				{
+					notesGroup.forEachAlive(function(note:Note)
+					{
+						for (babyArrow in strum.babyArrows)
+						{
+							if (strum.autoplay && babyArrow.animation.curAnim.name == 'confirm' && babyArrow.animation.curAnim.finished)
+								babyArrow.playAnim('static', true);
+						}
+
+						note.speed = songSpeed;
+
+						notesGroup.updateRects(note, strum);
+
+						if (strum.autoplay)
+						{
+							if (!note.mustPress && note.step <= Conductor.songPosition)
+								noteHit(note, strum);
+						}
+
+						var killRangeReached:Bool = (downscroll ? note.y > FlxG.height : note.y < -note.height);
+
+						// kill offscreen notes and cause misses if needed
+						if (Conductor.songPosition > note.missOffset + note.step)
+						{
+							note.active = false;
+							note.visible = false;
+
+							if (killRangeReached)
+							{
+								notesGroup.removeNote(note);
+								spawnedNotes.remove(note);
+							}
+
+							if (note.mustPress && !note.isSustain && !note.tooLate && !note.wasGoodHit && !note.isMine && !note.ignoreNote)
+							{
+								note.tooLate = true;
+								noteMiss(note.index, strum);
+							}
+						}
+					});
+				}
+			}
+			else
+			{
+				// prevent hits if the countdown was not active
 				notesGroup.forEachAlive(function(note:Note)
 				{
-					for (babyArrow in strum.babyArrows)
-					{
-						if (strum.autoplay && babyArrow.animation.curAnim.name == 'confirm' && babyArrow.animation.curAnim.finished)
-							babyArrow.playAnim('static', true);
-					}
-
-					note.speed = songSpeed;
-
-					notesGroup.updateRects(note, strum);
-
-					if (strum.autoplay)
-					{
-						if (!note.mustPress && note.step <= Conductor.songPosition)
-							noteHit(note, strum);
-					}
-
-					var killRangeReached:Bool = (downscroll ? note.y > FlxG.height : note.y < -note.height);
-
-					// kill offscreen notes
-					if (killRangeReached)
-					{
-						notesGroup.removeNote(note);
-						spawnedNotes.remove(note);
-					}
-
-					if (note.step < Conductor.songPosition - (PlayerUtils.timingThreshold) + noteMissOffset)
-					{
-						note.active = false;
-
-						if (!note.isSustain && !note.tooLate && !note.wasGoodHit && !note.isMine && !note.ignoreNote)
-						{
-							note.tooLate = true;
-							noteMiss(note.index, strum);
-						}
-					}
+					note.canBeHit = false;
+					note.wasGoodHit = false;
 				});
 			}
 		}
 	}
-
-	var noteMissOffset:Int = 15;
-	var noteHitOffset:Int = 50;
 
 	private var hasDied:Bool = false;
 
@@ -504,6 +517,9 @@ class PlayState extends MusicBeatState
 
 		for (strum in playerStrum)
 		{
+			// shortening
+			var babyArrow:BabyArrow = strum.babyArrows.members[idx];
+
 			if (state == PRESSED)
 			{
 				if (song != null && !strum.autoplay && countdownWasActive)
@@ -525,37 +541,33 @@ class PlayState extends MusicBeatState
 						normal notes
 					**/
 
+					var prevTime:Float = Conductor.songPosition;
+					Conductor.songPosition = FlxG.sound.music.time;
+
 					var noteList:Array<Note> = [];
 					var notePresses:Array<Note> = [];
-					var notePossible:Bool = true; // usually, yeah, it should be possible to hit a note
 
 					notesGroup.forEachAlive(function(note:Note)
 					{
-						if ((note.index == idx) && !note.isSustain && !note.tooLate && !note.wasGoodHit && note.mustPress && note.canBeHit)
-						{
+						if ((note.index == idx) && note.mustPress && note.canBeHit && !note.isSustain && !note.tooLate && !note.wasGoodHit)
 							noteList.push(note);
-						}
 						// trace("Stored Note List: " + noteList);
 					});
 					noteList.sort(sortHitNotes);
 
 					if (noteList.length > 0)
 					{
+						var notePossible:Bool = true; // usually, yeah, it should be possible to hit a note
+
 						for (epicNote in noteList)
 						{
-							for (epicPress in notePresses)
+							for (troubleNote in notePresses)
 							{
-								if (Math.abs(epicPress.step - epicPress.step) < 10)
+								if (Math.abs(epicNote.step - troubleNote.step) > 10)
 									notePossible = false;
-								else if (epicPress.index == epicNote.index && epicNote.step < epicPress.step)
-								{
-									notePresses.remove(epicNote);
-									notePresses.push(epicPress);
-									break;
-								}
 							}
 
-							if (notePossible)
+							if (notePossible && epicNote.canBeHit)
 							{
 								noteHit(epicNote, strum);
 								notePresses.push(epicNote);
@@ -570,21 +582,24 @@ class PlayState extends MusicBeatState
 							PlayerUtils.ghostMisses++;
 						}
 					}
+
+					Conductor.songPosition = prevTime;
 				}
 
-				if (strum.babyArrows.members[idx] != null && strum.babyArrows.members[idx].animation.curAnim.name != 'confirm')
+				if (babyArrow != null && babyArrow.animation.curAnim.name != 'confirm')
 				{
-					strum.babyArrows.members[idx].playAnim('pressed');
-					strum.babyArrows.members[idx].centerOffsets();
+					babyArrow.playAnim('pressed');
+					babyArrow.centerOffsets();
 				}
 			}
 			else
 			{
-				if (idx >= 0 && strum.babyArrows.members[idx] != null)
+				if (idx >= 0 && babyArrow != null)
 				{
-					strum.babyArrows.members[idx].playAnim('static');
-					strum.babyArrows.members[idx].centerOffsets();
+					babyArrow.playAnim('static');
+					babyArrow.centerOffsets();
 				}
+
 				for (player in strum.characters)
 				{
 					if (player.holdTimer > Conductor.stepCrochet * 4 * 0.001 && !keysHeld.contains(true))
@@ -617,7 +632,7 @@ class PlayState extends MusicBeatState
 		{
 			note.wasGoodHit = true;
 
-			var babyArrow = strum.babyArrows.members[note.index];
+			var babyArrow:BabyArrow = strum.babyArrows.members[note.index];
 
 			if (babyArrow != null && babyArrow.animation.curAnim.name != 'confirm')
 			{
@@ -769,6 +784,7 @@ class PlayState extends MusicBeatState
 		//
 		var firework = splashGroup.recycle(NoteSplash);
 		firework.setupNoteSplash(x, y, index);
+		firework.alpha = 1;
 		splashGroup.add(firework);
 	}
 

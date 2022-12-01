@@ -28,6 +28,10 @@ class Stage extends FlxTypedGroup<FlxBasic>
 		{
 			default:
 				cameraZoom = 0.9;
+
+				var bg:FlxSprite = new FlxSprite().makeGraphic(flixel.FlxG.width, flixel.FlxG.height, 0xFF749FD7);
+				bg.setGraphicSize(Std.int(bg.width * 5));
+				add(bg);
 		}
 	}
 

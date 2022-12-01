@@ -2,7 +2,7 @@ package funkin.song;
 
 import flixel.FlxG;
 import flixel.system.FlxSound;
-import funkin.song.SongFormat.SwagSong;
+import funkin.song.SongFormat.FeatherSong;
 import funkin.states.PlayState;
 
 typedef BPMChangeEvent =
@@ -32,18 +32,20 @@ class Conductor
 	public static var songVocals:FlxSound; // the Vocal Track for a Song
 	public static var canStartSong:Bool = false; // Whether or not we can begin to play the song
 
-	public static function mapBPMChanges(song:SwagSong)
+	public static var safeZoneOffset:Float = (OptionsMeta.getPref("Safe Frames") / 60) * 1000; // is calculated in create(), is safeFrames in milliseconds
+
+	public static function mapBPMChanges(song:FeatherSong)
 	{
 		bpmChangeMap = [];
 
-		var curBPM:Int = song.bpm;
+		var curBPM:Float = song.bpm;
 		var totalSteps:Int = 0;
 		var totalPos:Float = 0;
-		for (i in 0...song.notes.length)
+		for (i in 0...song.sectionNotes.length)
 		{
-			if (song.notes[i].changeBPM && song.notes[i].bpm != curBPM)
+			if (song.sectionNotes[i].bpm != curBPM)
 			{
-				curBPM = song.notes[i].bpm;
+				curBPM = song.sectionNotes[i].bpm;
 				var event:BPMChangeEvent = {
 					stepTime: totalSteps,
 					songTime: totalPos,
@@ -52,11 +54,9 @@ class Conductor
 				bpmChangeMap.push(event);
 			}
 
-			var deltaSteps:Int = song.notes[i].lengthInSteps;
-			totalSteps += deltaSteps;
-			totalPos += ((60 / curBPM) * 1000 / 4) * deltaSteps;
+			totalPos += ((60 / curBPM) * 1000 / 4) * 16;
 		}
-		trace("new BPM map BUDDY " + bpmChangeMap);
+		// trace("new BPM map BUDDY " + bpmChangeMap);
 	}
 
 	public static function changeBPM(newBpm:Float)

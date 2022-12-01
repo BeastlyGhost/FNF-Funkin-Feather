@@ -26,7 +26,7 @@ class NoteSplash extends FeatherSprite
 	{
 		setPosition(x, y);
 		animation.play('note' + index + '-' + FlxG.random.int(0, 1), true);
-		animation.curAnim.frameRate += FlxG.random.int(-2, 2);
+		// animation.curAnim.frameRate += FlxG.random.int(-2, 2);
 		updateHitbox();
 		offset.set(60, 30);
 	}
