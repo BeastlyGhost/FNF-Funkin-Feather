@@ -58,11 +58,9 @@ class PlayState extends MusicBeatState
 
 			Conductor.callVocals(song.name);
 			Conductor.changeBPM(song.bpm);
-			Conductor.mapBPMChanges(song);
+			// Conductor.mapBPMChanges(song);
 
 			spawnedNotes = ChartParser.loadChartNotes(song);
-
-			Conductor.songPosition = -(Conductor.crochet * 5);
 		}
 
 		return song;
@@ -220,7 +218,7 @@ class PlayState extends MusicBeatState
 		songCutscene();
 		changePresence();
 
-		// callFunc('postCreate', []);
+		callFunc('postCreate', []);
 	}
 
 	public static function changePresence(addString:String = '')
@@ -252,7 +250,9 @@ class PlayState extends MusicBeatState
 		for (strum in strumsGroup)
 			strum.alpha = 0;
 
-		// callFunc('songCutscene' + (isEndingSong ? 'End' : ''), []);
+		Conductor.songPosition = -(Conductor.crochet * 16);
+
+		callFunc('songCutscene' + (isEndingSong ? 'End' : ''), []);
 
 		isStartingSong = true;
 		startCountdown();
@@ -276,7 +276,7 @@ class PlayState extends MusicBeatState
 			return;
 		}
 
-		// callFunc('startCountdown', []);
+		callFunc('startCountdown', []);
 
 		var introGraphicNames:Array<String> = ['prepare', 'ready', 'set', 'go'];
 		var introSoundNames:Array<String> = ['intro3', 'intro2', 'intro1', 'introGo'];
@@ -330,7 +330,7 @@ class PlayState extends MusicBeatState
 			posSong -= 1;
 			posCount += 1;
 
-			// callFunc('countdownTick', [posCount]);
+			callFunc('countdownTick', [posCount]);
 
 			if (posCount == 4)
 				gameUI.showInfoCard();
@@ -339,15 +339,12 @@ class PlayState extends MusicBeatState
 
 	function startSong()
 	{
-		if (!isPaused && !hasDied && countdownWasActive && !isEndingSong)
-		{
-			// callFunc('startSong', []);
+		callFunc('startSong', []);
 
-			AssetHandler.clear(false, false);
+		AssetHandler.clear(false, false);
 
-			Conductor.playSong(song.name);
-			isStartingSong = false;
-		}
+		Conductor.playSong(song.name);
+		isStartingSong = false;
 	}
 
 	inline public function cameraMovePoint(character:String = 'player')
@@ -356,11 +353,11 @@ class PlayState extends MusicBeatState
 
 		switch (character)
 		{
-			case "player", "bf", "boyfriend":
+			case "player" | "bf" | "boyfriend":
 				char = player;
-			case "crowd", "spectator", "girlfriend", "gf":
+			case "crowd" | "spectator" | "girlfriend" | "gf":
 				char = crowd;
-			case "opponent", "dad", "dadOpponent":
+			case "opponent" | "dad" | "dadOpponent":
 				char = opponent;
 		}
 
@@ -372,45 +369,48 @@ class PlayState extends MusicBeatState
 
 	override public function update(elapsed:Float)
 	{
-		if (gameplayMode != STORY)
-		{
-			if (FlxG.keys.justPressed.SEVEN)
-			{
-				PlayerUtils.validScore = false;
-				gameplayMode = CHARTING;
-				Conductor.stopSong();
-				MusicState.switchState(new funkin.states.editors.ChartEditor());
-			}
-		}
-
-		gameStage.stageUpdate(elapsed, player, opponent, crowd);
-
-		// callFunc('update', [elapsed]);
+		callFunc('update', [elapsed]);
 
 		super.update(elapsed);
 
-		if (!isPaused && !hasDied)
-		{
-			Conductor.songPosition += elapsed * 1000;
-			if (Conductor.songPosition >= Conductor.lastSongPos)
-				Conductor.lastSongPos = Conductor.songPosition;
+		gameStage.stageUpdate(elapsed, player, opponent, crowd);
 
-			if (Conductor.songPosition >= 0)
+		if (!isPaused && !hasDied && !isEndingSong)
+		{
+			if (gameplayMode != STORY)
+			{
+				if (FlxG.keys.justPressed.SEVEN)
+				{
+					PlayerUtils.validScore = false;
+					gameplayMode = CHARTING;
+					Conductor.stopSong();
+					MusicState.switchState(new funkin.states.editors.ChartEditor());
+				}
+			}
+
+			Conductor.songPosition += elapsed * 1000;
+			if (Conductor.songPosition >= 0 && !FlxG.sound.music.playing && !isStartingSong)
 				startSong();
+
+			if (Conductor.songPosition > Conductor.lastSongPos)
+				Conductor.lastSongPos = Conductor.songPosition;
 		}
 
 		FeatherTools.cameraBumpingZooms(camGame, cameraZoom, cameraSpeed);
 		FeatherTools.cameraBumpingZooms(camHUD, 1);
 
+		if (song != null && song.sectionNotes != null && song.sectionNotes[Std.int(curStep / 16)] != null)
+			cameraMovePoint(song.sectionNotes[Std.int(curStep / 16)].cameraPoint);
+
 		playerDeathCheck();
 
-		if (Controls.getPressEvent("pause") && canPause)
+		if (Controls.getPressEvent("pause", "justPressed") && canPause)
 		{
 			isPaused = true;
 			Conductor.pauseSong();
 			globalManagerPause();
 			changePresence("Paused - ");
-			openSubState(new funkin.substates.PauseSubstate(player.getScreenPosition().x, player.getScreenPosition().y));
+			openSubState(new funkin.substates.PauseSubstate(player.getScreenPosition().x, player.getScreenPosition().y, "default"));
 		}
 
 		while (spawnedNotes[0] != null)
@@ -424,9 +424,6 @@ class PlayState extends MusicBeatState
 
 		if (song != null)
 		{
-			if (song.sectionNotes != null && song.sectionNotes[Std.int(curStep / 16)] != null)
-				cameraMovePoint(song.sectionNotes[Std.int(curStep / 16)].cameraPoint);
-
 			if (countdownWasActive)
 			{
 				for (strum in strumsGroup)
@@ -483,7 +480,7 @@ class PlayState extends MusicBeatState
 			}
 		}
 
-		// callFunc('postUpdate', [elapsed]);
+		callFunc('postUpdate', [elapsed]);
 	}
 
 	private var hasDied:Bool = false;
@@ -497,7 +494,7 @@ class PlayState extends MusicBeatState
 			PlayerUtils.deaths++;
 			hasDied = true;
 
-			// callFunc('onDeath', []);
+			callFunc('onDeath', []);
 
 			persistentUpdate = false;
 			persistentDraw = false;
@@ -524,7 +521,7 @@ class PlayState extends MusicBeatState
 				var index = actions.indexOf(action);
 				inputSystem(index, state);
 		}
-		// callFunc('onKey' + (state == PRESSED ? 'Press' : 'Release'), [key, action]);
+		callFunc('onKey' + (state == PRESSED ? 'Press' : 'Release'), [key, action]);
 	}
 
 	var keysHeld:Array<Bool> = [];
@@ -562,6 +559,7 @@ class PlayState extends MusicBeatState
 					**/
 
 					var prevTime:Float = Conductor.songPosition;
+
 					Conductor.songPosition = FlxG.sound.music.time;
 
 					var noteList:Array<Note> = [];
@@ -652,7 +650,7 @@ class PlayState extends MusicBeatState
 		{
 			note.wasGoodHit = true;
 
-			// callFunc('goodNoteHit', [note, strum]);
+			callFunc('goodNoteHit', [note, strum]);
 
 			var babyArrow:BabyArrow = strum.babyArrows.members[note.index];
 
@@ -842,7 +840,7 @@ class PlayState extends MusicBeatState
 
 		gameUI.updateIconScale();
 		gameStage.stageBeatHit(curBeat, player, opponent, crowd);
-		// callFunc('beatHit', [curBeat]);
+		callFunc('beatHit', [curBeat]);
 
 		super.beatHit();
 	}
@@ -851,27 +849,28 @@ class PlayState extends MusicBeatState
 	{
 		Conductor.stepResync();
 		gameStage.stageStepHit(curStep, player, opponent, crowd);
-		// callFunc('stepHit', [curStep]);
+		callFunc('stepHit', [curStep]);
 		super.stepHit();
 	}
 
 	override function sectionHit()
 	{
 		gameStage.stageSectionHit(curBeat, player, opponent, crowd);
-		// callFunc('sectionHit', [curSection]);
+		callFunc('sectionHit', [curSection]);
 		super.sectionHit();
 	}
 
 	override function openSubState(SubState:flixel.FlxSubState)
 	{
-		// callFunc('openSubState', []);
+		callFunc('openSubState', []);
+		super.openSubState(SubState);
 	}
 
 	override function closeSubState()
 	{
 		isPaused = false;
 		changePresence();
-		// callFunc('closeSubState', []);
+		callFunc('closeSubState', []);
 		super.closeSubState();
 	}
 
@@ -895,7 +894,7 @@ class PlayState extends MusicBeatState
 	{
 		super.endSong();
 
-		// callFunc('endSong', []);
+		callFunc('endSong', []);
 
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
