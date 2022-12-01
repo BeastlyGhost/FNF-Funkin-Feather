@@ -1,9 +1,14 @@
-"Where are the files" you might ask
+## "Where are the files?", you might ask.
 
-well, they are all organized inside their respective folders
+Well, they are organized and situated in their own repesctive folders.
 
-wanna mess with the main game? then go to the "funkin" folder
+- Wanna mess with the main game?
+  - Go to ``source/funkin/``.
 
-wanna check engine utilities and mess with backend files (like: FPS Counter)? then go to the "base" folder
+- Wanna check the engine's utilities and mess with backend files, e.g. the FPS Counter?
+  - Go to ``source/base/``.
+-------------------------------
 
-if you think it's hard to get through the files quickly, simply press CTRL+SHIFT+P, delete the first > symbol, type the file name you want and it will take you there!
+If you think that it's hard to nagivate to the correct file quickly, then, hit ``CTRL + Shift + P`` to access the ``Search Editor`` in Visual Studio Code.
+
+Delete the ``>`` symbol, insert the name of the file, hit ``Enter`` and it'll take you there!
