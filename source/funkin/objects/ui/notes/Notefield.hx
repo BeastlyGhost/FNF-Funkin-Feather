@@ -13,18 +13,43 @@ class Notefield extends FlxTypedGroup<Note>
 {
 	public function updateRects(note:Note, strum:Strum)
 	{
+		var center:Float = strum.y + BabyArrow.swagWidth / 2;
+
 		note.y = (strum.y - (Conductor.songPosition - note.step) * (0.45 * note.speed));
 
-		// i am so fucking sorry for this if condition
-		if (note.isSustain
-			&& note.y + note.offset.y <= strum.y + BabyArrow.swagWidth / 2
-			&& (!note.mustPress || (note.wasGoodHit || (note.prevNote.wasGoodHit && !note.canBeHit))))
+		// i am so fucking sorry for these if conditions
+		if (strum.downscroll)
 		{
-			var swagRect = new FlxRect(0, strum.y + BabyArrow.swagWidth / 2 - note.y, note.width * 2, note.height * 2);
-			swagRect.y /= note.scale.y;
-			swagRect.height -= swagRect.y;
+			if (note.isSustain)
+			{
+				if (note.animation.curAnim.name.endsWith('end') && note.prevNote != null)
+					note.y += note.prevNote.height;
+				else
+					note.y += note.height / 2;
 
-			note.clipRect = swagRect;
+				if (note.y - note.offset.y * note.scale.y + note.height >= center
+					&& (!note.mustPress || (note.wasGoodHit || (note.prevNote.wasGoodHit && !note.canBeHit))))
+				{
+					var swagRect = new FlxRect(0, 0, note.frameWidth, note.frameHeight);
+					swagRect.height = (center - note.y) / note.scale.y;
+					swagRect.y = note.frameHeight - swagRect.height;
+
+					note.clipRect = swagRect;
+				}
+			}
+		}
+		else
+		{
+			if (note.isSustain
+				&& note.y + note.offset.y * note.scale.y <= center
+				&& (!note.mustPress || (note.wasGoodHit || (note.prevNote.wasGoodHit && !note.canBeHit))))
+			{
+				var swagRect = new FlxRect(0, 0, note.width / note.scale.x, note.height / note.scale.y);
+				swagRect.y = (center - note.y) / note.scale.y;
+				swagRect.height -= swagRect.y;
+
+				note.clipRect = swagRect;
+			}
 		}
 	}
 

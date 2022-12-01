@@ -88,7 +88,7 @@ class PlayerUtils
 			timingMod: 166.67,
 			noteSplash: false,
 			causesBreak: true,
-			comboReturn: "FC"
+			comboReturn: null
 		}
 	];
 
@@ -166,6 +166,8 @@ class PlayerUtils
 				curGrade = grade;
 			}
 		}
+
+		curComboGrade = "";
 
 		// Update FC Display;
 		if (judgeTable[greatestJudgement].comboReturn != null)

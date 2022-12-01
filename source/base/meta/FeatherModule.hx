@@ -39,7 +39,6 @@ class FeatherModule extends SScript
 
 		// CLASSES (FUNKIN);
 		set('Alphabet', funkin.objects.ui.Alphabet);
-		set('Player', funkin.objects.Character.Player);
 		set('Character', funkin.objects.Character);
 		set('Conductor', funkin.song.Conductor);
 		set('Icon', funkin.objects.ui.Icon);

@@ -57,7 +57,7 @@ class OptionsMeta
 		},
 		{
 			name: "Downscroll",
-			description: "If the notes should go from top to bottom.",
+			description: "If the notes should come from top to bottom.",
 			type: BOOLEAN,
 			value: false
 		},

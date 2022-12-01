@@ -82,8 +82,9 @@ class PlayState extends MusicBeatState
 
 	public static var gameUI:UI;
 
-	public var strumsP1:Strum;
-	public var strumsP2:Strum;
+	public static var strumsP1:Strum;
+	public static var strumsP2:Strum;
+
 	public var playerStrum:Array<Strum> = [];
 
 	public static var assetSkin:String = 'default';
@@ -92,7 +93,7 @@ class PlayState extends MusicBeatState
 	public static var pixelAssetSize:Float = 6;
 
 	// Characters
-	public var player:Player;
+	public var player:Character;
 	public var crowd:Character;
 	public var opponent:Character;
 
@@ -119,8 +120,6 @@ class PlayState extends MusicBeatState
 	public static var lineRPC1:String = '';
 	public static var lineRPC2:String = '';
 
-	public var downscroll:Bool = false;
-
 	override public function create()
 	{
 		super.create();
@@ -142,7 +141,7 @@ class PlayState extends MusicBeatState
 
 		opponent = new Character();
 		crowd = new Character();
-		player = new Player();
+		player = new Character();
 
 		camHUD.bgColor.alpha = 0;
 		camOther.bgColor.alpha = 0;
@@ -165,7 +164,7 @@ class PlayState extends MusicBeatState
 		crowd.setCharacter(300, 100, 'bf');
 		add(crowd);
 
-		opponent.setCharacter(100, 100, 'bf');
+		opponent.setCharacter(100, 100, song.opponent);
 		add(opponent);
 
 		player.setCharacter(770, 450, 'bf');
@@ -179,10 +178,11 @@ class PlayState extends MusicBeatState
 		splashGroup.cameras = [camHUD];
 		notesGroup.cameras = [camHUD];
 
-		var height = (downscroll ? FlxG.height - 170 : 25);
+		var isDownscroll = OptionsMeta.getPref("Downscroll");
+		var height = (isDownscroll ? FlxG.height - 170 : 25);
 
-		strumsP1 = new Strum((FlxG.width / 2) + FlxG.width / 4, height, [player], false);
-		strumsP2 = new Strum((FlxG.width / 2) - FlxG.width / 4 - 30, height, [opponent], true);
+		strumsP1 = new Strum((FlxG.width / 2) + FlxG.width / 4, height, [player], false, isDownscroll);
+		strumsP2 = new Strum((FlxG.width / 2) - FlxG.width / 4 - 30, height, [opponent], true, isDownscroll);
 
 		strumsGroup.add(strumsP1);
 		strumsGroup.add(strumsP2);
@@ -379,6 +379,12 @@ class PlayState extends MusicBeatState
 		{
 			if (gameplayMode != STORY)
 			{
+				if (FlxG.keys.justPressed.SIX)
+				{
+					strumsP1.autoplay = !strumsP1.autoplay;
+					gameUI.autoPlayText.visible = strumsP1.autoplay;
+				}
+
 				if (FlxG.keys.justPressed.SEVEN)
 				{
 					PlayerUtils.validScore = false;
@@ -442,11 +448,11 @@ class PlayState extends MusicBeatState
 
 						if (strum.autoplay)
 						{
-							if (!note.mustPress && note.step <= Conductor.songPosition)
+							if (note.step <= Conductor.songPosition)
 								noteHit(note, strum);
 						}
 
-						var killRangeReached:Bool = (downscroll ? note.y > FlxG.height : note.y < -note.height);
+						var killRangeReached:Bool = (strum.downscroll ? note.y > FlxG.height : note.y < -note.height);
 
 						// kill offscreen notes and cause misses if needed
 						if (Conductor.songPosition > note.missOffset + note.step)
@@ -663,7 +669,7 @@ class PlayState extends MusicBeatState
 			var stringAnim:String = '';
 			var section = song.sectionNotes[Std.int(curStep / 16)];
 
-			// paunful if statement
+			// painful if statement
 			if (section != null)
 				if (section.animation != null && section.animation != '')
 					stringAnim = section.animation;
@@ -709,7 +715,7 @@ class PlayState extends MusicBeatState
 						popUpSplash(note.x, note.y, note.index);
 
 					// update scoretext
-					gameUI.updateScoreBar();
+					gameUI.updateScoreText();
 				}
 			}
 
@@ -739,7 +745,7 @@ class PlayState extends MusicBeatState
 		Conductor.songVocals.volume = 0;
 
 		PlayerUtils.decreaseScore();
-		gameUI.updateScoreBar();
+		gameUI.updateScoreText();
 	}
 
 	public function popUpScore(myRating:String = 'sick', preload:Bool = false)

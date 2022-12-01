@@ -109,6 +109,9 @@ class Note extends FeatherSprite
 		{
 			alpha = 0.6;
 
+			if (OptionsMeta.getPref("Downscroll"))
+				angle = 180;
+
 			speed = prevNote.speed;
 
 			x += width / 2;

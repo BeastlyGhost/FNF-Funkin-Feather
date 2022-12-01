@@ -19,7 +19,9 @@ import funkin.states.PlayState;
 **/
 class UI extends FlxSpriteGroup
 {
-	public var scoreBar:FlxText;
+	public var scoreText:FlxText;
+	public var autoPlayText:FlxText;
+	public var autoPlaySine:Float = 0;
 
 	public var healthBG:FlxSprite;
 	public var healthBar:FlxBar;
@@ -31,7 +33,7 @@ class UI extends FlxSpriteGroup
 	{
 		super();
 
-		healthBG = new FlxSprite(0, FlxG.height * 0.89);
+		healthBG = new FlxSprite(0, PlayState.strumsP1.downscroll ? FlxG.height * 0.1 : FlxG.height * 0.89);
 		healthBG.loadGraphic(AssetHandler.grabAsset("default/healthBar", IMAGE, "images/ui"));
 		healthBG.screenCenter(X);
 		healthBG.scrollFactor.set();
@@ -49,13 +51,31 @@ class UI extends FlxSpriteGroup
 		iconP2.y = healthBar.y - (iconP2.height / 2);
 		add(iconP2);
 
-		scoreBar = new FlxText(healthBG.x + healthBG.width - 190, healthBG.y + 30, 0, '', 20);
-		scoreBar.setFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 20, FlxColor.WHITE, CENTER, SHADOW, FlxColor.BLACK);
-		scoreBar.shadowOffset.set(2, 2);
-		scoreBar.scrollFactor.set();
-		add(scoreBar);
+		scoreText = new FlxText(healthBG.x + healthBG.width - 190, healthBG.y + 30, 0, '', 20);
+		scoreText.setFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 20, FlxColor.WHITE, CENTER, SHADOW, FlxColor.BLACK);
+		scoreText.shadowOffset.set(2, 2);
+		scoreText.scrollFactor.set();
+		add(scoreText);
 
-		updateScoreBar();
+		autoPlayText = new FlxText(-5, PlayState.strumsP1.downscroll ? FlxG.height - 80 : 80, FlxG.width - 800, '[AUTOPLAY]\n', 32);
+		autoPlayText.setFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 32, FlxColor.WHITE, CENTER, SHADOW, FlxColor.BLACK);
+		autoPlayText.shadowOffset.set(2, 2);
+		autoPlayText.screenCenter(X);
+		autoPlayText.visible = PlayState.strumsP1.autoplay;
+
+		/*
+			// repositioning for it to not be covered by the receptors
+			if (OptionsMeta.getPref('Center Notes'))
+			{
+				if (PlayState.strumsP1.downscroll)
+					autoPlayText.y = autoPlayText.y - 125;
+				else
+					autoPlayText.y = autoPlayText.y + 125;
+			}
+		 */
+		add(autoPlayText);
+
+		updateScoreText();
 		updateHealthBar();
 	}
 
@@ -78,12 +98,18 @@ class UI extends FlxSpriteGroup
 		iconP1.updateFrame(healthBar.percent);
 		iconP2.updateFrame(100 - healthBar.percent);
 
+		if (autoPlayText.visible)
+		{
+			autoPlaySine += 180 * (elapsed / 4);
+			autoPlayText.alpha = 1 - Math.sin((Math.PI * autoPlaySine) / 80);
+		}
+
 		super.update(elapsed);
 	}
 
 	public static var separator:String = " ~ ";
 
-	public function updateScoreBar()
+	public function updateScoreText()
 	{
 		var tempScore:String;
 
@@ -95,10 +121,10 @@ class UI extends FlxSpriteGroup
 			tempScore += separator + "Grade: " + PlayerUtils.curGrade + PlayerUtils.returnGradePercent();
 		}
 
-		scoreBar.text = tempScore;
-		scoreBar.screenCenter(X);
+		scoreText.text = tempScore;
+		scoreText.screenCenter(X);
 
-		PlayState.lineRPC1 = scoreBar.text;
+		PlayState.lineRPC1 = scoreText.text;
 		PlayState.changePresence();
 	}
 

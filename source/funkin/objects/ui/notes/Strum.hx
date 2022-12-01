@@ -14,14 +14,17 @@ class Strum extends FlxSpriteGroup
 	public var babyArrows:FlxTypedSpriteGroup<BabyArrow>;
 
 	public var characters:Array<Character>;
+
+	public var downscroll:Bool = false;
 	public var autoplay:Bool = true;
 
-	public function new(x:Float, y:Float, characters:Array<Character>, autoplay:Bool = true)
+	public function new(x:Float, y:Float, characters:Array<Character>, autoplay:Bool = true, downscroll:Bool = false)
 	{
 		super();
 
 		this.characters = characters;
 		this.autoplay = autoplay;
+		this.downscroll = downscroll;
 
 		babyArrows = new FlxTypedSpriteGroup<BabyArrow>();
 

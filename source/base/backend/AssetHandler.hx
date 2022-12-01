@@ -83,29 +83,31 @@ class AssetHandler
 	{
 		//
 		var path = grabRoot('$directory/$asset', type);
-		switch (type)
+		if (FileSystem.exists(path))
 		{
-			case JSON:
-				var json:String = File.getContent(path);
-				while (!json.endsWith("}"))
-					json = json.substr(0, json.length - 1);
-				return json;
-			case YAML:
-				var yaml:String = Yaml.parse(path);
-				return yaml;
-			case SPARROW:
-				return FlxAtlasFrames.fromSparrow(grabAsset(asset, IMAGE, directory), File.getContent(path));
-			case PACKER:
-				return FlxAtlasFrames.fromSpriteSheetPacker(grabAsset(asset, IMAGE, directory), File.getContent(path));
-			case IMAGE:
-				return grabGraphic(path);
-			case SOUND:
-				return grabSound(path);
-			default:
-				if (FileSystem.exists(path))
+			switch (type)
+			{
+				case JSON:
+					var json:String = File.getContent(path);
+					while (!json.endsWith("}"))
+						json = json.substr(0, json.length - 1);
+					return json;
+				case YAML:
+					var yaml:String = Yaml.parse(path);
+					return yaml;
+				case SPARROW:
+					return FlxAtlasFrames.fromSparrow(grabAsset(asset, IMAGE, directory), File.getContent(path));
+				case PACKER:
+					return FlxAtlasFrames.fromSpriteSheetPacker(grabAsset(asset, IMAGE, directory), File.getContent(path));
+				case IMAGE:
+					return grabGraphic(path);
+				case SOUND:
+					return grabSound(path);
+				default:
 					return path;
+			}
 		}
-		trace('asset is returning null at $path');
+		trace('$type asset is returning null at $path');
 		return null;
 	}
 
