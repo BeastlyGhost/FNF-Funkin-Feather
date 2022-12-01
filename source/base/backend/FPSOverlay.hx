@@ -66,7 +66,7 @@ class FPSOverlay extends TextField
 			text = ""
 				+ (OptionsMeta.getPref("Show Framerate") ? 'FPS: ${times.length}\n' : '')
 				+ (OptionsMeta.getPref("Show Memory") ? 'Memory: ${getInterval(memory)}\nMemory Peak: ${getInterval(memoryTotal)}\n' : '')
-				+ (OptionsMeta.getPref("Show Objects") ? 'Object Count: ${flixel.FlxG.state.members.length}\n' : '');
+				+ (OptionsMeta.getPref("Show Debug Info") ? 'Class: ${Main.currentState}\nObject Count: ${flixel.FlxG.state.members.length}\n' : '');
 		}
 	}
 }

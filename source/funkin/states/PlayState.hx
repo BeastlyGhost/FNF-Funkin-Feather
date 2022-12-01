@@ -220,7 +220,7 @@ class PlayState extends MusicBeatState
 		songCutscene();
 		changePresence();
 
-		callFunc('postCreate', []);
+		// callFunc('postCreate', []);
 	}
 
 	public static function changePresence(addString:String = '')
@@ -252,7 +252,7 @@ class PlayState extends MusicBeatState
 		for (strum in strumsGroup)
 			strum.alpha = 0;
 
-		callFunc('songCutscene' + (isEndingSong ? 'End' : ''), []);
+		// callFunc('songCutscene' + (isEndingSong ? 'End' : ''), []);
 
 		isStartingSong = true;
 		startCountdown();
@@ -276,7 +276,7 @@ class PlayState extends MusicBeatState
 			return;
 		}
 
-		callFunc('startCountdown', []);
+		// callFunc('startCountdown', []);
 
 		var introGraphicNames:Array<String> = ['prepare', 'ready', 'set', 'go'];
 		var introSoundNames:Array<String> = ['intro3', 'intro2', 'intro1', 'introGo'];
@@ -330,7 +330,7 @@ class PlayState extends MusicBeatState
 			posSong -= 1;
 			posCount += 1;
 
-			callFunc('countdownTick', [posCount]);
+			// callFunc('countdownTick', [posCount]);
 
 			if (posCount == 4)
 				gameUI.showInfoCard();
@@ -339,11 +339,11 @@ class PlayState extends MusicBeatState
 
 	function startSong()
 	{
-		if (posCount >= 4 && countdownWasActive && !isEndingSong)
+		if (!isPaused && !hasDied && countdownWasActive && !isEndingSong)
 		{
-			AssetHandler.clear(false, false);
+			// callFunc('startSong', []);
 
-			callFunc('startSong', []);
+			AssetHandler.clear(false, false);
 
 			Conductor.playSong(song.name);
 			isStartingSong = false;
@@ -385,7 +385,7 @@ class PlayState extends MusicBeatState
 
 		gameStage.stageUpdate(elapsed, player, opponent, crowd);
 
-		callFunc('update', [elapsed]);
+		// callFunc('update', [elapsed]);
 
 		super.update(elapsed);
 
@@ -395,9 +395,8 @@ class PlayState extends MusicBeatState
 			if (Conductor.songPosition >= Conductor.lastSongPos)
 				Conductor.lastSongPos = Conductor.songPosition;
 
-			if (isStartingSong)
-				if (Conductor.songPosition >= 0)
-					startSong();
+			if (Conductor.songPosition >= 0)
+				startSong();
 		}
 
 		FeatherTools.cameraBumpingZooms(camGame, cameraZoom, cameraSpeed);
@@ -484,7 +483,7 @@ class PlayState extends MusicBeatState
 			}
 		}
 
-		callFunc('postUpdate', [elapsed]);
+		// callFunc('postUpdate', [elapsed]);
 	}
 
 	private var hasDied:Bool = false;
@@ -498,7 +497,7 @@ class PlayState extends MusicBeatState
 			PlayerUtils.deaths++;
 			hasDied = true;
 
-			callFunc('onDeath', []);
+			// callFunc('onDeath', []);
 
 			persistentUpdate = false;
 			persistentDraw = false;
@@ -525,7 +524,7 @@ class PlayState extends MusicBeatState
 				var index = actions.indexOf(action);
 				inputSystem(index, state);
 		}
-		callFunc('onKey' + (state == PRESSED ? 'Press' : 'Release'), [key, action]);
+		// callFunc('onKey' + (state == PRESSED ? 'Press' : 'Release'), [key, action]);
 	}
 
 	var keysHeld:Array<Bool> = [];
@@ -653,7 +652,7 @@ class PlayState extends MusicBeatState
 		{
 			note.wasGoodHit = true;
 
-			callFunc('goodNoteHit', [note, strum]);
+			// callFunc('goodNoteHit', [note, strum]);
 
 			var babyArrow:BabyArrow = strum.babyArrows.members[note.index];
 
@@ -843,7 +842,7 @@ class PlayState extends MusicBeatState
 
 		gameUI.updateIconScale();
 		gameStage.stageBeatHit(curBeat, player, opponent, crowd);
-		callFunc('beatHit', [curBeat]);
+		// callFunc('beatHit', [curBeat]);
 
 		super.beatHit();
 	}
@@ -852,28 +851,27 @@ class PlayState extends MusicBeatState
 	{
 		Conductor.stepResync();
 		gameStage.stageStepHit(curStep, player, opponent, crowd);
-		callFunc('stepHit', [curStep]);
+		// callFunc('stepHit', [curStep]);
 		super.stepHit();
 	}
 
 	override function sectionHit()
 	{
 		gameStage.stageSectionHit(curBeat, player, opponent, crowd);
-		callFunc('sectionHit', [curSection]);
+		// callFunc('sectionHit', [curSection]);
 		super.sectionHit();
 	}
 
 	override function openSubState(SubState:flixel.FlxSubState)
 	{
-		callFunc('openSubState', []);
-		super.closeSubState();
+		// callFunc('openSubState', []);
 	}
 
 	override function closeSubState()
 	{
 		isPaused = false;
 		changePresence();
-		callFunc('closeSubState', []);
+		// callFunc('closeSubState', []);
 		super.closeSubState();
 	}
 
@@ -897,7 +895,7 @@ class PlayState extends MusicBeatState
 	{
 		super.endSong();
 
-		callFunc('endSong', []);
+		// callFunc('endSong', []);
 
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();

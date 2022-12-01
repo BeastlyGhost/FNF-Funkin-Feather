@@ -27,7 +27,6 @@ class PauseSubstate extends MusicBeatSubstate
 	];
 
 	var itemContainer:FlxTypedGroup<Alphabet>;
-	var currentList:String = "default";
 
 	var pauseMusic:FlxSound;
 	var mutex:Mutex;
@@ -37,8 +36,6 @@ class PauseSubstate extends MusicBeatSubstate
 		super();
 
 		wrappableGroup = listMap.get(listName);
-
-		currentList = listName;
 
 		mutex = new Mutex();
 		Thread.create(function()
@@ -74,9 +71,9 @@ class PauseSubstate extends MusicBeatSubstate
 		itemContainer = new FlxTypedGroup<Alphabet>();
 		add(itemContainer);
 
-		for (i in 0...listMap.get(listName).length)
+		for (i in 0...wrappableGroup.length)
 		{
-			var base:Alphabet = new Alphabet(0, (70 * i) + 30, listMap.get(listName)[i], true);
+			var base:Alphabet = new Alphabet(0, (70 * i) + 30, wrappableGroup[i], true);
 			base.isMenuItem = true;
 			base.targetY = i;
 			itemContainer.add(base);
@@ -98,7 +95,7 @@ class PauseSubstate extends MusicBeatSubstate
 
 		if (Controls.getPressEvent("accept"))
 		{
-			switch (listMap.get(currentList)[selection].toLowerCase())
+			switch (wrappableGroup[selection].toLowerCase())
 			{
 				case "resume song":
 					close();

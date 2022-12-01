@@ -3,6 +3,7 @@ package;
 import base.backend.FPSOverlay;
 import flixel.FlxG;
 import flixel.FlxGame;
+import flixel.FlxState;
 import openfl.Lib;
 import openfl.display.Sprite;
 
@@ -22,6 +23,9 @@ class Main extends Sprite
 		fullscreen: false, // whether the game should start at fullscreen
 		version: '0.0.1-PA', // the engine game version
 	};
+
+	// specifies the current state
+	public static var currentState:Class<FlxState> = funkin.states.TitleState;
 
 	public static function main():Void
 		Lib.current.addChild(new Main());

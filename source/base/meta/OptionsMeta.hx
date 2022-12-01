@@ -6,6 +6,8 @@ enum OptionType
 {
 	BOOLEAN;
 	STRING;
+	INTEGER;
+	FLOAT;
 	DYNAMIC;
 }
 
@@ -62,7 +64,7 @@ class OptionsMeta
 		{
 			name: "Safe Frames",
 			description: "Specify the amount of frames you have for hitting notes early / late",
-			type: STRING,
+			type: FLOAT,
 			value: 10,
 			max: 10
 		},
@@ -85,8 +87,8 @@ class OptionsMeta
 			value: true
 		},
 		{
-			name: "Show Objects",
-			description: "If the current state object count should be shown on the Info Counter.",
+			name: "Show Debug Info",
+			description: "If the current state folder location and object count should be shown on the Info Counter.",
 			type: BOOLEAN,
 			value: false
 		}
