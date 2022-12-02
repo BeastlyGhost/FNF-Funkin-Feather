@@ -58,7 +58,7 @@ class PauseSubstate extends MusicBeatSubstate
 		var levelInfo:FlxText = new FlxText(20, 15, 0, "", 32);
 		levelInfo.text = FeatherTools.formatSong(PlayState.song.name) + ' [${stringDiff.replace('-', '').toUpperCase()}]';
 		levelInfo.scrollFactor.set();
-		levelInfo.setFormat(Paths.font("vcr.ttf"), 32);
+		levelInfo.setFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 32);
 		levelInfo.updateHitbox();
 		add(levelInfo);
 

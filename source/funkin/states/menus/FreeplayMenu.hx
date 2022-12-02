@@ -86,7 +86,7 @@ class FreeplayMenu extends MusicBeatState
 
 		DiscordRPC.update("FREEPLAY MENU", "Choosing a Song");
 
-		menuBG = new FlxSprite(-80).loadGraphic(Paths.image('menus/menuDesat'));
+		menuBG = new FlxSprite(-80).loadGraphic(AssetHandler.grabAsset('menuDesat', IMAGE, 'images/menus'));
 		menuBG.scrollFactor.set();
 		menuBG.screenCenter(X);
 		add(menuBG);
@@ -155,7 +155,7 @@ class FreeplayMenu extends MusicBeatState
 			threadActive = false;
 			if (!FlxG.keys.pressed.SHIFT)
 			{
-				FlxG.sound.play(Paths.sound('base/menus/cancelMenu'));
+				FlxG.sound.play(AssetHandler.grabAsset('cancelMenu', SOUND, 'sounds/menus'));
 				FlxG.sound.music.stop();
 			}
 			MusicState.switchState(new MainMenu());

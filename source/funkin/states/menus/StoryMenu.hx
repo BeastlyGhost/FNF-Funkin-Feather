@@ -96,7 +96,7 @@ class StoryMenu extends MusicBeatState
 	function generateArrow(x:Float, y:Float, dir:String)
 	{
 		var arrow:FlxSprite = new FlxSprite(x, y);
-		arrow.frames = Paths.getSparrowAtlas('campaign_menu_UI_assets');
+		arrow.frames = AssetHandler.grabAsset('campaign_menu_UI_assets', SPARROW, 'images/menus/storyMenu');
 		arrow.animation.addByPrefix('idle', 'arrow $dir');
 		arrow.animation.addByPrefix('press', "arrow push $dir", 24, false);
 		arrow.animation.play('idle');
