@@ -910,11 +910,9 @@ class PlayState extends MusicBeatState
 		{
 			case STORY:
 				// playlist conditions go here
-				FeatherTools.menuMusicCheck(false);
-				MusicState.switchState(new funkin.states.menus.MainMenu());
+				MusicState.switchState(new funkin.states.menus.StoryMenu());
 			case FREEPLAY:
-				FeatherTools.menuMusicCheck(false);
-				MusicState.switchState(new funkin.states.menus.MainMenu());
+				MusicState.switchState(new funkin.states.menus.FreeplayMenu());
 			case CHARTING:
 				isPaused = true;
 				Conductor.pauseSong();

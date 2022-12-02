@@ -1,8 +1,10 @@
 package funkin.states.menus;
 
+import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
+import flixel.addons.transition.FlxTransitionableState;
 import flixel.effects.FlxFlicker;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
@@ -17,29 +19,50 @@ import funkin.song.MusicState;
 **/
 class MainMenu extends MusicBeatState
 {
-	var itemContainer:FlxTypedGroup<FlxSprite>;
-
 	var menuData:MainMenuData;
-
-	var menuBG:FlxSprite;
-	var menuFlash:FlxSprite;
 	var camFollow:FlxObject;
 
-	var lockedMovement:Bool = false;
+	public static var instance:MainMenu;
 
-	override function create()
+	public var camMain:FlxCamera;
+	public var camSub:FlxCamera;
+
+	public static var lockedMovement:Bool = false;
+	public static var firstStart:Bool = true;
+
+	public var itemContainer:FlxTypedGroup<FlxSprite>;
+
+	public var menuBG:FlxSprite;
+	public var versionText:FlxText;
+	public var menuFlash:FlxSprite;
+
+	function resetMenu()
 	{
-		super.create();
+		transIn = FlxTransitionableState.defaultTransIn;
+		transOut = FlxTransitionableState.defaultTransOut;
+
+		persistentUpdate = persistentDraw = true;
 
 		menuData = Yaml.read(AssetHandler.grabAsset("menuData", YAML, "data/menus"), yaml.Parser.options().useObjects());
 
 		DiscordRPC.update("MAIN MENU", "Navigating through the Main Menus");
 
-		FeatherTools.menuMusicCheck(false);
+		FeatherTools.menuMusicCheck(firstStart);
 
+		if (firstStart)
+			openSubState(new funkin.substates.TitleSubstate());
+	}
+
+	override function create()
+	{
+		super.create();
+
+		instance = this;
+
+		resetMenu();
+
+		lockedMovement = firstStart;
 		wrappableGroup = menuData.list;
-
-		persistentUpdate = persistentDraw = true;
 
 		menuBG = new FlxSprite(-80).loadGraphic(AssetHandler.grabAsset(menuData.bg, IMAGE, menuData.bgFolder));
 		add(menuBG);
@@ -55,7 +78,7 @@ class MainMenu extends MusicBeatState
 		for (bg in [menuBG, menuFlash])
 		{
 			bg.scrollFactor.set(0, 0.18);
-			bg.setGraphicSize(Std.int(bg.width * 1.1));
+			bg.setGraphicSize(Std.int(bg.width * 1.25));
 			bg.updateHitbox();
 			bg.screenCenter();
 			bg.antialiasing = true;
@@ -84,12 +107,36 @@ class MainMenu extends MusicBeatState
 
 		FlxG.camera.follow(camFollow, null, MusicState.boundFramerate(0.06));
 
-		var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, "Funkin' Feather v" + Main.game.version, 12);
-		versionShit.setFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 16, 0xFFFFFFFF, LEFT, OUTLINE, 0xFF000000);
-		versionShit.scrollFactor.set();
-		add(versionShit);
+		versionText = new FlxText(5, FlxG.height - 18, 0, "Funkin' Feather v" + Main.game.version, 12);
+		versionText.setFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 16, 0xFFFFFFFF, LEFT, OUTLINE, 0xFF000000);
+		versionText.scrollFactor.set();
+		add(versionText);
 
 		updateSelection();
+
+		updateObjectAlpha(firstStart ? 0 : 1);
+	}
+
+	public function updateObjectAlpha(alphaNew:Float, tweened:Bool = false)
+	{
+		if (!tweened)
+		{
+			itemContainer.forEach(function(spr:FlxSprite)
+			{
+				spr.alpha = alphaNew;
+			});
+			menuBG.alpha = alphaNew;
+			versionText.alpha = alphaNew;
+		}
+		else
+		{
+			itemContainer.forEach(function(spr:FlxSprite)
+			{
+				FlxTween.tween(spr, {alpha: alphaNew}, 0.6);
+			});
+			FlxTween.tween(menuBG, {alpha: alphaNew}, 0.6);
+			FlxTween.tween(versionText, {alpha: alphaNew}, 0.6);
+		}
 	}
 
 	override function update(elapsed:Float)
@@ -106,9 +153,6 @@ class MainMenu extends MusicBeatState
 
 			if (Controls.getPressEvent("ui_down"))
 				updateSelection(1);
-
-			if (Controls.getPressEvent("back"))
-				MusicState.switchState(new TitleState());
 
 			if (Controls.getPressEvent("accept"))
 			{

@@ -17,7 +17,7 @@ class Main extends Sprite
 		width: 1280, // the game window width
 		height: 720, // the game window height
 		zoom: -1.0, // defines the game's state bounds, -1.0 usually means automatic setup
-		initialState: funkin.states.TitleState, // the game's initial state (shown after boot splash)
+		initialState: funkin.states.menus.MainMenu, // the game's initial state (shown after boot splash)
 		framerate: 120, // the game's default framerate
 		skipSplash: false, // whether the game boot splash should be skipped (defaults to false, changes true when seen once)
 		fullscreen: false, // whether the game should start at fullscreen
@@ -25,7 +25,7 @@ class Main extends Sprite
 	};
 
 	// specifies the current state
-	public static var currentState:Class<FlxState> = funkin.states.TitleState;
+	public static var currentState:Class<FlxState> = funkin.states.menus.MainMenu;
 
 	public static function main():Void
 		Lib.current.addChild(new Main());

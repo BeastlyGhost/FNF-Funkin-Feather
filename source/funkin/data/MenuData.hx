@@ -17,6 +17,7 @@ typedef TitleData =
 	var bg:String;
 	var gf:String;
 	var ng:String;
+	var bgSize:Float;
 	var bgFolder:String;
 	var gfFolder:String;
 	var ngFolder:String;

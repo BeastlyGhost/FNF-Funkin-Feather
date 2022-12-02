@@ -1,8 +1,7 @@
-package funkin.states;
+package funkin.substates;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
-import flixel.addons.transition.FlxTransitionableState;
 import flixel.graphics.frames.FlxFrame;
 import flixel.group.FlxGroup;
 import flixel.math.FlxMath;
@@ -15,17 +14,19 @@ import funkin.data.MenuData.TitleData;
 import funkin.objects.ui.Alphabet;
 import funkin.song.Conductor;
 import funkin.song.MusicState;
+import funkin.states.menus.MainMenu;
 
 /**
 	the game's titlescreen, not much is going on about it aside from some wacky letter stuffs!
 **/
-class TitleState extends MusicBeatState
+class TitleSubstate extends MusicBeatSubstate
 {
 	var introLines:TitleData;
 	var introTxt:FlxGroup;
 	var txtRandom:Array<String> = [];
 
-	var started:Bool = false;
+	public static var started:Bool = false;
+
 	var skipped:Bool = false;
 
 	var gfDance:FlxSprite;
@@ -44,26 +45,26 @@ class TitleState extends MusicBeatState
 	{
 		super.create();
 
+		introLines = Yaml.read(AssetHandler.grabAsset("titleText", YAML, "data/menus"), yaml.Parser.options().useObjects());
+
 		if (!started)
 		{
-			transIn = FlxTransitionableState.defaultTransIn;
-			transOut = FlxTransitionableState.defaultTransOut;
-
-			FeatherTools.menuMusicCheck(true);
 			DiscordRPC.update("TITLE SCREEN", "Navigating through the Main Menus");
 
-			introLines = Yaml.read(AssetHandler.grabAsset("titleText", YAML, "data/menus"), yaml.Parser.options().useObjects());
-			// trace(introLines.stepText);
-
+			beginTitle();
 			started = true;
 		}
 
-		// guh
-		persistentUpdate = true;
-
-		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, 0xFF000000);
-		bg.scrollFactor.set();
-		bg.antialiasing = introLines.bgAntialias;
+		var bg:FlxSprite = new FlxSprite();
+		if (introLines.bg != null && introLines.bg.length > 1)
+		{
+			bg.loadGraphic(AssetHandler.grabAsset(introLines.bg, IMAGE, introLines.bgFolder));
+			bg.setGraphicSize(Std.int(bg.width * introLines.bgSize));
+			bg.antialiasing = introLines.bgAntialias;
+			bg.updateHitbox();
+		}
+		else
+			bg.makeGraphic(FlxG.width, FlxG.height, 0xFF000000);
 		add(bg);
 
 		// gf
@@ -102,7 +103,11 @@ class TitleState extends MusicBeatState
 		logoBump = new FlxSprite(-10, 10);
 		logoBump.loadGraphic(AssetHandler.grabAsset('logo', IMAGE, "images/menus/titleScreen"));
 		add(logoBump);
+
+		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
 	}
+
+	function beginTitle() {}
 
 	override function update(elapsed:Float)
 	{
@@ -125,8 +130,11 @@ class TitleState extends MusicBeatState
 
 				timer = FlxEase.quadInOut(timer);
 
-				titleEnter.color = FlxColor.interpolate(titleEnterColors[0], titleEnterColors[1], timer);
-				titleEnter.alpha = FlxMath.lerp(titleEnterSines[0], titleEnterSines[1], timer);
+				if (titleEnter != null)
+				{
+					titleEnter.color = FlxColor.interpolate(titleEnterColors[0], titleEnterColors[1], timer);
+					titleEnter.alpha = FlxMath.lerp(titleEnterSines[0], titleEnterSines[1], timer);
+				}
 			}
 
 			if (Controls.getPressEvent("accept"))
@@ -138,11 +146,30 @@ class TitleState extends MusicBeatState
 				FlxG.sound.play(AssetHandler.grabAsset("confirmMenu", SOUND, "sounds/menus"));
 				skipped = true;
 
-				FlxTween.tween(FlxG.camera, {zoom: 1.45, y: 2000}, 2, {ease: FlxEase.expoInOut});
+				// give the main menu the heads up that this is done
+				MainMenu.firstStart = false;
 
-				new FlxTimer().start(1, t ->
+				for (i in 0...cameras.length)
 				{
-					MusicState.switchState(new funkin.states.menus.MainMenu());
+					FlxTween.tween(cameras[i], {zoom: 1.45, y: 2000}, 2, {
+						onComplete: t ->
+						{
+							// send it back to the original position
+							cameras[i].zoom = 1;
+							cameras[i].y = 0;
+						},
+						ease: FlxEase.expoInOut
+					});
+				}
+
+				new FlxTimer().start(1.25, t ->
+				{
+					MainMenu.lockedMovement = false;
+
+					MainMenu.instance.updateObjectAlpha(1, true);
+
+					close();
+					// MusicState.switchState(new funkin.states.menus.MainMenu());
 				});
 			}
 		}
