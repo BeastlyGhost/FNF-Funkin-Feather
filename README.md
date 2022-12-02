@@ -12,7 +12,7 @@ However, it will be distributed separately, like a mod in it of itself.
 Pull Requests and Issues are greatly appreciated, as I, BeastlyGhost, wanna push the project further until it's in a useable state for both me and mod creators that may make use of the engine!
 
 -------------------------------
-# Want to contact me?
+## Want to contact me?
 You can do so, on:
 
 [Twitter - BeastlyGhost](https://twitter.com/BeastlyGabi)
