@@ -103,7 +103,8 @@ class PauseSubstate extends MusicBeatSubstate
 					funkin.song.Conductor.stopSong();
 					MusicState.resetState();
 				case "exit to options":
-				//
+					funkin.song.Conductor.stopSong();
+					MusicState.switchState(new funkin.states.menus.OptionsMenu());
 				case "exit to charter":
 					MusicState.switchState(new funkin.states.editors.ChartEditor());
 				case "leave charting mode":
@@ -111,6 +112,7 @@ class PauseSubstate extends MusicBeatSubstate
 					PlayState.gameplayMode = FREEPLAY;
 					MusicState.resetState();
 				case "exit to menu":
+					funkin.song.Conductor.stopSong();
 					PlayerUtils.deaths = 0;
 
 					if (PlayState.gameplayMode == STORY)

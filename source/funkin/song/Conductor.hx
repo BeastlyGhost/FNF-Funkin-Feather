@@ -29,6 +29,7 @@ class Conductor
 	public static var lastSongPos:Float; // Defines the Last Song Position
 
 	public static var bpmChangeMap:Array<BPMChangeEvent> = [];
+	public static var songMusic:FlxSound; // the Instrumental Track for a Song
 	public static var songVocals:FlxSound; // the Vocal Track for a Song
 	public static var canStartSong:Bool = false; // Whether or not we can begin to play the song
 
@@ -69,22 +70,24 @@ class Conductor
 
 	public static function callVocals(name:String)
 	{
-		AssetHandler.grabAsset("Inst", SOUND, "songs/" + name);
+		songMusic = new FlxSound().loadEmbedded(AssetHandler.grabAsset("Inst", SOUND, "songs/" + name));
 		songVocals = new FlxSound().loadEmbedded(AssetHandler.grabAsset("Voices", SOUND, "songs/" + name));
+		FlxG.sound.list.add(songMusic);
 		FlxG.sound.list.add(songVocals);
 	}
 
 	public static function playSong(name:String)
 	{
-		FlxG.sound.playMusic(AssetHandler.grabAsset("Inst", SOUND, "songs/" + name));
+		if (songMusic != null)
+			songMusic.play();
 		if (songVocals != null)
 			songVocals.play();
 	}
 
 	public static function pauseSong()
 	{
-		if (FlxG.sound.music != null)
-			FlxG.sound.music.pause();
+		if (songMusic != null)
+			songMusic.pause();
 		if (songVocals != null)
 			songVocals.pause();
 	}
@@ -94,10 +97,10 @@ class Conductor
 		if (songVocals != null)
 			songVocals.pause();
 
-		if (FlxG.sound.music != null)
+		if (songMusic != null)
 		{
-			FlxG.sound.music.play();
-			songPosition = FlxG.sound.music.time;
+			songMusic.play();
+			songPosition = songMusic.time;
 		}
 
 		if (songVocals != null)
@@ -109,10 +112,9 @@ class Conductor
 
 	public static function stepResync()
 	{
-		if (FlxG.sound.music != null)
+		if (songMusic != null)
 		{
-			if (Math.abs(FlxG.sound.music.time - (songPosition)) > 20
-				|| (songVocals != null && Math.abs(songVocals.time - (songPosition)) > 20))
+			if (Math.abs(songMusic.time - (songPosition)) > 20 || (songVocals != null && Math.abs(songVocals.time - (songPosition)) > 20))
 			{
 				resyncVocals();
 			}
@@ -121,8 +123,8 @@ class Conductor
 
 	public static function stopSong()
 	{
-		if (FlxG.sound.music != null)
-			FlxG.sound.music.stop();
+		if (songMusic != null)
+			songMusic.stop();
 		if (songVocals != null)
 			songVocals.stop();
 	}

@@ -53,6 +53,9 @@ class PlayState extends MusicBeatState
 				notesGroup.destroy();
 			spawnedNotes = [];
 
+			if (FlxG.sound.music != null && FlxG.sound.music.playing)
+				FlxG.sound.music.stop();
+
 			song = newSong;
 			songSpeed = song.speed;
 
@@ -127,8 +130,6 @@ class PlayState extends MusicBeatState
 		main = this;
 
 		FlxG.mouse.visible = false;
-		if (FlxG.sound.music != null && FlxG.sound.music.playing)
-			FlxG.sound.music.stop();
 
 		PlayerUtils.resetScore();
 
@@ -395,7 +396,7 @@ class PlayState extends MusicBeatState
 			}
 
 			Conductor.songPosition += elapsed * 1000;
-			if (Conductor.songPosition >= 0 && !FlxG.sound.music.playing && !isStartingSong)
+			if (Conductor.songPosition >= 0 && !Conductor.songMusic.playing && !isStartingSong)
 				startSong();
 
 			if (Conductor.songPosition > Conductor.lastSongPos)
@@ -569,7 +570,7 @@ class PlayState extends MusicBeatState
 
 					var prevTime:Float = Conductor.songPosition;
 
-					Conductor.songPosition = FlxG.sound.music.time;
+					Conductor.songPosition = Conductor.songMusic.time;
 
 					var noteList:Array<Note> = [];
 					var notePresses:Array<Note> = [];
@@ -904,9 +905,6 @@ class PlayState extends MusicBeatState
 		super.endSong();
 
 		callFunc('endSong', []);
-
-		if (FlxG.sound.music != null)
-			FlxG.sound.music.stop();
 
 		switch (gameplayMode)
 		{

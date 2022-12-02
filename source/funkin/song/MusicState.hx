@@ -90,8 +90,8 @@ class MusicBeatState extends FlxUIState implements MusicInterface
 
 	override public function update(elapsed:Float)
 	{
-		if (FlxG.sound.music != null && FlxG.sound.music.playing)
-			FlxG.sound.music.onComplete = endSong;
+		if (Conductor.songMusic != null)
+			Conductor.songMusic.onComplete = endSong;
 
 		updateTime();
 
@@ -151,10 +151,14 @@ class MusicBeatState extends FlxUIState implements MusicInterface
 
 		curStep = lastChange.stepTime + Math.floor((Conductor.songPosition - lastChange.songTime) / Conductor.stepCrochet);
 
+		curBeat = Math.floor(curStep / 4);
+		curSection = Math.floor(curBeat / 4);
+
 		if (lastStep != curStep)
 		{
 			if (curStep > 0)
 				stepHit();
+
 			lastStep = curStep;
 
 			if (PlayState.song != null)
@@ -163,9 +167,6 @@ class MusicBeatState extends FlxUIState implements MusicInterface
 					sectionHit();
 			}
 		}
-
-		curBeat = Math.floor(curStep / 4);
-		curSection = Math.floor(curBeat / 4);
 	}
 
 	public function sectionHit()
@@ -192,11 +193,12 @@ class MusicBeatState extends FlxUIState implements MusicInterface
 	public function endSong()
 	{
 		isEndingSong = true;
+		Conductor.songPosition = Conductor.songMusic.length;
 
-		if (FlxG.sound.music != null && FlxG.sound.music.playing)
+		if (Conductor.songMusic != null && Conductor.songMusic.playing)
 		{
-			FlxG.sound.music.volume = 0;
-			FlxG.sound.music.pause();
+			Conductor.songMusic.volume = 0;
+			Conductor.songMusic.pause();
 		}
 
 		if (Conductor.songVocals != null && Conductor.songVocals.playing)
@@ -204,8 +206,6 @@ class MusicBeatState extends FlxUIState implements MusicInterface
 			Conductor.songVocals.volume = 0;
 			Conductor.songVocals.pause();
 		}
-
-		Conductor.songPosition = FlxG.sound.music.length;
 	}
 
 	public function updateSelection(newSelection:Int = 0)

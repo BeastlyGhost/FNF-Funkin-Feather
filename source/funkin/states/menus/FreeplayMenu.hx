@@ -163,13 +163,13 @@ class FreeplayMenu extends MusicBeatState
 
 		if (Controls.getPressEvent("accept"))
 		{
-			PlayState.songName = songList[selection].name;
-			PlayState.gameplayMode = FREEPLAY;
-			PlayState.difficulty = selDifficulty;
-
 			if (FlxG.sound.music != null)
 				FlxG.sound.music.stop();
 			threadActive = false;
+
+			PlayState.songName = songList[selection].name;
+			PlayState.gameplayMode = FREEPLAY;
+			PlayState.difficulty = selDifficulty;
 
 			MusicState.switchState(new PlayState());
 		}
