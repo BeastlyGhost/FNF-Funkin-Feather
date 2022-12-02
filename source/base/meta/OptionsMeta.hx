@@ -91,6 +91,13 @@ class OptionsMeta
 			description: "If the current state folder location and object count should be shown on the Info Counter.",
 			type: BOOLEAN,
 			value: false
+		},
+		{
+			name: "Framerate Cap",
+			description: "Set your desired FPS limit.",
+			type: INTEGER,
+			value: 120,
+			max: 360
 		}
 	];
 

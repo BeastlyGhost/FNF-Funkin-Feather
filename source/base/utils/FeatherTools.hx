@@ -69,14 +69,11 @@ class FeatherTools
 	**/
 	inline public static function menuMusicCheck(volumeReset:Bool = false)
 	{
-		if ((FlxG.sound.music == null || !FlxG.sound.music.playing))
+		if ((FlxG.sound.music == null || (FlxG.sound.music != null && !FlxG.sound.music.playing)))
 		{
-			FlxG.sound.playMusic(AssetHandler.grabAsset("freakyMenu", SOUND, "music"));
+			FlxG.sound.playMusic(AssetHandler.grabAsset("freakyMenu", SOUND, "music"), (volumeReset) ? 0 : 0.7);
 			if (volumeReset)
-			{
-				FlxG.sound.music.volume = 0;
 				FlxG.sound.music.fadeIn(4, 0, 0.7);
-			}
 			Conductor.changeBPM(102);
 		}
 	}
