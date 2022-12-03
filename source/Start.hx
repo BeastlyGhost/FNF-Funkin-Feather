@@ -34,9 +34,10 @@ class Start extends FlxState
 		var bianca:FlxSprite = new FlxSprite().loadGraphic(AssetHandler.grabAsset("splashScreen/biancaSplash", IMAGE, "images/menus"));
 		bianca.setGraphicSize(Std.int(bianca.width * 0.6));
 		bianca.screenCenter(XY);
-		bianca.x -= 20;
+		bianca.x -= 1000;
 		add(bianca);
-
+		
+		FlxTween.tween(bianca, {x: bianca.x + 980}, 0.9, {ease: FlxEase.quintInOut});
 		FlxG.sound.play(AssetHandler.grabAsset("splashRingSound", SOUND, "sounds"));
 
 		FlxTween.tween(bianca, {alpha: 0}, 2, {
