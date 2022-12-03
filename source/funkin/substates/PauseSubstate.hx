@@ -62,10 +62,20 @@ class PauseSubstate extends MusicBeatSubstate
 		levelInfo.updateHitbox();
 		add(levelInfo);
 
+		var levelDeaths:FlxText = new FlxText(20, 15 + 32, 0, "", 32);
+		levelDeaths.text = 'Blue balled: ' + PlayerUtils.deaths;
+		levelDeaths.scrollFactor.set();
+		levelDeaths.setFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 32);
+		levelDeaths.updateHitbox();
+		add(levelDeaths);
+
 		levelInfo.alpha = 0;
+		levelDeaths.alpha = 0;
 		levelInfo.x = FlxG.width - (levelInfo.width + 20);
+		levelDeaths.x = FlxG.width - (levelDeaths.width + 20);
 
 		FlxTween.tween(levelInfo, {alpha: 1, y: 20}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.3});
+		FlxTween.tween(levelDeaths, {alpha: 1, y: levelDeaths.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.6});
 		FlxTween.tween(bg, {alpha: 0.6}, 0.4, {ease: FlxEase.quartInOut});
 
 		itemContainer = new FlxTypedGroup<Alphabet>();
