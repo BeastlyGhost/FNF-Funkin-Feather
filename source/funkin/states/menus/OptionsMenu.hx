@@ -48,6 +48,15 @@ class OptionsMenu extends MusicBeatState
 	{
 		super.update(elapsed);
 
+		if (activeContainer != null)
+		{
+			for (i in 0...activeContainer.length)
+			{
+				if (activeContainer[i].attributes != null && activeContainer[i].attributes.contains(UNSELECTABLE))
+					itemContainer.members[i].alpha = 0.6;
+			}
+		}
+
 		if (Controls.getPressEvent("ui_up"))
 			updateSelection(-1);
 		if (Controls.getPressEvent("ui_down"))
@@ -62,6 +71,8 @@ class OptionsMenu extends MusicBeatState
 	{
 		super.updateSelection(newSelection);
 
+		var selectionJumper = ((newSelection > selection) ? 1 : -1);
+
 		FlxG.sound.play(AssetHandler.grabAsset('scrollMenu', SOUND, "sounds/menus"));
 
 		var blah:Int = 0;
@@ -74,6 +85,9 @@ class OptionsMenu extends MusicBeatState
 			if (item.targetY == 0)
 				item.alpha = 1;
 		}
+
+		if (activeContainer[selection].attributes != null && activeContainer[selection].attributes.contains(UNSELECTABLE))
+			updateSelection(selection + selectionJumper);
 	}
 
 	public function switchCategory(newCategory:String)
@@ -103,17 +117,36 @@ class OptionsMenu extends MusicBeatState
 		{
 			var option = optionsArray[i];
 
-			var optionTxt:Alphabet = new Alphabet(0, 0, option.name, true);
-			//
-			optionTxt.screenCenter();
-			optionTxt.y += (125 * (i - Math.floor(optionsArray.length / 2)));
-			//
-			optionTxt.targetY = i;
-			optionTxt.disableX = true;
-			if (activeCategory != 'master')
-				optionTxt.isMenuItem = true;
-			optionTxt.alpha = 0.6;
-			itemContainer.add(optionTxt);
+			// set to default value
+			if (option.attributes == null)
+				option.attributes = [NOT_FORCED];
+			// we do this to avoid crashes with options that have no attributes @BeastlyGhost
+
+			if (!option.attributes.contains(FORCED))
+			{
+				var optionTxt:Alphabet = new Alphabet(0, 0, option.name, true);
+
+				// find unselectable options for automatically centering them
+				if (option.attributes.contains(UNSELECTABLE))
+				{
+					optionTxt.screenCenter(X);
+					optionTxt.forceX = optionTxt.x;
+					optionTxt.yAdd = -55;
+					optionTxt.scrollFactor.set();
+				}
+				else
+				{
+					optionTxt.screenCenter();
+					optionTxt.y += (125 * (i - Math.floor(optionsArray.length / 2)));
+				}
+
+				optionTxt.targetY = i;
+				optionTxt.disableX = true;
+				if (activeCategory != 'master')
+					optionTxt.isMenuItem = true;
+				optionTxt.alpha = 0.6;
+				itemContainer.add(optionTxt);
+			}
 		}
 
 		add(itemContainer);

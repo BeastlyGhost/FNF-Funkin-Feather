@@ -139,9 +139,12 @@ class TitleSubstate extends MusicBeatSubstate
 
 			if (Controls.getPressEvent("accept"))
 			{
-				titleEnter.color = FlxColor.WHITE;
-				titleEnter.alpha = 1;
-				titleEnter.animation.play('confirm');
+				if (titleEnter != null)
+				{
+					titleEnter.color = FlxColor.WHITE;
+					titleEnter.alpha = 1;
+					titleEnter.animation.play('confirm');
+				}
 
 				FlxG.sound.play(AssetHandler.grabAsset("confirmMenu", SOUND, "sounds/menus"));
 				skipped = true;
@@ -167,6 +170,7 @@ class TitleSubstate extends MusicBeatSubstate
 					MainMenu.lockedMovement = false;
 
 					MainMenu.instance.updateObjectAlpha(1, true);
+					DiscordRPC.update("MAIN MENU", "Navigating through the Main Menus");
 
 					close();
 					// MusicState.switchState(new funkin.states.menus.MainMenu());

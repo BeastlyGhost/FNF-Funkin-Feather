@@ -23,7 +23,6 @@ class Start extends FlxState
 		FlxG.mouse.useSystemCursor = true;
 		FlxG.mouse.visible = false;
 
-		FlxTransitionableState.skipNextTransIn = true;
 		triggerSplash(Main.game.skipSplash);
 	}
 

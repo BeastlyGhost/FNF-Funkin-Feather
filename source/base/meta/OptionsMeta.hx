@@ -11,6 +11,13 @@ enum OptionType
 	DYNAMIC;
 }
 
+enum OptionAttribute
+{
+	UNSELECTABLE;
+	NOT_FORCED;
+	FORCED; // FORCED at default value
+}
+
 typedef OptionData =
 {
 	var name:String;
@@ -18,6 +25,7 @@ typedef OptionData =
 	var ?max:Dynamic;
 	var ?description:String;
 	var ?type:OptionType; // defaults to DYNAMIC if null
+	var ?attributes:Array<OptionAttribute>;
 }
 
 /**
@@ -35,6 +43,7 @@ class OptionsMeta
 			name: "Auto Pause",
 			description: "If the game should pause itself when the window is unfocused.",
 			type: BOOLEAN,
+			attributes: [NOT_FORCED],
 			value: false
 		},
 		{
@@ -87,7 +96,7 @@ class OptionsMeta
 			value: true
 		},
 		{
-			name: "Show Debug Info",
+			name: "Show Debug",
 			description: "If the current state folder location and object count should be shown on the Info Counter.",
 			type: BOOLEAN,
 			value: false

@@ -14,10 +14,12 @@ class Alphabet extends FlxSpriteGroup
 	public var paused:Bool = false;
 
 	// for menu shit
-	public var targetY:Float = 0;
 	public var isMenuItem:Bool = false;
 	public var forceX:Float = Math.NEGATIVE_INFINITY;
 	public var disableX:Bool = false;
+	public var targetY:Float = 0;
+	public var xAdd:Float = 0;
+	public var yAdd:Float = 0;
 	public var xTo = 100;
 
 	public var text:String = "";
