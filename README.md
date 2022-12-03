@@ -9,12 +9,11 @@ The base game won't be included with the project, as it's made specifically for 
 However, it will be distributed separately, like a mod in it of itself.
 
 -------------------------------
-Pull Requests and Issues are greatly appreciated, as I, BeastlyGhost, wanna push the project further until it's in a useable state for both me and mod creators that may make use of the engine!
+Pull requests and issues are greatly appreciated, as I, BeastlyGhost, wanna push the project further until it's in a useable state for both me and mod creators that may make use of the engine!
 
 -------------------------------
 ## Want to contact me?
 You can do so, on:
 
-[Twitter - BeastlyGhost](https://twitter.com/BeastlyGabi)
-
-[Discord - BeastlyGhost](https://discord.com/users/597124141530742805)
+- [Twitter](https://twitter.com/BeastlyGabi)
+- [Discord](https://discord.com/users/597124141530742805)
