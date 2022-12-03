@@ -5,7 +5,7 @@
 	<!-- ___________ Application Settings ___________ -->
 
 	<!--Title and executable name-->
-	<app title="Funkin' Feather" file="Project-Feather" />
+	<app title="Friday Night Funkin' - Feather" file="Funkin-Feather" />
 
 	<!--Metadata, version name and company (save folder)-->
 	<app main="Main" version="1.0.0" company="BeastlyGhost" />

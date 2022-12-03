@@ -7,7 +7,7 @@ import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
-import funkin.base.PlayerInfo;
+import funkin.backend.dependencies.PlayerInfo;
 import funkin.objects.ui.Alphabet;
 import funkin.song.MusicState;
 import funkin.states.PlayState;

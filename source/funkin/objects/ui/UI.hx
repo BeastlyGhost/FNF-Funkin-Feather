@@ -10,7 +10,7 @@ import flixel.tweens.FlxTween;
 import flixel.ui.FlxBar;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
-import funkin.base.PlayerInfo;
+import funkin.backend.dependencies.PlayerInfo;
 import funkin.states.PlayState;
 
 /**

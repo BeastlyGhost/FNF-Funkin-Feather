@@ -1,4 +1,4 @@
-package funkin.base;
+package funkin.backend.data;
 
 import flixel.FlxG;
 

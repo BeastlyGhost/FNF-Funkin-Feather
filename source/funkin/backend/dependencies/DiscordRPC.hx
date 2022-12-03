@@ -1,4 +1,4 @@
-package funkin.base;
+package funkin.backend.dependencies;
 
 #if RPC_ALLOWED
 import discord_rpc.DiscordRpc as RPCWrapper;

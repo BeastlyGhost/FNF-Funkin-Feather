@@ -4,7 +4,7 @@ import flixel.math.FlxPoint;
 import funkin.backend.data.CharacterData.CharacterOrigin;
 import funkin.backend.data.CharacterData.PsychAnimsArray;
 import funkin.backend.data.CharacterData.PsychCharFile;
-import funkin.base.FeatherTools.FeatherSprite;
+import funkin.backend.dependencies.FeatherTools.FeatherSprite;
 import funkin.song.Conductor;
 import haxe.Json;
 import sys.FileSystem;
