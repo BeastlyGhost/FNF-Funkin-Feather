@@ -95,24 +95,25 @@ class PauseSubstate extends MusicBeatSubstate
 
 		if (Controls.getPressEvent("accept"))
 		{
-			switch (wrappableGroup[selection].toLowerCase())
+			var mySelection = wrappableGroup[selection].toLowerCase();
+
+			if (mySelection != "resume song")
+				funkin.song.Conductor.stopSong();
+
+			switch (mySelection)
 			{
 				case "resume song":
 					close();
 				case "restart song":
-					funkin.song.Conductor.stopSong();
 					MusicState.resetState();
 				case "exit to options":
-					funkin.song.Conductor.stopSong();
 					MusicState.switchState(new funkin.states.menus.OptionsMenu());
 				case "exit to charter":
 					MusicState.switchState(new funkin.states.editors.ChartEditor());
 				case "leave charting mode":
-					funkin.song.Conductor.stopSong();
 					PlayState.gameplayMode = FREEPLAY;
 					MusicState.resetState();
 				case "exit to menu":
-					funkin.song.Conductor.stopSong();
 					PlayerUtils.deaths = 0;
 
 					if (PlayState.gameplayMode == STORY)
