@@ -1,7 +1,5 @@
 package funkin.song;
 
-import base.backend.Interfaces.MusicInterface;
-import base.backend.Transition;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.FlxSubState;
@@ -11,6 +9,8 @@ import flixel.math.FlxMath;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxTimer;
+import funkin.backend.Interfaces.MusicInterface;
+import funkin.backend.Transition;
 import funkin.song.Conductor.BPMChangeEvent;
 import funkin.states.PlayState;
 

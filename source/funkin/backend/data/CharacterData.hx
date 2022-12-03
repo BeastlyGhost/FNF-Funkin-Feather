@@ -1,4 +1,4 @@
-package funkin.data;
+package funkin.backend.data;
 
 enum CharacterOrigin
 {

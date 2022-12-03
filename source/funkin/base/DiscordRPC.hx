@@ -1,4 +1,4 @@
-package base.meta;
+package funkin.base;
 
 #if RPC_ALLOWED
 import discord_rpc.DiscordRpc as RPCWrapper;

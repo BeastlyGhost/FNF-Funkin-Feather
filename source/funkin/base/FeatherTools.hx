@@ -1,4 +1,4 @@
-package base.meta;
+package funkin.base;
 
 import flixel.FlxCamera;
 import flixel.FlxG;

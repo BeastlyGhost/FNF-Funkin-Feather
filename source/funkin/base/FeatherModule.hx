@@ -1,4 +1,4 @@
-package base.meta;
+package funkin.base;
 
 class FeatherModule extends SScript
 {
@@ -53,9 +53,10 @@ class FeatherModule extends SScript
 		set('Main', Main);
 		set('Stage', funkin.objects.Stage);
 		set('OptionsMeta', OptionsMeta);
-		set('FeatherTools', base.meta.FeatherTools);
-		set('FeatherSprite', base.meta.FeatherTools.FeatherSprite);
-		set('Controls', base.backend.Controls);
+		set('FeatherTools', funkin.base.FeatherTools);
+		set('FeatherSprite', funkin.base.FeatherTools.FeatherSprite);
+		set('FeatherAttachedSprite', funkin.base.FeatherTools.FeatherAttachedSprite);
+		set('Controls', funkin.backend.Controls);
 
 		#if windows
 		set('platform', 'windows');

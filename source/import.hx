@@ -4,10 +4,10 @@
 **/
 
 using StringTools;
-using base.backend.AssetHandler;
-using base.backend.Controls;
-using base.backend.Paths;
-using base.meta.DiscordRPC;
-using base.meta.FeatherTools;
-using base.meta.OptionsMeta;
+using funkin.backend.AssetHandler;
+using funkin.backend.Controls;
+using funkin.backend.Paths;
+using funkin.base.DiscordRPC;
+using funkin.base.FeatherTools;
+using funkin.base.OptionsMeta;
 using yaml.Yaml;

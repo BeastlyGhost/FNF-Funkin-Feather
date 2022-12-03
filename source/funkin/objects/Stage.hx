@@ -1,9 +1,9 @@
 package funkin.objects;
 
-import base.meta.FeatherTools.FeatherSprite;
 import flixel.FlxBasic;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
+import funkin.base.FeatherTools.FeatherSprite;
 import funkin.states.PlayState;
 
 /**

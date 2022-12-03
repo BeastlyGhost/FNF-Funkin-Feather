@@ -1,7 +1,5 @@
 package funkin.states;
 
-import base.meta.FeatherModule;
-import base.meta.PlayerInfo;
 import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxObject;
@@ -13,6 +11,8 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxSort;
 import flixel.util.FlxTimer;
+import funkin.base.FeatherModule;
+import funkin.base.PlayerInfo;
 import funkin.objects.Character;
 import funkin.objects.Stage;
 import funkin.objects.ui.UI;

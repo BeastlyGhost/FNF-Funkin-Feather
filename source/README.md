@@ -6,7 +6,7 @@ Well, they are organized and situated in their own repesctive folders.
   - Go to ``source/funkin/``.
 
 - Wanna check the engine's utilities and mess with backend files, e.g. the FPS Counter?
-  - Go to ``source/base/``.
+  - Go to ``source/funkin/backend/``.
 -------------------------------
 
 If you think that it's hard to nagivate to the correct file quickly, then, hit ``CTRL + Shift + P`` to access the ``Search Editor`` in Visual Studio Code.

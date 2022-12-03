@@ -10,7 +10,7 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
-import funkin.data.MenuData.MainMenuData;
+import funkin.backend.data.MenuData.MainMenuData;
 import funkin.song.MusicState;
 
 /**

@@ -1,4 +1,4 @@
-package base.meta;
+package funkin.base;
 
 import flixel.FlxG;
 import flixel.FlxSprite;

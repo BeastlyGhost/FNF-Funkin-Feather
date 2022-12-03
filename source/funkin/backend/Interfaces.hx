@@ -1,4 +1,4 @@
-package base.backend;
+package funkin.backend;
 
 /**
 	Handles variales used on the `MusicState` class

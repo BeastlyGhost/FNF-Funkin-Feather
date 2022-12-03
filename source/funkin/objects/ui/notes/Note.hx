@@ -1,10 +1,10 @@
 package funkin.objects.ui.notes;
 
-import base.meta.FeatherTools.FeatherSprite;
-import base.meta.PlayerInfo;
 import flixel.FlxG;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxRect;
+import funkin.base.FeatherTools.FeatherSprite;
+import funkin.base.PlayerInfo;
 import funkin.objects.ui.notes.Strum.BabyArrow;
 import funkin.song.Conductor;
 import funkin.states.PlayState;

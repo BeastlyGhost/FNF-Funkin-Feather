@@ -1,4 +1,4 @@
-package base.backend;
+package funkin.backend;
 
 import flixel.FlxCamera;
 import flixel.FlxG;

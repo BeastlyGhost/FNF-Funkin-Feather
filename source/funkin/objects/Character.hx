@@ -1,10 +1,10 @@
 package funkin.objects;
 
-import base.meta.FeatherTools.FeatherSprite;
 import flixel.math.FlxPoint;
-import funkin.data.CharacterData.CharacterOrigin;
-import funkin.data.CharacterData.PsychAnimsArray;
-import funkin.data.CharacterData.PsychCharFile;
+import funkin.backend.data.CharacterData.CharacterOrigin;
+import funkin.backend.data.CharacterData.PsychAnimsArray;
+import funkin.backend.data.CharacterData.PsychCharFile;
+import funkin.base.FeatherTools.FeatherSprite;
 import funkin.song.Conductor;
 import haxe.Json;
 import sys.FileSystem;

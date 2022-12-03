@@ -1,6 +1,5 @@
 package funkin.objects.ui;
 
-import base.meta.PlayerInfo;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
@@ -11,6 +10,7 @@ import flixel.tweens.FlxTween;
 import flixel.ui.FlxBar;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
+import funkin.base.PlayerInfo;
 import funkin.states.PlayState;
 
 /**

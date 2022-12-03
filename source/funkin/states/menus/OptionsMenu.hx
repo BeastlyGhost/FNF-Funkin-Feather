@@ -1,10 +1,10 @@
 package funkin.states.menus;
 
-import base.meta.OptionsMeta;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
-import funkin.data.OptionsContainer;
+import funkin.backend.data.OptionsContainer;
+import funkin.base.OptionsMeta;
 import funkin.objects.ui.Alphabet;
 import funkin.song.MusicState;
 

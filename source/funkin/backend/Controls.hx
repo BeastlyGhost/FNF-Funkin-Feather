@@ -1,4 +1,4 @@
-package base.backend;
+package funkin.backend;
 
 import flixel.FlxG;
 import flixel.input.keyboard.FlxKey;
