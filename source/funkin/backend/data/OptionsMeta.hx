@@ -170,29 +170,10 @@ class OptionsMeta
 		FlxG.autoPause = getPref('Auto Pause');
 	}
 
-	public static var optionList(get, set):Map<String, Array<String>> = [
+	@:isVar public static var optionList:Map<String, Array<String>> = [
 		"gameplay" => ["Downscroll", "Ghost Tapping", "Show Grades", "Safe Frames"],
 		"accessibility" => ["Auto Pause", "Anti Aliasing", "Flashing Lights"],
 		"debugging" => ["Framerate Cap", "Show Framerate", "Show Memory", "Show Debug"],
 		"custom settings" => [],
 	];
-
-	public static function get_optionList(listName:String)
-	{
-		if (listName == null)
-			listName = "NULL";
-
-		return optionList.get(listName);
-	}
-
-	public static function set_optionList(listName:String, optionsArray:Array<String>)
-	{
-		if (listName == null)
-			listName = 'NULL';
-		if (optionsArray == null)
-			optionsArray = ['NOTHING'];
-
-		if (!optionsList.exists(listName))
-			optionsList.set(listName, optionsArray);
-	}
 }
