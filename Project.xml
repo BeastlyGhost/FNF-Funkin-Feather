@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project>
+<project xmlns="http://lime.openfl.org/project/1.0.4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://lime.openfl.org/project/1.0.4 http://lime.openfl.org/xsd/project-1.0.4.xsd">
 
 	<!-- ___________ Application Settings ___________ -->
 
-	<!-- Title and Executable Name -->
+	<!--Title and executable name-->
 	<app title="Funkin' Feather" file="Project-Feather" />
 
-	<!-- Metadata, Version Name and Company (Save Folder) Name-->
+	<!--Metadata, version name and company (save folder)-->
 	<app main="Main" version="1.0.0" company="BeastlyGhost" />
 
 	<!--The flixel preloader is not accurate in Chrome. You can use it regularly if you embed the swf into a html file
