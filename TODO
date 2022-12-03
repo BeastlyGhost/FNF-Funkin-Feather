@@ -1,13 +1,13 @@
 [PRIORITY: HIGH]
-- Fix Inputs letting you hit notes when they are far away from you
-- Set up Notes and Splashes on the Strum.hx Class
+- Fix inputs letting you hit notes when they are far away from you
+- Set up notes and splashes on the Strum Class
 
 [PRIORITY: MEDIUM]
-- Implement Game Weeks
-- Implement Score Saving
-- Implement Scripts
-- Implement Events
+- Implement game weeks
+- Implement score saving
+- Implement scripts
+- Implement events
 
 [PRIORITY: LOW]
-- Fix Sustain Notes on PlayState
-- Fix Note Splashes on PlayState
+- Fix sustain notes on PlayState
+- Fix note splashes on PlayState
