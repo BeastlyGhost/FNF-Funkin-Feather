@@ -1,6 +1,6 @@
 package funkin.objects;
 
-import base.utils.FeatherTools.FeatherSprite;
+import base.meta.FeatherTools.FeatherSprite;
 import flixel.math.FlxPoint;
 import funkin.data.CharacterData.CharacterOrigin;
 import funkin.data.CharacterData.PsychAnimsArray;

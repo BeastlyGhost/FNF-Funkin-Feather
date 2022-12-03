@@ -228,7 +228,7 @@ class FreeplayMenu extends MusicBeatState
 	{
 		selDifficulty = FlxMath.wrap(Math.floor(selDifficulty) + newDifficulty, 0, 2);
 
-		var stringDiff = funkin.song.ChartParser.difficultyMap.get(selDifficulty);
+		var stringDiff = FeatherTools.getDifficulty(selDifficulty);
 
 		diffTxt.text = '< ${stringDiff.replace('-', '').toUpperCase()} >';
 	}

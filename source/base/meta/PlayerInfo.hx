@@ -1,7 +1,14 @@
-package base.utils;
+package base.meta;
 
+import flixel.FlxG;
 import flixel.FlxSprite;
 import funkin.states.PlayState;
+
+enum HighscoreType
+{
+	CAMPAIGN;
+	FREEPLAY;
+}
 
 typedef Judgement =
 {
@@ -16,10 +23,10 @@ typedef Judgement =
 }
 
 /**
-	PlayerUtils handles the main "competitive" structure of the engine
+	PlayerInfo handles the main "competitive" structure of the engine
 	it initializes things like score counters, handles accuracy, and handles judgements
  */
-class PlayerUtils
+class PlayerInfo
 {
 	public static var score:Int = 0;
 	public static var misses:Int = 0;
@@ -46,8 +53,7 @@ class PlayerUtils
 
 	public static var scoreMap:Map<String, Int> = [];
 	public static var weekScoreMap:Map<String, Int> = [];
-	public static var accuracyMap:Map<String, Float> = [];
-	public static var missesMap:Map<String, Float> = [];
+	public static var missesMap:Map<String, Int> = [];
 
 	public static final judgeTable:Array<Judgement> = [
 		{
@@ -150,7 +156,7 @@ class PlayerUtils
 		if (accuracy >= 100)
 			accuracy = 100;
 
-		PlayerUtils.totalNotesHit++;
+		PlayerInfo.totalNotesHit++;
 		noteRatingMod += (Math.max(0, id));
 		updateGrade();
 	}
@@ -231,7 +237,7 @@ class PlayerUtils
 		if (judgeTable[rating].causesBreak)
 			breaks = misses + gottenJudges.get(judgeTable[rating].name);
 
-		PlayerUtils.updateGradePercent(Std.int(judgeTable[rating].percentMod));
+		PlayerInfo.updateGradePercent(Std.int(judgeTable[rating].percentMod));
 
 		if (health > 2)
 			health = 2;
@@ -249,9 +255,96 @@ class PlayerUtils
 		if (judgeTable[3].causesBreak)
 			breaks = misses + gottenJudges.get(judgeTable[3].name);
 
-		PlayerUtils.updateGradePercent(Std.int(judgeTable[3].percentMod));
+		PlayerInfo.updateGradePercent(Std.int(judgeTable[3].percentMod));
 
 		if (health < 0)
 			health = 0;
+	}
+
+	/**
+		here's where a lot of repeated code comes into play, i will eventually clean this up
+		@BeastlyGhost
+	**/
+	//
+	public static function saveScore(song:String, score:Int, diff:Int = 0)
+	{
+		var songFinal = song + FeatherTools.getDifficulty(diff);
+
+		if (scoreMap.exists(songFinal))
+		{
+			if (scoreMap.get(songFinal) < score)
+				scoreMap.set(songFinal, score);
+		}
+		else
+			scoreMap.set(songFinal, score);
+
+		FlxG.save.data.songScores = scoreMap;
+		FlxG.save.flush();
+	}
+
+	public static function saveWeekScore(week:String, score:Int, diff:Int = 0)
+	{
+		var weekFinal = week + FeatherTools.getDifficulty(diff);
+
+		if (weekScoreMap.exists(weekFinal))
+		{
+			if (weekScoreMap.get(weekFinal) < score)
+				weekScoreMap.set(weekFinal, score);
+		}
+		else
+			weekScoreMap.set(weekFinal, score);
+
+		FlxG.save.data.weekScores = weekScoreMap;
+		FlxG.save.flush();
+	}
+
+	public static function saveMisses(song:String, misses:Int, diff:Int = 0)
+	{
+		var songFinal = song + FeatherTools.getDifficulty(diff);
+
+		if (missesMap.exists(songFinal))
+		{
+			if (missesMap.get(songFinal) < misses)
+				missesMap.set(songFinal, misses);
+		}
+		else
+			missesMap.set(songFinal, misses);
+
+		FlxG.save.data.songMisses = missesMap;
+		FlxG.save.flush();
+	}
+
+	public static function getScore(song:String, diff:Int)
+	{
+		if (!scoreMap.exists(song + FeatherTools.getDifficulty(diff)))
+			scoreMap.set(song + FeatherTools.getDifficulty(diff), 0);
+
+		return scoreMap.get(song + FeatherTools.getDifficulty(diff));
+	}
+
+	public static function getMisses(song:String, diff:Int)
+	{
+		if (!missesMap.exists(song + FeatherTools.getDifficulty(diff)))
+			missesMap.set(song + FeatherTools.getDifficulty(diff), 0);
+
+		return missesMap.get(song + FeatherTools.getDifficulty(diff));
+	}
+
+	public static function getWeekScore(week:String, diff:Int)
+	{
+		if (!weekScoreMap.exists(week + FeatherTools.getDifficulty(diff)))
+			weekScoreMap.set(week + FeatherTools.getDifficulty(diff), 0);
+
+		return weekScoreMap.get(week + FeatherTools.getDifficulty(diff));
+	}
+
+	public static function loadHighscores()
+	{
+		if (FlxG.save.data.songScores != null)
+			scoreMap = FlxG.save.data.songScores;
+		if (FlxG.save.data.weekScores != null)
+			weekScoreMap = FlxG.save.data.weekScores;
+		if (FlxG.save.data.songMisses != null)
+			missesMap = FlxG.save.data.songMisses;
 	}
 }

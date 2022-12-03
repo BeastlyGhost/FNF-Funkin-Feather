@@ -1,4 +1,4 @@
-package base.utils;
+package base.meta;
 
 import flixel.FlxCamera;
 import flixel.FlxG;
@@ -110,6 +110,11 @@ class FeatherTools
 		}
 
 		return if (directory != null) directory else [];
+	}
+
+	public static function getDifficulty(diff:Int = 0)
+	{
+		return funkin.song.ChartParser.difficultyMap.get(diff);
 	}
 }
 

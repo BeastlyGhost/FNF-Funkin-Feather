@@ -1,7 +1,7 @@
 package funkin.states;
 
 import base.meta.FeatherModule;
-import base.utils.PlayerUtils;
+import base.meta.PlayerInfo;
 import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxObject;
@@ -131,7 +131,7 @@ class PlayState extends MusicBeatState
 
 		FlxG.mouse.visible = false;
 
-		PlayerUtils.resetScore();
+		PlayerInfo.resetScore();
 
 		// initialize main variales
 		camGame = new FlxCamera();
@@ -388,7 +388,7 @@ class PlayState extends MusicBeatState
 
 				if (FlxG.keys.justPressed.SEVEN)
 				{
-					PlayerUtils.validScore = false;
+					PlayerInfo.validScore = false;
 					gameplayMode = CHARTING;
 					Conductor.stopSong();
 					MusicState.switchState(new funkin.states.editors.ChartEditor());
@@ -497,11 +497,11 @@ class PlayState extends MusicBeatState
 
 	public function playerDeathCheck():Bool
 	{
-		if (PlayerUtils.health <= 0 && !hasDied)
+		if (PlayerInfo.health <= 0 && !hasDied)
 		{
 			isPaused = true;
 			Conductor.stopSong(); // *beep boops stop*
-			PlayerUtils.deaths++;
+			PlayerInfo.deaths++;
 			hasDied = true;
 
 			callFunc('onDeath', []);
@@ -607,7 +607,7 @@ class PlayState extends MusicBeatState
 						if (!OptionsMeta.getPref("Ghost Tapping"))
 						{
 							noteMiss(idx, strum);
-							PlayerUtils.ghostMisses++;
+							PlayerInfo.ghostMisses++;
 						}
 					}
 
@@ -694,9 +694,9 @@ class PlayState extends MusicBeatState
 
 			if (note.mustPress && !strum.autoplay) // being hit by the player
 			{
-				for (i in 0...PlayerUtils.judgeTable.length)
+				for (i in 0...PlayerInfo.judgeTable.length)
 				{
-					var timingMod:Float = PlayerUtils.judgeTable[i].timingMod;
+					var timingMod:Float = PlayerInfo.judgeTable[i].timingMod;
 					if (noteDiff <= timingMod && (timingMod < lowestDiff))
 					{
 						ratingInteger = i;
@@ -706,16 +706,16 @@ class PlayState extends MusicBeatState
 
 				if (!note.isSustain)
 				{
-					if (PlayerUtils.judgeTable[ratingInteger].causesBreak)
-						PlayerUtils.breaks += 1;
+					if (PlayerInfo.judgeTable[ratingInteger].causesBreak)
+						PlayerInfo.breaks += 1;
 
-					if (ratingInteger > PlayerUtils.greatestJudgement)
-						PlayerUtils.greatestJudgement = ratingInteger;
+					if (ratingInteger > PlayerInfo.greatestJudgement)
+						PlayerInfo.greatestJudgement = ratingInteger;
 
-					PlayerUtils.increaseScore(ratingInteger);
-					popUpScore(PlayerUtils.judgeTable[ratingInteger].name);
+					PlayerInfo.increaseScore(ratingInteger);
+					popUpScore(PlayerInfo.judgeTable[ratingInteger].name);
 
-					if (PlayerUtils.judgeTable[ratingInteger].noteSplash)
+					if (PlayerInfo.judgeTable[ratingInteger].noteSplash)
 						popUpSplash(note.x, note.y, note.index);
 
 					// update scoretext
@@ -735,7 +735,7 @@ class PlayState extends MusicBeatState
 	{
 		if (crowd != null)
 		{
-			if (PlayerUtils.combo >= 5)
+			if (PlayerInfo.combo >= 5)
 				if (crowd.animOffsets.exists("sad"))
 					crowd.playAnim("sad");
 		}
@@ -748,13 +748,13 @@ class PlayState extends MusicBeatState
 		FlxG.sound.play(AssetHandler.grabAsset("miss" + FlxG.random.int(1, 3), SOUND, "sounds/" + assetSkin), FlxG.random.float(0.1, 0.2));
 		Conductor.songVocals.volume = 0;
 
-		PlayerUtils.decreaseScore();
+		PlayerInfo.decreaseScore();
 		gameUI.updateScoreText();
 	}
 
 	public function popUpScore(myRating:String = 'sick', preload:Bool = false)
 	{
-		var rating:FlxSprite = PlayerUtils.generateRating(assetSkin);
+		var rating:FlxSprite = PlayerInfo.generateRating(assetSkin);
 
 		rating.screenCenter();
 		rating.x = (FlxG.width * 0.55) - 40;
@@ -777,12 +777,12 @@ class PlayState extends MusicBeatState
 			startDelay: Conductor.crochet * 0.001
 		});
 
-		var stringCombo:String = Std.string(PlayerUtils.combo);
+		var stringCombo:String = Std.string(PlayerInfo.combo);
 		var splitCombo:Array<String> = stringCombo.split("");
 
 		for (i in 0...splitCombo.length)
 		{
-			var numScore:FlxSprite = PlayerUtils.generateCombo(assetSkin);
+			var numScore:FlxSprite = PlayerInfo.generateCombo(assetSkin);
 
 			numScore.alpha = 1;
 			numScore.screenCenter();

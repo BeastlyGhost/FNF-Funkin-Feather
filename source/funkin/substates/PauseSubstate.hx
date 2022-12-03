@@ -1,6 +1,6 @@
 package funkin.substates;
 
-import base.utils.PlayerUtils;
+import base.meta.PlayerInfo;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
@@ -53,7 +53,7 @@ class PauseSubstate extends MusicBeatSubstate
 		bg.scrollFactor.set();
 		add(bg);
 
-		var stringDiff = funkin.song.ChartParser.difficultyMap.get(PlayState.difficulty);
+		var stringDiff = FeatherTools.getDifficulty(PlayState.difficulty);
 
 		var levelInfo:FlxText = new FlxText(20, 15, 0, "", 32);
 		levelInfo.text = FeatherTools.formatSong(PlayState.song.name) + ' [${stringDiff.replace('-', '').toUpperCase()}]';
@@ -63,7 +63,7 @@ class PauseSubstate extends MusicBeatSubstate
 		add(levelInfo);
 
 		var levelDeaths:FlxText = new FlxText(20, 15 + 32, 0, "", 32);
-		levelDeaths.text = 'Blue balled: ' + PlayerUtils.deaths;
+		levelDeaths.text = 'Blue balled: ' + PlayerInfo.deaths;
 		levelDeaths.scrollFactor.set();
 		levelDeaths.setFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 32);
 		levelDeaths.updateHitbox();
@@ -124,7 +124,7 @@ class PauseSubstate extends MusicBeatSubstate
 					PlayState.gameplayMode = FREEPLAY;
 					MusicState.resetState();
 				case "exit to menu":
-					PlayerUtils.deaths = 0;
+					PlayerInfo.deaths = 0;
 
 					if (PlayState.gameplayMode == STORY)
 						MusicState.switchState(new funkin.states.menus.MainMenu());

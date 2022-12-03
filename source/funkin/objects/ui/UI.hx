@@ -1,6 +1,6 @@
 package funkin.objects.ui;
 
-import base.utils.PlayerUtils;
+import base.meta.PlayerInfo;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
@@ -81,7 +81,7 @@ class UI extends FlxSpriteGroup
 
 	override function update(elapsed:Float)
 	{
-		healthBar.percent = (PlayerUtils.health * 50);
+		healthBar.percent = (PlayerInfo.health * 50);
 
 		// attach to health
 		iconP1.setGraphicSize(Std.int(FlxMath.lerp(150, iconP1.width, 0.85)));
@@ -113,12 +113,12 @@ class UI extends FlxSpriteGroup
 	{
 		var tempScore:String;
 
-		tempScore = "Score: " + PlayerUtils.score;
+		tempScore = "Score: " + PlayerInfo.score;
 
 		if (OptionsMeta.getPref("Show Grades"))
 		{
-			tempScore += separator + "Misses: " + PlayerUtils.misses;
-			tempScore += separator + "Grade: " + PlayerUtils.curGrade + PlayerUtils.returnGradePercent();
+			tempScore += separator + "Misses: " + PlayerInfo.misses;
+			tempScore += separator + "Grade: " + PlayerInfo.curGrade + PlayerInfo.returnGradePercent();
 		}
 
 		scoreText.text = tempScore;
