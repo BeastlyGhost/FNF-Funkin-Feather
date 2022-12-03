@@ -119,10 +119,10 @@ class OptionsMenu extends MusicBeatState
 
 			// set to default value
 			if (option.attributes == null)
-				option.attributes = [NOT_FORCED];
+				option.attributes = [DEFAULT];
 			// we do this to avoid crashes with options that have no attributes @BeastlyGhost
 
-			if (!option.attributes.contains(FORCED))
+			if (!option.attributes.contains(UNCHANGEABLE))
 			{
 				var optionTxt:Alphabet = new Alphabet(0, 0, option.name, true);
 

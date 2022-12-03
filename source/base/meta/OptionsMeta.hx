@@ -13,9 +13,9 @@ enum OptionType
 
 enum OptionAttribute
 {
+	DEFAULT;
+	UNCHANGEABLE; // always force an option on it's default value
 	UNSELECTABLE;
-	NOT_FORCED;
-	FORCED; // FORCED at default value
 }
 
 typedef OptionData =
@@ -43,7 +43,6 @@ class OptionsMeta
 			name: "Auto Pause",
 			description: "If the game should pause itself when the window is unfocused.",
 			type: BOOLEAN,
-			attributes: [NOT_FORCED],
 			value: false
 		},
 		{
