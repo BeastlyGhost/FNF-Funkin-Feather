@@ -3,7 +3,6 @@ package funkin.states.menus;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
-import funkin.backend.data.OptionsContainer;
 import funkin.backend.data.OptionsMeta;
 import funkin.objects.ui.Alphabet;
 import funkin.song.MusicState;
