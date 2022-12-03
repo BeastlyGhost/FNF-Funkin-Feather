@@ -95,7 +95,7 @@ class PauseSubstate extends MusicBeatSubstate
 
 		if (Controls.getPressEvent("accept"))
 		{
-			switch (wrappableGroup[Math.floor(selection)].toLowerCase())
+			switch (wrappableGroup[selection].toLowerCase())
 			{
 				case "resume song":
 					close();
