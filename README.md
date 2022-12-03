@@ -5,7 +5,7 @@ A Work in Progress (WIP) rewrite of [Friday Night Funkin'](https://github.com/ni
 Made for learning purposes and as a love letter for Friday Night Funkin's modding community!
 While still being very early in development, feedback and help with this project is appreciated.
 
-The base game won't be included with Project Feather, as it's made specifically for mods and mods *only*.
+The base game won't be included with Funkin': Feather, as it's made specifically for mods and mods *only*.
 However, it will be distributed separately, like a mod in it of itself.
 
 -------------------------------
