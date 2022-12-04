@@ -34,7 +34,7 @@ jobs:
           haxelib git SScript https://github.com/AltronMaxX/SScript --quiet
 
       - name: Compile
-        run: lime build linux -release
+        run: haxelib run lime build linux -release
 
       - name: Publish Artifact
         uses: actions/upload-artifact@main
@@ -68,7 +68,7 @@ jobs:
         shell: cmd
 
       - name: Compile
-        run: lime build windows -release
+        run: haxelib run lime build windows -release
 
       - name: Publish Artifact
         uses: actions/upload-artifact@main
@@ -101,7 +101,7 @@ jobs:
           haxelib git SScript https://github.com/AltronMaxX/SScript --quiet
 
       - name: Compile
-        run: lime build mac -release
+        run: haxelib run lime build mac -release
 
       - name: Publish Artifact
         uses: actions/upload-artifact@main
