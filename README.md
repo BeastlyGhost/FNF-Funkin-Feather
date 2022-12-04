@@ -9,7 +9,7 @@ The base game won't be included with Funkin': Feather, as it's made specifically
 However, it will be distributed separately, like a mod in it of itself.
 
 -------------------------------
-Pull requests and Issues are greatly appreciated, as I, BeastlyGhost, wanna push the project further until it's in a useable state for both me and mod creators that may make use of it!
+Pull requests are greatly appreciated, as I, BeastlyGhost, wanna push the project further until it's in a useable state for both me and mod creators that may make use of it!
 
 -------------------------------
 ## Want to contact me?

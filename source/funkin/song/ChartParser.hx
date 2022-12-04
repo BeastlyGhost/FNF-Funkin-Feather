@@ -5,7 +5,6 @@ import flixel.util.FlxSort;
 import funkin.objects.ui.notes.Note;
 import funkin.song.SongFormat;
 import haxe.Json;
-import sys.FileSystem;
 
 enum DataFormat
 {
@@ -181,17 +180,13 @@ class ChartParser
 			swagNote.sustainLength = note.holdLength;
 			swagNote.type = note.type;
 			swagNote.scrollFactor.set(0, 0);
-
-			var susLength:Float = swagNote.sustainLength;
-
-			susLength = susLength / Conductor.stepCrochet;
 			dunces.push(swagNote);
 
-			for (susNote in 0...Math.floor(susLength))
+			for (holdNote in 0...Math.floor(swagNote.sustainLength / Conductor.stepCrochet))
 			{
 				oldNote = dunces[Std.int(dunces.length - 1)];
 
-				var sustainNote:Note = new Note(note.time + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet, note.index, note.type, oldNote, true);
+				var sustainNote:Note = new Note(note.time + (Conductor.stepCrochet * holdNote) + Conductor.stepCrochet, note.index, note.type, oldNote, true);
 				sustainNote.scrollFactor.set();
 				dunces.push(sustainNote);
 

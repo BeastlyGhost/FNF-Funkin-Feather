@@ -3,7 +3,6 @@ package funkin.objects;
 import flixel.FlxBasic;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
-import funkin.backend.dependencies.FeatherTools.FeatherSprite;
 import funkin.states.PlayState;
 
 /**
