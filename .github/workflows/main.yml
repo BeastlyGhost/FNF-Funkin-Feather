@@ -40,7 +40,7 @@ jobs:
         uses: actions/upload-artifact@main
         with:
           name: linuxBuild
-          path: export/release/linux/bin
+          path: "export/release/linux/bin"
 
   buildWindows:
     runs-on: windows-latest
@@ -74,7 +74,7 @@ jobs:
         uses: actions/upload-artifact@main
         with:
           name: windowsBuild
-          path: export/release/windows/bin
+          path: "export/release/windows/bin"
 
   buildMac:
     runs-on: macos-latest
@@ -89,7 +89,7 @@ jobs:
       - name: Install Haxelib
         run: |
           haxelib setup ~/haxelib
-          haxelib install hscpp > /dev/null --quiet
+          haxelib install hxcpp > /dev/null --quiet
           haxelib install lime --quiet
           haxelib install openfl --quiet
           haxelib install flixel --quiet
@@ -107,4 +107,4 @@ jobs:
         uses: actions/upload-artifact@main
         with:
           name: macBuild
-          path: export/release/macos/bin
+          path: "export/release/macos/bin"
