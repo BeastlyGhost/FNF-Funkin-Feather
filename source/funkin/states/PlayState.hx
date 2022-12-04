@@ -234,7 +234,7 @@ class PlayState extends MusicBeatState
 				mode = "Freeplay";
 		}
 
-		var stringDiff = ChartParser.difficultyMap.get(difficulty);
+		var stringDiff = FeatherTools.getDifficulty(difficulty);
 
 		lineRPC2 = '${FeatherTools.formatSong(song.name)} [${stringDiff.replace('-', '').toUpperCase()}]';
 

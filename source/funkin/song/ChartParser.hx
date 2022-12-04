@@ -19,16 +19,17 @@ enum DataFormat
 class ChartParser
 {
 	public static var chartDataType:DataFormat = FEATHER;
-	public static var difficultyMap:Map<Int, String> = [0 => "-easy", 1 => "-normal", 2 => "-hard",];
 
 	public static function loadChartData(songName:String, songDiff:Int)
 	{
 		var timeBegin:Float = Sys.time();
 
-		var songDiff:String = difficultyMap.get(songDiff);
+		var songDiff:String = funkin.backend.data.SongManager.defaultDiffs[songDiff];
 
-		if (songDiff == "-normal")
+		if (songDiff.toLowerCase() == "normal")
 			songDiff = '';
+		else
+			songDiff = '-${songDiff.toLowerCase()}';
 
 		var dataSong = AssetHandler.grabAsset(songName + songDiff, JSON, 'songs/' + songName);
 

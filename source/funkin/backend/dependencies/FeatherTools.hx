@@ -114,7 +114,7 @@ class FeatherTools
 
 	public static function getDifficulty(diff:Int = 0)
 	{
-		return funkin.song.ChartParser.difficultyMap.get(diff);
+		return funkin.backend.data.SongManager.defaultDiffs[diff];
 	}
 }
 

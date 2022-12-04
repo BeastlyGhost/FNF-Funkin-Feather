@@ -7,19 +7,12 @@ import flixel.math.FlxMath;
 import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
+import funkin.backend.data.SongManager;
 import funkin.objects.ui.Alphabet;
 import funkin.song.MusicState;
 import openfl.media.Sound;
 import sys.thread.Mutex;
 import sys.thread.Thread;
-
-typedef SongData =
-{
-	var name:String;
-	var week:Int;
-	var character:String;
-	var color:Int; // should this be an array? huh.. @BeastlyGhost
-}
 
 /**
 	the Freeplay Menu, for selecting and playing songs!
@@ -28,37 +21,9 @@ typedef SongData =
 **/
 class FreeplayMenu extends MusicBeatState
 {
+	var songList:Array<SongListForm> = [];
+
 	var itemContainer:FlxTypedGroup<Alphabet>;
-
-	@:isVar var songList(get, default):Array<SongData> = [];
-
-	var songNameList:Array<String> = [];
-
-	function get_songList():Array<SongData>
-	{
-		var songs:Array<String> = [];
-		var songsFolder = sys.FileSystem.readDirectory('assets/songs');
-
-		for (folder in songsFolder)
-			if (!folder.contains('.'))
-				songs.push(folder);
-
-		for (i in 0...songs.length)
-		{
-			if (!songNameList.contains(songs[i]))
-			{
-				songList.push({
-					name: songs[i],
-					week: 1,
-					character: 'bf',
-					color: -1
-				});
-				songNameList.push(songs[i]);
-			}
-		}
-
-		return songList;
-	}
 
 	static var selDifficulty:Int = 1;
 
@@ -85,6 +50,9 @@ class FreeplayMenu extends MusicBeatState
 		mutex = new Mutex();
 
 		DiscordRPC.update("FREEPLAY MENU", "Choosing a Song");
+
+		// get the song list
+		songList = SongManager.get_songList();
 
 		menuBG = new FlxSprite(-80).loadGraphic(AssetHandler.grabAsset('menuDesat', IMAGE, 'images/menus'));
 		menuBG.scrollFactor.set();
@@ -226,7 +194,7 @@ class FreeplayMenu extends MusicBeatState
 
 	function updateDifficulty(newDifficulty:Int = 0)
 	{
-		selDifficulty = FlxMath.wrap(Math.floor(selDifficulty) + newDifficulty, 0, 2);
+		selDifficulty = FlxMath.wrap(Math.floor(selDifficulty) + newDifficulty, 0, songList[selection].diffs.length);
 
 		var stringDiff = FeatherTools.getDifficulty(selDifficulty);
 

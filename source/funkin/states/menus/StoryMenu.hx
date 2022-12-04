@@ -4,28 +4,10 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
+import funkin.backend.data.SongManager.WeekForm;
 import funkin.objects.ui.menus.WeekCharacter;
 import funkin.objects.ui.menus.WeekItem;
 import funkin.song.MusicState;
-
-typedef WeekData =
-{
-	var weekImage:String;
-	var storyName:String;
-	var songs:Array<WeekSongData>;
-	var characters:Array<String>;
-	var difficulties:Array<String>;
-	var hideFromStory:Bool;
-	var hideFromFreeplay:Bool;
-	var defaultLocked:Bool;
-}
-
-typedef WeekSongData =
-{
-	var name:String;
-	var character:String;
-	var colors:Array<Int>; // for freeplay
-}
 
 class StoryMenu extends MusicBeatState
 {
@@ -36,7 +18,7 @@ class StoryMenu extends MusicBeatState
 
 	var difficultySpr:FlxSprite;
 
-	var weekList:Array<WeekData> = [];
+	var weekList:Array<WeekForm> = [];
 
 	var scoreTxt:FlxText;
 	var nameTxt:FlxText;
