@@ -36,7 +36,7 @@ class Start extends FlxState
 		bianca.screenCenter(XY);
 		bianca.x -= 1000;
 		add(bianca);
-		
+
 		FlxTween.tween(bianca, {x: bianca.x + 980}, 0.9, {ease: FlxEase.quintInOut});
 		FlxG.sound.play(AssetHandler.grabAsset("splashRingSound", SOUND, "sounds"));
 
