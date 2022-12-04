@@ -3,7 +3,6 @@ package funkin.song;
 import flixel.FlxG;
 import flixel.system.FlxSound;
 import funkin.song.SongFormat.FeatherSong;
-import funkin.states.PlayState;
 
 typedef BPMChangeEvent =
 {

@@ -15,9 +15,8 @@ import funkin.backend.dependencies.FeatherModule;
 import funkin.backend.dependencies.PlayerInfo;
 import funkin.objects.Character;
 import funkin.objects.Stage;
-import funkin.objects.ui.UI;
+import funkin.objects.ui.*;
 import funkin.objects.ui.notes.*;
-import funkin.objects.ui.notes.Strum.BabyArrow;
 import funkin.song.ChartParser;
 import funkin.song.Conductor;
 import funkin.song.MusicState;
@@ -444,6 +443,7 @@ class PlayState extends MusicBeatState
 						}
 
 						note.speed = songSpeed;
+						note.downscroll = strum.downscroll;
 
 						notesGroup.updateRects(note, strum);
 
@@ -456,7 +456,7 @@ class PlayState extends MusicBeatState
 							// redoing this later
 						**/
 
-						var killRangeReached:Bool = (strum.downscroll ? note.y > FlxG.height : note.y < -note.height);
+						var killRangeReached:Bool = (note.downscroll ? note.y > FlxG.height : note.y < -note.height);
 
 						// kill offscreen notes and cause misses if needed
 						if (Conductor.songPosition > note.missOffset + note.step)

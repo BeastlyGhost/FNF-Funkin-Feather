@@ -8,7 +8,6 @@ import funkin.backend.dependencies.FeatherTools.FeatherSprite;
 import funkin.song.Conductor;
 import haxe.Json;
 import sys.FileSystem;
-import sys.io.File;
 
 /**
 	Character class, initializes all characters that are present during gameplay

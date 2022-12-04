@@ -1,11 +1,7 @@
 package funkin.objects.ui.notes;
 
-import flixel.FlxG;
-import flixel.group.FlxGroup.FlxTypedGroup;
-import flixel.math.FlxRect;
 import funkin.backend.dependencies.FeatherTools.FeatherSprite;
-import funkin.backend.dependencies.PlayerInfo;
-import funkin.objects.ui.notes.Strum.BabyArrow;
+import funkin.objects.ui.notes.BabyArrow;
 import funkin.song.Conductor;
 import funkin.states.PlayState;
 
@@ -24,8 +20,10 @@ class Note extends FeatherSprite
 	public var ignoreNote:Bool = false;
 	public var isMine:Bool = false;
 
+	public var downscroll:Bool = false;
+
 	// modifiable gameplay variables
-	public var missOffset:Float = 150;
+	public var missOffset:Float = 200;
 
 	public var type:String = 'default';
 	public var prevNote:Note;
