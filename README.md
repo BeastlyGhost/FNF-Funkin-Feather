@@ -1,5 +1,5 @@
 # Funkin': Feather
-A Work in Progress (WIP) rewrite of [Friday Night Funkin'](https://github.com/ninjamuffin99/Funkin).
+A Work in Progress rewrite of [Friday Night Funkin'](https://github.com/ninjamuffin99/Funkin).
 
 -------------------------------
 Made for learning purposes and as a love letter for Friday Night Funkin's modding community!

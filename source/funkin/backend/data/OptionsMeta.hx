@@ -20,7 +20,7 @@ enum OptionAttribute
 
 typedef OptionData =
 {
-	var ?name:String;
+	var name:String;
 	var ?value:Dynamic;
 	var ?max:Dynamic;
 	var ?description:String;
@@ -109,55 +109,26 @@ class OptionsMeta
 		}
 	];
 
-	public static var myPreferences:Array<OptionData> = [];
-
 	/**
-		[Saves your game preferences]
+	 * [Saves your game preferences with "Ghost" as the save file name]
 	**/
 	public static function savePrefs()
 	{
 		#if (flixel < "5.0.0")
-		FlxG.save.bind("Funkin-Feather", "BeastlyGhost");
+		FlxG.save.bind("Project-Feather", "BeastlyGhost");
 		#end
-		FlxG.save.data.preferences = myPreferences;
+		FlxG.save.data.preferences = preferences;
 		FlxG.save.data.flush();
 	}
 
 	/**
-		[Loads your game preferences]
+	 * [Loads your game preferences with "Ghost" as the save file name]
 	**/
 	public static function loadPrefs()
 	{
 		#if (flixel < "5.0.0")
-		FlxG.save.bind("Funkin-Feather", "BeastlyGhost");
+		FlxG.save.bind("Project-Feather", "BeastlyGhost");
 		#end
-
-		for (i in 0...preferences.length)
-		{
-			if (!myPreferences.contains(preferences[i]))
-			{
-				myPreferences.push({
-					name: preferences[i].name,
-					description: preferences[i].description,
-					type: preferences[i].type,
-					value: preferences[i].value,
-					attributes: preferences[i].attributes,
-					max: preferences[i].max
-				});
-			}
-
-			/*
-				if (FlxG.save.data.preferences != null)
-				{
-					var savedPreferences = FlxG.save.data.preferences;
-					for (j in 0...savedPreferences.length)
-					{
-						if (myPreferences.contains(savedPreferences[j]) && !myPreferences[j].attributes.contains(UNCHANGEABLE))
-							//
-					}
-				}
-			 */
-		}
 
 		if (FlxG.save.data.volume != null)
 			FlxG.sound.volume = FlxG.save.data.volume;
@@ -165,14 +136,16 @@ class OptionsMeta
 			FlxG.sound.muted = FlxG.save.data.mute;
 		if (FlxG.save.data.seenSplash != null)
 			Main.game.skipSplash = FlxG.save.data.seenSplash;
+		if (FlxG.save.data.preferences != null)
+			preferences = FlxG.save.data.preferences;
 
 		updatePrefs();
 	}
 
 	/**
-		[Returns the specified preference from within the preferences map]
-		@param name the `name` of your desired preference
-		@return the default / current parameter for your preference
+	 * [Returns the specified preference from within the preferences map]
+	 * @param name the `name` of your desired preference
+	 * @return the default / current parameter for your preference
 	**/
 	public static function getPref(name:String):Dynamic
 	{
@@ -187,7 +160,7 @@ class OptionsMeta
 	}
 
 	/**
-		[Updates default game preferences data if needed]
+	 * [Updates default game preferences data if needed]
 	**/
 	public static function updatePrefs()
 	{
@@ -197,7 +170,7 @@ class OptionsMeta
 		FlxG.autoPause = getPref('Auto Pause');
 	}
 
-	public static var optionList:Map<String, Array<String>> = [
+	@:isVar public static var optionList:Map<String, Array<String>> = [
 		"gameplay" => ["Downscroll", "Ghost Tapping", "Show Grades", "Safe Frames"],
 		"accessibility" => ["Auto Pause", "Anti Aliasing", "Flashing Lights"],
 		"debugging" => ["Framerate Cap", "Show Framerate", "Show Memory", "Show Debug"],
