@@ -10,4 +10,4 @@ using funkin.backend.Paths;
 using funkin.backend.data.OptionsMeta;
 using funkin.backend.dependencies.DiscordRPC;
 using funkin.backend.dependencies.FeatherTools;
-using yaml.Yaml;
+import yaml.Yaml;

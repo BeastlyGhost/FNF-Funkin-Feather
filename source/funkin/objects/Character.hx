@@ -225,9 +225,9 @@ class Character extends FeatherSprite
 		if (animation.curAnim != null)
 		{
 			/**
-			 * Special Animation Behavior Code
-			 * @author Shadow_Mario_
-			 */
+				Special Animation Behavior Code
+				@author Shadow_Mario_
+			**/
 			if (heyTimer > 0)
 			{
 				heyTimer -= elapsed;
