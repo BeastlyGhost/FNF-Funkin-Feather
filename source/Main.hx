@@ -24,8 +24,7 @@ class Main extends Sprite
 		version: '0.0.1-PA', // the engine game version
 	};
 
-	// specifies the current state
-	public static var currentState:Class<FlxState> = funkin.states.menus.MainMenu;
+	public static var __justcompiled:Bool = false;
 
 	public static function main():Void
 		Lib.current.addChild(new Main());
@@ -55,6 +54,14 @@ class Main extends Sprite
 
 		addChild(new FlxGame(game.width, game.height, Start, #if (flixel < "5.0.0") game.zoom, #end game.framerate, game.framerate, true, game.fullscreen));
 		addChild(new FPS(0, 0));
+
+		#if sys
+		if (Sys.args().contains("-livereload"))
+		{
+			__justcompiled = true;
+		}
+		// if you typed in terminal "lime test windows" the __justcompiled will be true, and you will be able just to do stuff if you just built the game, if you open the game with the .exe file the __justcompiled will be false.
+		#end
 
 		FlxG.stage.application.window.onClose.add(function()
 		{
