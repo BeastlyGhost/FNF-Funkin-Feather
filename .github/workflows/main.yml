@@ -27,9 +27,9 @@ jobs:
           haxelib install openfl --quiet
           haxelib install flixel --quiet
           haxelib install flixel-addons --quiet
+          haxelib install yaml --quiet
           haxelib install flixel-ui --quiet
           haxelib install hxcpp-debug-server --quiet
-          haxelib git yaml https://github.com/Stilic/hx-yaml --quiet
           haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc --quiet
           haxelib git SScript https://github.com/AltronMaxX/SScript --quiet
 
@@ -60,9 +60,9 @@ jobs:
           haxelib install openfl --quiet
           haxelib install flixel --quiet
           haxelib install flixel-addons --quiet
+          haxelib install yaml --quiet
           haxelib install flixel-ui --quiet
           haxelib install hxcpp-debug-server --quiet
-          haxelib git yaml https://github.com/Stilic/hx-yaml --quiet
           haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc --quiet
           haxelib git SScript https://github.com/AltronMaxX/SScript --quiet
         shell: cmd
@@ -94,9 +94,9 @@ jobs:
           haxelib install openfl --quiet
           haxelib install flixel --quiet
           haxelib install flixel-addons --quiet
+          haxelib install yaml --quiet
           haxelib install flixel-ui --quiet
           haxelib install hxcpp-debug-server --quiet
-          haxelib git yaml https://github.com/Stilic/hx-yaml --quiet
           haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc --quiet
           haxelib git SScript https://github.com/AltronMaxX/SScript --quiet
 
