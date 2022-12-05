@@ -5,6 +5,7 @@ import openfl.events.Event;
 import openfl.system.System;
 import openfl.text.TextField;
 import openfl.text.TextFormat;
+import flixel.FlxG;
 
 /**
 	Debug Info class for displaying Framerate and Memory information on screen,
@@ -66,7 +67,8 @@ class FPS extends TextField
 			text = ""
 				+ (OptionsMeta.getPref("Show Framerate") ? 'FPS: ${times.length}\n' : '')
 				+ (OptionsMeta.getPref("Show Memory") ? 'Memory: ${getInterval(memory)}\nMemory Peak: ${getInterval(memoryTotal)}\n' : '')
-				+ (OptionsMeta.getPref("Show Debug") ? 'Class: ${Type.getClassName(Type.getClass(flixel.FlxG.state))}\nObject Count: ${flixel.FlxG.state.members.length}\n' : '');
+				+ (OptionsMeta.getPref("Show Debug") ? 'Class: ${Type.getClassName(Type.getClass(FlxG.state))}\nObject Count: ${FlxG.state.members.length}\n' : '')
+			 	+ 'VRAM: ${getInterval(Std.int(FlxG.stage.context3D.totalGPUMemory / 1024 / 1024))}';
 		}
 	}
 }
