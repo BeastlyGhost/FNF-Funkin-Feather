@@ -32,7 +32,6 @@ class MusicState
 			Transition.start(0.3, true, Fade, FlxEase.linear, function()
 			{
 				FlxG.switchState(state);
-				Main.currentState = Type.getClass(state);
 			});
 			return;
 		}
