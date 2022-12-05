@@ -61,7 +61,6 @@
 
 	<!-- ___________ Haxedefines ___________ -->
 
-	<haxedef name="no-deprecation-warnings"/>
 	<haxedef name="hscriptPos" />
 
 	<!--Optimise inputs, be careful you will get null errors if you don't use conditionals in your game-->

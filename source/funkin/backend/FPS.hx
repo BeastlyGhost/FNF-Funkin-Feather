@@ -1,11 +1,11 @@
 package funkin.backend;
 
+import flixel.FlxG;
 import haxe.Timer;
 import openfl.events.Event;
 import openfl.system.System;
 import openfl.text.TextField;
 import openfl.text.TextFormat;
-import flixel.FlxG;
 
 /**
 	Debug Info class for displaying Framerate and Memory information on screen,
@@ -65,10 +65,10 @@ class FPS extends TextField
 		if (visible)
 		{
 			text = ""
-				+ (OptionsMeta.getPref("Show Framerate") ? 'FPS: ${times.length}\n' : '')
-				+ (OptionsMeta.getPref("Show Memory") ? 'Memory: ${getInterval(memory)}\nMemory Peak: ${getInterval(memoryTotal)}\n' : '')
-				+ (OptionsMeta.getPref("Show Debug") ? 'Class: ${Type.getClassName(Type.getClass(FlxG.state))}\nObject Count: ${FlxG.state.members.length}\n' : '')
-			 	+ 'VRAM: ${getInterval(Std.int(FlxG.stage.context3D.totalGPUMemory / 1024 / 1024))}';
+				+ (OptionsMeta.getPref("Show FPS Info") ? 'FPS: ${times.length}\n' : '')
+				+ (OptionsMeta.getPref("Show RAM Info") ? 'RAM: ${getInterval(memory)} / ${getInterval(memoryTotal)}\n' : '')
+				+ (OptionsMeta.getPref("Show VRAM Info") ? 'VRAM: ${getInterval(Std.int(FlxG.stage.context3D.totalGPUMemory / 1024 / 1024))}\n' : '')
+				+ (OptionsMeta.getPref("Show Debug Info") ? '${Type.getClassName(Type.getClass(FlxG.state))} (Objects: ${FlxG.state.members.length})\n' : '');
 		}
 	}
 }

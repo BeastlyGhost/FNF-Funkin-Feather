@@ -70,8 +70,14 @@ class OptionsMeta
 			value: false
 		},
 		{
+			name: "Center Notes",
+			description: "If the notes should be centered (hides the opponent's notes).",
+			type: BOOLEAN,
+			value: false
+		},
+		{
 			name: "Safe Frames",
-			description: "Specify the amount of frames you have for hitting notes early / late",
+			description: "Specify the amount of frames you have for hitting notes early / late.",
 			type: FLOAT,
 			value: 10,
 			max: 10
@@ -83,19 +89,25 @@ class OptionsMeta
 			value: true
 		},
 		{
-			name: "Show Framerate",
+			name: "Show FPS Info",
 			description: "If the current framerate should be shown on the Info Counter.",
 			type: BOOLEAN,
 			value: true
 		},
 		{
-			name: "Show Memory",
+			name: "Show RAM Info",
 			description: "if the current memory usage should be shown on the Info Counter.",
 			type: BOOLEAN,
 			value: true
 		},
 		{
-			name: "Show Debug",
+			name: "Show VRAM Info",
+			description: "if the current GPU memory usage should be shown on the Info Counter.",
+			type: BOOLEAN,
+			value: true
+		},
+		{
+			name: "Show Debug Info",
 			description: "If the current state folder location and object count should be shown on the Info Counter.",
 			type: BOOLEAN,
 			value: false
@@ -198,9 +210,15 @@ class OptionsMeta
 	}
 
 	public static var optionList:Map<String, Array<String>> = [
-		"gameplay" => ["Downscroll", "Ghost Tapping", "Show Grades", "Safe Frames"],
+		"gameplay" => ["Downscroll", "Ghost Tapping", "Center Notes", "Show Grades", "Safe Frames"],
 		"accessibility" => ["Auto Pause", "Anti Aliasing", "Flashing Lights"],
-		"debugging" => ["Framerate Cap", "Show Framerate", "Show Memory", "Show Debug"],
+		"debugging" => [
+			"Framerate Cap",
+			"Show FPS Info",
+			"Show RAM Info",
+			"Show VRAM Info",
+			"Show Debug Info"
+		],
 		"custom settings" => [],
 	];
 }
