@@ -135,7 +135,7 @@ class Note extends FeatherSprite
 				&& step < Conductor.songPosition + (Conductor.safeZoneOffset * 0.5))
 				canBeHit = true;
 			else
-				canBeHit = true;
+				canBeHit = false;
 		}
 		else
 		{
