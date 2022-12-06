@@ -1,18 +1,16 @@
 package funkin.objects.ui.notes;
 
-import flixel.group.FlxSpriteGroup;
+import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import funkin.states.PlayState;
 
 /**
-	Strum class, initializes the gray notes at the top / bottom of the screen,
+	Strumline class, initializes the gray notes at the top / bottom of the screen,
 	it also comes with a set of functions for handling said notes
 **/
-class Strum extends FlxSpriteGroup
+class Strumline extends FlxTypedGroup<BabyArrow>
 {
-	public var babyArrows:FlxTypedSpriteGroup<BabyArrow>;
-
 	public var characters:Array<Character>;
 
 	public var downscroll:Bool = false;
@@ -25,8 +23,6 @@ class Strum extends FlxSpriteGroup
 		this.characters = characters;
 		this.autoplay = autoplay;
 		this.downscroll = downscroll;
-
-		babyArrows = new FlxTypedSpriteGroup<BabyArrow>();
 
 		for (index in 0...4)
 		{
@@ -58,10 +54,10 @@ class Strum extends FlxSpriteGroup
 				default:
 					babyArrow.frames = AssetHandler.grabAsset('NOTE_assets', SPARROW, 'images/ui/default');
 					//
-					babyArrow.animation.addByPrefix(babyArrow.colors[index], 'arrow' + babyArrow.actions[index].toUpperCase());
-					babyArrow.animation.addByPrefix('static', 'arrow${babyArrow.actions[index].toUpperCase()}');
-					babyArrow.animation.addByPrefix('pressed', '${babyArrow.actions[index]} press', 24, false);
-					babyArrow.animation.addByPrefix('confirm', '${babyArrow.actions[index]} confirm', 24, false);
+					babyArrow.animation.addByPrefix(BabyArrow.colors[index], 'arrow' + BabyArrow.actions[index].toUpperCase());
+					babyArrow.animation.addByPrefix('static', 'arrow${BabyArrow.actions[index].toUpperCase()}');
+					babyArrow.animation.addByPrefix('pressed', '${BabyArrow.actions[index]} press', 24, false);
+					babyArrow.animation.addByPrefix('confirm', '${BabyArrow.actions[index]} confirm', 24, false);
 
 					babyArrow.setGraphicSize(Std.int(babyArrow.width * 0.7));
 					babyArrow.antialiasing = true;
@@ -71,12 +67,10 @@ class Strum extends FlxSpriteGroup
 			babyArrow.y -= 10;
 
 			babyArrow.animation.play('static');
-			babyArrows.add(babyArrow);
+			add(babyArrow);
 
 			babyArrow.alpha = 0;
 			FlxTween.tween(babyArrow, {y: babyArrow.y + 10, alpha: babyArrow.defaultAlpha}, 1, {ease: FlxEase.circOut, startDelay: 0.5 + (0.2 * index)});
 		}
-
-		add(babyArrows);
 	}
 }

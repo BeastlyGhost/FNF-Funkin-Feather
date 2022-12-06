@@ -42,7 +42,7 @@ class Start extends FlxState
 		FlxG.sound.play(AssetHandler.grabAsset("splashRingSound", SOUND, "sounds"));
 
 		FlxTween.tween(bianca, {alpha: 0}, 2, {
-			onComplete: t ->
+			onComplete: function(t:FlxTween)
 			{
 				FlxG.save.data.seenSplash = true;
 				FlxG.switchState(cast Type.createInstance(Main.game.initialState, []));

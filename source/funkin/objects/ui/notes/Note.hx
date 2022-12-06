@@ -23,10 +23,14 @@ class Note extends FeatherSprite
 	public var downscroll:Bool = false;
 
 	// modifiable gameplay variables
+	public var earlyHitMult:Float = 1;
+	public var lateHitMult:Float = 1;
 	public var missOffset:Float = 200;
 
 	public var type:String = 'default';
 	public var prevNote:Note;
+	public var parentNote:Note;
+	public var children:Array<Note> = [];
 
 	public var speed:Float = 1;
 	public var step:Float = 0;
@@ -49,6 +53,16 @@ class Note extends FeatherSprite
 		this.prevNote = prevNote;
 		this.isSustain = isSustain;
 
+		if (isSustain)
+		{
+			earlyHitMult = 0.5;
+
+			parentNote = prevNote;
+			while (parentNote.isSustain && parentNote.prevNote != null)
+				parentNote = parentNote.prevNote;
+			parentNote.children.push(this);
+		}
+
 		x += 50;
 		// MAKE SURE ITS DEFINITELY OFF SCREEN?
 		y -= 2000;
@@ -58,8 +72,7 @@ class Note extends FeatherSprite
 
 	public function generateNote()
 	{
-		var babyArrow:BabyArrow = new BabyArrow(index);
-		var stringSect = babyArrow.getColor(index);
+		var stringSect = BabyArrow.colors[index];
 
 		switch (PlayState.assetSkin)
 		{
@@ -78,9 +91,9 @@ class Note extends FeatherSprite
 					animation.add(stringSect + 'hold', [indexPixel[index] - 4]);
 				}
 
-				babyArrow.setGraphicSize(Std.int(babyArrow.width * PlayState.pixelAssetSize));
-				babyArrow.updateHitbox();
-				babyArrow.antialiasing = false;
+				setGraphicSize(Std.int(width * PlayState.pixelAssetSize));
+				updateHitbox();
+				antialiasing = false;
 
 			default:
 				frames = AssetHandler.grabAsset('NOTE_assets', SPARROW, 'images/ui/default');
@@ -130,19 +143,10 @@ class Note extends FeatherSprite
 		super.update(elapsed);
 
 		if (mustPress)
-		{
-			if (step > Conductor.songPosition - (Conductor.safeZoneOffset)
-				&& step < Conductor.songPosition + (Conductor.safeZoneOffset * 0.5))
-				canBeHit = true;
-			else
-				canBeHit = false;
-		}
+			canBeHit = step > Conductor.songPosition - Conductor.safeZoneOffset * lateHitMult
+				&& step < Conductor.songPosition + Conductor.safeZoneOffset * earlyHitMult;
 		else
-		{
 			canBeHit = false;
-
-			// --hold note condition here--
-		}
 
 		if (tooLate || (prevNote != null && prevNote.isSustain && prevNote.tooLate))
 		{

@@ -49,7 +49,7 @@ class Transition
 				grpTrans.add(bgSpr);
 
 				FlxTween.tween(bgSpr, {alpha: (transIn ? 1 : 0)}, speed, {
-					onComplete: t ->
+					onComplete: function(t:FlxTween)
 					{
 						if (onEnd != null)
 							onEnd();

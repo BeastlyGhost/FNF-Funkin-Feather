@@ -2,6 +2,7 @@ package funkin.objects.ui.notes;
 
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxRect;
+import funkin.states.PlayState;
 import funkin.objects.ui.notes.BabyArrow;
 import funkin.song.Conductor;
 
@@ -11,14 +12,17 @@ import funkin.song.Conductor;
 **/
 class Notefield extends FlxTypedGroup<Note>
 {
-	public function updateRects(note:Note, strum:Strum)
+	public function updatePosition(note:Note, strumline:Strumline)
 	{
-		var center:Float = strum.y + BabyArrow.swagWidth / 2;
+		var babyArrow:BabyArrow = strumline.members[note.index];
 
-		note.y = (strum.y - (Conductor.songPosition - note.step) * (0.45 * note.speed));
+		note.x = babyArrow.x;
+
+		var center:Float = babyArrow.y + BabyArrow.swagWidth / 2;
+		note.y = babyArrow.y - (Conductor.songPosition - note.step) * (0.45 * note.speed);
 
 		// i am so fucking sorry for these if conditions
-		if (strum.downscroll)
+		if (strumline.downscroll)
 		{
 			if (note.isSustain)
 			{

@@ -155,7 +155,7 @@ class TitleSubstate extends MusicBeatSubstate
 				for (i in 0...cameras.length)
 				{
 					FlxTween.tween(cameras[i], {zoom: 1.45, y: 2000}, 2, {
-						onComplete: t ->
+						onComplete: function(t:FlxTween)
 						{
 							// send it back to the original position
 							cameras[i].zoom = 1;
@@ -165,7 +165,7 @@ class TitleSubstate extends MusicBeatSubstate
 					});
 				}
 
-				new FlxTimer().start(1.25, t ->
+				new FlxTimer().start(1.25, function(t:FlxTimer)
 				{
 					MainMenu.lockedMovement = false;
 

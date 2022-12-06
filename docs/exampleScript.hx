@@ -60,7 +60,7 @@ function onKeyRelease(key:Int, action:String, isGamepad:Bool)
 	// when you release a key on playstate
 }
 
-function goodNoteHit(note:Note, strum:Strum)
+function goodNoteHit(note:Note, strumline:Strumline)
 {
 	// when you hit a note on playstate
 	// NOTICE: use `if (!note.mustPress)` for opponent notes!!!

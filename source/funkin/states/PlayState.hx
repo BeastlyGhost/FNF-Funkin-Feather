@@ -39,8 +39,6 @@ class PlayState extends MusicBeatState
 	public static var main:PlayState;
 	public static var modules:Array<FeatherModule> = [];
 
-	public static final inputActions:Array<String> = ["left", "down", "up", "right"];
-
 	// Song
 	public static var song(default, set):FeatherSong;
 	@:isVar public static var songSpeed(get, default):Float = 1; // this needs to be a `get, set` later
@@ -80,17 +78,17 @@ class PlayState extends MusicBeatState
 	public static var songPlaylist:Array<String> = [];
 
 	// User Interface
-	public static var strumsGroup:FlxTypedGroup<Strum>;
+	public static var strumsGroup:FlxTypedGroup<Strumline>;
 	public static var notesGroup:Notefield;
 	public static var splashGroup:FlxTypedGroup<NoteSplash>;
 	public static var spawnedNotes:Array<Note>;
 
 	public static var gameUI:UI;
 
-	public static var strumsP1:Strum;
-	public static var strumsP2:Strum;
+	public static var strumsP1:Strumline;
+	public static var strumsP2:Strumline;
 
-	public var playerStrum:Array<Strum> = [];
+	public var playerStrum:Array<Strumline> = [];
 
 	public static var assetSkin:String = 'default';
 
@@ -173,7 +171,7 @@ class PlayState extends MusicBeatState
 		player.setCharacter(770, 450, 'bf');
 		add(player);
 
-		strumsGroup = new FlxTypedGroup<Strum>();
+		strumsGroup = new FlxTypedGroup<Strumline>();
 		splashGroup = new FlxTypedGroup<NoteSplash>();
 		notesGroup = new Notefield();
 
@@ -184,8 +182,8 @@ class PlayState extends MusicBeatState
 		var isDownscroll = OptionsMeta.getPref("Downscroll");
 		var height = (isDownscroll ? FlxG.height - 170 : 25);
 
-		strumsP1 = new Strum((FlxG.width / 2) + FlxG.width / 4, height, [player], false, isDownscroll);
-		strumsP2 = new Strum((FlxG.width / 2) - FlxG.width / 4 - 30, height, [opponent], true, isDownscroll);
+		strumsP1 = new Strumline((FlxG.width / 2) + FlxG.width / 4, height, [player], false, isDownscroll);
+		strumsP2 = new Strumline((FlxG.width / 2) - FlxG.width / 4 - 30, height, [opponent], true, isDownscroll);
 
 		strumsGroup.add(strumsP1);
 		strumsGroup.add(strumsP2);
@@ -251,8 +249,13 @@ class PlayState extends MusicBeatState
 
 	public function songCutscene()
 	{
-		for (strum in strumsGroup)
-			strum.alpha = 0;
+		for (strumline in strumsGroup)
+		{
+			strumline.forEachAlive(function(babyArrow:BabyArrow)
+			{
+				babyArrow.alpha = 0;
+			});
+		}
 
 		Conductor.songPosition = -(Conductor.crochet * 16);
 
@@ -436,52 +439,58 @@ class PlayState extends MusicBeatState
 		{
 			if (countdownWasActive)
 			{
-				for (strum in strumsGroup)
+				for (strumline in strumsGroup)
 				{
-					notesGroup.forEachAlive(function(note:Note)
+					strumline.forEachAlive(function(babyArrow:BabyArrow)
 					{
-						for (babyArrow in strum.babyArrows)
-						{
-							if (strum.autoplay && babyArrow.animation.curAnim.name == 'confirm' && babyArrow.animation.curAnim.finished)
-								babyArrow.playAnim('static', true);
-						}
-
-						note.speed = songSpeed;
-						note.downscroll = strum.downscroll;
-
-						notesGroup.updateRects(note, strum);
-
-						/*
-							if (strum.autoplay)
-							{
-								if (note.step <= Conductor.songPosition)
-									noteHit(note, strum);
-							}
-							// redoing this later
-						**/
-
-						var killRangeReached:Bool = (note.downscroll ? note.y > FlxG.height : note.y < -note.height);
-
-						// kill offscreen notes and cause misses if needed
-						if (Conductor.songPosition > note.missOffset + note.step)
-						{
-							note.active = false;
-							note.visible = false;
-
-							if (killRangeReached)
-							{
-								notesGroup.removeNote(note);
-								spawnedNotes.remove(note);
-							}
-
-							if (note.mustPress && !note.isSustain && !note.tooLate && !note.wasGoodHit && !note.isMine && !note.ignoreNote)
-							{
-								note.tooLate = true;
-								noteMiss(note.index, strum);
-							}
-						}
+						if (strumline.autoplay && babyArrow.animation.curAnim.name == 'confirm' && babyArrow.animation.curAnim.finished)
+							babyArrow.playAnim('static');
 					});
 				}
+
+				notesGroup.forEachAlive(function(note:Note)
+				{
+					var strumline:Strumline = note.mustPress ? strumsP1 : strumsP2;
+
+					if (!strumline.autoplay && keysHeld.contains(true) && keysHeld[note.index] && note.canBeHit && note.mustPress && note.isSustain
+						&& !note.tooLate)
+						noteHit(note, strumline);
+
+					note.speed = songSpeed;
+					note.downscroll = strumline.downscroll;
+
+					notesGroup.updatePosition(note, strumline);
+
+					/*
+						if (strumline.autoplay)
+						{
+							if (note.step <= Conductor.songPosition)
+								noteHit(note, strumline);
+						}
+						// redoing this later
+					**/
+
+					var killRangeReached:Bool = (note.downscroll ? note.y > FlxG.height : note.y < -note.height);
+
+					// kill offscreen notes and cause misses if needed
+					if (Conductor.songPosition > note.missOffset + note.step)
+					{
+						note.active = false;
+						note.visible = false;
+
+						if (killRangeReached)
+						{
+							notesGroup.removeNote(note);
+							spawnedNotes.remove(note);
+						}
+
+						if (note.mustPress && !note.isSustain && !note.tooLate && !note.wasGoodHit && !note.isMine && !note.ignoreNote)
+						{
+							note.tooLate = true;
+							noteMiss(note.index, strumline);
+						}
+					}
+				});
 			}
 			else
 			{
@@ -528,8 +537,8 @@ class PlayState extends MusicBeatState
 		if (isPaused || isEndingSong)
 			return;
 
-		if (action != null && inputActions.contains(action))
-			inputSystem(inputActions.indexOf(action), true);
+		if (action != null && BabyArrow.actions.contains(action))
+			inputSystem(BabyArrow.actions.indexOf(action), true);
 		callFunc('onKeyPress', [key, action, isGamepad]);
 	}
 
@@ -538,8 +547,8 @@ class PlayState extends MusicBeatState
 		if (isPaused || isEndingSong)
 			return;
 
-		if (action != null && inputActions.contains(action))
-			inputSystem(inputActions.indexOf(action), false);
+		if (action != null && BabyArrow.actions.contains(action))
+			inputSystem(BabyArrow.actions.indexOf(action), false);
 		callFunc('onKeyRelease', [key, action, isGamepad]);
 	}
 
@@ -551,32 +560,15 @@ class PlayState extends MusicBeatState
 		keysHeld[idx] = pressed;
 		// trace(idx, pressed);
 
-		for (strum in playerStrum)
+		for (strumline in playerStrum)
 		{
 			// shortening
-			var babyArrow:BabyArrow = strum.babyArrows.members[idx];
+			var babyArrow:BabyArrow = strumline.members[idx];
 
 			if (pressed)
 			{
-				if (song != null && !strum.autoplay && countdownWasActive)
+				if (song != null && !strumline.autoplay && countdownWasActive)
 				{
-					/*
-						hold notes
-					**/
-
-					if (keysHeld.contains(true))
-					{
-						notesGroup.forEachAlive(function(note:Note)
-						{
-							if (note.canBeHit && note.mustPress && note.isSustain && !note.tooLate && keysHeld[note.index])
-								noteHit(note, strum);
-						});
-					}
-
-					/*
-						normal notes
-					**/
-
 					var prevTime:Float = Conductor.songPosition;
 
 					Conductor.songPosition = Conductor.songMusic.time;
@@ -606,14 +598,14 @@ class PlayState extends MusicBeatState
 
 							if (notePossible && epicNote.canBeHit)
 							{
-								noteHit(epicNote, strum);
+								noteHit(epicNote, strumline);
 								notePresses.push(epicNote);
 							}
 						}
 					}
 					else if (!OptionsMeta.getPref("Ghost Tapping"))
 					{
-						noteMiss(idx, strum);
+						noteMiss(idx, strumline);
 						PlayerInfo.ghostMisses++;
 					}
 
@@ -621,20 +613,14 @@ class PlayState extends MusicBeatState
 				}
 
 				if (babyArrow != null && babyArrow.animation.curAnim.name != 'confirm')
-				{
 					babyArrow.playAnim('pressed');
-					babyArrow.centerOffsets();
-				}
 			}
 			else
 			{
 				if (idx >= 0 && babyArrow != null)
-				{
 					babyArrow.playAnim('static');
-					babyArrow.centerOffsets();
-				}
 
-				for (player in strum.characters)
+				for (player in strumline.characters)
 				{
 					if (player.holdTimer > Conductor.stepCrochet * 4 * 0.001 && !keysHeld.contains(true))
 					{
@@ -660,21 +646,18 @@ class PlayState extends MusicBeatState
 		return FlxSort.byValues(FlxSort.ASCENDING, a.step, b.step);
 	}
 
-	public function noteHit(note:Note, strum:Strum)
+	public function noteHit(note:Note, strumline:Strumline)
 	{
 		if (!note.wasGoodHit)
 		{
 			note.wasGoodHit = true;
 
-			callFunc('goodNoteHit', [note, strum]);
+			callFunc('goodNoteHit', [note, strumline]);
 
-			var babyArrow:BabyArrow = strum.babyArrows.members[note.index];
+			var babyArrow:BabyArrow = strumline.members[note.index];
 
-			if (babyArrow != null && babyArrow.animation.curAnim.name != 'confirm')
-			{
+			if (babyArrow != null)
 				babyArrow.playAnim('confirm', true);
-				babyArrow.centerOffsets();
-			}
 
 			var stringAnim:String = '';
 			var section = song.sectionNotes[Std.int(curStep / 16)];
@@ -684,7 +667,7 @@ class PlayState extends MusicBeatState
 				if (section.animation != null && section.animation != '')
 					stringAnim = section.animation;
 
-			for (char in strum.characters)
+			for (char in strumline.characters)
 			{
 				if (char != null)
 				{
@@ -698,7 +681,7 @@ class PlayState extends MusicBeatState
 			var noteDiff:Float = Math.abs(note.step - Conductor.songPosition);
 			var ratingInteger:Int = 3; // 3 is "Shit"
 
-			if (note.mustPress && !strum.autoplay) // being hit by the player
+			if (note.mustPress && !strumline.autoplay) // being hit by the player
 			{
 				for (i in 0...PlayerInfo.judgeTable.length)
 				{
@@ -737,7 +720,7 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	public function noteMiss(idx:Int, strum:Strum)
+	public function noteMiss(idx:Int, strumline:Strumline)
 	{
 		if (crowd != null)
 		{
@@ -746,7 +729,7 @@ class PlayState extends MusicBeatState
 					crowd.playAnim("sad");
 		}
 
-		for (char in strum.characters)
+		for (char in strumline.characters)
 		{
 			if (char != null && char.hasMissAnims)
 				char.playAnim(char.singAnims[idx] + 'miss');
@@ -776,7 +759,7 @@ class PlayState extends MusicBeatState
 		rating.animation.play(myRating);
 
 		FlxTween.tween(rating, {alpha: 0}, 0.2, {
-			onComplete: t ->
+			onComplete: function(t:FlxTween)
 			{
 				rating.kill();
 			},
@@ -806,7 +789,7 @@ class PlayState extends MusicBeatState
 			numScore.animation.play("num" + splitCombo[i]);
 
 			FlxTween.tween(numScore, {alpha: 0}, 0.2, {
-				onComplete: t ->
+				onComplete: function(t:FlxTween)
 				{
 					numScore.kill();
 				},
@@ -826,9 +809,9 @@ class PlayState extends MusicBeatState
 
 	public function charDancing(beat:Int)
 	{
-		for (strum in strumsGroup)
+		for (strumline in strumsGroup)
 		{
-			for (i in strum.characters)
+			for (i in strumline.characters)
 			{
 				var boppingBeat = (i.isQuickDancer ? beat % Math.round(crowdSpeed) * i.bopTimer == 0 : beat % i.bopTimer == 0);
 

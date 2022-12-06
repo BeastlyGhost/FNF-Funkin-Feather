@@ -1,17 +1,17 @@
 package funkin.objects.ui.notes;
 
 /**
-	`BabyArrow`s are sprites that are attached to your `Strum`line,
+	`BabyArrow`s are sprites that are attached to your `Strumline`line,
 	this class simply initializes said `BabyArrow`s
 **/
 class BabyArrow extends FeatherSprite
 {
+	public static final swagWidth:Float = 160 * 0.7;
+
+	public static final actions:Array<String> = ['left', 'down', 'up', 'right'];
+	public static final colors:Array<String> = ['purple', 'blue', 'green', 'red'];
+
 	public var index:Int = 0;
-
-	public static var swagWidth:Float = 160 * 0.7;
-
-	public var actions:Array<String> = ['left', 'down', 'up', 'right'];
-	public var colors:Array<String> = ['purple', 'blue', 'green', 'red'];
 
 	public var defaultAlpha:Float = 0.8;
 
@@ -39,10 +39,4 @@ class BabyArrow extends FeatherSprite
 		centerOffsets();
 		centerOrigin();
 	}
-
-	public function getColor(index:Int)
-		return colors[index];
-
-	public function getAction(index:Int)
-		return actions[index];
 }
