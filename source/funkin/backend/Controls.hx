@@ -11,6 +11,7 @@ typedef Action =
 {
 	var keyboard:Array<Int>;
 	var gamepad:Array<FlxGamepadInputID>;
+	var id:Int;
 };
 
 typedef KeyCall = (Int, String, Bool) -> Void; // for convenience
@@ -22,13 +23,13 @@ typedef KeyCall = (Int, String, Bool) -> Void; // for convenience
 class Controls
 {
 	public static final defaultActions:Map<String, Action> = [
-		"left" => {keyboard: [Keyboard.LEFT, Keyboard.D], gamepad: [DPAD_LEFT, LEFT_STICK_DIGITAL_LEFT]},
-		"down" => {keyboard: [Keyboard.DOWN, Keyboard.F], gamepad: [DPAD_DOWN, LEFT_STICK_DIGITAL_DOWN]},
-		"up" => {keyboard: [Keyboard.UP, Keyboard.J], gamepad: [DPAD_UP, LEFT_STICK_DIGITAL_UP]},
-		"right" => {keyboard: [Keyboard.RIGHT, Keyboard.K], gamepad: [DPAD_RIGHT, LEFT_STICK_DIGITAL_RIGHT]},
-		"accept" => {keyboard: [Keyboard.ENTER, Keyboard.SPACE], gamepad: [A, START]},
-		"pause" => {keyboard: [Keyboard.ENTER, Keyboard.P], gamepad: [START]},
-		"back" => {keyboard: [Keyboard.ESCAPE, Keyboard.BACKSPACE], gamepad: [B]},
+		"left" => {keyboard: [Keyboard.LEFT, Keyboard.D], gamepad: [DPAD_LEFT, LEFT_STICK_DIGITAL_LEFT], id: 1},
+		"down" => {keyboard: [Keyboard.DOWN, Keyboard.F], gamepad: [DPAD_DOWN, LEFT_STICK_DIGITAL_DOWN], id: 2},
+		"up" => {keyboard: [Keyboard.UP, Keyboard.J], gamepad: [DPAD_UP, LEFT_STICK_DIGITAL_UP], id: 3},
+		"right" => {keyboard: [Keyboard.RIGHT, Keyboard.K], gamepad: [DPAD_RIGHT, LEFT_STICK_DIGITAL_RIGHT], id: 4},
+		"accept" => {keyboard: [Keyboard.ENTER, Keyboard.SPACE], gamepad: [A, START], id: 5},
+		"pause" => {keyboard: [Keyboard.ENTER, Keyboard.P], gamepad: [START], id: 6},
+		"back" => {keyboard: [Keyboard.ESCAPE, Keyboard.BACKSPACE], gamepad: [B], id: 7},
 	];
 	public static var actions(default, null):Map<String, Action>;
 
