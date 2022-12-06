@@ -86,6 +86,7 @@ class FreeplayMenu extends MusicBeatState
 		add(scoreBG);
 
 		add(diffTxt);
+		add(scoreTxt);
 
 		updateSelection();
 	}
