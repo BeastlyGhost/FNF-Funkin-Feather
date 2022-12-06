@@ -10,6 +10,7 @@ import flixel.util.FlxColor;
 import funkin.backend.data.SongManager;
 import funkin.backend.dependencies.PlayerInfo;
 import funkin.objects.ui.Alphabet;
+import funkin.objects.ui.Icon;
 import funkin.song.MusicState;
 import openfl.media.Sound;
 
@@ -23,6 +24,8 @@ class FreeplayMenu extends MusicBeatState
 	var songList:Array<SongListForm> = [];
 
 	var itemContainer:FlxTypedGroup<Alphabet>;
+
+	var iconContainer:Array<Icon> = [];
 
 	static var selDifficulty:Int = 1;
 
@@ -70,6 +73,11 @@ class FreeplayMenu extends MusicBeatState
 			songText.isMenuItem = true;
 			songText.targetY = i;
 			itemContainer.add(songText);
+
+			var songIcon:Icon = new Icon('bf');
+			songIcon.parentSprite = songText;
+			iconContainer.push(songIcon);
+			add(songIcon);
 		}
 
 		wrappableGroup = songList;
@@ -153,6 +161,11 @@ class FreeplayMenu extends MusicBeatState
 		super.updateSelection(newSelection);
 
 		FlxG.sound.play(AssetHandler.grabAsset('scrollMenu', SOUND, "sounds/menus"));
+
+		for (i in 0...iconContainer.length)
+			iconContainer[i].alpha = 0.6;
+
+		iconContainer[selection].alpha = 1;
 
 		var blah:Int = 0;
 		for (item in itemContainer.members)
