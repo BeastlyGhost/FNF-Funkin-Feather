@@ -73,8 +73,9 @@ class PlayState extends MusicBeatState
 	public static function get_songSpeed()
 		return FlxMath.roundDecimal(songSpeed, 2);
 
-	public static var songName:String;
-	public static var difficulty:Int;
+	public static var songName:String = 'test';
+	public static var difficulty:Int = 0;
+	public static var currentWeek:Int = 0;
 
 	public static var songPlaylist:Array<String> = [];
 
@@ -915,8 +916,12 @@ class PlayState extends MusicBeatState
 		{
 			case STORY:
 				// playlist conditions go here
+				if (PlayerInfo.validScore)
+					PlayerInfo.saveScore(song.name, PlayerInfo.score, difficulty, true);
 				MusicState.switchState(new funkin.states.menus.StoryMenu());
 			case FREEPLAY:
+				if (PlayerInfo.validScore)
+					PlayerInfo.saveScore(song.name, PlayerInfo.score, difficulty, false);
 				MusicState.switchState(new funkin.states.menus.FreeplayMenu());
 			case CHARTING:
 				isPaused = true;
