@@ -46,8 +46,6 @@ class FreeplayMenu extends MusicBeatState
 	{
 		super.create();
 
-		mutex = new Mutex();
-
 		DiscordRPC.update("FREEPLAY MENU", "Choosing a Song");
 
 		// get the song list

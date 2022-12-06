@@ -71,8 +71,9 @@ class PlayState extends MusicBeatState
 	public static function get_songSpeed()
 		return FlxMath.roundDecimal(songSpeed, 2);
 
-	public static var songName:String;
-	public static var difficulty:Int;
+	public static var songName:String = 'test';
+	public static var difficulty:Int = 0;
+	public static var currentWeek:Int = 0;
 
 	public static var songPlaylist:Array<String> = [];
 
