@@ -137,7 +137,7 @@ class TitleSubstate extends MusicBeatSubstate
 				}
 			}
 
-			if (Controls.getPressEvent("accept"))
+			if (Controls.isJustPressed("accept"))
 			{
 				if (titleEnter != null)
 				{

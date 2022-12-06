@@ -56,13 +56,13 @@ class OptionsMenu extends MusicBeatState
 			}
 		}
 
-		if (Controls.getPressEvent("ui_up"))
+		if (Controls.isJustPressed("up"))
 			updateSelection(-1);
-		if (Controls.getPressEvent("ui_down"))
+		if (Controls.isJustPressed("down"))
 			updateSelection(1);
 
-		if (Controls.getPressEvent("accept")) {}
-		if (Controls.getPressEvent("back"))
+		if (Controls.isJustPressed("accept")) {}
+		if (Controls.isJustPressed("back"))
 			MusicState.switchState(new MainMenu());
 	}
 

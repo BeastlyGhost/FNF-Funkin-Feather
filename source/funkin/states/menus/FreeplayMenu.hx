@@ -108,17 +108,17 @@ class FreeplayMenu extends MusicBeatState
 
 		repositionScore();
 
-		if (Controls.getPressEvent("ui_up"))
+		if (Controls.isJustPressed("up"))
 			updateSelection(-1);
-		if (Controls.getPressEvent("ui_down"))
+		if (Controls.isJustPressed("down"))
 			updateSelection(1);
 
-		if (Controls.getPressEvent("ui_left"))
+		if (Controls.isJustPressed("left"))
 			updateDifficulty(-1);
-		if (Controls.getPressEvent("ui_right"))
+		if (Controls.isJustPressed("right"))
 			updateDifficulty(1);
 
-		if (Controls.getPressEvent("back"))
+		if (Controls.isJustPressed("back"))
 		{
 			threadActive = false;
 			if (!FlxG.keys.pressed.SHIFT)
@@ -129,7 +129,7 @@ class FreeplayMenu extends MusicBeatState
 			MusicState.switchState(new MainMenu());
 		}
 
-		if (Controls.getPressEvent("accept"))
+		if (Controls.isJustPressed("accept"))
 		{
 			if (FlxG.sound.music != null)
 				FlxG.sound.music.stop();

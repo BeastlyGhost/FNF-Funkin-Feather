@@ -148,13 +148,13 @@ class MainMenu extends MusicBeatState
 
 		if (!lockedMovement)
 		{
-			if (Controls.getPressEvent("ui_up"))
+			if (Controls.isJustPressed("up"))
 				updateSelection(-1);
 
-			if (Controls.getPressEvent("ui_down"))
+			if (Controls.isJustPressed("down"))
 				updateSelection(1);
 
-			if (Controls.getPressEvent("accept"))
+			if (Controls.isJustPressed("accept"))
 			{
 				FlxG.sound.play(AssetHandler.grabAsset('confirmMenu', SOUND, "sounds/menus"));
 				lockedMovement = true;

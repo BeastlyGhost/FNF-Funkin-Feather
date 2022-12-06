@@ -87,7 +87,7 @@ class StoryMenu extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
-		if (Controls.getPressEvent("back"))
+		if (Controls.isJustPressed("back"))
 			MusicState.switchState(new MainMenu());
 	}
 }

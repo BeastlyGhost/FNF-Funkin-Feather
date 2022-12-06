@@ -98,12 +98,12 @@ class PauseSubstate extends MusicBeatSubstate
 	{
 		super.update(elapsed);
 
-		if (Controls.getPressEvent("ui_up"))
+		if (Controls.isJustPressed("up"))
 			updateSelection(-1);
-		if (Controls.getPressEvent("ui_down"))
+		if (Controls.isJustPressed("down"))
 			updateSelection(1);
 
-		if (Controls.getPressEvent("accept"))
+		if (Controls.isJustPressed("accept"))
 		{
 			var mySelection = wrappableGroup[selection].toLowerCase();
 

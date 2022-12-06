@@ -39,6 +39,8 @@ class PlayState extends MusicBeatState
 	public static var main:PlayState;
 	public static var modules:Array<FeatherModule> = [];
 
+	public static final inputActions:Array<String> = ["left", "down", "up", "right"];
+
 	// Song
 	public static var song(default, set):FeatherSong;
 	@:isVar public static var songSpeed(get, default):Float = 1; // this needs to be a `get, set` later
@@ -213,7 +215,8 @@ class PlayState extends MusicBeatState
 
 		FlxG.worldBounds.set(0, 0, FlxG.width, FlxG.height);
 
-		Controls.keyEventTrigger.add(keyEventTrigger);
+		Controls.onKeyPressed.add(onKeyPressed);
+		Controls.onKeyReleased.add(onKeyReleased);
 
 		songCutscene();
 		changePresence();
@@ -410,7 +413,7 @@ class PlayState extends MusicBeatState
 
 		playerDeathCheck();
 
-		if (Controls.getPressEvent("pause", "justPressed") && canPause)
+		if (Controls.isJustPressed("pause") && canPause)
 		{
 			isPaused = true;
 			Conductor.pauseSong();
@@ -519,35 +522,40 @@ class PlayState extends MusicBeatState
 		return false;
 	}
 
-	public function keyEventTrigger(action:String, key:Int, state:KeyState)
+	public function onKeyPressed(key:Int, action:String)
 	{
 		if (isPaused || isEndingSong)
 			return;
 
-		switch (action)
-		{
-			case "left" | "down" | "up" | "right":
-				var actions = ["left", "down", "up", "right"];
-				var index = actions.indexOf(action);
-				inputSystem(index, state);
-		}
-		callFunc('onKey' + (state == PRESSED ? 'Press' : 'Release'), [key, action]);
+		if (action != null && inputActions.contains(action))
+			inputSystem(inputActions.indexOf(action), true);
+		callFunc('onKeyPress', [key, action]);
+	}
+
+	public function onKeyReleased(key:Int, action:String)
+	{
+		if (isPaused || isEndingSong)
+			return;
+
+		if (action != null && inputActions.contains(action))
+			inputSystem(inputActions.indexOf(action), false);
+		callFunc('onKeyRelease', [key, action]);
 	}
 
 	var keysHeld:Array<Bool> = [];
 
 	// idx is shortehand for index
-	public function inputSystem(idx:Int, state:KeyState)
+	public function inputSystem(idx:Int, pressed:Bool)
 	{
-		keysHeld[idx] = (state == PRESSED);
-		// trace(keysHeld);
+		keysHeld[idx] = pressed;
+		// trace(idx, pressed);
 
 		for (strum in playerStrum)
 		{
 			// shortening
 			var babyArrow:BabyArrow = strum.babyArrows.members[idx];
 
-			if (state == PRESSED)
+			if (pressed)
 			{
 				if (song != null && !strum.autoplay && countdownWasActive)
 				{
@@ -577,7 +585,7 @@ class PlayState extends MusicBeatState
 
 					notesGroup.forEachAlive(function(note:Note)
 					{
-						if ((note.index == idx) && note.mustPress && note.canBeHit && !note.isSustain && !note.tooLate && !note.wasGoodHit)
+						if (note.index == idx && note.mustPress && note.canBeHit && !note.isSustain && !note.tooLate && !note.wasGoodHit)
 							noteList.push(note);
 						// trace("Stored Note List: " + noteList);
 					});
@@ -602,13 +610,10 @@ class PlayState extends MusicBeatState
 							}
 						}
 					}
-					else
+					else if (!OptionsMeta.getPref("Ghost Tapping"))
 					{
-						if (!OptionsMeta.getPref("Ghost Tapping"))
-						{
-							noteMiss(idx, strum);
-							PlayerInfo.ghostMisses++;
-						}
+						noteMiss(idx, strum);
+						PlayerInfo.ghostMisses++;
 					}
 
 					Conductor.songPosition = prevTime;
@@ -924,7 +929,8 @@ class PlayState extends MusicBeatState
 
 	override public function destroy()
 	{
-		Controls.keyEventTrigger.remove(keyEventTrigger);
+		Controls.onKeyPressed.remove(onKeyPressed);
+		Controls.onKeyReleased.remove(onKeyReleased);
 		super.destroy();
 	}
 
