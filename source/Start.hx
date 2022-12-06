@@ -5,6 +5,7 @@ import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
+import funkin.backend.dependencies.PlayerInfo;
 
 /**
 	Starting Class for the game
@@ -17,6 +18,7 @@ class Start extends FlxState
 		super.create();
 
 		OptionsMeta.loadPrefs();
+		PlayerInfo.loadHighscores();
 
 		FlxG.fixedTimestep = true;
 		FlxG.mouse.useSystemCursor = true;

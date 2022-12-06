@@ -8,11 +8,10 @@ import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import funkin.backend.data.SongManager;
+import funkin.backend.dependencies.PlayerInfo;
 import funkin.objects.ui.Alphabet;
 import funkin.song.MusicState;
 import openfl.media.Sound;
-import sys.thread.Mutex;
-import sys.thread.Thread;
 
 /**
 	the Freeplay Menu, for selecting and playing songs!
@@ -30,16 +29,16 @@ class FreeplayMenu extends MusicBeatState
 	var songInst:FlxSound;
 	var songVocals:FlxSound;
 
+	var lerpScore:Int = 0;
+	var intendedScore:Int = 0;
+
+	var inst:Sound;
+	var vocals:Sound;
+
 	var menuBG:FlxSprite;
 	var scoreBG:FlxSprite;
 	var scoreTxt:FlxText;
 	var diffTxt:FlxText;
-
-	var songThread:Thread;
-	var threadActive:Bool = true;
-	var mutex:Mutex;
-	var instPlaying:Sound = null;
-	var selSongPlaying:Int = 0;
 
 	var tempColors = [0xFFFFB300, 0xFF56AEBD, 0xFF9F5788, 0xFFC35D5D];
 
@@ -97,8 +96,13 @@ class FreeplayMenu extends MusicBeatState
 	{
 		super.update(elapsed);
 
+		lerpScore = Math.floor(FlxMath.lerp(lerpScore, intendedScore, 0.4));
+
+		if (Math.abs(lerpScore - intendedScore) <= 10)
+			lerpScore = intendedScore;
+
 		if (scoreTxt != null)
-			scoreTxt.text = "PERSONAL BEST: 0";
+			scoreTxt.text = "PERSONAL BEST: " + lerpScore;
 
 		if (menuBG != null && menuBG.pixels != null)
 			menuBG.color = FlxColor.interpolate(menuBG.color, tempColors[selection]);
@@ -119,45 +123,19 @@ class FreeplayMenu extends MusicBeatState
 			updateDifficulty(1);
 
 		if (Controls.getPressEvent("back"))
-		{
-			threadActive = false;
-			if (!FlxG.keys.pressed.SHIFT)
-			{
-				FlxG.sound.play(AssetHandler.grabAsset('cancelMenu', SOUND, 'sounds/menus'));
-				FlxG.sound.music.stop();
-			}
 			MusicState.switchState(new MainMenu());
-		}
 
 		if (Controls.getPressEvent("accept"))
 		{
 			if (FlxG.sound.music != null)
 				FlxG.sound.music.stop();
-			threadActive = false;
 
 			PlayState.songName = songList[selection].name;
-			PlayState.gameplayMode = FREEPLAY;
+			PlayState.currentWeek = songList[selection].week;
 			PlayState.difficulty = selDifficulty;
+			PlayState.gameplayMode = FREEPLAY;
 
 			MusicState.switchState(new PlayState());
-		}
-
-		if (instPlaying != null)
-		{
-			if (FlxG.sound.music != null)
-				FlxG.sound.music.stop();
-
-			if (FlxG.sound.music.fadeTween != null)
-				FlxG.sound.music.fadeTween.cancel();
-
-			mutex.acquire();
-			FlxG.sound.playMusic(instPlaying);
-
-			FlxG.sound.music.volume = 0.0;
-			FlxG.sound.music.fadeIn(1.0, 0.0, 1.0);
-
-			instPlaying = null;
-			mutex.release();
 		}
 	}
 
@@ -188,51 +166,18 @@ class FreeplayMenu extends MusicBeatState
 				item.alpha = 1;
 		}
 
+		intendedScore = PlayerInfo.getScore(songList[selection].name, selDifficulty, false);
+
 		updateDifficulty();
-		updateBackgroundSong();
 	}
 
 	function updateDifficulty(newDifficulty:Int = 0)
 	{
-		selDifficulty = FlxMath.wrap(Math.floor(selDifficulty) + newDifficulty, 0, songList[selection].diffs.length);
+		selDifficulty = FlxMath.wrap(Math.floor(selDifficulty) + newDifficulty, 0, songList[selection].diffs.length - 1);
 
 		var stringDiff = FeatherTools.getDifficulty(selDifficulty);
-
 		diffTxt.text = '< ${stringDiff.replace('-', '').toUpperCase()} >';
-	}
 
-	function updateBackgroundSong()
-	{
-		if (songThread == null)
-		{
-			songThread = Thread.create(function()
-			{
-				while (true)
-				{
-					if (!threadActive)
-						return;
-
-					var index:Null<Int> = Thread.readMessage(false);
-					if (index != null)
-					{
-						if (index == selection && index != selSongPlaying)
-						{
-							var inst:Sound = AssetHandler.grabAsset("Inst", SOUND, "songs/" + songList[selection].name);
-
-							if (index == selection && threadActive)
-							{
-								mutex.acquire();
-								instPlaying = inst;
-								mutex.release();
-
-								selSongPlaying = selection;
-							}
-						}
-					}
-				}
-			});
-		}
-
-		songThread.sendMessage(selection);
+		intendedScore = PlayerInfo.getScore(songList[selection].name, selDifficulty, false);
 	}
 }

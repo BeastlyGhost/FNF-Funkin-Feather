@@ -4,12 +4,6 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import funkin.states.PlayState;
 
-enum HighscoreType
-{
-	CAMPAIGN;
-	FREEPLAY;
-}
-
 typedef Judgement =
 {
 	var name:String;
@@ -53,7 +47,6 @@ class PlayerInfo
 
 	public static var scoreMap:Map<String, Int> = [];
 	public static var weekScoreMap:Map<String, Int> = [];
-	public static var missesMap:Map<String, Int> = [];
 
 	public static final judgeTable:Array<Judgement> = [
 		{
@@ -262,80 +255,38 @@ class PlayerInfo
 	}
 
 	/**
-		here's where a lot of repeated code comes into play, i will eventually clean this up
-		@BeastlyGhost
+		Functions for saving scores
 	**/
 	//
-	public static function saveScore(song:String, score:Int, diff:Int = 0)
+	public static function saveScore(song:String, score:Int, diff:Int = 0, isStory:Bool)
 	{
+		var chosenMap = (isStory ? weekScoreMap : scoreMap);
+		var chosenSave = (isStory ? FlxG.save.data.weekScores : FlxG.save.data.songScores);
+
 		var songFinal = song + FeatherTools.getDifficulty(diff);
 
-		if (scoreMap.exists(songFinal))
+		if (chosenMap.exists(songFinal))
 		{
-			if (scoreMap.get(songFinal) < score)
-				scoreMap.set(songFinal, score);
+			if (chosenMap.get(songFinal) < score)
+				chosenMap.set(songFinal, score);
 		}
 		else
-			scoreMap.set(songFinal, score);
+			chosenMap.set(songFinal, score);
 
-		FlxG.save.data.songScores = scoreMap;
+		chosenSave = chosenMap;
 		FlxG.save.flush();
 	}
 
-	public static function saveWeekScore(week:String, score:Int, diff:Int = 0)
+	public static function getScore(song:String, diff:Int, isStory:Bool = false)
 	{
-		var weekFinal = week + FeatherTools.getDifficulty(diff);
+		var chosenMap = (isStory ? weekScoreMap : scoreMap);
 
-		if (weekScoreMap.exists(weekFinal))
-		{
-			if (weekScoreMap.get(weekFinal) < score)
-				weekScoreMap.set(weekFinal, score);
-		}
-		else
-			weekScoreMap.set(weekFinal, score);
-
-		FlxG.save.data.weekScores = weekScoreMap;
-		FlxG.save.flush();
-	}
-
-	public static function saveMisses(song:String, misses:Int, diff:Int = 0)
-	{
 		var songFinal = song + FeatherTools.getDifficulty(diff);
 
-		if (missesMap.exists(songFinal))
-		{
-			if (missesMap.get(songFinal) < misses)
-				missesMap.set(songFinal, misses);
-		}
-		else
-			missesMap.set(songFinal, misses);
+		if (!chosenMap.exists(song + FeatherTools.getDifficulty(diff)))
+			chosenMap.set(song + FeatherTools.getDifficulty(diff), 0);
 
-		FlxG.save.data.songMisses = missesMap;
-		FlxG.save.flush();
-	}
-
-	public static function getScore(song:String, diff:Int)
-	{
-		if (!scoreMap.exists(song + FeatherTools.getDifficulty(diff)))
-			scoreMap.set(song + FeatherTools.getDifficulty(diff), 0);
-
-		return scoreMap.get(song + FeatherTools.getDifficulty(diff));
-	}
-
-	public static function getMisses(song:String, diff:Int)
-	{
-		if (!missesMap.exists(song + FeatherTools.getDifficulty(diff)))
-			missesMap.set(song + FeatherTools.getDifficulty(diff), 0);
-
-		return missesMap.get(song + FeatherTools.getDifficulty(diff));
-	}
-
-	public static function getWeekScore(week:String, diff:Int)
-	{
-		if (!weekScoreMap.exists(week + FeatherTools.getDifficulty(diff)))
-			weekScoreMap.set(week + FeatherTools.getDifficulty(diff), 0);
-
-		return weekScoreMap.get(week + FeatherTools.getDifficulty(diff));
+		return chosenMap.get(song + FeatherTools.getDifficulty(diff));
 	}
 
 	public static function loadHighscores()
@@ -344,7 +295,5 @@ class PlayerInfo
 			scoreMap = FlxG.save.data.songScores;
 		if (FlxG.save.data.weekScores != null)
 			weekScoreMap = FlxG.save.data.weekScores;
-		if (FlxG.save.data.songMisses != null)
-			missesMap = FlxG.save.data.songMisses;
 	}
 }

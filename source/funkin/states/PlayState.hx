@@ -910,8 +910,12 @@ class PlayState extends MusicBeatState
 		{
 			case STORY:
 				// playlist conditions go here
+				if (PlayerInfo.validScore)
+					PlayerInfo.saveScore(song.name, PlayerInfo.score, difficulty, true);
 				MusicState.switchState(new funkin.states.menus.StoryMenu());
 			case FREEPLAY:
+				if (PlayerInfo.validScore)
+					PlayerInfo.saveScore(song.name, PlayerInfo.score, difficulty, false);
 				MusicState.switchState(new funkin.states.menus.FreeplayMenu());
 			case CHARTING:
 				isPaused = true;
