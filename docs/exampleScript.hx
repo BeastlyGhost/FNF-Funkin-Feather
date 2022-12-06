@@ -50,12 +50,12 @@ function onDeath()
 	// when you die on playstate
 }
 
-function onKeyPress(key:Int, action:String)
+function onKeyPress(key:Int, action:String, isGamepad:Bool)
 {
 	// when you press a key on playstate
 }
 
-function onKeyRelease(key:Int, action:String)
+function onKeyRelease(key:Int, action:String, isGamepad:Bool)
 {
 	// when you release a key on playstate
 }

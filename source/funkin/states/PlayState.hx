@@ -523,24 +523,24 @@ class PlayState extends MusicBeatState
 		return false;
 	}
 
-	public function onKeyPressed(key:Int, action:String)
+	public function onKeyPressed(key:Int, action:String, isGamepad:Bool)
 	{
 		if (isPaused || isEndingSong)
 			return;
 
 		if (action != null && inputActions.contains(action))
 			inputSystem(inputActions.indexOf(action), true);
-		callFunc('onKeyPress', [key, action]);
+		callFunc('onKeyPress', [key, action, isGamepad]);
 	}
 
-	public function onKeyReleased(key:Int, action:String)
+	public function onKeyReleased(key:Int, action:String, isGamepad:Bool)
 	{
 		if (isPaused || isEndingSong)
 			return;
 
 		if (action != null && inputActions.contains(action))
 			inputSystem(inputActions.indexOf(action), false);
-		callFunc('onKeyRelease', [key, action]);
+		callFunc('onKeyRelease', [key, action, isGamepad]);
 	}
 
 	var keysHeld:Array<Bool> = [];
