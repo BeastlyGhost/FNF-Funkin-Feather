@@ -34,8 +34,6 @@ class Character extends FeatherSprite
 
 	public var idleSuffix:String = '';
 
-	public var singAnims:Array<String> = ['singLEFT', 'singDOWN', 'singUP', 'singRIGHT'];
-
 	public var defaultIdle:String = 'idle';
 
 	public var charType:CharacterOrigin = FUNKIN_FEATHER;
@@ -138,9 +136,9 @@ class Character extends FeatherSprite
 				}
 		}
 
-		for (anim in singAnims)
+		for (i in 0...funkin.objects.ui.notes.BabyArrow.actions.length)
 		{
-			if (animOffsets.exists(anim + 'miss'))
+			if (animOffsets.exists('sing' + funkin.objects.ui.notes.BabyArrow.actions[i].toUpperCase() + 'miss'))
 				hasMissAnims = true;
 		}
 

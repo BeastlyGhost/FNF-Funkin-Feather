@@ -1,4 +1,14 @@
-package funkin.backend;
+package funkin.backend.data;
+
+/**
+	Interface methods are a way to generalize similar variables and functions,
+	they are used to specify the behavior of a class, not many interfaces will be
+	directly used with the project, but this class will be kept for the sake of organization
+	and source code abstraction in a general sense
+
+	@BeastlyGhost
+**/
+class Interfaces {} // nothing, I just wanna leave the comment haha
 
 /**
 	Handles variales used on the `MusicState` class

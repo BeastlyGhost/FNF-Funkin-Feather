@@ -9,7 +9,7 @@ import flixel.math.FlxMath;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxTimer;
-import funkin.backend.Interfaces.MusicInterface;
+import funkin.backend.data.Interfaces.MusicInterface;
 import funkin.backend.Transition;
 import funkin.song.Conductor.BPMChangeEvent;
 import funkin.states.PlayState;
