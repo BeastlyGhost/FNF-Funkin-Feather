@@ -14,17 +14,18 @@ class Notefield extends FlxTypedGroup<Note>
 {
 	public function updatePosition(note:Note, strumline:Strumline)
 	{
-		var babyArrow:BabyArrow = strumline.members[note.index];
+		var babyArrow:BabyArrow = strumline.babyArrows.members[note.index];
 
 		note.x = babyArrow.x;
 
 		var center:Float = babyArrow.y + BabyArrow.swagWidth / 2;
 		note.y = babyArrow.y - (Conductor.songPosition - note.step) * (0.45 * note.speed);
 
-		// i am so fucking sorry for these if conditions
-		if (strumline.downscroll)
+		if (note.isSustain)
 		{
-			if (note.isSustain)
+			note.flipY = strumline.downscroll;
+
+			if (strumline.downscroll)
 			{
 				if (note.animation.curAnim.name.endsWith('end') && note.prevNote != null)
 					note.y += note.prevNote.height;
@@ -41,11 +42,7 @@ class Notefield extends FlxTypedGroup<Note>
 					note.clipRect = swagRect;
 				}
 			}
-		}
-		else
-		{
-			if (note.isSustain
-				&& note.y + note.offset.y * note.scale.y <= center
+			else if (note.y + note.offset.y * note.scale.y <= center
 				&& (!note.mustPress || (note.wasGoodHit || (note.prevNote.wasGoodHit && !note.canBeHit))))
 			{
 				var swagRect = new FlxRect(0, 0, note.width / note.scale.x, note.height / note.scale.y);

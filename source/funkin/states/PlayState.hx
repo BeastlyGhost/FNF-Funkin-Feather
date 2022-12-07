@@ -80,7 +80,6 @@ class PlayState extends MusicBeatState
 	// User Interface
 	public static var strumsGroup:FlxTypedGroup<Strumline>;
 	public static var notesGroup:Notefield;
-	public static var splashGroup:FlxTypedGroup<NoteSplash>;
 	public static var spawnedNotes:Array<Note>;
 
 	public static var gameUI:UI;
@@ -176,11 +175,9 @@ class PlayState extends MusicBeatState
 		add(player);
 
 		strumsGroup = new FlxTypedGroup<Strumline>();
-		splashGroup = new FlxTypedGroup<NoteSplash>();
 		notesGroup = new Notefield();
 
 		strumsGroup.cameras = [camHUD];
-		splashGroup.cameras = [camHUD];
 		notesGroup.cameras = [camHUD];
 
 		var isDownscroll = OptionsMeta.getPref("Downscroll");
@@ -195,12 +192,7 @@ class PlayState extends MusicBeatState
 		playerStrum = [strumsP1];
 
 		add(strumsGroup);
-		add(splashGroup);
 		add(notesGroup);
-
-		var firework:NoteSplash = new NoteSplash(100, 100, 0);
-		firework.alpha = 0.000001;
-		splashGroup.add(firework);
 
 		gameUI = new UI();
 		gameUI.cameras = [camHUD];
@@ -255,7 +247,7 @@ class PlayState extends MusicBeatState
 	{
 		for (strumline in strumsGroup)
 		{
-			strumline.forEachAlive(function(babyArrow:BabyArrow)
+			strumline.babyArrows.forEachAlive(function(babyArrow:BabyArrow)
 			{
 				babyArrow.alpha = 0;
 			});
@@ -445,7 +437,7 @@ class PlayState extends MusicBeatState
 			{
 				for (strumline in strumsGroup)
 				{
-					strumline.forEachAlive(function(babyArrow:BabyArrow)
+					strumline.babyArrows.forEachAlive(function(babyArrow:BabyArrow)
 					{
 						if (strumline.autoplay && babyArrow.animation.curAnim.name == 'confirm' && babyArrow.animation.curAnim.finished)
 							babyArrow.playAnim('static');
@@ -461,7 +453,6 @@ class PlayState extends MusicBeatState
 						noteHit(note, strumline);
 
 					note.speed = songSpeed;
-					note.downscroll = strumline.downscroll;
 
 					notesGroup.updatePosition(note, strumline);
 
@@ -471,7 +462,7 @@ class PlayState extends MusicBeatState
 							noteHit(note, strumline);
 					}
 
-					var killRangeReached:Bool = (note.downscroll ? note.y > FlxG.height : note.y < -note.height);
+					var killRangeReached:Bool = strumline.downscroll ? note.y > FlxG.height : note.y < -note.height;
 
 					// kill offscreen notes and cause misses if needed
 					if (Conductor.songPosition > note.missOffset + note.step)
@@ -562,7 +553,7 @@ class PlayState extends MusicBeatState
 		for (strumline in playerStrum)
 		{
 			// shortening
-			var babyArrow:BabyArrow = strumline.members[idx];
+			var babyArrow:BabyArrow = strumline.babyArrows.members[idx];
 
 			if (pressed)
 			{
@@ -652,7 +643,7 @@ class PlayState extends MusicBeatState
 
 			callFunc('goodNoteHit', [note, strumline]);
 
-			var babyArrow:BabyArrow = strumline.members[note.index];
+			var babyArrow:BabyArrow = strumline.babyArrows.members[note.index];
 
 			if (babyArrow != null)
 				babyArrow.playAnim('confirm', true);
@@ -703,7 +694,7 @@ class PlayState extends MusicBeatState
 					popUpScore(PlayerInfo.judgeTable[ratingInteger].name);
 
 					if (PlayerInfo.judgeTable[ratingInteger].noteSplash)
-						popUpSplash(babyArrow.x, babyArrow.y, note.index);
+						strumline.popUpSplash(note.index);
 
 					// update scoretext
 					gameUI.updateScoreText();
@@ -792,15 +783,6 @@ class PlayState extends MusicBeatState
 				startDelay: Conductor.crochet * 0.002
 			});
 		}
-	}
-
-	public function popUpSplash(x:Float, y:Float, index:Int)
-	{
-		//
-		var firework = splashGroup.recycle(NoteSplash);
-		firework.setupNoteSplash(x, y, index);
-		firework.alpha = 1;
-		splashGroup.add(firework);
 	}
 
 	public function charDancing(beat:Int)

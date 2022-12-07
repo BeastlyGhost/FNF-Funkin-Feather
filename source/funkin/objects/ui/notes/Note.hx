@@ -20,8 +20,6 @@ class Note extends FeatherSprite
 	public var ignoreNote:Bool = false;
 	public var isMine:Bool = false;
 
-	public var downscroll:Bool = false;
-
 	// modifiable gameplay variables
 	public var earlyHitMult:Float = 1;
 	public var lateHitMult:Float = 1;
@@ -119,9 +117,6 @@ class Note extends FeatherSprite
 		if (isSustain && prevNote != null)
 		{
 			alpha = 0.6;
-
-			if (OptionsMeta.getPref("Downscroll"))
-				angle = 180;
 
 			speed = prevNote.speed;
 

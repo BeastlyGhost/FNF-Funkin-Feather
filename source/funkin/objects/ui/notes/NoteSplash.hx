@@ -4,9 +4,14 @@ import flixel.FlxG;
 
 class NoteSplash extends FeatherSprite
 {
+	public var index:Int;
+
 	public function new(x:Float, y:Float, index:Int = 0)
 	{
 		super(x, y);
+
+		this.index = index;
+		ID = index;
 
 		frames = AssetHandler.grabAsset("noteSplashes", SPARROW, "images/ui/default");
 
@@ -22,8 +27,11 @@ class NoteSplash extends FeatherSprite
 		setupNoteSplash(x, y, index);
 	}
 
-	public function setupNoteSplash(x:Float, y:Float, ?index:Int = 0)
+	public function setupNoteSplash(x:Float, y:Float, index:Int = 0)
 	{
+		this.index = index;
+		ID = index;
+
 		setPosition(x, y);
 		animation.play('note' + index + '-' + FlxG.random.int(0, 1), true);
 		// animation.curAnim.frameRate += FlxG.random.int(-2, 2);
