@@ -1,11 +1,11 @@
 [PRIORITY: HIGH]
-- Rewrite the input system
-- (Properly) Implement Characters
-- Implement game weeks and finish the Story Mode Menu
+- Rewrite the input system.
+- (Properly) implement characters.
+- Implement game weeks and finish the Story Mode menu.
 
 [PRIORITY: MEDIUM]
-- use Scripts for Notetypes
-- work on the chart editor
+- Use Scripts for Notetypes.
+- Work on the Chart Editor.
 
 [PRIORITY: LOW]
 ...
