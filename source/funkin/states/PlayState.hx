@@ -415,9 +415,7 @@ class PlayState extends MusicBeatState
 
 		if (Controls.isJustPressed("pause") && canPause)
 		{
-			isPaused = true;
-			Conductor.pauseSong();
-			globalManagerPause();
+			pauseGame();
 			changePresence("Paused - ");
 			openSubState(new funkin.substates.PauseSubstate(player.getScreenPosition().x, player.getScreenPosition().y, "default"));
 		}
@@ -504,7 +502,7 @@ class PlayState extends MusicBeatState
 	{
 		if (PlayerInfo.health <= 0 && !hasDied)
 		{
-			isPaused = true;
+			pauseGame();
 			Conductor.stopSong(); // *beep boops stop*
 			PlayerInfo.deaths++;
 			hasDied = true;
@@ -513,8 +511,6 @@ class PlayState extends MusicBeatState
 
 			persistentUpdate = false;
 			persistentDraw = false;
-
-			globalManagerPause();
 
 			FlxG.sound.play(AssetHandler.grabAsset("fnf_loss_sfx", SOUND, "sounds/" + assetSkin));
 
@@ -639,13 +635,11 @@ class PlayState extends MusicBeatState
 
 			callFunc('goodNoteHit', [note, strumline]);
 
-			var babyArrow:BabyArrow = strumline.babyArrows.members[note.index];
-
-			if (babyArrow != null)
-				babyArrow.playAnim('confirm', true);
+			if (strumline.babyArrows.members[note.index] != null)
+				strumline.babyArrows.members[note.index].playAnim('confirm', true);
 
 			var stringAnim:String = '';
-			var section = song.sectionNotes[Std.int(curStep / 16)];
+			var section = song.sectionNotes[curSection];
 
 			// painful if statement
 			if (section != null)
@@ -654,12 +648,8 @@ class PlayState extends MusicBeatState
 
 			for (char in strumline.characters)
 			{
-				if (char != null)
-				{
-					char.playAnim(char.singAnims[note.index] + stringAnim, true);
-					Conductor.songVocals.volume = 1;
-					char.holdTimer = 0;
-				}
+				charPlayAnim(char, 'sing' + BabyArrow.actions[note.index].toUpperCase() + stringAnim);
+				Conductor.songVocals.volume = 1;
 			}
 
 			var lowestDiff:Float = Math.POSITIVE_INFINITY;
@@ -707,19 +697,31 @@ class PlayState extends MusicBeatState
 
 	public function noteMiss(idx:Int, strumline:Strumline):Void
 	{
+		if (strumline.autoplay)
+			return;
+
 		if (PlayerInfo.combo >= 5)
 			if (crowd != null && crowd.animOffsets.exists("sad"))
 				crowd.playAnim("sad");
 
 		for (char in strumline.characters)
-			if (char != null && char.hasMissAnims)
-				char.playAnim(char.singAnims[idx] + 'miss');
+			if (char.hasMissAnims)
+				charPlayAnim(char, 'sing' + BabyArrow.actions[idx].toUpperCase() + 'miss');
 
 		FlxG.sound.play(AssetHandler.grabAsset("miss" + FlxG.random.int(1, 3), SOUND, "sounds/" + assetSkin), FlxG.random.float(0.1, 0.2));
 		Conductor.songVocals.volume = 0;
 
 		PlayerInfo.decreaseScore();
 		gameUI.updateScoreText();
+	}
+
+	public function charPlayAnim(char:Character, stringSect:String = 'singDOWN')
+	{
+		if (char != null)
+		{
+			char.playAnim(stringSect, true);
+			char.holdTimer = 0;
+		}
 	}
 
 	public function popUpScore(myRating:String = 'sick', preload:Bool = false):Void
@@ -845,8 +847,11 @@ class PlayState extends MusicBeatState
 		super.closeSubState();
 	}
 
-	public function globalManagerPause():Void
+	public function pauseGame():Void
 	{
+		isPaused = true;
+		Conductor.pauseSong();
+
 		// stop all tweens and timers
 		FlxTimer.globalManager.forEach(function(tmr:FlxTimer)
 		{
@@ -879,9 +884,6 @@ class PlayState extends MusicBeatState
 					PlayerInfo.saveScore(song.name, PlayerInfo.score, difficulty, false);
 				MusicState.switchState(new funkin.states.menus.FreeplayMenu());
 			case CHARTING:
-				isPaused = true;
-				Conductor.pauseSong();
-				globalManagerPause();
 				changePresence("Finished playing a song - ");
 				openSubState(new funkin.substates.PauseSubstate(player.getScreenPosition().x, player.getScreenPosition().y, "charting"));
 		}
