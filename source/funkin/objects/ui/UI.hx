@@ -8,7 +8,6 @@ import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.ui.FlxBar;
-import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import funkin.backend.dependencies.PlayerInfo;
 import funkin.states.PlayState;
@@ -52,27 +51,26 @@ class UI extends FlxSpriteGroup
 		add(iconP2);
 
 		scoreText = new FlxText(healthBG.x + healthBG.width - 190, healthBG.y + 30, 0, '', 20);
-		scoreText.setFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 20, FlxColor.WHITE, CENTER, SHADOW, FlxColor.BLACK);
+		scoreText.setFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 20, 0xFFFFFFFF, CENTER, SHADOW, 0xFF000000);
 		scoreText.shadowOffset.set(2, 2);
 		scoreText.scrollFactor.set();
 		add(scoreText);
 
 		autoPlayText = new FlxText(-5, PlayState.strumsP1.downscroll ? FlxG.height - 80 : 80, FlxG.width - 800, '[AUTOPLAY]\n', 32);
-		autoPlayText.setFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 32, FlxColor.WHITE, CENTER, SHADOW, FlxColor.BLACK);
+		autoPlayText.setFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 32, 0xFFFFFFFF, CENTER, SHADOW, 0xFF000000);
 		autoPlayText.shadowOffset.set(2, 2);
 		autoPlayText.screenCenter(X);
 		autoPlayText.visible = PlayState.strumsP1.autoplay;
 
-		/*
-			// repositioning for it to not be covered by the receptors
-			if (OptionsMeta.getPref('Center Notes'))
-			{
-				if (PlayState.strumsP1.downscroll)
-					autoPlayText.y = autoPlayText.y - 125;
-				else
-					autoPlayText.y = autoPlayText.y + 125;
-			}
-		 */
+		// repositioning for it to not be covered by the receptors
+		if (OptionsMeta.getPref('Center Notes'))
+		{
+			if (PlayState.strumsP1.downscroll)
+				autoPlayText.y = autoPlayText.y - 125;
+			else
+				autoPlayText.y = autoPlayText.y + 125;
+		}
+
 		add(autoPlayText);
 
 		updateScoreText();
@@ -153,7 +151,7 @@ class UI extends FlxSpriteGroup
 		blackBy.alpha = 0.7;
 		blackBy.y = FlxG.height - 120;
 		byText = new FlxText(0, 0, 425);
-		byText.setFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 28, FlxColor.WHITE, CENTER);
+		byText.setFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 28, 0xFFFFFFFF, CENTER);
 		// byText.borderSize *= 1.25;
 		// byText.borderQuality *= 1.25;
 		byText.screenCenter();

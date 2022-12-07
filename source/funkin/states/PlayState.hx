@@ -41,7 +41,7 @@ class PlayState extends MusicBeatState
 
 	// Song
 	public static var song(default, set):FeatherSong;
-	@:isVar public static var songSpeed(get, default):Float = 1; // this needs to be a `get, set` later
+	@:isVar public static var songSpeed(get, default):Float = 1; // this needs to be a (get, set) later
 
 	public static function set_song(newSong:FeatherSong):FeatherSong
 	{
@@ -428,7 +428,7 @@ class PlayState extends MusicBeatState
 
 		while (spawnedNotes[0] != null)
 		{
-			if (spawnedNotes[0].step - Conductor.songPosition > 1800)
+			if (spawnedNotes[0].step - Conductor.songPosition > 2000)
 				break;
 
 			notesGroup.add(spawnedNotes[0]);
@@ -461,14 +461,11 @@ class PlayState extends MusicBeatState
 
 					notesGroup.updatePosition(note, strumline);
 
-					/*
-						if (strumline.autoplay)
-						{
-							if (note.step <= Conductor.songPosition)
-								noteHit(note, strumline);
-						}
-						// redoing this later
-					**/
+					if (strumline.autoplay)
+					{
+						if (note.step <= Conductor.songPosition)
+							noteHit(note, strumline);
+					}
 
 					var killRangeReached:Bool = (note.downscroll ? note.y > FlxG.height : note.y < -note.height);
 
@@ -554,11 +551,9 @@ class PlayState extends MusicBeatState
 
 	var keysHeld:Array<Bool> = [];
 
-	// idx is shortehand for index
 	public function inputSystem(idx:Int, pressed:Bool)
 	{
 		keysHeld[idx] = pressed;
-		// trace(idx, pressed);
 
 		for (strumline in playerStrum)
 		{
@@ -580,7 +575,6 @@ class PlayState extends MusicBeatState
 					{
 						if (note.index == idx && note.mustPress && note.canBeHit && !note.isSustain && !note.tooLate && !note.wasGoodHit)
 							noteList.push(note);
-						// trace("Stored Note List: " + noteList);
 					});
 					noteList.sort(sortHitNotes);
 
@@ -705,7 +699,7 @@ class PlayState extends MusicBeatState
 					popUpScore(PlayerInfo.judgeTable[ratingInteger].name);
 
 					if (PlayerInfo.judgeTable[ratingInteger].noteSplash)
-						popUpSplash(note.x, note.y, note.index);
+						popUpSplash(babyArrow.x, babyArrow.y, note.index);
 
 					// update scoretext
 					gameUI.updateScoreText();
@@ -722,18 +716,16 @@ class PlayState extends MusicBeatState
 
 	public function noteMiss(idx:Int, strumline:Strumline)
 	{
-		if (crowd != null)
-		{
-			if (PlayerInfo.combo >= 5)
-				if (crowd.animOffsets.exists("sad"))
-					crowd.playAnim("sad");
-		}
+		if (PlayerInfo.combo >= 5)
+			if (crowd != null && crowd.animOffsets.exists("sad"))
+				crowd.playAnim("sad");
 
 		for (char in strumline.characters)
 		{
 			if (char != null && char.hasMissAnims)
 				char.playAnim(char.singAnims[idx] + 'miss');
 		}
+
 		FlxG.sound.play(AssetHandler.grabAsset("miss" + FlxG.random.int(1, 3), SOUND, "sounds/" + assetSkin), FlxG.random.float(0.1, 0.2));
 		Conductor.songVocals.volume = 0;
 

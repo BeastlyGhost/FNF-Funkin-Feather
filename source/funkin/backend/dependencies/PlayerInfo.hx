@@ -48,7 +48,7 @@ class PlayerInfo
 	public static var scoreMap:Map<String, Int> = [];
 	public static var weekScoreMap:Map<String, Int> = [];
 
-	public static final judgeTable:Array<Judgement> = [
+	public static var judgeTable:Array<Judgement> = [
 		{
 			name: "sick",
 			score: 350,
@@ -87,7 +87,7 @@ class PlayerInfo
 			timingMod: 180,
 			noteSplash: false,
 			causesBreak: true,
-			comboReturn: null
+			comboReturn: "FC"
 		}
 	];
 
@@ -113,13 +113,14 @@ class PlayerInfo
 		combo = 0;
 		breaks = 0;
 		health = 1;
-		accuracy = 0;
 		validScore = true;
 
 		totalNotesHit = 0;
 		totalMinesHit = 0;
+
 		greatestJudgement = 0;
 		noteRatingMod = 0.0001;
+		accuracy = 0;
 
 		for (i in 0...judgeTable.length)
 		{
