@@ -37,9 +37,13 @@ class Note extends FeatherSprite
 	public var sustainLength:Float = 0;
 	public var isSustain:Bool = false;
 
+	public var offsetX:Float = 0;
+	public var offsetY:Float = 0;
+
 	public function new(step:Float, index:Int, type:String, ?prevNote:Note, isSustain:Bool = false):Void
 	{
-		super(x, y);
+		// MAKE SURE ITS DEFINITELY OFF SCREEN?
+		super(0, -2000);
 
 		if (prevNote == null)
 			prevNote = this;
@@ -51,25 +55,6 @@ class Note extends FeatherSprite
 		this.prevNote = prevNote;
 		this.isSustain = isSustain;
 
-		if (isSustain)
-		{
-			earlyHitMult = 0.5;
-
-			parentNote = prevNote;
-			while (parentNote.isSustain && parentNote.prevNote != null)
-				parentNote = parentNote.prevNote;
-			parentNote.children.push(this);
-		}
-
-		x += 50;
-		// MAKE SURE ITS DEFINITELY OFF SCREEN?
-		y -= 2000;
-
-		generateNote();
-	}
-
-	public function generateNote():Void
-	{
 		var stringSect = BabyArrow.colors[index];
 
 		switch (PlayState.assetSkin)
@@ -96,33 +81,48 @@ class Note extends FeatherSprite
 			default:
 				frames = AssetHandler.grabAsset('NOTE_assets', SPARROW, 'images/ui/default');
 
-				animation.addByPrefix(stringSect + 'Scroll', stringSect + '0');
-				animation.addByPrefix(stringSect + 'hold', stringSect + ' hold piece');
-				animation.addByPrefix(stringSect + 'holdend', stringSect + ' hold end');
+				if (!isSustain)
+					animation.addByPrefix(stringSect + 'Scroll', stringSect + '0');
+				else
+				{
+					animation.addByPrefix(stringSect + 'hold', stringSect + ' hold piece');
+					animation.addByPrefix(stringSect + 'holdend', stringSect + ' hold end');
 
-				// i'm going after phantomarcade @BeastlyGhost
-				animation.addByPrefix('purpleholdend', 'pruple end hold');
+					// i'm going after phantomarcade @BeastlyGhost
+					animation.addByPrefix('purpleholdend', 'pruple end hold');
+				}
 
 				setGraphicSize(Std.int(width * 0.7));
 				antialiasing = true;
 		}
 
-		x += BabyArrow.swagWidth * index;
-
 		updateHitbox();
 
 		if (!isSustain)
 			playAnim(stringSect + "Scroll");
+		else
+		{
+			earlyHitMult = 0.5;
+
+			parentNote = prevNote;
+			while (parentNote.isSustain && parentNote.prevNote != null)
+				parentNote = parentNote.prevNote;
+			parentNote.children.push(this);
+		}
 
 		if (isSustain && prevNote != null)
 		{
 			alpha = 0.6;
-
 			speed = prevNote.speed;
 
-			x += width / 2;
+			offsetX = width / 2;
+
 			playAnim(stringSect + 'holdend');
 			updateHitbox();
+
+			offsetX -= width / 2;
+			if (PlayState.assetSkin == 'pixel')
+				offsetX += 30;
 
 			if (prevNote.isSustain)
 			{

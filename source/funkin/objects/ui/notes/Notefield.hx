@@ -2,7 +2,6 @@ package funkin.objects.ui.notes;
 
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxRect;
-import funkin.states.PlayState;
 import funkin.objects.ui.notes.BabyArrow;
 import funkin.song.Conductor;
 
@@ -16,10 +15,11 @@ class Notefield extends FlxTypedGroup<Note>
 	{
 		var babyArrow:BabyArrow = strumline.babyArrows.members[note.index];
 
-		note.x = babyArrow.x;
+		note.x = babyArrow.x + note.offsetX;
 
-		var center:Float = babyArrow.y + BabyArrow.swagWidth / 2;
-		note.y = babyArrow.y - (Conductor.songPosition - note.step) * (0.45 * note.speed);
+		var strumY:Float = babyArrow.y + note.offsetY;
+		var center:Float = strumY + BabyArrow.swagWidth / 2;
+		note.y = strumY - (Conductor.songPosition - note.step) * (0.45 * note.speed) * (strumline.downscroll ? -1 : 1);
 
 		if (note.isSustain)
 		{

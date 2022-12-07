@@ -3,6 +3,7 @@ package funkin.objects.ui.notes;
 import flixel.group.FlxGroup;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
+import funkin.song.Conductor;
 import funkin.states.PlayState;
 
 /**
@@ -76,7 +77,8 @@ class Strumline extends FlxGroup
 			babyArrows.add(babyArrow);
 
 			babyArrow.alpha = 0;
-			FlxTween.tween(babyArrow, {y: babyArrow.y + 10, alpha: babyArrow.defaultAlpha}, 1 / Conductor.songRate, {ease: FlxEase.circOut, startDelay: 0.5 + (0.2 * index)});
+			FlxTween.tween(babyArrow, {y: babyArrow.y + 10, alpha: babyArrow.defaultAlpha}, 1 / Conductor.songRate,
+				{ease: FlxEase.circOut, startDelay: 0.5 + (0.2 * index)});
 		}
 
 		splashes = new FlxTypedGroup<NoteSplash>();
