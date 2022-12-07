@@ -41,7 +41,7 @@ class Strumline extends FlxGroup
 			switch (PlayState.assetSkin)
 			{
 				case "pixel":
-					babyArrow.loadGraphic(AssetHandler.grabAsset('NOTE_assets', IMAGE, 'images/ui/pixel'), true, 17, 17);
+					babyArrow.loadGraphic(AssetHandler.grabAsset('NOTE_assets', IMAGE, 'data/notes/default/pixel'), true, 17, 17);
 					//
 					babyArrow.animation.add('static', [index]);
 					babyArrow.animation.add('pressed', [4 + index, 8 + index], 12, false);
@@ -59,7 +59,7 @@ class Strumline extends FlxGroup
 					babyArrow.y += 25;
 
 				default:
-					babyArrow.frames = AssetHandler.grabAsset('NOTE_assets', SPARROW, 'images/ui/default');
+					babyArrow.frames = AssetHandler.grabAsset('NOTE_assets', SPARROW, 'data/notes/default/base');
 					//
 					babyArrow.animation.addByPrefix(BabyArrow.colors[index], 'arrow' + BabyArrow.actions[index].toUpperCase());
 					babyArrow.animation.addByPrefix('static', 'arrow${BabyArrow.actions[index].toUpperCase()}');

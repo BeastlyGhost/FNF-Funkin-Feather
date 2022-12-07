@@ -123,14 +123,7 @@ class AlphaCharacter extends FlxSprite
 	{
 		super(x, y);
 
-		try
-		{
-			frames = AssetHandler.grabAsset('alphabet', SPARROW, "images/ui/default");
-		}
-		catch (e)
-		{
-			this.kill();
-		}
+		frames = AssetHandler.grabAsset('alphabet', SPARROW, "images/ui/base");
 		antialiasing = true;
 	}
 

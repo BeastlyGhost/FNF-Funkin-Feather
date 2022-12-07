@@ -89,7 +89,7 @@ class PlayState extends MusicBeatState
 
 	public var playerStrum:Array<Strumline> = [];
 
-	public static var assetSkin:String = 'default';
+	public static var assetSkin:String = 'base';
 
 	// how big to stretch the pixel assets
 	public static var pixelAssetSize:Float = 6;

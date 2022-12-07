@@ -13,7 +13,7 @@ class NoteSplash extends FeatherSprite
 		this.index = index;
 		ID = index;
 
-		frames = AssetHandler.grabAsset("noteSplashes", SPARROW, "images/ui/default");
+		frames = AssetHandler.grabAsset("noteSplashes", SPARROW, "data/notes/default/base");
 
 		animation.addByPrefix('note1-0', 'note impact 1 blue', 24, false);
 		animation.addByPrefix('note2-0', 'note impact 1 green', 24, false);
@@ -34,7 +34,7 @@ class NoteSplash extends FeatherSprite
 
 		setPosition(x, y);
 		animation.play('note' + index + '-' + FlxG.random.int(0, 1), true);
-		// animation.curAnim.frameRate += FlxG.random.int(-2, 2);
+		animation.curAnim.frameRate += FlxG.random.int(-2, 2);
 		updateHitbox();
 		offset.set(60, 30);
 	}

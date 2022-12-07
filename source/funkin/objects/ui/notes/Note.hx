@@ -84,12 +84,12 @@ class Note extends FeatherSprite
 
 				if (!isSustain)
 				{
-					loadGraphic(AssetHandler.grabAsset('NOTE_assets', IMAGE, 'images/ui/pixel'));
+					loadGraphic(AssetHandler.grabAsset('NOTE_assets', IMAGE, 'data/notes/default/pixel'));
 					animation.add(stringSect + 'Scroll', [indexPixel[index]], 12);
 				}
 				else
 				{
-					loadGraphic(AssetHandler.grabAsset('HOLD_assets', IMAGE, 'images/ui/pixel'));
+					loadGraphic(AssetHandler.grabAsset('HOLD_assets', IMAGE, 'data/notes/default/pixel'));
 					animation.add(stringSect + 'holdend', [indexPixel[index]]);
 					animation.add(stringSect + 'hold', [indexPixel[index] - 4]);
 				}
@@ -99,7 +99,7 @@ class Note extends FeatherSprite
 				antialiasing = false;
 
 			default:
-				frames = AssetHandler.grabAsset('NOTE_assets', SPARROW, 'images/ui/default');
+				frames = AssetHandler.grabAsset('NOTE_assets', SPARROW, 'data/notes/default/base');
 
 				if (!isSustain)
 					animation.addByPrefix(stringSect + 'Scroll', stringSect + '0');

@@ -15,36 +15,64 @@ class Paths
 		return AssetHandler.grabRoot(file);
 
 	inline public static function image(key:String, ?library:String):FlxGraphic
-		return AssetHandler.grabAsset(key, IMAGE, "images");
+	{
+		if (library == null || library.length > 1)
+			library = "images";
+		return AssetHandler.grabAsset(key, IMAGE, library);
+	}
 
 	inline public static function font(key:String, ?library:String):String
-		return AssetHandler.grabAsset(key, FONT, "data/fonts");
+	{
+		if (library == null || library.length > 1)
+			library = "data/fonts";
+		return AssetHandler.grabAsset(key, FONT, library);
+	}
 
 	inline public static function txt(key:String, ?library:String):String
-		return AssetHandler.grabAsset(key, TEXT, null);
+		return AssetHandler.grabAsset(key, TEXT, library);
 
 	inline public static function json(key:String, ?library:String):String
-		return AssetHandler.grabAsset(key, JSON, null);
+		return AssetHandler.grabAsset(key, JSON, library);
 
 	inline public static function sound(key:String, ?library:String):Sound
-		return AssetHandler.grabAsset(key, SOUND, "sounds");
+	{
+		if (library == null || library.length > 1)
+			library = "sounds";
+		return AssetHandler.grabAsset(key, SOUND, library);
+	}
 
 	inline public static function soundRandom(key:String, min:Int, max:Int, ?library:String):Sound
-		return AssetHandler.grabAsset(key + FlxG.random.int(min, max), SOUND, "sounds");
+	{
+		if (library == null || library.length > 1)
+			library = "sounds";
+		return AssetHandler.grabAsset(key + FlxG.random.int(min, max), SOUND, library);
+	}
 
 	inline public static function music(key:String, ?library:String):Sound
-		return AssetHandler.grabAsset(key, SOUND, "music");
-
-	inline public static function module(key:String, folder:String = null, ?library:String):String
 	{
-		if (folder == null || folder.length > 1)
-			folder = 'scripts';
-		return AssetHandler.grabAsset(key, MODULE, folder);
+		if (library == null || library.length > 1)
+			library = "music";
+		return AssetHandler.grabAsset(key, SOUND, library);
+	}
+
+	inline public static function module(key:String, ?library:String):String
+	{
+		if (library == null || library.length > 1)
+			library = 'scripts';
+		return AssetHandler.grabAsset(key, MODULE, library);
 	}
 
 	inline public static function getSparrowAtlas(key:String, ?library:String):FlxAtlasFrames
-		return AssetHandler.grabAsset(key, SPARROW, "images");
+	{
+		if (library == null || library.length > 1)
+			library = "images";
+		return AssetHandler.grabAsset(key, SPARROW, library);
+	}
 
 	inline public static function getPackerAtlas(key:String, ?library:String):FlxAtlasFrames
-		return AssetHandler.grabAsset(key, PACKER, "images");
+	{
+		if (library == null || library.length > 1)
+			library = "images";
+		return AssetHandler.grabAsset(key, PACKER, library);
+	}
 }

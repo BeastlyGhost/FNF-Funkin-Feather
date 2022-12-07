@@ -33,7 +33,7 @@ class UI extends FlxSpriteGroup
 		super();
 
 		healthBG = new FlxSprite(0, PlayState.strumsP1.downscroll ? FlxG.height * 0.1 : FlxG.height * 0.89);
-		healthBG.loadGraphic(AssetHandler.grabAsset("default/healthBar", IMAGE, "images/ui"));
+		healthBG.loadGraphic(AssetHandler.grabAsset("base/healthBar", IMAGE, "images/ui"));
 		healthBG.screenCenter(X);
 		healthBG.scrollFactor.set();
 		add(healthBG);
@@ -145,7 +145,7 @@ class UI extends FlxSpriteGroup
 	public function showInfoCard():Void
 	{
 		var blackBy, byText;
-		blackBy = new FlxSprite().loadGraphic(AssetHandler.grabAsset('infobox', IMAGE, 'images/ui/default'));
+		blackBy = new FlxSprite().loadGraphic(AssetHandler.grabAsset('infobox', IMAGE, 'images/ui/base'));
 		blackBy.screenCenter();
 		blackBy.x -= FlxG.width;
 		blackBy.alpha = 0.7;
