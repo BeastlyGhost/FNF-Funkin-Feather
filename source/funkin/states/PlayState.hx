@@ -884,6 +884,7 @@ class PlayState extends MusicBeatState
 					PlayerInfo.saveScore(song.name, PlayerInfo.score, difficulty, false);
 				MusicState.switchState(new funkin.states.menus.FreeplayMenu());
 			case CHARTING:
+				pauseGame();
 				changePresence("Finished playing a song - ");
 				openSubState(new funkin.substates.PauseSubstate(player.getScreenPosition().x, player.getScreenPosition().y, "charting"));
 		}
