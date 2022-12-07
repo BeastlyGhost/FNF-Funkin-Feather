@@ -31,7 +31,7 @@ class PauseSubstate extends MusicBeatSubstate
 	var pauseMusic:FlxSound;
 	var mutex:Mutex;
 
-	public function new(x:Float, y:Float, listName:String = "default")
+	public function new(x:Float, y:Float, listName:String = "default"):Void
 	{
 		super();
 
@@ -94,7 +94,7 @@ class PauseSubstate extends MusicBeatSubstate
 		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
 	}
 
-	override function update(elapsed:Float)
+	override function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
 
@@ -140,7 +140,7 @@ class PauseSubstate extends MusicBeatSubstate
 		}
 	}
 
-	override public function updateSelection(newSelection:Int = 0)
+	override public function updateSelection(newSelection:Int = 0):Void
 	{
 		super.updateSelection(newSelection);
 
@@ -159,7 +159,7 @@ class PauseSubstate extends MusicBeatSubstate
 		}
 	}
 
-	override function destroy()
+	override function destroy():Void
 	{
 		if (pauseMusic != null)
 			pauseMusic.destroy();

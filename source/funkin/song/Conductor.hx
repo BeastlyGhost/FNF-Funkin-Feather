@@ -35,7 +35,7 @@ class Conductor
 
 	public static var safeZoneOffset:Float = (OptionsMeta.getPref("Safe Frames") / 60) * 1000; // is calculated in create(), is safeFrames in milliseconds
 
-	public static function mapBPMChanges(song:FeatherSong)
+	public static function mapBPMChanges(song:FeatherSong):Void
 	{
 		bpmChangeMap = [];
 
@@ -60,7 +60,7 @@ class Conductor
 		// trace("new BPM map BUDDY " + bpmChangeMap);
 	}
 
-	public static function changeBPM(newBpm:Float)
+	public static function changeBPM(newBpm:Float):Void
 	{
 		bpm = newBpm;
 
@@ -68,7 +68,7 @@ class Conductor
 		stepCrochet = crochet / 4;
 	}
 
-	public static function callVocals(name:String)
+	public static function callVocals(name:String):Void
 	{
 		songMusic = new FlxSound().loadEmbedded(AssetHandler.grabAsset("Inst", SOUND, "songs/" + name));
 		songVocals = new FlxSound().loadEmbedded(AssetHandler.grabAsset("Voices", SOUND, "songs/" + name));
@@ -88,7 +88,7 @@ class Conductor
 		}
 	}
 
-	public static function playSong(name:String)
+	public static function playSong(name:String):Void
 	{
 		if (songMusic != null)
 			songMusic.play();
@@ -96,7 +96,7 @@ class Conductor
 			songVocals.play();
 	}
 
-	public static function pauseSong()
+	public static function pauseSong():Void
 	{
 		if (songMusic != null)
 			songMusic.pause();
@@ -104,7 +104,7 @@ class Conductor
 			songVocals.pause();
 	}
 
-	public static function resyncVocals()
+	public static function resyncVocals():Void
 	{
 		if (songVocals != null)
 			songVocals.pause();
@@ -125,7 +125,7 @@ class Conductor
 		}
 	}
 
-	public static function stepResync()
+	public static function stepResync():Void
 	{
 		if (songMusic != null)
 		{
@@ -136,7 +136,7 @@ class Conductor
 		}
 	}
 
-	public static function stopSong()
+	public static function stopSong():Void
 	{
 		if (songMusic != null)
 			songMusic.stop();

@@ -13,12 +13,12 @@ class Stage extends FlxTypedGroup<FlxBasic>
 	public var curStage:String;
 	public var cameraZoom:Float = 1.05;
 
-	public function new()
+	public function new():Void
 	{
 		super();
 	}
 
-	public function setStage(?curStage:String)
+	public function setStage(?curStage:String):Void
 	{
 		if (curStage == null)
 			curStage = "unknown";
@@ -34,7 +34,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 		}
 	}
 
-	public function getStageName()
+	public function getStageName():String
 	{
 		var dummyStage:String = "unknown";
 
@@ -72,7 +72,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 		return dummyStage;
 	}
 
-	public function getStageCrowd()
+	public function getStageCrowd():String
 	{
 		var dummyCrowd:String = 'gf';
 
@@ -104,13 +104,13 @@ class Stage extends FlxTypedGroup<FlxBasic>
 		return dummyCrowd;
 	}
 
-	public function stageCountdownTick(count:Int, player:Character, opponent:Character, crowd:Character) {}
+	public function stageCountdownTick(count:Int, player:Character, opponent:Character, crowd:Character):Void {}
 
-	public function stageUpdate(elapsed:Float, player:Character, opponent:Character, crowd:Character) {}
+	public function stageUpdate(elapsed:Float, player:Character, opponent:Character, crowd:Character):Void {}
 
-	public function stageStepHit(curStep:Int, player:Character, opponent:Character, crowd:Character) {}
+	public function stageStepHit(curStep:Int, player:Character, opponent:Character, crowd:Character):Void {}
 
-	public function stageBeatHit(curBeat:Int, player:Character, opponent:Character, crowd:Character) {}
+	public function stageBeatHit(curBeat:Int, player:Character, opponent:Character, crowd:Character):Void {}
 
-	public function stageSectionHit(curSec:Int, player:Character, opponent:Character, crowd:Character) {}
+	public function stageSectionHit(curSec:Int, player:Character, opponent:Character, crowd:Character):Void {}
 }

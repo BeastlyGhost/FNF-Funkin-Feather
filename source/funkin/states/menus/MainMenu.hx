@@ -36,7 +36,7 @@ class MainMenu extends MusicBeatState
 	public var versionText:FlxText;
 	public var menuFlash:FlxSprite;
 
-	function resetMenu()
+	function resetMenu():Void
 	{
 		transIn = FlxTransitionableState.defaultTransIn;
 		transOut = FlxTransitionableState.defaultTransOut;
@@ -53,7 +53,7 @@ class MainMenu extends MusicBeatState
 			openSubState(new funkin.substates.TitleSubstate());
 	}
 
-	override function create()
+	override function create():Void
 	{
 		super.create();
 
@@ -117,7 +117,7 @@ class MainMenu extends MusicBeatState
 		updateObjectAlpha(firstStart ? 0 : 1);
 	}
 
-	public function updateObjectAlpha(alphaNew:Float, tweened:Bool = false)
+	public function updateObjectAlpha(alphaNew:Float, tweened:Bool = false):Void
 	{
 		if (!tweened)
 		{
@@ -139,7 +139,7 @@ class MainMenu extends MusicBeatState
 		}
 	}
 
-	override function update(elapsed:Float)
+	override function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
 
@@ -201,7 +201,7 @@ class MainMenu extends MusicBeatState
 		});
 	}
 
-	override function updateSelection(newSelection:Int = 0)
+	override function updateSelection(newSelection:Int = 0):Void
 	{
 		super.updateSelection(newSelection);
 

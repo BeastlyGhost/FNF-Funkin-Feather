@@ -105,7 +105,7 @@ class PlayerInfo
 	// stores how many judgements you did hit
 	public static var gottenJudges:Map<String, Int> = [];
 
-	public static function resetScore()
+	public static function resetScore():Void
 	{
 		score = 0;
 		misses = 0;
@@ -132,7 +132,7 @@ class PlayerInfo
 		curGrade = "N/A";
 	}
 
-	public static function returnGradePercent()
+	public static function returnGradePercent():String
 	{
 		var floor = Math.floor(accuracy * 100) / 100;
 
@@ -143,7 +143,7 @@ class PlayerInfo
 		return ' [$finalPercent]';
 	}
 
-	public static function updateGradePercent(id:Int)
+	public static function updateGradePercent(id:Int):Void
 	{
 		if (accuracy <= 0)
 			accuracy = 0;
@@ -155,7 +155,7 @@ class PlayerInfo
 		updateGrade();
 	}
 
-	public static function updateGrade()
+	public static function updateGrade():Void
 	{
 		var biggestAccuracy:Float = 0;
 		for (grade in gradeLetters.keys())
@@ -177,7 +177,7 @@ class PlayerInfo
 			curComboGrade = (misses < 10 ? 'SDCB' : '');
 	}
 
-	public static function generateRating(skin:String = 'default')
+	public static function generateRating(skin:String = 'default'):FlxSprite
 	{
 		var width:Int = (skin == "pixel" ? 60 : 346);
 		var height:Int = (skin == "pixel" ? 21 : 155);
@@ -196,7 +196,7 @@ class PlayerInfo
 		return rating;
 	}
 
-	public static function generateCombo(skin:String = 'default')
+	public static function generateCombo(skin:String = 'default'):FlxSprite
 	{
 		var width:Int = (skin == "pixel" ? 12 : 108);
 		var height:Int = (skin == "pixel" ? 12 : 142);
@@ -215,7 +215,7 @@ class PlayerInfo
 		return combo;
 	}
 
-	public static function increaseScore(rating:Int)
+	public static function increaseScore(rating:Int):Void
 	{
 		score += judgeTable[rating].score;
 		health += 0.04 * (judgeTable[rating].health) / 100;
@@ -237,7 +237,7 @@ class PlayerInfo
 			health = 2;
 	}
 
-	public static function decreaseScore()
+	public static function decreaseScore():Void
 	{
 		score += judgeTable[3].score;
 		health += 0.04 * (judgeTable[3].health) / 100;
@@ -259,7 +259,7 @@ class PlayerInfo
 		Functions for saving scores
 	**/
 	//
-	public static function saveScore(song:String, score:Int, diff:Int = 0, isStory:Bool)
+	public static function saveScore(song:String, score:Int, diff:Int = 0, isStory:Bool):Void
 	{
 		var chosenMap = (isStory ? weekScoreMap : scoreMap);
 		var chosenSave = (isStory ? FlxG.save.data.weekScores : FlxG.save.data.songScores);
@@ -275,10 +275,9 @@ class PlayerInfo
 			chosenMap.set(songFinal, score);
 
 		chosenSave = chosenMap;
-		FlxG.save.flush();
 	}
 
-	public static function getScore(song:String, diff:Int, isStory:Bool = false)
+	public static function getScore(song:String, diff:Int, isStory:Bool = false):Int
 	{
 		var chosenMap = (isStory ? weekScoreMap : scoreMap);
 
@@ -290,7 +289,7 @@ class PlayerInfo
 		return chosenMap.get(song + FeatherTools.getDifficulty(diff));
 	}
 
-	public static function loadHighscores()
+	public static function loadHighscores():Void
 	{
 		if (FlxG.save.data.songScores != null)
 			scoreMap = FlxG.save.data.songScores;

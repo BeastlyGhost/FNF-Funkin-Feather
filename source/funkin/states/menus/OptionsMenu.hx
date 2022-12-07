@@ -29,7 +29,7 @@ class OptionsMenu extends MusicBeatState
 
 	var menuBG:FlxSprite;
 
-	override function create()
+	override function create():Void
 	{
 		super.create();
 
@@ -43,7 +43,7 @@ class OptionsMenu extends MusicBeatState
 		switchCategory("master");
 	}
 
-	override function update(elapsed:Float)
+	override function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
 
@@ -66,7 +66,7 @@ class OptionsMenu extends MusicBeatState
 			MusicState.switchState(new MainMenu());
 	}
 
-	override public function updateSelection(newSelection:Int = 0)
+	override public function updateSelection(newSelection:Int = 0):Void
 	{
 		super.updateSelection(newSelection);
 
@@ -89,7 +89,7 @@ class OptionsMenu extends MusicBeatState
 			updateSelection(selection + selectionJumper);
 	}
 
-	public function switchCategory(newCategory:String)
+	public function switchCategory(newCategory:String):Void
 	{
 		activeCategory = newCategory;
 
@@ -99,7 +99,7 @@ class OptionsMenu extends MusicBeatState
 		updateSelection(selection);
 	}
 
-	public function generateOptions(optionsArray:Array<OptionData>)
+	public function generateOptions(optionsArray:Array<OptionData>):Void
 	{
 		activeContainer = optionsArray;
 

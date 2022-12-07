@@ -40,7 +40,7 @@ class Alphabet extends FlxSpriteGroup
 
 	var isBold:Bool = false;
 
-	public function new(x:Float, y:Float, text:String = "", ?bold:Bool = false)
+	public function new(x:Float, y:Float, text:String = "", ?bold:Bool = false):Void
 	{
 		super(x, y);
 
@@ -52,7 +52,7 @@ class Alphabet extends FlxSpriteGroup
 			addText();
 	}
 
-	public function addText()
+	public function addText():Void
 	{
 		doSplitWords();
 
@@ -89,7 +89,7 @@ class Alphabet extends FlxSpriteGroup
 	function doSplitWords():Void
 		splitWords = _finalText.split("");
 
-	override function update(elapsed:Float)
+	override function update(elapsed:Float):Void
 	{
 		if (isMenuItem)
 		{
@@ -119,7 +119,7 @@ class AlphaCharacter extends FlxSprite
 
 	public var row:Int = 0;
 
-	public function new(x:Float, y:Float)
+	public function new(x:Float, y:Float):Void
 	{
 		super(x, y);
 
@@ -134,7 +134,7 @@ class AlphaCharacter extends FlxSprite
 		antialiasing = true;
 	}
 
-	public function createBold(letter:String)
+	public function createBold(letter:String):Void
 	{
 		animation.addByPrefix(letter, letter.toUpperCase() + " bold", 24);
 		animation.play(letter);
@@ -165,7 +165,7 @@ class AlphaCharacter extends FlxSprite
 		updateHitbox();
 	}
 
-	public function createSymbol(letter:String)
+	public function createSymbol(letter:String):Void
 	{
 		switch (letter)
 		{

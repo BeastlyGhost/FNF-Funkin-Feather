@@ -16,7 +16,7 @@ class FPS extends TextField
 	public var times:Array<Float> = [];
 	public var memoryTotal:UInt = 0;
 
-	public function new(x:Float, y:Float)
+	public function new(x:Float, y:Float):Void
 	{
 		super();
 
@@ -51,7 +51,7 @@ class FPS extends TextField
 		return '$size ${intervalArray[data]}';
 	}
 
-	private function update(_:Event)
+	private function update(_:Event):Void
 	{
 		var now:Float = Timer.stamp();
 		times.push(now);

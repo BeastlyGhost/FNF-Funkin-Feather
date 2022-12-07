@@ -37,7 +37,7 @@ class Note extends FeatherSprite
 	public var sustainLength:Float = 0;
 	public var isSustain:Bool = false;
 
-	public function new(step:Float, index:Int, type:String, ?prevNote:Note, isSustain:Bool = false)
+	public function new(step:Float, index:Int, type:String, ?prevNote:Note, isSustain:Bool = false):Void
 	{
 		super(x, y);
 
@@ -68,7 +68,7 @@ class Note extends FeatherSprite
 		generateNote();
 	}
 
-	public function generateNote()
+	public function generateNote():Void
 	{
 		var stringSect = BabyArrow.colors[index];
 
@@ -133,7 +133,7 @@ class Note extends FeatherSprite
 		}
 	}
 
-	override function update(elapsed:Float)
+	override function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
 

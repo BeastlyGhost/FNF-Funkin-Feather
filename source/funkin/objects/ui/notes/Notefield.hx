@@ -12,7 +12,7 @@ import funkin.song.Conductor;
 **/
 class Notefield extends FlxTypedGroup<Note>
 {
-	public function updatePosition(note:Note, strumline:Strumline)
+	public function updatePosition(note:Note, strumline:Strumline):Void
 	{
 		var babyArrow:BabyArrow = strumline.babyArrows.members[note.index];
 
@@ -54,7 +54,7 @@ class Notefield extends FlxTypedGroup<Note>
 		}
 	}
 
-	public function removeNote(note:Note)
+	public function removeNote(note:Note):Void
 	{
 		if (!note.canDie)
 			return;

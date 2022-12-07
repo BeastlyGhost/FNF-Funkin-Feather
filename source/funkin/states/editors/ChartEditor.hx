@@ -108,7 +108,7 @@ class ChartEditor extends MusicBeatState
 
 	var noteSelection:Int;
 
-	override function create()
+	override function create():Void
 	{
 		super.create();
 
@@ -169,7 +169,7 @@ class ChartEditor extends MusicBeatState
 		mousePosUpdate();
 	}
 
-	function addSongUI()
+	function addSongUI():Void
 	{
 		var tab_group_song = new FlxUI(null, boxUI);
 		tab_group_song.name = "Song";
@@ -183,7 +183,7 @@ class ChartEditor extends MusicBeatState
 		boxUI.scrollFactor.set();
 	}
 
-	function generateEditorGrid()
+	function generateEditorGrid():Void
 	{
 		gridMain = FlxGridOverlay.create(gridSize, gridSize, gridSize * 8, gridSize * 16);
 		gridMain.screenCenter(XY);
@@ -193,7 +193,7 @@ class ChartEditor extends MusicBeatState
 		add(gridBlackLine);
 	}
 
-	override function update(elapsed:Float)
+	override function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
 
@@ -298,7 +298,7 @@ class ChartEditor extends MusicBeatState
 		}
 	}
 
-	function placeNote()
+	function placeNote():Void
 	{
 		var time:Float = getStrumTime(mouseHighlight.y) + getSectionStart();
 		var index:Int = Math.floor(FlxG.mouse.x / gridSize);
@@ -309,7 +309,7 @@ class ChartEditor extends MusicBeatState
 		updateGrid();
 	}
 
-	function removeNote(note:Note)
+	function removeNote(note:Note):Void
 	{
 		var index:Null<Int> = note.index;
 		var isMustPress:Bool = song.sectionNotes[curSection].cameraPoint == "player";
@@ -332,7 +332,7 @@ class ChartEditor extends MusicBeatState
 		updateGrid();
 	}
 
-	function mousePosUpdate()
+	function mousePosUpdate():Void
 	{
 		if (FlxG.mouse.x > gridMain.x
 			&& FlxG.mouse.x < (gridMain.x + gridMain.width)

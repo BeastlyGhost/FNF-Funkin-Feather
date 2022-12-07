@@ -114,7 +114,7 @@ class AssetHandler
 		@param outputDir the directory we should look for
 		@return uses FlxGraphic's `fromBitmapData` function to return your graphic asset
 	**/
-	public static function grabGraphic(outputDir:String)
+	public static function grabGraphic(outputDir:String):FlxGraphic
 	{
 		if (!mappedAssets[IMAGE].exists(outputDir))
 		{
@@ -220,7 +220,7 @@ class AssetHandler
 		Simply put, this clears all tracked assets that exist on the `trackedAssets` array
 		@param clearMappedImages whether images should also be cleared along with sounds
 	**/
-	public static function clear(clearUnusedImages:Bool, ?clearMappedImages:Bool)
+	public static function clear(clearUnusedImages:Bool, ?clearMappedImages:Bool):Void
 	{
 		if (clearMappedImages)
 		{

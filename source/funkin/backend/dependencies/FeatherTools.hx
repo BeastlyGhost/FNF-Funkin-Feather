@@ -30,7 +30,7 @@ class FeatherTools
 	 * @param daZaza - Default Camera Zoom
 	 * @param zazaSpeed - Default Camera Speed
 	 */
-	inline public static function cameraBumpingZooms(leCam:FlxCamera, daZaza:Float = 1.05, zazaSpeed:Float = 1)
+	inline public static function cameraBumpingZooms(leCam:FlxCamera, daZaza:Float = 1.05, zazaSpeed:Float = 1):Void
 	{
 		var easeLerp = 1 - MusicState.boundFramerate(0.15) * zazaSpeed;
 		if (leCam != null)
@@ -43,7 +43,7 @@ class FeatherTools
 		}
 	}
 
-	inline public static function cameraBumpReset(curBeat:Int, leCam:FlxCamera, speedVal:Float = 4, resetVal:Float = 0.015)
+	inline public static function cameraBumpReset(curBeat:Int, leCam:FlxCamera, speedVal:Float = 4, resetVal:Float = 0.015):Void
 	{
 		if ((leCam.zoom < 1.35 && curBeat % speedVal == 0))
 			leCam.zoom += resetVal;
@@ -67,7 +67,7 @@ class FeatherTools
 		Checks if the Main Menu Song is playing, if it isn't, then play it!
 		@param volumeReset if the song should fade in on a successful song reset
 	**/
-	inline public static function menuMusicCheck(volumeReset:Bool = false)
+	inline public static function menuMusicCheck(volumeReset:Bool = false):Void
 	{
 		if ((FlxG.sound.music == null || (FlxG.sound.music != null && !FlxG.sound.music.playing)))
 		{
@@ -112,7 +112,7 @@ class FeatherTools
 		return if (directory != null) directory else [];
 	}
 
-	public static function getDifficulty(diff:Int = 0)
+	public static function getDifficulty(diff:Int = 0):String
 	{
 		return funkin.backend.data.SongManager.defaultDiffs[diff];
 	}
@@ -126,7 +126,7 @@ class FeatherSprite extends FlxSprite
 	//
 	public var animOffsets:Map<String, Array<Dynamic>>;
 
-	public function new(x:Float, y:Float)
+	public function new(x:Float, y:Float):Void
 	{
 		animOffsets = new Map<String, Array<Dynamic>>();
 
@@ -146,7 +146,7 @@ class FeatherSprite extends FlxSprite
 			offset.set(0, 0);
 	}
 
-	public function addOffset(name:String, x:Float = 0, y:Float = 0)
+	public function addOffset(name:String, x:Float = 0, y:Float = 0):Void
 		animOffsets[name] = [x, y];
 }
 
@@ -166,7 +166,7 @@ class FeatherAttachedSprite extends FeatherSprite
 	public var copyParentAlpha:Bool = false;
 	public var copyParentVisib:Bool = false;
 
-	public function new(fileName:String, ?fileFolder:String, ?fileAnim:String, ?looped:Bool = false)
+	public function new(fileName:String, ?fileFolder:String, ?fileAnim:String, ?looped:Bool = false):Void
 	{
 		super(x, y);
 
@@ -184,7 +184,7 @@ class FeatherAttachedSprite extends FeatherSprite
 		}
 	}
 
-	override function update(elapsed:Float)
+	override function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
 

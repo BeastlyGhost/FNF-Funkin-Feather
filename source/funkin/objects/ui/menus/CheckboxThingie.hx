@@ -4,7 +4,7 @@ import flixel.FlxSprite;
 
 class CheckboxThingie extends FlxSprite
 {
-	override public function new(x:Float, y:Float)
+	override public function new(x:Float, y:Float):Void
 	{
 		super(x, y);
 
@@ -17,7 +17,7 @@ class CheckboxThingie extends FlxSprite
 		updateHitbox();
 	}
 
-	override function update(elapsed:Float)
+	override function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
 

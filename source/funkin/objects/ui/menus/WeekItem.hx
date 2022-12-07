@@ -11,7 +11,7 @@ class WeekItem extends FlxSpriteGroup
 	var sprite:FlxSprite;
 	var flashingVal:Int = 0;
 
-	public function new(x:Float, y:Float, imageName:String = 'week0')
+	public function new(x:Float, y:Float, imageName:String = 'week0'):Void
 	{
 		super(x, y);
 		sprite = new FlxSprite().loadGraphic(AssetHandler.grabAsset(imageName, IMAGE, 'images/menus/storyMenu/weeks'));
@@ -20,12 +20,12 @@ class WeekItem extends FlxSpriteGroup
 
 	var spriteActive:Bool = false;
 
-	public function select()
+	public function select():Void
 		spriteActive = true;
 
 	var fakeFramerate:Int = Math.round((1 / FlxG.elapsed) / 10);
 
-	override function update(elapsed:Float)
+	override function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
 		y = FlxMath.lerp(y, (itemY * 120) + 480, 0.17);

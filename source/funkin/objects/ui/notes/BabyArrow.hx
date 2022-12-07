@@ -15,7 +15,7 @@ class BabyArrow extends FeatherSprite
 
 	public var defaultAlpha:Float = 0.8;
 
-	public function new(index:Int)
+	public function new(index:Int):Void
 	{
 		super(x, y);
 
@@ -25,11 +25,6 @@ class BabyArrow extends FeatherSprite
 
 		updateHitbox();
 		scrollFactor.set();
-	}
-
-	override public function update(elapsed:Float)
-	{
-		super.update(elapsed);
 	}
 
 	override public function playAnim(AnimName:String, Force:Bool = false, Reversed:Bool = false, Frame:Int = 0):Void

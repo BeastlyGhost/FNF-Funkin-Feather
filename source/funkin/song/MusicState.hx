@@ -22,10 +22,10 @@ import funkin.states.PlayState;
 **/
 class MusicState
 {
-	public static function boundFramerate(input:Float)
+	public static function boundFramerate(input:Float):Float
 		return input * (60 / FlxG.drawFramerate);
 
-	public static function switchState(state:FlxState)
+	public static function switchState(state:FlxState):Void
 	{
 		if (!FlxTransitionableState.skipNextTransIn)
 		{
@@ -43,7 +43,7 @@ class MusicState
 		}
 	}
 
-	public static function resetState(?skipTransition:Bool)
+	public static function resetState(?skipTransition:Bool):Void
 	{
 		if (!skipTransition)
 		{
@@ -75,7 +75,7 @@ class MusicBeatState extends FlxUIState implements MusicInterface
 	public var selection:Int = 0; // Defines the Current Selected Item on a State
 	public var wrappableGroup:Array<Dynamic> = []; // Defines the `selection` limits
 
-	override public function create()
+	override public function create():Void
 	{
 		// clear assets cache
 		AssetHandler.clear(true, true);
@@ -87,7 +87,7 @@ class MusicBeatState extends FlxUIState implements MusicInterface
 		super.create();
 	}
 
-	override public function update(elapsed:Float)
+	override public function update(elapsed:Float):Void
 	{
 		if (Conductor.songMusic != null)
 			Conductor.songMusic.onComplete = endSong;
@@ -102,7 +102,7 @@ class MusicBeatState extends FlxUIState implements MusicInterface
 		super.update(elapsed);
 	}
 
-	override function openSubState(SubState:FlxSubState)
+	override function openSubState(SubState:FlxSubState):Void
 	{
 		if (FlxG.sound.music != null)
 			Conductor.pauseSong();
@@ -110,7 +110,7 @@ class MusicBeatState extends FlxUIState implements MusicInterface
 		super.openSubState(SubState);
 	}
 
-	override function closeSubState()
+	override function closeSubState():Void
 	{
 		if (!isEndingSong)
 			Conductor.resyncVocals();
@@ -133,7 +133,7 @@ class MusicBeatState extends FlxUIState implements MusicInterface
 		super.closeSubState();
 	}
 
-	public function updateTime()
+	public function updateTime():Void
 	{
 		// Update Steps
 		var lastChange:BPMChangeEvent = {
@@ -168,19 +168,19 @@ class MusicBeatState extends FlxUIState implements MusicInterface
 		}
 	}
 
-	public function sectionHit()
+	public function sectionHit():Void
 	{
 		if (lastSection < curSection)
 			lastSection = curSection;
 	}
 
-	public function beatHit()
+	public function beatHit():Void
 	{
 		if (lastBeat < curBeat)
 			lastBeat = curBeat;
 	}
 
-	public function stepHit()
+	public function stepHit():Void
 	{
 		if (curStep % 4 == 0)
 			beatHit();
@@ -189,7 +189,7 @@ class MusicBeatState extends FlxUIState implements MusicInterface
 	public var isStartingSong:Bool = false;
 	public var isEndingSong:Bool = false;
 
-	public function endSong()
+	public function endSong():Void
 	{
 		isEndingSong = true;
 		Conductor.songPosition = Conductor.songMusic.length;
@@ -207,7 +207,7 @@ class MusicBeatState extends FlxUIState implements MusicInterface
 		}
 	}
 
-	public function updateSelection(newSelection:Int = 0)
+	public function updateSelection(newSelection:Int = 0):Void
 		selection = FlxMath.wrap(Math.floor(selection) + newSelection, 0, wrappableGroup.length - 1);
 }
 
@@ -225,19 +225,19 @@ class MusicBeatSubstate extends FlxSubState implements MusicInterface
 
 	public var wrappableGroup:Array<Dynamic> = [];
 
-	override public function create()
+	override public function create():Void
 	{
 		super.create();
 	}
 
-	override public function update(elapsed:Float)
+	override public function update(elapsed:Float):Void
 	{
 		updateTime();
 
 		super.update(elapsed);
 	}
 
-	public function updateTime()
+	public function updateTime():Void
 	{
 		// Update Steps
 		var lastChange:BPMChangeEvent = {
@@ -271,26 +271,26 @@ class MusicBeatSubstate extends FlxSubState implements MusicInterface
 		curSection = Math.floor(curBeat / 4);
 	}
 
-	public function sectionHit()
+	public function sectionHit():Void
 	{
 		if (lastSection < curSection)
 			lastSection = curSection;
 	}
 
-	public function beatHit()
+	public function beatHit():Void
 	{
 		if (lastBeat < curBeat)
 			lastBeat = curBeat;
 	}
 
-	public function stepHit()
+	public function stepHit():Void
 	{
 		if (curStep % 4 == 0)
 			beatHit();
 	}
 
-	public function endSong() {}
+	public function endSong():Void {}
 
-	public function updateSelection(newSelection:Int = 0)
+	public function updateSelection(newSelection:Int = 0):Void
 		selection = FlxMath.wrap(Math.floor(selection) + newSelection, 0, wrappableGroup.length - 1);
 }

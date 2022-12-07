@@ -26,7 +26,7 @@ class DiscordRPC
 		});
 	}
 
-	public static function destroy()
+	public static function destroy():Void
 		RPCWrapper.shutdown();
 
 	static function ready():Void
@@ -87,7 +87,7 @@ class DiscordRPC
 		return;
 	}
 
-	public static function destroy()
+	public static function destroy():Void
 	{
 		return;
 	}

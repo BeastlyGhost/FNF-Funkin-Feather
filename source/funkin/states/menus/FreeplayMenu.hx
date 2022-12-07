@@ -48,7 +48,7 @@ class FreeplayMenu extends MusicBeatState
 
 	var tempColors = [0xFFFFB300, 0xFF56AEBD, 0xFF9F5788, 0xFFC35D5D];
 
-	override function create()
+	override function create():Void
 	{
 		super.create();
 
@@ -67,7 +67,7 @@ class FreeplayMenu extends MusicBeatState
 		generateUI();
 	}
 
-	function generateUI()
+	function generateUI():Void
 	{
 		itemContainer = new FlxTypedGroup<Alphabet>();
 		add(itemContainer);
@@ -113,7 +113,7 @@ class FreeplayMenu extends MusicBeatState
 		updateSelection();
 	}
 
-	override function update(elapsed:Float)
+	override function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
 
@@ -177,7 +177,7 @@ class FreeplayMenu extends MusicBeatState
 		}
 	}
 
-	function repositionScore()
+	function repositionScore():Void
 	{
 		// from the base game
 		scoreTxt.x = FlxG.width - scoreTxt.width - 6;
@@ -188,7 +188,7 @@ class FreeplayMenu extends MusicBeatState
 		rateTxt.x = FlxG.width - rateTxt.width;
 	}
 
-	override public function updateSelection(newSelection:Int = 0)
+	override public function updateSelection(newSelection:Int = 0):Void
 	{
 		super.updateSelection(newSelection);
 
@@ -215,7 +215,7 @@ class FreeplayMenu extends MusicBeatState
 		updateDifficulty();
 	}
 
-	function updateDifficulty(newDifficulty:Int = 0)
+	function updateDifficulty(newDifficulty:Int = 0):Void
 	{
 		selDifficulty = FlxMath.wrap(Math.floor(selDifficulty) + newDifficulty, 0, songList[selection].diffs.length - 1);
 

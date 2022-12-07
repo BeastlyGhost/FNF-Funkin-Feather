@@ -19,7 +19,7 @@ class ChartParser
 {
 	public static var chartDataType:DataFormat = FEATHER;
 
-	public static function loadChartData(songName:String, songDiff:Int)
+	public static function loadChartData(songName:String, songDiff:Int):FeatherSong
 	{
 		var timeBegin:Float = Sys.time();
 
@@ -163,7 +163,7 @@ class ChartParser
 		return featherSong;
 	}
 
-	public static function loadChartNotes(song:FeatherSong)
+	public static function loadChartNotes(song:FeatherSong):Array<Note>
 	{
 		var dunces:Array<Note> = [];
 

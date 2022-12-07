@@ -126,7 +126,7 @@ class OptionsMeta
 	/**
 		[Saves your game preferences]
 	**/
-	public static function savePrefs()
+	public static function savePrefs():Void
 	{
 		#if (flixel < "5.0.0")
 		FlxG.save.bind("Funkin-Feather", "BeastlyGhost");
@@ -138,7 +138,7 @@ class OptionsMeta
 	/**
 		[Loads your game preferences]
 	**/
-	public static function loadPrefs()
+	public static function loadPrefs():Void
 	{
 		#if (flixel < "5.0.0")
 		FlxG.save.bind("Funkin-Feather", "BeastlyGhost");
@@ -201,7 +201,7 @@ class OptionsMeta
 	/**
 		[Updates default game preferences data if needed]
 	**/
-	public static function updatePrefs()
+	public static function updatePrefs():Void
 	{
 		#if (flixel >= "5.0.0")
 		flixel.FlxSprite.defaultAntialiasing = getPref('Anti Aliasing');

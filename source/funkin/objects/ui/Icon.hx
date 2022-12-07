@@ -17,14 +17,14 @@ class Icon extends FlxSprite
 	public var character:String = 'bf';
 	public var suffix:String = '';
 
-	public function new(character:String = 'bf', flip:Bool = false)
+	public function new(character:String = 'bf', flip:Bool = false):Void
 	{
 		super();
 
 		setIcon(character, flip);
 	}
 
-	public dynamic function updateFrame(health:Float)
+	public dynamic function updateFrame(health:Float):Void
 	{
 		if (graphic == null)
 			return;
@@ -35,7 +35,7 @@ class Icon extends FlxSprite
 			animation.curAnim.curFrame = 0;
 	}
 
-	public function setIcon(char:String, shouldBeFlipped:Bool)
+	public function setIcon(char:String, shouldBeFlipped:Bool):Void
 	{
 		var iconAsset:FlxGraphic = AssetHandler.grabAsset('$char/icon$suffix', IMAGE, 'data/characters');
 		var iconWidth:Int = 1;
@@ -66,7 +66,7 @@ class Icon extends FlxSprite
 		scrollFactor.set();
 	}
 
-	override function update(elapsed:Float)
+	override function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
 

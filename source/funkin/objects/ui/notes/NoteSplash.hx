@@ -6,7 +6,7 @@ class NoteSplash extends FeatherSprite
 {
 	public var index:Int;
 
-	public function new(x:Float, y:Float, index:Int = 0)
+	public function new(x:Float, y:Float, index:Int = 0):Void
 	{
 		super(x, y);
 
@@ -27,7 +27,7 @@ class NoteSplash extends FeatherSprite
 		setupNoteSplash(x, y, index);
 	}
 
-	public function setupNoteSplash(x:Float, y:Float, index:Int = 0)
+	public function setupNoteSplash(x:Float, y:Float, index:Int = 0):Void
 	{
 		this.index = index;
 		ID = index;
@@ -39,7 +39,7 @@ class NoteSplash extends FeatherSprite
 		offset.set(60, 30);
 	}
 
-	override public function update(elapsed:Float)
+	override public function update(elapsed:Float):Void
 	{
 		if (animation.curAnim.finished)
 			kill();

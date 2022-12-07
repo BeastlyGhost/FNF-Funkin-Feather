@@ -22,7 +22,7 @@ haxelib run formatter -s <path>
 Variable names should be concise and properly labled for the sake of explaining their functionality.
 
 ## Long functions / Important variables
-If a funcion is long or if a variable is imporant, you should leave a comment explaining it / what it does. 
+If a funcion is long or if a variable is imporant, you should leave a comment explaining it / what it does, and you should always make sure to declare the function type (e.g: Void, Bool, String, etc). 
 
 For example: `// this function/variable is cool 'cause [insert explanation here]`
 

@@ -220,7 +220,7 @@ class Character extends FeatherSprite
 		return this;
 	}
 
-	override function update(elapsed:Float)
+	override function update(elapsed:Float):Void
 	{
 		if (animation.curAnim != null)
 		{
@@ -278,7 +278,7 @@ class Character extends FeatherSprite
 
 	private var isRight:Bool = false;
 
-	public function dance()
+	public function dance():Void
 	{
 		if (animation.curAnim != null || !onSpecial)
 		{

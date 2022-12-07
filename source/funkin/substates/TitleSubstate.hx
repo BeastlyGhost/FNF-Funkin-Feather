@@ -41,7 +41,7 @@ class TitleSubstate extends MusicBeatSubstate
 
 	var soundMusic:FlxSound;
 
-	override function create()
+	override function create():Void
 	{
 		super.create();
 
@@ -107,9 +107,9 @@ class TitleSubstate extends MusicBeatSubstate
 		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
 	}
 
-	function beginTitle() {}
+	function beginTitle():Void {}
 
-	override function update(elapsed:Float)
+	override function update(elapsed:Float):Void
 	{
 		if (FlxG.sound.music != null)
 			Conductor.songPosition = FlxG.sound.music.time;
@@ -182,7 +182,7 @@ class TitleSubstate extends MusicBeatSubstate
 	var isRight:Bool = false;
 	var logoTween:FlxTween;
 
-	override function beatHit()
+	override function beatHit():Void
 	{
 		super.beatHit();
 

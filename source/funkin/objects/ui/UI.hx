@@ -28,7 +28,7 @@ class UI extends FlxSpriteGroup
 	public var iconP1:Icon;
 	public var iconP2:Icon;
 
-	public function new()
+	public function new():Void
 	{
 		super();
 
@@ -77,7 +77,7 @@ class UI extends FlxSpriteGroup
 		updateHealthBar();
 	}
 
-	override function update(elapsed:Float)
+	override function update(elapsed:Float):Void
 	{
 		healthBar.percent = (PlayerInfo.health * 50);
 
@@ -107,7 +107,7 @@ class UI extends FlxSpriteGroup
 
 	public static var separator:String = " ~ ";
 
-	public function updateScoreText()
+	public function updateScoreText():Void
 	{
 		var tempScore:String;
 
@@ -126,14 +126,14 @@ class UI extends FlxSpriteGroup
 		PlayState.changePresence();
 	}
 
-	public function updateHealthBar()
+	public function updateHealthBar():Void
 	{
 		healthBar.createFilledBar(0xFFFF0000, 0xFF66FF33);
 		healthBar.updateBar();
 		healthBar.scrollFactor.set();
 	}
 
-	public function updateIconScale()
+	public function updateIconScale():Void
 	{
 		iconP1.setGraphicSize(Std.int(iconP1.width + 30));
 		iconP1.updateHitbox();
@@ -142,7 +142,7 @@ class UI extends FlxSpriteGroup
 		iconP2.updateHitbox();
 	}
 
-	public function showInfoCard()
+	public function showInfoCard():Void
 	{
 		var blackBy, byText;
 		blackBy = new FlxSprite().loadGraphic(AssetHandler.grabAsset('infobox', IMAGE, 'images/ui/default'));

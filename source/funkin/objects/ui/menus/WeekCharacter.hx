@@ -20,7 +20,7 @@ class WeekCharacter extends FlxSprite
 	var baseX:Float = 0;
 	var baseY:Float = 0;
 
-	public function new(x:Float, char:String = 'bf')
+	public function new(x:Float, char:String = 'bf'):Void
 	{
 		super(x);
 
@@ -30,7 +30,7 @@ class WeekCharacter extends FlxSprite
 		createCharacter(char);
 	}
 
-	public function createCharacter(char:String = 'bf')
+	public function createCharacter(char:String = 'bf'):Void
 	{
 		var pathRaw = AssetHandler.grabAsset(char, YAML, "images/menus/storyMenu/characters");
 

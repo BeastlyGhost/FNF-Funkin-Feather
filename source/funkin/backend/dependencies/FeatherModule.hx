@@ -2,7 +2,7 @@ package funkin.backend.dependencies;
 
 class FeatherModule extends SScript
 {
-	public function new(file:String, ?preset:Bool = true)
+	public function new(file:String, ?preset:Bool = true):Void
 	{
 		super(file, preset);
 		traces = false;
@@ -126,7 +126,7 @@ class EventModule
 	// public static var pushedEvents:Array<String> = [];
 	public static var loadedEvents:Map<String, FeatherModule> = [];
 
-	public static function getScriptEvents()
+	public static function getScriptEvents():Void
 	{
 		loadedEvents.clear();
 		eventArray = [];

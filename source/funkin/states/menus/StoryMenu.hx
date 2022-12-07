@@ -23,7 +23,7 @@ class StoryMenu extends MusicBeatState
 	var scoreTxt:FlxText;
 	var nameTxt:FlxText;
 
-	override function create()
+	override function create():Void
 	{
 		super.create();
 
@@ -75,7 +75,7 @@ class StoryMenu extends MusicBeatState
 		add(characterContainer);
 	}
 
-	function generateArrow(x:Float, y:Float, dir:String)
+	function generateArrow(x:Float, y:Float, dir:String):FlxSprite
 	{
 		var arrow:FlxSprite = new FlxSprite(x, y);
 		arrow.frames = AssetHandler.grabAsset('campaign_menu_UI_assets', SPARROW, 'images/menus/storyMenu');
@@ -85,7 +85,7 @@ class StoryMenu extends MusicBeatState
 		return arrow;
 	}
 
-	override function update(elapsed:Float)
+	override function update(elapsed:Float):Void
 	{
 		if (Controls.isJustPressed("back"))
 			MusicState.switchState(new MainMenu());

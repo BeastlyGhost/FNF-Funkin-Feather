@@ -22,7 +22,7 @@ enum TransType
 **/
 class Transition
 {
-	public static function start(speed:Null<Float>, transIn:Null<Bool>, ?type:TransType, ?fadeEase:Null<EaseFunction>, ?onEnd:Void->Void)
+	public static function start(speed:Null<Float>, transIn:Null<Bool>, ?type:TransType, ?fadeEase:Null<EaseFunction>, ?onEnd:Void->Void):Void
 	{
 		if (speed == null)
 			speed = 0.3;

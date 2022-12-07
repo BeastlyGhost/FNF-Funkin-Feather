@@ -19,7 +19,7 @@ class Strumline extends FlxGroup
 	public var downscroll:Bool = false;
 	public var autoplay:Bool = true;
 
-	public function new(x:Float, y:Float, characters:Array<Character>, autoplay:Bool = true, downscroll:Bool = false)
+	public function new(x:Float, y:Float, characters:Array<Character>, autoplay:Bool = true, downscroll:Bool = false):Void
 	{
 		super();
 
@@ -76,7 +76,7 @@ class Strumline extends FlxGroup
 			babyArrows.add(babyArrow);
 
 			babyArrow.alpha = 0;
-			FlxTween.tween(babyArrow, {y: babyArrow.y + 10, alpha: babyArrow.defaultAlpha}, 1, {ease: FlxEase.circOut, startDelay: 0.5 + (0.2 * index)});
+			FlxTween.tween(babyArrow, {y: babyArrow.y + 10, alpha: babyArrow.defaultAlpha}, 1 / Conductor.songRate, {ease: FlxEase.circOut, startDelay: 0.5 + (0.2 * index)});
 		}
 
 		splashes = new FlxTypedGroup<NoteSplash>();
@@ -88,7 +88,7 @@ class Strumline extends FlxGroup
 		splashes.add(firework);
 	}
 
-	public function popUpSplash(index:Int)
+	public function popUpSplash(index:Int):Void
 	{
 		var firework:NoteSplash = splashes.recycle(NoteSplash);
 		var babyArrow:BabyArrow = babyArrows.members[index];
@@ -97,7 +97,7 @@ class Strumline extends FlxGroup
 		splashes.add(firework);
 	}
 
-	override function update(elapsed:Float)
+	override function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
 		splashes.forEachAlive(function(splash:NoteSplash)

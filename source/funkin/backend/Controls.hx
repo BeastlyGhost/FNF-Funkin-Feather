@@ -38,7 +38,7 @@ class Controls
 
 	static var keysHeld:Array<Int> = []; // for keyboard keys
 
-	public static function init()
+	public static function init():Void
 	{
 		actions = defaultActions.copy();
 
@@ -48,7 +48,7 @@ class Controls
 		FlxG.signals.preUpdate.add(update);
 	}
 
-	public static function destroy()
+	public static function destroy():Void
 	{
 		actions = null;
 
@@ -58,7 +58,7 @@ class Controls
 		FlxG.signals.preUpdate.remove(update);
 	}
 
-	public static function getActionFromKey(key:Int, isGamepad:Bool = false)
+	public static function getActionFromKey(key:Int, isGamepad:Bool = false):String
 	{
 		for (id => action in actions)
 		{
@@ -68,7 +68,7 @@ class Controls
 		return null;
 	}
 
-	public static function isJustPressed(action:String)
+	public static function isJustPressed(action:String):Bool
 	{
 		var action:Action = actions.get(action);
 
@@ -91,7 +91,7 @@ class Controls
 		return false;
 	}
 
-	public static function isPressed(action:String)
+	public static function isPressed(action:String):Bool
 	{
 		var action:Action = actions.get(action);
 
@@ -114,7 +114,7 @@ class Controls
 		return false;
 	}
 
-	static function onKeyDown(evt:KeyboardEvent)
+	static function onKeyDown(evt:KeyboardEvent):Void
 	{
 		if (FlxG.keys.enabled && (FlxG.state.active || FlxG.state.persistentUpdate) && !keysHeld.contains(evt.keyCode))
 		{
@@ -123,7 +123,7 @@ class Controls
 		}
 	}
 
-	static function onKeyUp(evt:KeyboardEvent)
+	static function onKeyUp(evt:KeyboardEvent):Void
 	{
 		if (FlxG.keys.enabled && (FlxG.state.active || FlxG.state.persistentUpdate) && keysHeld.contains(evt.keyCode))
 		{
@@ -132,7 +132,7 @@ class Controls
 		}
 	}
 
-	static function update()
+	static function update():Void
 	{
 		var gamepad:FlxGamepad = FlxG.gamepads.lastActive;
 		if (gamepad != null)

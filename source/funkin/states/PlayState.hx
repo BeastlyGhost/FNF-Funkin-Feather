@@ -68,7 +68,7 @@ class PlayState extends MusicBeatState
 		return song;
 	}
 
-	public static function get_songSpeed()
+	public static function get_songSpeed():Float
 		return FlxMath.roundDecimal(songSpeed, 2) / Conductor.songRate;
 
 	public static var songName:String = 'test';
@@ -122,7 +122,7 @@ class PlayState extends MusicBeatState
 	public static var lineRPC1:String = '';
 	public static var lineRPC2:String = '';
 
-	override public function create()
+	override public function create():Void
 	{
 		super.create();
 
@@ -219,7 +219,7 @@ class PlayState extends MusicBeatState
 		callFunc('postCreate', []);
 	}
 
-	public static function changePresence(addString:String = '')
+	public static function changePresence(addString:String = ''):Void
 	{
 		var mode:String = 'Freeplay';
 
@@ -243,7 +243,7 @@ class PlayState extends MusicBeatState
 	public var countdownWasActive:Bool = false;
 	public var skipCountdown:Bool = false;
 
-	public function songCutscene()
+	public function songCutscene():Void
 	{
 		for (strumline in strumsGroup)
 		{
@@ -264,7 +264,7 @@ class PlayState extends MusicBeatState
 	var posCount:Int = 0;
 	var posSong:Int = 4;
 
-	public function startCountdown()
+	public function startCountdown():Void
 	{
 		countdownWasActive = true;
 		canPause = true;
@@ -311,7 +311,7 @@ class PlayState extends MusicBeatState
 					introSprite.antialiasing = false;
 				}
 
-				FlxTween.tween(introSprite, {y: introSprite.y += 50, alpha: 0}, Conductor.crochet / 1000, {
+				FlxTween.tween(introSprite, {y: introSprite.y += 50, alpha: 0}, Conductor.crochet / 1000 / Conductor.songRate, {
 					ease: FlxEase.cubeInOut,
 					onComplete: function(twn:FlxTween)
 					{
@@ -340,7 +340,7 @@ class PlayState extends MusicBeatState
 		}, 5);
 	}
 
-	function startSong()
+	function startSong():Void
 	{
 		callFunc('startSong', []);
 
@@ -350,7 +350,7 @@ class PlayState extends MusicBeatState
 		isStartingSong = false;
 	}
 
-	inline public function cameraMovePoint(character:String = 'player')
+	inline public function cameraMovePoint(character:String = 'player'):Void
 	{
 		var char:Character = opponent;
 
@@ -370,7 +370,7 @@ class PlayState extends MusicBeatState
 		camFollow.setPosition(pointX + char.camOffset.x, pointY + char.camOffset.y);
 	}
 
-	override public function update(elapsed:Float)
+	override public function update(elapsed:Float):Void
 	{
 		callFunc('update', [elapsed]);
 
@@ -524,7 +524,7 @@ class PlayState extends MusicBeatState
 		return false;
 	}
 
-	public function onKeyPressed(key:Int, action:String, isGamepad:Bool)
+	public function onKeyPressed(key:Int, action:String, isGamepad:Bool):Void
 	{
 		if (isPaused || isEndingSong)
 			return;
@@ -534,7 +534,7 @@ class PlayState extends MusicBeatState
 		callFunc('onKeyPress', [key, action, isGamepad]);
 	}
 
-	public function onKeyReleased(key:Int, action:String, isGamepad:Bool)
+	public function onKeyReleased(key:Int, action:String, isGamepad:Bool):Void
 	{
 		if (isPaused || isEndingSong)
 			return;
@@ -546,7 +546,7 @@ class PlayState extends MusicBeatState
 
 	var keysHeld:Array<Bool> = [];
 
-	public function inputSystem(idx:Int, pressed:Bool)
+	public function inputSystem(idx:Int, pressed:Bool):Void
 	{
 		keysHeld[idx] = pressed;
 
@@ -580,10 +580,8 @@ class PlayState extends MusicBeatState
 						for (epicNote in noteList)
 						{
 							for (troubleNote in notePresses)
-							{
 								if (Math.abs(epicNote.step - troubleNote.step) > 10)
 									notePossible = false;
-							}
 
 							if (notePossible && epicNote.canBeHit)
 							{
@@ -612,10 +610,8 @@ class PlayState extends MusicBeatState
 				for (player in strumline.characters)
 				{
 					if (player.holdTimer > Conductor.stepCrochet * 4 * 0.001 && !keysHeld.contains(true))
-					{
 						if (player.animation.curAnim.name.startsWith('sing') && !player.animation.curAnim.name.endsWith('miss'))
 							player.dance();
-					}
 				}
 			}
 		}
@@ -635,7 +631,7 @@ class PlayState extends MusicBeatState
 		return FlxSort.byValues(FlxSort.ASCENDING, a.step, b.step);
 	}
 
-	public function noteHit(note:Note, strumline:Strumline)
+	public function noteHit(note:Note, strumline:Strumline):Void
 	{
 		if (!note.wasGoodHit)
 		{
@@ -709,17 +705,15 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	public function noteMiss(idx:Int, strumline:Strumline)
+	public function noteMiss(idx:Int, strumline:Strumline):Void
 	{
 		if (PlayerInfo.combo >= 5)
 			if (crowd != null && crowd.animOffsets.exists("sad"))
 				crowd.playAnim("sad");
 
 		for (char in strumline.characters)
-		{
 			if (char != null && char.hasMissAnims)
 				char.playAnim(char.singAnims[idx] + 'miss');
-		}
 
 		FlxG.sound.play(AssetHandler.grabAsset("miss" + FlxG.random.int(1, 3), SOUND, "sounds/" + assetSkin), FlxG.random.float(0.1, 0.2));
 		Conductor.songVocals.volume = 0;
@@ -728,7 +722,7 @@ class PlayState extends MusicBeatState
 		gameUI.updateScoreText();
 	}
 
-	public function popUpScore(myRating:String = 'sick', preload:Bool = false)
+	public function popUpScore(myRating:String = 'sick', preload:Bool = false):Void
 	{
 		var rating:FlxSprite = PlayerInfo.generateRating(assetSkin);
 
@@ -745,7 +739,7 @@ class PlayState extends MusicBeatState
 
 		rating.animation.play(myRating);
 
-		FlxTween.tween(rating, {alpha: 0}, 0.2, {
+		FlxTween.tween(rating, {alpha: 0}, 0.2 / Conductor.songRate, {
 			onComplete: function(t:FlxTween)
 			{
 				rating.kill();
@@ -775,7 +769,7 @@ class PlayState extends MusicBeatState
 
 			numScore.animation.play("num" + splitCombo[i]);
 
-			FlxTween.tween(numScore, {alpha: 0}, 0.2, {
+			FlxTween.tween(numScore, {alpha: 0}, 0.2 / Conductor.songRate, {
 				onComplete: function(t:FlxTween)
 				{
 					numScore.kill();
@@ -785,7 +779,7 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	public function charDancing(beat:Int)
+	public function charDancing(beat:Int):Void
 	{
 		for (strumline in strumsGroup)
 		{
@@ -808,7 +802,7 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	override function beatHit()
+	override function beatHit():Void
 	{
 		charDancing(curBeat);
 
@@ -822,7 +816,7 @@ class PlayState extends MusicBeatState
 		super.beatHit();
 	}
 
-	override function stepHit()
+	override function stepHit():Void
 	{
 		Conductor.stepResync();
 		gameStage.stageStepHit(curStep, player, opponent, crowd);
@@ -830,20 +824,20 @@ class PlayState extends MusicBeatState
 		super.stepHit();
 	}
 
-	override function sectionHit()
+	override function sectionHit():Void
 	{
 		gameStage.stageSectionHit(curBeat, player, opponent, crowd);
 		callFunc('sectionHit', [curSection]);
 		super.sectionHit();
 	}
 
-	override function openSubState(SubState:flixel.FlxSubState)
+	override function openSubState(SubState:flixel.FlxSubState):Void
 	{
 		callFunc('openSubState', []);
 		super.openSubState(SubState);
 	}
 
-	override function closeSubState()
+	override function closeSubState():Void
 	{
 		isPaused = false;
 		changePresence();
@@ -851,7 +845,7 @@ class PlayState extends MusicBeatState
 		super.closeSubState();
 	}
 
-	public function globalManagerPause()
+	public function globalManagerPause():Void
 	{
 		// stop all tweens and timers
 		FlxTimer.globalManager.forEach(function(tmr:FlxTimer)
@@ -867,7 +861,7 @@ class PlayState extends MusicBeatState
 		});
 	}
 
-	override function endSong()
+	override function endSong():Void
 	{
 		super.endSong();
 
@@ -893,7 +887,7 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	override public function destroy()
+	override public function destroy():Void
 	{
 		Controls.onKeyPressed.remove(onKeyPressed);
 		Controls.onKeyReleased.remove(onKeyReleased);
@@ -901,7 +895,7 @@ class PlayState extends MusicBeatState
 	}
 
 	// MODULES
-	public function callFunc(key:String, args:Array<Dynamic>)
+	public function callFunc(key:String, args:Array<Dynamic>):Void
 	{
 		if (modules != null)
 		{
@@ -912,7 +906,7 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	public function setVar(key:String, value:Dynamic)
+	public function setVar(key:String, value:Dynamic):Bool
 	{
 		var allSucceed:Bool = true;
 		if (modules != null)
@@ -932,7 +926,7 @@ class PlayState extends MusicBeatState
 		return allSucceed;
 	}
 
-	private function callModuleLocals()
+	private function callModuleLocals():Void
 	{
 		setVar('elapsed', FlxG.elapsed);
 		setVar('curBeat', curBeat);
