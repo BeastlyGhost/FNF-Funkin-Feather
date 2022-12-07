@@ -69,7 +69,7 @@ class PlayState extends MusicBeatState
 	}
 
 	public static function get_songSpeed()
-		return FlxMath.roundDecimal(songSpeed, 2);
+		return FlxMath.roundDecimal(songSpeed, 2) / Conductor.songRate;
 
 	public static var songName:String = 'test';
 	public static var difficulty:Int = 0;
@@ -132,6 +132,10 @@ class PlayState extends MusicBeatState
 		FlxG.mouse.visible = false;
 
 		PlayerInfo.resetScore();
+
+		cameraSpeed = 1 * Conductor.songRate;
+		cameraZoom = 1.05;
+		bumpSpeed = 4;
 
 		// initialize main variales
 		camGame = new FlxCamera();
@@ -299,7 +303,7 @@ class PlayState extends MusicBeatState
 
 		var introSprite:FlxSprite;
 
-		new FlxTimer().start(Conductor.crochet / 1000, function(tmr:FlxTimer)
+		new FlxTimer().start(Conductor.crochet / 1000 / Conductor.songRate, function(tmr:FlxTimer)
 		{
 			if (introGraphics[posCount] != null)
 			{
@@ -740,9 +744,9 @@ class PlayState extends MusicBeatState
 		rating.screenCenter();
 		rating.x = (FlxG.width * 0.55) - 40;
 		rating.y -= 60;
-		rating.acceleration.y = 550;
-		rating.velocity.y -= FlxG.random.int(140, 175);
-		rating.velocity.x -= FlxG.random.int(0, 10);
+		rating.acceleration.y = 550 * Conductor.songRate;
+		rating.velocity.y -= FlxG.random.int(140, 175) * Conductor.songRate;
+		rating.velocity.x -= FlxG.random.int(0, 10) * Conductor.songRate;
 		add(rating);
 
 		if (preload)
@@ -770,9 +774,9 @@ class PlayState extends MusicBeatState
 			numScore.x += (43 * i) + 20;
 			numScore.y += 60;
 
-			numScore.acceleration.y = FlxG.random.int(200, 300);
-			numScore.velocity.y = -FlxG.random.int(140, 160);
-			numScore.velocity.x = FlxG.random.float(-5, 5);
+			numScore.acceleration.y = FlxG.random.int(200, 300) * Conductor.songRate;
+			numScore.velocity.y = -FlxG.random.int(140, 160) * Conductor.songRate;
+			numScore.velocity.x = FlxG.random.float(-5, 5) * Conductor.songRate;
 			add(numScore);
 
 			if (preload)

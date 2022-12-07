@@ -30,6 +30,7 @@ class Conductor
 	public static var bpmChangeMap:Array<BPMChangeEvent> = [];
 	public static var songMusic:FlxSound; // the Instrumental Track for a Song
 	public static var songVocals:FlxSound; // the Vocal Track for a Song
+	public static var songRate:Float = 1; // the Song Playback Rate / Speed
 	public static var canStartSong:Bool = false; // Whether or not we can begin to play the song
 
 	public static var safeZoneOffset:Float = (OptionsMeta.getPref("Safe Frames") / 60) * 1000; // is calculated in create(), is safeFrames in milliseconds
@@ -71,8 +72,20 @@ class Conductor
 	{
 		songMusic = new FlxSound().loadEmbedded(AssetHandler.grabAsset("Inst", SOUND, "songs/" + name));
 		songVocals = new FlxSound().loadEmbedded(AssetHandler.grabAsset("Voices", SOUND, "songs/" + name));
+
+		#if (flixel >= "5.0.0")
+		songMusic.pitch = songRate;
+		#end
+
 		FlxG.sound.list.add(songMusic);
-		FlxG.sound.list.add(songVocals);
+
+		if (songVocals != null)
+		{
+			#if (flixel >= "5.0.0")
+			songVocals.pitch = songRate;
+			#end
+			FlxG.sound.list.add(songVocals);
+		}
 	}
 
 	public static function playSong(name:String)
@@ -105,6 +118,9 @@ class Conductor
 		if (songVocals != null)
 		{
 			songVocals.time = Conductor.songPosition;
+			#if (flixel >= "5.0.0")
+			songVocals.pitch = songRate;
+			#end
 			songVocals.play();
 		}
 	}

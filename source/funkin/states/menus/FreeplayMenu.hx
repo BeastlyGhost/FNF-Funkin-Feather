@@ -27,6 +27,8 @@ class FreeplayMenu extends MusicBeatState
 
 	var iconContainer:Array<Icon> = [];
 
+	var songRating:Float = 1;
+
 	static var selDifficulty:Int = 1;
 
 	var songInst:FlxSound;
@@ -42,6 +44,7 @@ class FreeplayMenu extends MusicBeatState
 	var scoreBG:FlxSprite;
 	var scoreTxt:FlxText;
 	var diffTxt:FlxText;
+	var rateTxt:FlxText;
 
 	var tempColors = [0xFFFFB300, 0xFF56AEBD, 0xFF9F5788, 0xFFC35D5D];
 
@@ -53,6 +56,8 @@ class FreeplayMenu extends MusicBeatState
 
 		// get the song list
 		songList = SongManager.get_songList();
+
+		funkin.song.Conductor.songRate = songRating;
 
 		menuBG = new FlxSprite(-80).loadGraphic(AssetHandler.grabAsset('menuDesat', IMAGE, 'images/menus'));
 		menuBG.scrollFactor.set();
@@ -84,16 +89,25 @@ class FreeplayMenu extends MusicBeatState
 
 		scoreTxt = new FlxText(FlxG.width * 0.7, 5, 0, "", 32);
 		diffTxt = new FlxText(scoreTxt.x, scoreTxt.y + 36, 0, "", 24);
-		scoreBG = new FlxSprite(scoreTxt.x - 6, 0).makeGraphic(1, 66, 0xFF000000);
+		#if (flixel >= "5.0.0")
+		rateTxt = new FlxText(diffTxt.x, diffTxt.y + 36, 0, "", 24);
+		#end
+		scoreBG = new FlxSprite(scoreTxt.x - 6, 0).makeGraphic(1, #if (flixel >= "5.0.0") 106 #else 66 #end, 0xFF000000);
 
 		scoreTxt.setFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 32, 0xFFFFFFFF, RIGHT);
 		diffTxt.setFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 24, 0xFFFFFFFF, RIGHT);
+		rateTxt.setFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 24, 0xFFFFFFFF, RIGHT);
 
 		scoreBG.antialiasing = false;
 		scoreBG.alpha = 0.6;
 		add(scoreBG);
 
 		add(diffTxt);
+
+		#if (flixel >= "5.0.0")
+		add(rateTxt);
+		#end
+
 		add(scoreTxt);
 
 		updateSelection();
@@ -111,6 +125,9 @@ class FreeplayMenu extends MusicBeatState
 		if (scoreTxt != null)
 			scoreTxt.text = "PERSONAL BEST: " + lerpScore;
 
+		if (rateTxt != null)
+			rateTxt.text = 'RATE: ' + songRating + "x";
+
 		if (menuBG != null && menuBG.pixels != null)
 			menuBG.color = FlxColor.interpolate(menuBG.color, tempColors[selection]);
 
@@ -124,10 +141,20 @@ class FreeplayMenu extends MusicBeatState
 		if (Controls.isJustPressed("down"))
 			updateSelection(1);
 
-		if (Controls.isJustPressed("left"))
+		if (Controls.isJustPressed("left") && !FlxG.keys.pressed.SHIFT)
 			updateDifficulty(-1);
-		if (Controls.isJustPressed("right"))
+		if (Controls.isJustPressed("right") && !FlxG.keys.pressed.SHIFT)
 			updateDifficulty(1);
+
+		#if (flixel >= "5.0.0")
+		if (Controls.isJustPressed("left") && FlxG.keys.pressed.SHIFT)
+			songRating -= 0.05;
+		if (Controls.isJustPressed("right") && FlxG.keys.pressed.SHIFT)
+			songRating += 0.05;
+		#end
+
+		if (FlxG.keys.pressed.SHIFT && FlxG.keys.justPressed.R)
+			songRating = 1;
 
 		if (Controls.isJustPressed("back"))
 			MusicState.switchState(new MainMenu());
@@ -142,6 +169,10 @@ class FreeplayMenu extends MusicBeatState
 			PlayState.difficulty = selDifficulty;
 			PlayState.gameplayMode = FREEPLAY;
 
+			#if (flixel >= "5.0.0")
+			funkin.song.Conductor.songRate = songRating;
+			#end
+
 			MusicState.switchState(new PlayState());
 		}
 	}
@@ -154,6 +185,7 @@ class FreeplayMenu extends MusicBeatState
 		scoreBG.x = FlxG.width - scoreBG.scale.x / 2;
 		diffTxt.x = scoreBG.x + scoreBG.width / 2;
 		diffTxt.x -= diffTxt.width / 2;
+		rateTxt.x = FlxG.width - rateTxt.width;
 	}
 
 	override public function updateSelection(newSelection:Int = 0)
