@@ -89,6 +89,12 @@ class OptionsMeta
 			value: true
 		},
 		{
+			name: "Note Quantization",
+			description: "If notes should change colors depending on the song beat.",
+			type: BOOLEAN,
+			value: false
+		},
+		{
 			name: "Show FPS Info",
 			description: "If the current framerate should be shown on the Info Counter.",
 			type: BOOLEAN,

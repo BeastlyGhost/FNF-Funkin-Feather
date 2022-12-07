@@ -1,13 +1,43 @@
 package funkin.objects;
 
 import flixel.math.FlxPoint;
-import funkin.backend.data.CharacterData.CharacterOrigin;
-import funkin.backend.data.CharacterData.PsychAnimsArray;
-import funkin.backend.data.CharacterData.PsychCharFile;
 import funkin.backend.dependencies.FeatherTools.FeatherSprite;
 import funkin.song.Conductor;
 import haxe.Json;
 import sys.FileSystem;
+
+enum CharacterOrigin
+{
+	FUNKIN_FEATHER;
+	FOREVER_FEATHER;
+	FUNKIN_COCOA;
+	PSYCH_ENGINE;
+}
+
+typedef PsychCharFile =
+{
+	var animations:Array<PsychAnimsArray>;
+	var image:String;
+	var scale:Float;
+	var sing_duration:Float;
+	var healthicon:String;
+
+	var position:Array<Float>;
+	var camera_position:Array<Float>;
+	var flip_x:Bool;
+	var no_antialiasing:Bool;
+	var healthbar_colors:Array<Int>;
+}
+
+typedef PsychAnimsArray =
+{
+	var anim:String;
+	var name:String;
+	var fps:Int;
+	var loop:Bool;
+	var indices:Array<Int>;
+	var offsets:Array<Int>;
+}
 
 /**
 	Character class, initializes all characters that are present during gameplay

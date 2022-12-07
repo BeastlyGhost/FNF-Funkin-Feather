@@ -715,7 +715,7 @@ class PlayState extends MusicBeatState
 		gameUI.updateScoreText();
 	}
 
-	public function charPlayAnim(char:Character, stringSect:String = 'singDOWN')
+	public function charPlayAnim(char:Character, stringSect:String = 'singDOWN'):Void
 	{
 		if (char != null)
 		{

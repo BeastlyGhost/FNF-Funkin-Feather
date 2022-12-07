@@ -29,6 +29,15 @@ class OptionsMenu extends MusicBeatState
 
 	var menuBG:FlxSprite;
 
+	var fromPlayState:Bool = false;
+
+	public function new(fromPlayState:Bool = false):Void
+	{
+		super();
+
+		this.fromPlayState = fromPlayState;
+	}
+
 	override function create():Void
 	{
 		super.create();
@@ -63,7 +72,12 @@ class OptionsMenu extends MusicBeatState
 
 		if (Controls.isJustPressed("accept")) {}
 		if (Controls.isJustPressed("back"))
-			MusicState.switchState(new MainMenu());
+		{
+			if (fromPlayState)
+				MusicState.switchState(new funkin.states.PlayState());
+			else
+				MusicState.switchState(new funkin.states.menus.MainMenu());
+		}
 	}
 
 	override public function updateSelection(newSelection:Int = 0):Void

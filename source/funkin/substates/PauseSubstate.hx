@@ -21,9 +21,9 @@ import sys.thread.Thread;
 class PauseSubstate extends MusicBeatSubstate
 {
 	var listMap:Map<String, Array<String>> = [
-		"default" => ["Resume Song", "Restart Song", /*"Exit to Options",*/ "Exit to menu"],
+		"default" => ["Resume Song", "Restart Song", "Exit to Options", "Exit to menu"],
 		"charting" => ["Exit to Charter", "Leave Charting Mode", "Exit to menu"],
-		"no-resume" => ["Restart Song", /*"Exit to Options",*/ "Exit to menu"],
+		"no-resume" => ["Restart Song", "Exit to Options", "Exit to menu"],
 	];
 
 	var itemContainer:FlxTypedGroup<Alphabet>;
@@ -117,7 +117,7 @@ class PauseSubstate extends MusicBeatSubstate
 				case "restart song":
 					MusicState.resetState();
 				case "exit to options":
-					MusicState.switchState(new funkin.states.menus.OptionsMenu());
+					MusicState.switchState(new funkin.states.menus.OptionsMenu(true));
 				case "exit to charter":
 					MusicState.switchState(new funkin.states.editors.ChartEditor());
 				case "leave charting mode":

@@ -10,8 +10,19 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
-import funkin.backend.data.MenuData.MainMenuData;
 import funkin.song.MusicState;
+
+typedef MainMenuData =
+{
+	var bg:String;
+	var flash:String;
+	var bgFolder:String;
+	var flashFolder:String;
+	var flashColor:Int;
+	var list:Array<String>;
+	var listY:Float;
+	var listSpacing:Float;
+}
 
 /**
 	the Main Menu, for now it will remain the same as the base game's,

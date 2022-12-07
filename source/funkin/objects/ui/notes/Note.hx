@@ -5,6 +5,24 @@ import funkin.objects.ui.notes.BabyArrow;
 import funkin.song.Conductor;
 import funkin.states.PlayState;
 
+class NoteTools
+{
+	// based on forever engine
+	public static var quantIdx:Array<Int> = [4, 8, 12, 16, 20, 24, 32, 48, 64, 192];
+
+	public static var defaultNotes:Array<String> = ['', 'mine', 'fake'];
+
+	public static function declareQuant(step:Float):Int
+	{
+		for (q in 0...quantIdx.length)
+		{
+			//
+		}
+
+		return quantIdx.length - 1;
+	}
+}
+
 /**
 	Note class, initializes *scrolling* notes for the main game
 **/
@@ -36,6 +54,8 @@ class Note extends FeatherSprite
 
 	public var sustainLength:Float = 0;
 	public var isSustain:Bool = false;
+
+	public var isQuant:Bool = false;
 
 	public var offsetX:Float = 0;
 	public var offsetY:Float = 0;

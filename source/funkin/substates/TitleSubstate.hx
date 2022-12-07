@@ -10,11 +10,35 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
-import funkin.backend.data.MenuData.TitleData;
 import funkin.objects.ui.Alphabet;
 import funkin.song.Conductor;
 import funkin.song.MusicState;
 import funkin.states.menus.MainMenu;
+
+typedef TitleData =
+{
+	var bg:String;
+	var gf:String;
+	var ng:String;
+	var bgSize:Float;
+	var bgFolder:String;
+	var gfFolder:String;
+	var ngFolder:String;
+	var bgAntialias:Bool;
+	var gfAntialias:Bool;
+	var ngAntialias:Bool;
+	var randomText:Array<Array<String>>;
+	var stepText:Array<IntroData>;
+}
+
+typedef IntroData =
+{
+	var steps:Array<Int>;
+	var lines:Array<String>;
+	var ngVisible:Bool;
+	var showRandom:Bool;
+	var func:String;
+}
 
 /**
 	the game's titlescreen, not much is going on about it aside from some wacky letter stuffs!
