@@ -384,8 +384,10 @@ class PlayState extends MusicBeatState
 			{
 				if (FlxG.keys.justPressed.SIX)
 				{
+					PlayerInfo.validScore = false;
 					strumsP1.autoplay = !strumsP1.autoplay;
 					gameUI.autoPlayText.visible = strumsP1.autoplay;
+					gameUI.autoPlaySine = 1;
 				}
 
 				if (FlxG.keys.justPressed.SEVEN)

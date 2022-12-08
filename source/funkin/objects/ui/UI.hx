@@ -105,7 +105,11 @@ class UI extends FlxSpriteGroup
 		super.update(elapsed);
 	}
 
-	public static var separator:String = " ~ ";
+	// for reference: https://en.wikipedia.org/wiki/Template:%E2%80%A2
+	public static var separator:String = " • ";
+
+	// so you can change it separately
+	public static var separatorFC:String = " • ";
 
 	public function updateScoreText():Void
 	{
