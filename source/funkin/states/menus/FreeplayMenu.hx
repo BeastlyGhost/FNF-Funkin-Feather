@@ -96,7 +96,9 @@ class FreeplayMenu extends MusicBeatState
 
 		scoreTxt.setFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 32, 0xFFFFFFFF, RIGHT);
 		diffTxt.setFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 24, 0xFFFFFFFF, RIGHT);
+		#if (flixel >= "5.0.0")
 		rateTxt.setFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 24, 0xFFFFFFFF, RIGHT);
+		#end
 
 		scoreBG.antialiasing = false;
 		scoreBG.alpha = 0.6;
@@ -125,8 +127,10 @@ class FreeplayMenu extends MusicBeatState
 		if (scoreTxt != null)
 			scoreTxt.text = "PERSONAL BEST: " + lerpScore;
 
+		#if (flixel >= "5.0.0")
 		if (rateTxt != null)
 			rateTxt.text = 'RATE: ' + songRating + "x";
+		#end
 
 		if (menuBG != null && menuBG.pixels != null)
 			menuBG.color = FlxColor.interpolate(menuBG.color, tempColors[selection]);
@@ -185,7 +189,9 @@ class FreeplayMenu extends MusicBeatState
 		scoreBG.x = FlxG.width - scoreBG.scale.x / 2;
 		diffTxt.x = scoreBG.x + scoreBG.width / 2;
 		diffTxt.x -= diffTxt.width / 2;
+		#if (flixel >= "5.0.0")
 		rateTxt.x = FlxG.width - rateTxt.width;
+		#end
 	}
 
 	override public function updateSelection(newSelection:Int = 0):Void
