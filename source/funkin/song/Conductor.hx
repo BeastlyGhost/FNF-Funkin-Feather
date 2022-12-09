@@ -127,12 +127,10 @@ class Conductor
 
 	public static function stepResync():Void
 	{
-		if (songMusic != null)
+		if ((songMusic != null && Math.abs(songMusic.time - (songPosition)) > 20)
+			|| (songVocals != null && Math.abs(songVocals.time - (songPosition)) > 20))
 		{
-			if (Math.abs(songMusic.time - (songPosition)) > 20 || (songVocals != null && Math.abs(songVocals.time - (songPosition)) > 20))
-			{
-				resyncVocals();
-			}
+			resyncVocals();
 		}
 	}
 

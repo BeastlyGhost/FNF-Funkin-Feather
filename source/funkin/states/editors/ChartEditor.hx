@@ -11,6 +11,7 @@ import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import funkin.objects.ui.Icon;
 import funkin.objects.ui.notes.Note;
+import funkin.song.ChartParser;
 import funkin.song.Conductor;
 import funkin.song.MusicState;
 import funkin.song.SongFormat.FeatherSong;
@@ -19,9 +20,9 @@ import openfl.net.FileReference;
 
 enum CharterTheme
 {
-	FLIXEL_WHITE; // default because i'm uncreative asf
+	FLIXEL_WHITE; // default
 	PSYCH_WHITE; // from public concepts: https://twitter.com/Shadow_Mario_/status/1442549049777922048
-	HOPELESS_DARK; // AMOLED, will be inspired by Alice: Mad & Hopeless
+	CROW_ENGINE; // if EyeDaleHim ever decides to make a proper style
 	FOREVER_DARK; // Forever Engine Chart Editor Style
 	IZZY_DARK; // Izzy Engine Chart Editor Style
 }
@@ -86,12 +87,14 @@ enum CharterTheme
 **/
 class ChartEditor extends MusicBeatState
 {
-	var defaultUIStyle:CharterTheme = FLIXEL_WHITE; // fallback in case the theme fails to load
+	var defaultStyle:CharterTheme = FLIXEL_WHITE; // fallback in case the theme fails to load
 
 	var uiStyle:CharterTheme = FLIXEL_WHITE;
+
 	var boxUI:FlxUITabMenu;
 
 	var song:FeatherSong;
+	var difficulty:Int = 0;
 
 	var gridMain:FlxSprite;
 	var gridSize:Int = 45;
@@ -114,10 +117,29 @@ class ChartEditor extends MusicBeatState
 
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
+		Conductor.stopSong();
 
 		FlxG.mouse.visible = true;
 
 		generateEditorGrid();
+
+		if (PlayState.song != null)
+		{
+			song = PlayState.song;
+			difficulty = PlayState.difficulty;
+		}
+		else
+		{
+			song = ChartParser.loadChartData('test', 1);
+			difficulty = 1;
+		}
+
+		DiscordRPC.update("CHART EDITOR", "Charting: " + song.name);
+
+		Conductor.callVocals(song.name);
+		Conductor.changeBPM(song.bpm);
+		// Conductor.mapBPMChanges(song);
+
 
 		/*
 			iconP1 = new Icon('bf');
@@ -138,14 +160,11 @@ class ChartEditor extends MusicBeatState
 		renderedNotes = new FlxTypedGroup<Note>();
 		renderedHolds = new FlxTypedGroup<Note>();
 
-		song = PlayState.song;
-		// loadSong(song.name);
-		// Conductor.changeBPM(song.bpm);
-		// Conductor.mapBPMChanges(song);
-
-		infoText = new FlxText(0, FlxG.height, 0, "SONG: " + song.name, 16);
+		infoText = new FlxText(0, FlxG.height, 0, "", 16);
 		infoText.scrollFactor.set();
 		add(infoText);
+
+		infoText.text = 'SONG: ${song.name}';
 
 		mouseHighlight = new FlxSprite().makeGraphic(gridSize, gridSize);
 		mouseHighlight.screenCenter(XY);
@@ -154,19 +173,21 @@ class ChartEditor extends MusicBeatState
 		var tabs = [
 			{name: "Song", label: 'Song Data'},
 			{name: "Section", label: 'Section Data'},
-			{name: "Note", label: 'Note Data'}
+			{name: "Note", label: 'Note Data'},
+			{name: "Events", label: 'Event Data'}
 		];
 
 		boxUI = new FlxUITabMenu(null, tabs, true);
 
 		boxUI.resize(300, 400);
-		boxUI.x = FlxG.width / 1;
-		boxUI.y = 20;
+		boxUI.x = FlxG.width - boxUI.width;
+		boxUI.y = FlxG.height - boxUI.height - 230;
+		boxUI.selected_tab = 3;
 		add(boxUI);
 
-		addSongUI();
-
 		mousePosUpdate();
+
+		addSongUI();
 	}
 
 	function addSongUI():Void
@@ -174,7 +195,7 @@ class ChartEditor extends MusicBeatState
 		var tab_group_song = new FlxUI(null, boxUI);
 		tab_group_song.name = "Song";
 
-		var songName = new FlxUIInputText(10, 10, 70, song.name, 8);
+		var songName = new FlxUIInputText(10, 15, 70, song.name, 8);
 
 		tab_group_song.add(new FlxText(songName.x, songName.y - 15, 0, "Song Name:"));
 		tab_group_song.add(songName);
@@ -239,14 +260,31 @@ class ChartEditor extends MusicBeatState
 			}
 		}
 
+		if (FlxG.keys.justPressed.SPACE)
+		{
+			if (song != null && Conductor.songMusic != null)
+			{
+				if (!Conductor.songMusic.playing)
+					Conductor.playSong(song.name);
+				else
+					Conductor.pauseSong();
+			}
+		}
+
 		if (FlxG.keys.justPressed.ESCAPE)
 		{
 			PlayState.songName = song.name;
 			PlayState.gameplayMode = CHARTING;
-			PlayState.difficulty = 1;
+			PlayState.difficulty = difficulty;
 
 			MusicState.switchState(new PlayState());
 		}
+	}
+
+	override function stepHit():Void
+	{
+		Conductor.stepResync();
+		super.stepHit();
 	}
 
 	function updateGrid():Void

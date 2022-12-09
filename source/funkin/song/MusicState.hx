@@ -189,23 +189,7 @@ class MusicBeatState extends FlxUIState implements MusicInterface
 	public var isStartingSong:Bool = false;
 	public var isEndingSong:Bool = false;
 
-	public function endSong():Void
-	{
-		isEndingSong = true;
-		Conductor.songPosition = Conductor.songMusic.length;
-
-		if (Conductor.songMusic != null && Conductor.songMusic.playing)
-		{
-			Conductor.songMusic.volume = 0;
-			Conductor.songMusic.pause();
-		}
-
-		if (Conductor.songVocals != null && Conductor.songVocals.playing)
-		{
-			Conductor.songVocals.volume = 0;
-			Conductor.songVocals.pause();
-		}
-	}
+	public function endSong():Void {}
 
 	public function updateSelection(newSelection:Int = 0):Void
 		selection = FlxMath.wrap(Math.floor(selection) + newSelection, 0, wrappableGroup.length - 1);

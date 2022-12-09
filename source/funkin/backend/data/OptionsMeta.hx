@@ -122,7 +122,7 @@ class OptionsMeta
 			name: "Framerate Cap",
 			description: "Set your desired FPS limit.",
 			type: INTEGER,
-			value: 120,
+			value: 60,
 			max: 360
 		}
 	];
@@ -212,6 +212,7 @@ class OptionsMeta
 		#if (flixel >= "5.0.0")
 		flixel.FlxSprite.defaultAntialiasing = getPref('Anti Aliasing');
 		#end
+		FlxG.drawFramerate = FlxG.updateFramerate = getPref("Framerate Cap");
 		FlxG.autoPause = getPref('Auto Pause');
 	}
 

@@ -880,6 +880,21 @@ class PlayState extends MusicBeatState
 
 		callFunc('endSong', []);
 
+		isEndingSong = true;
+		Conductor.songPosition = Conductor.songMusic.length;
+
+		if (Conductor.songMusic != null && Conductor.songMusic.playing)
+		{
+			Conductor.songMusic.volume = 0;
+			Conductor.songMusic.pause();
+		}
+
+		if (Conductor.songVocals != null && Conductor.songVocals.playing)
+		{
+			Conductor.songVocals.volume = 0;
+			Conductor.songVocals.pause();
+		}
+
 		switch (gameplayMode)
 		{
 			case STORY:
