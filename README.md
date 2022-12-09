@@ -1,6 +1,7 @@
 # Funkin': Feather
 
 ![Repo size](https://img.shields.io/github/repo-size/BeastlyGhost/FNF-Funkin-Feather)
+
 A Work in Progress rewrite of [Friday Night Funkin'](https://github.com/ninjamuffin99/Funkin).
 
 ---
