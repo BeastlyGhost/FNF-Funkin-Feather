@@ -273,7 +273,7 @@ class PlayState extends MusicBeatState
 		canPause = true;
 
 		// cache ratings
-		popUpScore('sick', true);
+		popUpScore('sick', true, true);
 
 		if (countdownWasActive && !isPaused && !hasDied && skipCountdown)
 		{
@@ -679,7 +679,6 @@ class PlayState extends MusicBeatState
 						PlayerInfo.greatestJudgement = ratingInteger;
 
 					PlayerInfo.increaseScore(ratingInteger);
-					popUpScore(PlayerInfo.judgeTable[ratingInteger].name);
 
 					// update scoretext
 					gameUI.updateScoreText();
@@ -688,8 +687,12 @@ class PlayState extends MusicBeatState
 
 			if (!note.isSustain)
 			{
-				if (PlayerInfo.judgeTable[ratingInteger].noteSplash || note.doSplash || (note.mustPress && babyStrum.autoplay))
-					babyStrum.popUpSplash(note.index);
+				if (note.mustPress)
+				{
+					if (PlayerInfo.judgeTable[ratingInteger].noteSplash || note.doSplash || babyStrum.autoplay)
+						babyStrum.popUpSplash(note.index);
+					popUpScore(PlayerInfo.judgeTable[babyStrum.autoplay ? 0 : ratingInteger].name, !babyStrum.autoplay);
+				}
 
 				notesGroup.removeNote(note);
 				spawnedNotes.remove(note);
@@ -717,7 +720,7 @@ class PlayState extends MusicBeatState
 		gameUI.updateScoreText();
 	}
 
-	public function popUpScore(myRating:String = 'sick', preload:Bool = false):Void
+	public function popUpScore(myRating:String = 'sick', combo:Bool = true, preload:Bool = false):Void
 	{
 		var rating:FlxSprite = PlayerInfo.generateRating(assetSkin);
 
@@ -742,35 +745,38 @@ class PlayState extends MusicBeatState
 			startDelay: Conductor.crochet * 0.001
 		});
 
-		var stringCombo:String = Std.string(PlayerInfo.combo);
-		var splitCombo:Array<String> = stringCombo.split("");
-
-		for (i in 0...splitCombo.length)
+		if (combo)
 		{
-			var numScore:FlxSprite = PlayerInfo.generateCombo(assetSkin);
+			var stringCombo:String = Std.string(PlayerInfo.combo);
+			var splitCombo:Array<String> = stringCombo.split("");
 
-			numScore.alpha = 1;
-			numScore.screenCenter();
-			numScore.x += (43 * i) + 20;
-			numScore.y += 60;
+			for (i in 0...splitCombo.length)
+			{
+				var numScore:FlxSprite = PlayerInfo.generateCombo(assetSkin);
 
-			numScore.acceleration.y = FlxG.random.int(200, 300) * Conductor.songRate;
-			numScore.velocity.y = -FlxG.random.int(140, 160) * Conductor.songRate;
-			numScore.velocity.x = FlxG.random.float(-5, 5) * Conductor.songRate;
-			add(numScore);
+				numScore.alpha = 1;
+				numScore.screenCenter();
+				numScore.x += (43 * i) + 20;
+				numScore.y += 60;
 
-			if (preload)
-				numScore.alpha = 0.000001;
+				numScore.acceleration.y = FlxG.random.int(200, 300) * Conductor.songRate;
+				numScore.velocity.y = -FlxG.random.int(140, 160) * Conductor.songRate;
+				numScore.velocity.x = FlxG.random.float(-5, 5) * Conductor.songRate;
+				add(numScore);
 
-			numScore.animation.play("num" + splitCombo[i]);
+				if (preload)
+					numScore.alpha = 0.000001;
 
-			FlxTween.tween(numScore, {alpha: 0}, 0.2 / Conductor.songRate, {
-				onComplete: function(t:FlxTween)
-				{
-					numScore.kill();
-				},
-				startDelay: Conductor.crochet * 0.002
-			});
+				numScore.animation.play("num" + splitCombo[i]);
+
+				FlxTween.tween(numScore, {alpha: 0}, 0.2 / Conductor.songRate, {
+					onComplete: function(t:FlxTween)
+					{
+						numScore.kill();
+					},
+					startDelay: Conductor.crochet * 0.002
+				});
+			}
 		}
 	}
 

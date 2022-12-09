@@ -54,6 +54,8 @@ class FreeplayMenu extends MusicBeatState
 
 		DiscordRPC.update("FREEPLAY MENU", "Choosing a Song");
 
+		FeatherTools.menuMusicCheck(false);
+
 		// get the song list
 		songList = SongManager.get_songList();
 
