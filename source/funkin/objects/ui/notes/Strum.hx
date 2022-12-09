@@ -10,7 +10,7 @@ import funkin.states.PlayState;
 	Strumline class, initializes the gray notes at the top / bottom of the screen,
 	it also comes with a set of functions for handling said notes
 **/
-class Strumline extends FlxGroup
+class Strum extends FlxGroup
 {
 	public var characters:Array<Character>;
 

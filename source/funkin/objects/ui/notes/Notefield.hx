@@ -11,21 +11,21 @@ import funkin.song.Conductor;
 **/
 class Notefield extends FlxTypedGroup<Note>
 {
-	public function updatePosition(note:Note, strumline:Strumline):Void
+	public function updatePosition(note:Note, strum:Strum):Void
 	{
-		var babyArrow:BabyArrow = strumline.babyArrows.members[note.index];
+		var babyArrow:BabyArrow = strum.babyArrows.members[note.index];
 
 		note.x = babyArrow.x + note.offsetX;
 
 		var strumY:Float = babyArrow.y + note.offsetY;
 		var center:Float = strumY + BabyArrow.swagWidth / 2;
-		note.y = strumY - (Conductor.songPosition - note.step) * (0.45 * note.speed) * (strumline.downscroll ? -1 : 1);
+		note.y = strumY - (Conductor.songPosition - note.step) * (0.45 * note.speed) * (strum.downscroll ? -1 : 1);
 
 		if (note.isSustain)
 		{
-			note.flipY = strumline.downscroll;
+			note.flipY = strum.downscroll;
 
-			if (strumline.downscroll)
+			if (strum.downscroll)
 			{
 				if (note.animation.curAnim.name.endsWith('end') && note.prevNote != null)
 					note.y += note.prevNote.height;

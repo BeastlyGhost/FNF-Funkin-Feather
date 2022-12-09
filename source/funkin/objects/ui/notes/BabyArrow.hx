@@ -1,7 +1,7 @@
 package funkin.objects.ui.notes;
 
 /**
-	`BabyArrow`s are sprites that are attached to your `Strumline`line,
+	`BabyArrow`s are sprites that are attached to your `Strum`line,
 	this class simply initializes said `BabyArrow`s
 **/
 class BabyArrow extends FeatherSprite

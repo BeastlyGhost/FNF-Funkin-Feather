@@ -36,6 +36,7 @@ class Note extends FeatherSprite
 
 	public var lowPriority:Bool = false;
 	public var ignoreNote:Bool = false;
+	public var doSplash:Bool = false;
 	public var isMine:Bool = false;
 
 	// modifiable gameplay variables

@@ -18,7 +18,7 @@ class Main extends Sprite
 		height: 720, // the game window height
 		zoom: -1.0, // defines the game's state bounds, -1.0 usually means automatic setup
 		initialState: funkin.states.menus.MainMenu, // the game's initial state (shown after boot splash)
-		framerate: 120, // the game's default framerate
+		framerate: 60, // the game's default framerate
 		skipSplash: false, // whether the game boot splash should be skipped (defaults to false, changes true when seen once)
 		fullscreen: false, // whether the game should start at fullscreen
 		version: '0.0.1-PA', // the engine game version
@@ -57,10 +57,8 @@ class Main extends Sprite
 
 		#if sys
 		if (Sys.args().contains("-livereload"))
-		{
 			__justcompiled = true;
-		}
-		// if you typed in terminal "lime test windows" the __justcompiled will be true, and you will be able just to do stuff if you just built the game, if you open the game with the .exe file the __justcompiled will be false.
+		// compiling via terminal will set this to true, else it's false
 		#end
 
 		FlxG.stage.application.window.onClose.add(function()
