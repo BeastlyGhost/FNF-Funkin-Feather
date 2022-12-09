@@ -1,8 +1,8 @@
 # Funkin': Feather
 
-![Repo size](https://img.shields.io/github/repo-size/BeastlyGhost/FNF-Funkin-Feather)
-
 A Work in Progress rewrite of [Friday Night Funkin'](https://github.com/ninjamuffin99/Funkin).
+
+![Repo size](https://img.shields.io/github/repo-size/BeastlyGhost/FNF-Funkin-Feather)
 
 ---
 Made for learning purposes and as a love letter for Friday Night Funkin's modding community.
