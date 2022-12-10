@@ -4,10 +4,8 @@ import flixel.FlxG;
 
 enum OptionType
 {
-	BOOLEAN;
-	STRING;
-	INTEGER;
-	FLOAT;
+	CHECKMARK;
+	SELECTOR;
 	DYNAMIC;
 }
 
@@ -22,7 +20,7 @@ typedef OptionData =
 {
 	var name:String;
 	var ?value:Dynamic;
-	var ?max:Dynamic;
+	var ?values:Array<Dynamic>;
 	var ?description:String;
 	var ?type:OptionType; // defaults to DYNAMIC if null
 	var ?attributes:Array<OptionAttribute>;
@@ -42,88 +40,87 @@ class OptionsMeta
 		{
 			name: "Auto Pause",
 			description: "If the game should pause itself when the window is unfocused.",
-			type: BOOLEAN,
+			type: CHECKMARK,
 			value: false
 		},
 		{
 			name: "Anti Aliasing",
 			description: "If sprite antialiasing should be disabled, may improve performance.",
-			type: BOOLEAN,
+			type: CHECKMARK,
 			value: true
 		},
 		{
 			name: "Ghost Tapping",
 			description: "If you should be able to spam when there's no notes to hit during gameplay.",
-			type: BOOLEAN,
+			type: CHECKMARK,
 			value: true
 		},
 		{
-			name: "Show Grades",
-			description: "If misses, accuracy and grades should be shown during gameplay.",
-			type: BOOLEAN,
-			value: true
+			name: "User Interface Style",
+			description: "Choose your UI Style.",
+			type: SELECTOR,
+			value: "Feather Detailed",
+			values: ["FNF Minimal", "FNF Detailed", "Feather Minimal", "Feather Detailed"]
 		},
 		{
 			name: "Downscroll",
 			description: "If the notes should come from top to bottom.",
-			type: BOOLEAN,
+			type: CHECKMARK,
 			value: false
 		},
 		{
 			name: "Center Notes",
 			description: "If the notes should be centered (hides the opponent's notes).",
-			type: BOOLEAN,
+			type: CHECKMARK,
 			value: false
 		},
 		{
 			name: "Safe Frames",
 			description: "Specify the amount of frames you have for hitting notes early / late.",
-			type: FLOAT,
-			value: 10,
-			max: 10
+			type: SELECTOR,
+			value: 10
 		},
 		{
 			name: "Flashing Lights",
 			description: "If menus and songs should have Flashing Effects.",
-			type: BOOLEAN,
+			type: CHECKMARK,
 			value: true
 		},
 		{
 			name: "Note Quantization",
 			description: "If notes should change colors depending on the song beat.",
-			type: BOOLEAN,
+			type: CHECKMARK,
 			value: false
 		},
 		{
 			name: "Show FPS Info",
 			description: "If the current framerate should be shown on the Info Counter.",
-			type: BOOLEAN,
+			type: CHECKMARK,
 			value: true
 		},
 		{
 			name: "Show RAM Info",
 			description: "if the current memory usage should be shown on the Info Counter.",
-			type: BOOLEAN,
+			type: CHECKMARK,
 			value: true
 		},
 		{
 			name: "Show VRAM Info",
 			description: "if the current GPU memory usage should be shown on the Info Counter.",
-			type: BOOLEAN,
+			type: CHECKMARK,
 			value: true
 		},
 		{
 			name: "Show Debug Info",
 			description: "If the current state folder location and object count should be shown on the Info Counter.",
-			type: BOOLEAN,
+			type: CHECKMARK,
 			value: false
 		},
 		{
 			name: "Framerate Cap",
 			description: "Set your desired FPS limit.",
-			type: INTEGER,
-			value: 60,
-			max: 360
+			type: SELECTOR,
+			value: 60
 		}
 	];
 
@@ -160,7 +157,6 @@ class OptionsMeta
 					type: preferences[i].type,
 					value: preferences[i].value,
 					attributes: preferences[i].attributes,
-					max: preferences[i].max
 				});
 			}
 
@@ -197,7 +193,12 @@ class OptionsMeta
 		for (i in 0...preferences.length)
 		{
 			if (preferences[i].name == name)
+			{
+				if (preferences[i].value == null)
+					return false;
+
 				return preferences[i].value;
+			}
 		}
 
 		trace('Preference "$name" does not exist in the preferences map.');

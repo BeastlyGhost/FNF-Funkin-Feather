@@ -108,11 +108,11 @@ class CreditsMenu extends MusicBeatState
 			FlxG.sound.play(AssetHandler.grabAsset('scrollMenu', SOUND, "sounds/menus"));
 
 		/*
-		for (i in 0...iconContainer.length)
-			iconContainer[i].alpha = 0.6;
+			for (i in 0...iconContainer.length)
+				iconContainer[i].alpha = 0.6;
 
-		iconContainer[selection].alpha = 1;
-		*/
+			iconContainer[selection].alpha = 1;
+		 */
 
 		var blah:Int = 0;
 		for (item in itemContainer.members)
@@ -126,8 +126,8 @@ class CreditsMenu extends MusicBeatState
 		}
 
 		/*
-		if (wrappableGroup[selection].type != null && wrappableGroup[selection].type == "divider")
-			updateSelection(selection + selectionJumper);
-		*/	
+			if (wrappableGroup[selection].type != null && wrappableGroup[selection].type == "divider")
+				updateSelection(selection + selectionJumper);
+		 */
 	}
 }

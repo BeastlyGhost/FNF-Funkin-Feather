@@ -28,11 +28,15 @@ class UI extends FlxSpriteGroup
 	public var iconP1:Icon;
 	public var iconP2:Icon;
 
+	public var uiStyle:String = OptionsMeta.getPref("User Interface Style");
+
 	public function new():Void
 	{
 		super();
 
-		healthBG = new FlxSprite(0, PlayState.strumsP1.downscroll ? FlxG.height * 0.1 : FlxG.height * 0.89);
+		var ui_feather = uiStyle.contains("Feather");
+
+		healthBG = new FlxSprite(0, PlayState.strumsP1.downscroll ? FlxG.height * 0.1 : FlxG.height * (ui_feather ? 0.92 : 0.89));
 		healthBG.loadGraphic(AssetHandler.grabAsset("base/healthBar", IMAGE, "images/ui"));
 		healthBG.screenCenter(X);
 		healthBG.scrollFactor.set();
@@ -65,7 +69,7 @@ class UI extends FlxSpriteGroup
 		// repositioning for it to not be covered by the receptors
 		if (OptionsMeta.getPref('Center Notes'))
 		{
-			if (PlayState.strumsP1.downscroll)
+			if (PlayState.playerStrum.downscroll)
 				autoPlayText.y = autoPlayText.y - 125;
 			else
 				autoPlayText.y = autoPlayText.y + 125;
@@ -82,11 +86,8 @@ class UI extends FlxSpriteGroup
 		healthBar.percent = (PlayerInfo.health * 50);
 
 		// attach to health
-		iconP1.setGraphicSize(Std.int(FlxMath.lerp(150, iconP1.width, 0.85)));
-		iconP2.setGraphicSize(Std.int(FlxMath.lerp(150, iconP2.width, 0.85)));
-
-		iconP1.updateHitbox();
-		iconP2.updateHitbox();
+		iconP1.doBops(true);
+		iconP2.doBops(true);
 
 		var iconOffset:Int = 26;
 
@@ -117,7 +118,7 @@ class UI extends FlxSpriteGroup
 
 		tempScore = "Score: " + PlayerInfo.score;
 
-		if (OptionsMeta.getPref("Show Grades"))
+		if (uiStyle.contains("Detailed"))
 		{
 			tempScore += separator + "Misses: " + PlayerInfo.misses;
 			tempScore += separator + "Grade: " + PlayerInfo.curGrade + PlayerInfo.returnGradePercent();
@@ -137,13 +138,11 @@ class UI extends FlxSpriteGroup
 		healthBar.scrollFactor.set();
 	}
 
-	public function updateIconScale():Void
+	public function beatHit(curBeat:Int):Void
 	{
-		iconP1.setGraphicSize(Std.int(iconP1.width + 30));
-		iconP1.updateHitbox();
-
-		iconP2.setGraphicSize(Std.int(iconP2.width + 30));
-		iconP2.updateHitbox();
+		//
+		iconP1.doBops(false);
+		iconP2.doBops(false);
 	}
 
 	public function showInfoCard():Void

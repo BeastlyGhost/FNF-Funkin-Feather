@@ -2,6 +2,7 @@ package funkin.objects.ui;
 
 import flixel.FlxSprite;
 import flixel.graphics.FlxGraphic;
+import flixel.math.FlxMath;
 import sys.FileSystem;
 
 /**
@@ -14,6 +15,8 @@ class Icon extends FlxSprite
 	public var initialWidth:Float = 0;
 	public var initialHeight:Float = 0;
 
+	public var shouldBop:Bool = true;
+
 	public var character:String = 'bf';
 	public var suffix:String = '';
 
@@ -22,6 +25,20 @@ class Icon extends FlxSprite
 		super();
 
 		setIcon(character, flip);
+	}
+
+	public function doBops(onUpdate:Bool = false)
+	{
+		if (!shouldBop)
+			return;
+
+		// TODO: replace this with customizable one later
+		if (onUpdate)
+			setGraphicSize(Std.int(FlxMath.lerp(150, width, 0.85)));
+		else
+			setGraphicSize(Std.int(width + 30));
+
+		updateHitbox();
 	}
 
 	public dynamic function updateFrame(health:Float):Void
@@ -35,7 +52,7 @@ class Icon extends FlxSprite
 			animation.curAnim.curFrame = 0;
 	}
 
-	public function setIcon(char:String, shouldBeFlipped:Bool):Void
+	public function setIcon(char:String, beFlipped:Bool):Void
 	{
 		var iconAsset:FlxGraphic = AssetHandler.grabAsset('$char/icon$suffix', IMAGE, 'data/characters');
 		var iconWidth:Int = 1;
@@ -61,7 +78,7 @@ class Icon extends FlxSprite
 		initialHeight = height;
 		antialiasing = true;
 
-		animation.add('icon', [for (i in 0...frames.frames.length) i], 0, false, shouldBeFlipped);
+		animation.add('icon', [for (i in 0...frames.frames.length) i], 0, false, beFlipped);
 		animation.play('icon');
 		scrollFactor.set();
 	}

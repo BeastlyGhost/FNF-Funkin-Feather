@@ -87,7 +87,7 @@ class PlayState extends MusicBeatState
 	public static var strumsP1:Strum;
 	public static var strumsP2:Strum;
 
-	public var playerStrum:Array<Strum> = [];
+	public static var playerStrum:Strum;
 
 	public static var assetSkin:String = 'base';
 
@@ -189,7 +189,7 @@ class PlayState extends MusicBeatState
 		strumsGroup.add(strumsP1);
 		strumsGroup.add(strumsP2);
 
-		playerStrum = [strumsP1];
+		playerStrum = strumsP1;
 
 		add(strumsGroup);
 		add(notesGroup);
@@ -548,69 +548,66 @@ class PlayState extends MusicBeatState
 	{
 		keysHeld[idx] = pressed;
 
-		for (babyStrum in playerStrum)
+		// shortening
+		var babyArrow:BabyArrow = playerStrum.babyArrows.members[idx];
+
+		if (pressed)
 		{
-			// shortening
-			var babyArrow:BabyArrow = babyStrum.babyArrows.members[idx];
-
-			if (pressed)
+			if (song != null && !playerStrum.autoplay && countdownWasActive)
 			{
-				if (song != null && !babyStrum.autoplay && countdownWasActive)
+				var prevTime:Float = Conductor.songPosition;
+
+				Conductor.songPosition = Conductor.songMusic.time;
+
+				var noteList:Array<Note> = [];
+				var notePresses:Array<Note> = [];
+
+				notesGroup.forEachAlive(function(note:Note)
 				{
-					var prevTime:Float = Conductor.songPosition;
+					if (note.index == idx && note.mustPress && note.canBeHit && !note.isSustain && !note.tooLate && !note.wasGoodHit)
+						noteList.push(note);
+				});
+				noteList.sort(sortHitNotes);
 
-					Conductor.songPosition = Conductor.songMusic.time;
+				if (noteList.length > 0)
+				{
+					var notePossible:Bool = true; // usually, yeah, it should be possible to hit a note
 
-					var noteList:Array<Note> = [];
-					var notePresses:Array<Note> = [];
-
-					notesGroup.forEachAlive(function(note:Note)
+					for (epicNote in noteList)
 					{
-						if (note.index == idx && note.mustPress && note.canBeHit && !note.isSustain && !note.tooLate && !note.wasGoodHit)
-							noteList.push(note);
-					});
-					noteList.sort(sortHitNotes);
+						for (troubleNote in notePresses)
+							if (Math.abs(epicNote.step - troubleNote.step) > 10)
+								notePossible = false;
 
-					if (noteList.length > 0)
-					{
-						var notePossible:Bool = true; // usually, yeah, it should be possible to hit a note
-
-						for (epicNote in noteList)
+						if (notePossible && epicNote.canBeHit)
 						{
-							for (troubleNote in notePresses)
-								if (Math.abs(epicNote.step - troubleNote.step) > 10)
-									notePossible = false;
-
-							if (notePossible && epicNote.canBeHit)
-							{
-								noteHit(epicNote, babyStrum);
-								notePresses.push(epicNote);
-							}
+							noteHit(epicNote, playerStrum);
+							notePresses.push(epicNote);
 						}
 					}
-					else if (!OptionsMeta.getPref("Ghost Tapping"))
-					{
-						noteMiss(idx, babyStrum);
-						PlayerInfo.ghostMisses++;
-					}
-
-					Conductor.songPosition = prevTime;
 				}
-
-				if (babyArrow != null && babyArrow.animation.curAnim.name != 'confirm')
-					babyArrow.playAnim('pressed');
-			}
-			else
-			{
-				if (idx >= 0 && babyArrow != null)
-					babyArrow.playAnim('static');
-
-				for (player in babyStrum.characters)
+				else if (!OptionsMeta.getPref("Ghost Tapping"))
 				{
-					if (player.holdTimer > Conductor.stepCrochet * 4 * 0.001 && !keysHeld.contains(true))
-						if (player.animation.curAnim.name.startsWith('sing') && !player.animation.curAnim.name.endsWith('miss'))
-							player.dance();
+					noteMiss(idx, playerStrum);
+					PlayerInfo.ghostMisses++;
 				}
+
+				Conductor.songPosition = prevTime;
+			}
+
+			if (babyArrow != null && babyArrow.animation.curAnim.name != 'confirm')
+				babyArrow.playAnim('pressed');
+		}
+		else
+		{
+			if (idx >= 0 && babyArrow != null)
+				babyArrow.playAnim('static');
+
+			for (player in playerStrum.characters)
+			{
+				if (player.holdTimer > Conductor.stepCrochet * 4 * 0.001 && !keysHeld.contains(true))
+					if (player.animation.curAnim.name.startsWith('sing') && !player.animation.curAnim.name.endsWith('miss'))
+						player.dance();
 			}
 		}
 	}
@@ -819,7 +816,7 @@ class PlayState extends MusicBeatState
 		FeatherTools.cameraBumpReset(curBeat, camGame, bumpSpeed, 0.015);
 		FeatherTools.cameraBumpReset(curBeat, camHUD, bumpSpeed, 0.03);
 
-		gameUI.updateIconScale();
+		gameUI.beatHit(curBeat);
 		gameStage.stageBeatHit(curBeat, player, opponent, crowd);
 		callFunc('beatHit', [curBeat]);
 
