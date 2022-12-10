@@ -140,7 +140,6 @@ class ChartEditor extends MusicBeatState
 		Conductor.changeBPM(song.bpm);
 		// Conductor.mapBPMChanges(song);
 
-
 		/*
 			iconP1 = new Icon('bf');
 			iconP2 = new Icon('bf');

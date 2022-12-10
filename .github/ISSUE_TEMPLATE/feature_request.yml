@@ -1,0 +1,24 @@
+name: Feature request
+description: Suggest an idea for the engine
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem-related
+    attributes:
+      label: "Is your feature request related to a problem? If so, link the issue(s) or describe it/them."
+    validations:
+      required: true
+
+  - type: textarea
+    id: describe-feature
+    attributes:
+      label: "Describe the feature you'd want to see in Funkin' Feather."
+    validations:
+      required: true
+
+  - type: textarea
+    id: other-benefits
+    attributes:
+      label: "Is there any additional benefits to the engine if this feature gets implemented?"
+    validations:
+      required: true
