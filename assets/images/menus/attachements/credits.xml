@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Free texture packer v0.6.7 http://free-tex-packer.com -->
 <TextureAtlas imagePath="credits.png" width="661" height="943">
-  <SubTexture name="credits white0002" x="0" y="0" width="661" height="188" frameX="-0" frameY="-1" frameWidth="661" frameHeight="191" />
-  <SubTexture name="credits white0003" x="0" y="188" width="652" height="190" frameX="-5" frameY="-0" frameWidth="661" frameHeight="191" />
-  <SubTexture name="credits white0001" x="0" y="378" width="651" height="190" frameX="-4" frameY="-1" frameWidth="661" frameHeight="191" />
+
+  <!-- _________________________________________ STATIC _________________________________________ -->
+
+  <SubTexture name="credits basic0000" x="0" y="568" width="427" height="125" frameX="-0" frameY="-0" frameWidth="427" frameHeight="125" />
   <SubTexture name="credits basic0001" x="0" y="568" width="427" height="125" frameX="-0" frameY="-0" frameWidth="427" frameHeight="125" />
-  <SubTexture name="credits basic0004" x="0" y="693" width="427" height="125" frameX="-0" frameY="-0" frameWidth="427" frameHeight="125" />
-  <SubTexture name="credits basic0007" x="0" y="818" width="427" height="125" frameX="-0" frameY="-0" frameWidth="427" frameHeight="125" />
   <SubTexture name="credits basic0002" x="0" y="568" width="427" height="125" frameX="-0" frameY="-0" frameWidth="427" frameHeight="125" />
-  <SubTexture name="credits basic0003" x="0" y="568" width="427" height="125" frameX="-0" frameY="-0" frameWidth="427" frameHeight="125" />
+  <SubTexture name="credits basic0003" x="0" y="693" width="427" height="125" frameX="-0" frameY="-0" frameWidth="427" frameHeight="125" />
+  <SubTexture name="credits basic0004" x="0" y="693" width="427" height="125" frameX="-0" frameY="-0" frameWidth="427" frameHeight="125" />
   <SubTexture name="credits basic0005" x="0" y="693" width="427" height="125" frameX="-0" frameY="-0" frameWidth="427" frameHeight="125" />
-  <SubTexture name="credits basic0006" x="0" y="693" width="427" height="125" frameX="-0" frameY="-0" frameWidth="427" frameHeight="125" />
+  <SubTexture name="credits basic0006" x="0" y="818" width="427" height="125" frameX="-0" frameY="-0" frameWidth="427" frameHeight="125" />
+  <SubTexture name="credits basic0007" x="0" y="818" width="427" height="125" frameX="-0" frameY="-0" frameWidth="427" frameHeight="125" />
   <SubTexture name="credits basic0008" x="0" y="818" width="427" height="125" frameX="-0" frameY="-0" frameWidth="427" frameHeight="125" />
-  <SubTexture name="credits basic0009" x="0" y="818" width="427" height="125" frameX="-0" frameY="-0" frameWidth="427" frameHeight="125" />
+
+  <!-- _________________________________________ SELECTED _________________________________________ -->
+
+  <SubTexture name="credits white0000" x="0" y="378" width="651" height="190" frameX="-4" frameY="35" frameWidth="661" frameHeight="191" />
+  <SubTexture name="credits white0001" x="0" y="0" width="661" height="188" frameX="-0" frameY="35" frameWidth="661" frameHeight="191" />
+  <SubTexture name="credits white0002" x="0" y="188" width="652" height="190" frameX="-5" frameY="35" frameWidth="661" frameHeight="191" />
 </TextureAtlas>

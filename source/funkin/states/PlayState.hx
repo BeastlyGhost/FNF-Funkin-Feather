@@ -843,6 +843,9 @@ class PlayState extends MusicBeatState
 
 	override function openSubState(SubState:flixel.FlxSubState):Void
 	{
+		if (FlxG.sound.music != null)
+			Conductor.pauseSong();
+
 		callFunc('openSubState', []);
 		super.openSubState(SubState);
 	}

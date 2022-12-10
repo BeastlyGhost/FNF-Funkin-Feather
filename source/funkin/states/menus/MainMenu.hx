@@ -54,7 +54,7 @@ class MainMenu extends MusicBeatState
 
 		persistentUpdate = persistentDraw = true;
 
-		menuData = Yaml.read(AssetHandler.grabAsset("menuData", YAML, "data/menus"), yaml.Parser.options().useObjects());
+		menuData = Yaml.read(AssetHandler.grabAsset("mainMenu", YAML, "data/menus"), yaml.Parser.options().useObjects());
 
 		DiscordRPC.update("MAIN MENU", "Navigating through the Main Menus");
 
@@ -195,6 +195,8 @@ class MainMenu extends MusicBeatState
 									MusicState.switchState(new StoryMenu());
 								case "freeplay":
 									MusicState.switchState(new FreeplayMenu());
+								case "credits":
+									MusicState.switchState(new CreditsMenu());
 								case "options":
 									MusicState.switchState(new OptionsMenu());
 								default:
@@ -216,8 +218,7 @@ class MainMenu extends MusicBeatState
 	{
 		super.updateSelection(newSelection);
 
-		if (newSelection != 0)
-			FlxG.sound.play(AssetHandler.grabAsset('scrollMenu', SOUND, "sounds/menus"));
+		FlxG.sound.play(AssetHandler.grabAsset('scrollMenu', SOUND, "sounds/menus"));
 
 		itemContainer.forEach(function(spr:FlxSprite)
 		{

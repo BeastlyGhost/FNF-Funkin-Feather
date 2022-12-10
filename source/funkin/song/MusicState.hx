@@ -102,14 +102,6 @@ class MusicBeatState extends FlxUIState implements MusicInterface
 		super.update(elapsed);
 	}
 
-	override function openSubState(SubState:FlxSubState):Void
-	{
-		if (FlxG.sound.music != null)
-			Conductor.pauseSong();
-
-		super.openSubState(SubState);
-	}
-
 	override function closeSubState():Void
 	{
 		if (!isEndingSong)

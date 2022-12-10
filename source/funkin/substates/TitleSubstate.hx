@@ -69,7 +69,7 @@ class TitleSubstate extends MusicBeatSubstate
 	{
 		super.create();
 
-		introLines = Yaml.read(AssetHandler.grabAsset("titleText", YAML, "data/menus"), yaml.Parser.options().useObjects());
+		introLines = Yaml.read(AssetHandler.grabAsset("titleScreen", YAML, "data/menus"), yaml.Parser.options().useObjects());
 
 		if (!started)
 		{

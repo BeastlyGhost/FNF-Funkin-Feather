@@ -144,8 +144,7 @@ class PauseSubstate extends MusicBeatSubstate
 	{
 		super.updateSelection(newSelection);
 
-		if (newSelection != 0)
-			FlxG.sound.play(AssetHandler.grabAsset('scrollMenu', SOUND, "sounds/menus"));
+		FlxG.sound.play(AssetHandler.grabAsset('scrollMenu', SOUND, "sounds/menus"));
 
 		var blah:Int = 0;
 		for (item in itemContainer.members)

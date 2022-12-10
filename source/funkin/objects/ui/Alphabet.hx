@@ -44,6 +44,8 @@ class Alphabet extends FlxSpriteGroup
 	{
 		super(x, y);
 
+		forceX = Math.NEGATIVE_INFINITY;
+
 		_finalText = text;
 		this.text = text;
 		isBold = bold;

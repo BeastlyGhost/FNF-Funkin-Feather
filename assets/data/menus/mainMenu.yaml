@@ -5,6 +5,6 @@ bgFolder: "images/menus"
 flashFolder: "images/menus"
 flashColor: 0xFFfd719b
 
-list: ["story mode", "freeplay", "options"]
-listSpacing: 230
+list: ["story mode", "freeplay", "credits", "options"]
+listSpacing: 160
 listY: 55

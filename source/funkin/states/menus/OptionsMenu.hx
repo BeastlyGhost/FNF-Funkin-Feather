@@ -56,11 +56,11 @@ class OptionsMenu extends MusicBeatState
 	{
 		super.update(elapsed);
 
-		if (activeContainer != null)
+		if (wrappableGroup != null)
 		{
-			for (i in 0...activeContainer.length)
+			for (i in 0...wrappableGroup.length)
 			{
-				if (activeContainer[i].attributes != null && activeContainer[i].attributes.contains(UNSELECTABLE))
+				if (wrappableGroup[i].attributes != null && wrappableGroup[i].attributes.contains(UNSELECTABLE))
 					itemContainer.members[i].alpha = 0.6;
 			}
 		}
@@ -99,7 +99,7 @@ class OptionsMenu extends MusicBeatState
 				item.alpha = 1;
 		}
 
-		if (activeContainer[selection].attributes != null && activeContainer[selection].attributes.contains(UNSELECTABLE))
+		if (wrappableGroup[selection].attributes != null && wrappableGroup[selection].attributes.contains(UNSELECTABLE))
 			updateSelection(selection + selectionJumper);
 	}
 

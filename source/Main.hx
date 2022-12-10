@@ -2,7 +2,6 @@ package;
 
 import flixel.FlxG;
 import flixel.FlxGame;
-import flixel.FlxState;
 import funkin.backend.FPS;
 import openfl.Lib;
 import openfl.display.Sprite;

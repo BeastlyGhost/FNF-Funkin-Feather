@@ -112,9 +112,18 @@ class FeatherTools
 		return if (directory != null) directory else [];
 	}
 
-	public static function getDifficulty(diff:Int = 0):String
+	inline public static function getDifficulty(diff:Int = 0):String
 	{
 		return funkin.backend.data.SongManager.defaultDiffs[diff];
+	}
+
+	inline public static function openURL(link:String)
+	{
+		#if linux
+		Sys.command('/usr/bin/xdg-open', [link]);
+		#else
+		FlxG.openURL(link);
+		#end
 	}
 }
 

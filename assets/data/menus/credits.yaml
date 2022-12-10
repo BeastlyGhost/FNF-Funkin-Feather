@@ -1,0 +1,15 @@
+userList:
+  - name: "BeastlyGhost"
+    icon: "ghost"
+    profession: "Lead Programmer"
+    description: "Venha pequena fruta, venha comigo."
+    socials: [["Twitter"], ["https://twitter.com/BeastlyGabi"]]
+
+  - name: "Test"
+    type: "separator"
+
+  - name: "BeastlyGhost"
+    icon: "ghost"
+    profession: "Lead Programmer"
+    description: "Venha pequena fruta, venha comigo."
+    socials: [["Twitter"], ["https://twitter.com/BeastlyGabi"]]
