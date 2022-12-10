@@ -104,7 +104,8 @@ class CreditsMenu extends MusicBeatState
 
 		var selectionJumper = ((newSelection > selection) ? 1 : -1);
 
-		FlxG.sound.play(AssetHandler.grabAsset('scrollMenu', SOUND, "sounds/menus"));
+		if (newSelection != 0)
+			FlxG.sound.play(AssetHandler.grabAsset('scrollMenu', SOUND, "sounds/menus"));
 
 		/*
 		for (i in 0...iconContainer.length)

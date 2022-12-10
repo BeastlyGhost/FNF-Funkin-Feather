@@ -200,7 +200,8 @@ class FreeplayMenu extends MusicBeatState
 	{
 		super.updateSelection(newSelection);
 
-		FlxG.sound.play(AssetHandler.grabAsset('scrollMenu', SOUND, "sounds/menus"));
+		if (newSelection != 0)
+			FlxG.sound.play(AssetHandler.grabAsset('scrollMenu', SOUND, "sounds/menus"));
 
 		for (i in 0...iconContainer.length)
 			iconContainer[i].alpha = 0.6;

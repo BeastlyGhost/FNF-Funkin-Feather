@@ -86,7 +86,8 @@ class OptionsMenu extends MusicBeatState
 
 		var selectionJumper = ((newSelection > selection) ? 1 : -1);
 
-		FlxG.sound.play(AssetHandler.grabAsset('scrollMenu', SOUND, "sounds/menus"));
+		if (newSelection != 0)
+			FlxG.sound.play(AssetHandler.grabAsset('scrollMenu', SOUND, "sounds/menus"));
 
 		var blah:Int = 0;
 		for (item in itemContainer.members)
