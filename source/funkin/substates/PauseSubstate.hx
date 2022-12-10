@@ -8,14 +8,14 @@ import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import funkin.backend.dependencies.PlayerInfo;
-import funkin.objects.ui.Alphabet;
+import funkin.objects.ui.fonts.Alphabet;
 import funkin.song.MusicState;
 import funkin.states.PlayState;
 import sys.thread.Mutex;
 import sys.thread.Thread;
 
 /**
-	a Subclass for when you `pause` on `PlayState`
+	a Subclass for when you pause on `PlayState`
 	initializes simple options with simple functions
 **/
 class PauseSubstate extends MusicBeatSubstate

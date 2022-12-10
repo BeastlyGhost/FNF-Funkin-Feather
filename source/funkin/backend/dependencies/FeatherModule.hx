@@ -38,7 +38,7 @@ class FeatherModule extends SScript
 		set('FlxTrail', flixel.addons.effects.FlxTrail);
 
 		// CLASSES (FUNKIN);
-		set('Alphabet', funkin.objects.ui.Alphabet);
+		set('Alphabet', funkin.objects.ui.fonts.Alphabet);
 		set('Character', funkin.objects.Character);
 		set('Conductor', funkin.song.Conductor);
 		set('Icon', funkin.objects.ui.Icon);

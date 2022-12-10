@@ -1,5 +1,6 @@
 package funkin.states;
 
+import flixel.math.FlxPoint;
 import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxObject;
@@ -95,9 +96,9 @@ class PlayState extends MusicBeatState
 	public static var pixelAssetSize:Float = 6;
 
 	// Characters
-	public var player:Character;
-	public var crowd:Character;
-	public var opponent:Character;
+	public static var player:Character;
+	public static var crowd:Character;
+	public static var opponent:Character;
 
 	public var crowdSpeed:Int = 1;
 
@@ -127,6 +128,8 @@ class PlayState extends MusicBeatState
 		super.create();
 
 		main = this;
+
+		modules = [];
 
 		FlxG.mouse.visible = false;
 
@@ -165,13 +168,14 @@ class PlayState extends MusicBeatState
 
 		curStage = gameStage.getStageName();
 
-		crowd.setCharacter(300, 100, 'bf');
+		crowd.setCharacter(300, 100, song.crowd);
 		add(crowd);
 
 		opponent.setCharacter(100, 100, song.opponent);
+
 		add(opponent);
 
-		player.setCharacter(770, 450, 'bf');
+		player.setCharacter(770, 450, song.player);
 		add(player);
 
 		strumsGroup = new FlxTypedGroup<Strum>();
@@ -350,24 +354,30 @@ class PlayState extends MusicBeatState
 		isStartingSong = false;
 	}
 
-	inline public function cameraMovePoint(character:String = 'player'):Void
+	inline public function moveCameraSection(pointString:String = 'player'):Void
 	{
+		if (pointString == null)
+			return;
+
+		/** Does this even work properly?
+			@BeastlyGhost **/
+
 		var char:Character = opponent;
 
-		switch (character)
+		switch (pointString)
 		{
-			case "player" | "bf" | "boyfriend":
-				char = player;
-			case "crowd" | "spectator" | "girlfriend" | "gf":
+			case 'crowd':
 				char = crowd;
-			case "opponent" | "dad" | "dadOpponent":
+			case 'player':
+				char = player;
+			default:
 				char = opponent;
 		}
 
-		var pointX = character == "player" ? char.getMidpoint().x - 100 : char.getMidpoint().x + 100;
-		var pointY = char.getMidpoint().y - 100;
+		var midpoint:FlxPoint = char.getMidpoint();
+		var player:Bool = (pointString == "player");
 
-		camFollow.setPosition(pointX + char.camOffset.x, pointY + char.camOffset.y);
+		camFollow.setPosition(midpoint.x + char.camOffset.x + (player ? -100 : 100), midpoint.y - 100 + char.camOffset.y);
 	}
 
 	override public function update(elapsed:Float):Void
@@ -409,9 +419,6 @@ class PlayState extends MusicBeatState
 
 		FeatherTools.cameraBumpingZooms(camGame, cameraZoom, cameraSpeed);
 		FeatherTools.cameraBumpingZooms(camHUD, 1);
-
-		if (song != null && song.sectionNotes != null && song.sectionNotes[Std.int(curStep / 16)] != null)
-			cameraMovePoint(song.sectionNotes[Std.int(curStep / 16)].cameraPoint);
 
 		playerDeathCheck();
 
@@ -792,20 +799,21 @@ class PlayState extends MusicBeatState
 		{
 			for (i in babyStrum.characters)
 			{
-				var boppingBeat = (i.isQuickDancer ? beat % Math.round(crowdSpeed) * i.bopTimer == 0 : beat % i.bopTimer == 0);
+				if (i != null)
+				{
+					var boppingBeat = (i.isQuickDancer ? beat % Math.round(crowdSpeed) * i.bopTimer == 0 : beat % i.bopTimer == 0);
 
-				if (i != null && !i.animation.curAnim.name.startsWith("sing") && boppingBeat && (i.animOffsets.exists(i.defaultIdle)))
-					i.dance();
+					if (!i.animation.curAnim.name.startsWith("sing") && boppingBeat)
+						i.dance();
+				}
 			}
 		}
 
-		var boppingBeat = (crowd.isQuickDancer ? beat % Math.round(crowdSpeed) * crowd.bopTimer == 0 : beat % crowd.bopTimer == 0);
-		if (crowd != null
-			&& !crowd.animation.curAnim.name.startsWith("sing")
-			&& boppingBeat
-			&& (crowd.animOffsets.exists(crowd.defaultIdle)))
+		if (crowd != null)
 		{
-			crowd.dance();
+			var boppingBeat = (crowd.isQuickDancer ? beat % Math.round(crowdSpeed) * crowd.bopTimer == 0 : beat % crowd.bopTimer == 0);
+			if (!crowd.animation.curAnim.name.startsWith("sing") && boppingBeat)
+				crowd.dance();
 		}
 	}
 
@@ -833,6 +841,8 @@ class PlayState extends MusicBeatState
 
 	override function sectionHit():Void
 	{
+		moveCameraSection(song.sectionNotes[curSection].cameraPoint);
+
 		gameStage.stageSectionHit(curBeat, player, opponent, crowd);
 		callFunc('sectionHit', [curSection]);
 		super.sectionHit();

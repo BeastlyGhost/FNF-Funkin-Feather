@@ -1,4 +1,4 @@
-package funkin.objects.ui;
+package funkin.objects.ui.fonts;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -8,7 +8,7 @@ import flixel.math.FlxMath;
 /**
 	Loosley based on FlxTypeText lolol
 **/
-class Alphabet extends FlxSpriteGroup
+class Alphabet extends FlxTypedSpriteGroup<AlphaCharacter>
 {
 	public var delay:Float = 0.05;
 	public var paused:Bool = false;
@@ -114,9 +114,7 @@ class Alphabet extends FlxSpriteGroup
 class AlphaCharacter extends FlxSprite
 {
 	public static var alphabet:String = "abcdefghijklmnopqrstuvwxyz";
-
 	public static var numbers:String = "1234567890";
-
 	public static var symbols:String = "|~#$%()*+-:;<=>@[]^_.,'!?";
 
 	public var row:Int = 0;

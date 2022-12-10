@@ -43,33 +43,38 @@ class Icon extends FlxSprite
 
 	public dynamic function updateFrame(health:Float):Void
 	{
-		if (graphic == null)
-			return;
-
-		if (health < 20)
-			animation.curAnim.curFrame = 1;
-		else
+		if (graphic != null)
+		{
 			animation.curAnim.curFrame = 0;
+
+			if (frames != null)
+			{
+				if (health < 20)
+					animation.curAnim.curFrame = 1;
+			}
+		}
 	}
 
 	public function setIcon(char:String, beFlipped:Bool):Void
 	{
-		var iconAsset:FlxGraphic = AssetHandler.grabAsset('$char/icon$suffix', IMAGE, 'data/characters');
-		var iconWidth:Int = 1;
+		var stringTrim:String = char;
+		if (stringTrim.contains('-'))
+			stringTrim = stringTrim.substring(0, stringTrim.indexOf('-'));
 
 		if (!FileSystem.exists(AssetHandler.grabAsset('$char/icon$suffix', IMAGE, 'data/characters')))
 		{
-			if (char.contains('-'))
-				char = char.substring(0, char.indexOf('-'));
+			if (char != stringTrim)
+				char = stringTrim;
+			else
+				char = 'placeholder';
 		}
 
-		if (iconAsset == null)
-			return;
+		var iconAsset:FlxGraphic = AssetHandler.grabAsset('$char/icon$suffix', IMAGE, 'data/characters');
 
 		loadGraphic(iconAsset); // get file size
 
 		// icons with endless frames;
-		iconWidth = Std.int(iconAsset.width / 150) - 1;
+		var iconWidth:Int = Std.int(iconAsset.width / 150) - 1;
 		iconWidth = iconWidth + 1;
 
 		loadGraphic(iconAsset, true, Std.int(iconAsset.width / iconWidth), iconAsset.height); // then load it
@@ -87,7 +92,7 @@ class Icon extends FlxSprite
 	{
 		super.update(elapsed);
 
-		if (parentSprite != null)
+		if (frames != null && parentSprite != null)
 		{
 			setPosition(parentSprite.x + parentSprite.width + 10, parentSprite.y - 30);
 			scrollFactor.set(parentSprite.scrollFactor.x, parentSprite.scrollFactor.y);

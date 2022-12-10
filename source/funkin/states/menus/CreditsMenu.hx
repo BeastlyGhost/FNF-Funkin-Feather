@@ -1,7 +1,7 @@
 package funkin.states.menus;
 
 import flixel.FlxG;
-import funkin.objects.ui.Alphabet;
+import funkin.objects.ui.fonts.Alphabet;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.FlxSprite;
 import funkin.song.MusicState;

@@ -105,7 +105,7 @@ class ChartParser
 					if (songNotes[1] > 3)
 						daMustHit = !section.mustHitSection;
 
-					pointer = daMustHit ? "player" : "opponent";
+					pointer = (daMustHit ? "player" : "opponent");
 
 					if (section.altAnim)
 						songNotes[4] = '-alt';

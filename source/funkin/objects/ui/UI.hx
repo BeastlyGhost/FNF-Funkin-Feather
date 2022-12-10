@@ -34,9 +34,7 @@ class UI extends FlxSpriteGroup
 	{
 		super();
 
-		var ui_feather = uiStyle.contains("Feather");
-
-		healthBG = new FlxSprite(0, PlayState.strumsP1.downscroll ? FlxG.height * 0.1 : FlxG.height * (ui_feather ? 0.92 : 0.89));
+		healthBG = new FlxSprite(0, PlayState.strumsP1.downscroll ? FlxG.height * 0.1 : FlxG.height * (uiStyle.contains("Feather") ? 0.92 : 0.89));
 		healthBG.loadGraphic(AssetHandler.grabAsset("base/healthBar", IMAGE, "images/ui"));
 		healthBG.screenCenter(X);
 		healthBG.scrollFactor.set();
@@ -46,11 +44,11 @@ class UI extends FlxSpriteGroup
 		healthBar.scrollFactor.set();
 		add(healthBar);
 
-		iconP1 = new Icon('bf', true);
+		iconP1 = new Icon('placeholder', true);
 		iconP1.y = healthBar.y - (iconP1.height / 2);
 		add(iconP1);
 
-		iconP2 = new Icon('bf', false);
+		iconP2 = new Icon('placeholder', false);
 		iconP2.y = healthBar.y - (iconP2.height / 2);
 		add(iconP2);
 

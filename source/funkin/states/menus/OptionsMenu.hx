@@ -4,7 +4,7 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import funkin.backend.data.OptionsMeta;
-import funkin.objects.ui.Alphabet;
+import funkin.objects.ui.fonts.Alphabet;
 import funkin.song.MusicState;
 
 /**

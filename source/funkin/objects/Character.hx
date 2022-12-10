@@ -1,5 +1,7 @@
 package funkin.objects;
 
+import funkin.states.PlayState;
+import funkin.backend.dependencies.FeatherModule;
 import flixel.math.FlxPoint;
 import funkin.backend.dependencies.FeatherTools.FeatherSprite;
 import funkin.song.Conductor;
@@ -49,13 +51,14 @@ class Character extends FeatherSprite
 	public var camOffset:FlxPoint;
 
 	public var character:String;
+	public var icon:String;
 
 	public var player:Bool = false;
 
 	public var bopTimer:Float = 2;
 	public var holdTimer:Float = 0;
 	public var heyTimer:Float = 0;
-	public var dadVar:Float = 4;
+	public var dadVar:Float = 4; // this is the ONLY variable on this section that doesn't end with "Timer", oh lord
 
 	public var onSpecial:Bool = false;
 	public var hasMissAnims:Bool = false;
@@ -64,11 +67,7 @@ class Character extends FeatherSprite
 
 	public var idleSuffix:String = '';
 
-	public var defaultIdle:String = 'idle';
-
 	public var charType:CharacterOrigin = FUNKIN_FEATHER;
-
-	public var psychAnimationsArray:Array<PsychAnimsArray> = [];
 
 	public function new(player:Bool = false):Void
 	{
@@ -82,93 +81,73 @@ class Character extends FeatherSprite
 		antialiasing = true;
 
 		character = char;
+		if (icon == null)
+			icon = char;
 
 		charOffset = new FlxPoint(0, 0);
 		camOffset = new FlxPoint(0, 0);
 
 		if (isQuickDancer)
-		{
-			defaultIdle = 'danceRight';
 			danceIdle = true;
-		}
 
-		if (FileSystem.exists(AssetHandler.grabAsset(character, JSON, "data/characters/" + character)))
-			charType = PSYCH_ENGINE;
+		/**
+			if (FileSystem.exists(AssetHandler.grabAsset(character, MODULE, "data/characters/" + character)))
+				charType = FOREVER_FEATHER;
+
+			if (FileSystem.exists(AssetHandler.grabAsset(character, JSON, "data/characters/" + character)))
+				charType = PSYCH_ENGINE;
+		**/
 
 		switch (character)
 		{
+			case 'placeholder':
+				frames = AssetHandler.grabAsset("placeholder", SPARROW, "data/characters/placeholder");
+
+				animation.addByPrefix('idle', 'Idle', 24, false);
+				animation.addByPrefix('singLEFT', 'Left', 24, false);
+				animation.addByPrefix('singDOWN', 'Down', 24, false);
+				animation.addByPrefix('singUP', 'Up', 24, false);
+				animation.addByPrefix('singRIGHT', 'Right', 24, false);
+
+				if (player)
+				{
+					addOffset("idle", 0, -350);
+					addOffset("singLEFT", 22, -353);
+					addOffset("singDOWN", 17, -375);
+					addOffset("singUP", 8, -334);
+					addOffset("singRIGHT", 50, -348);
+					camOffset.set(30, 330);
+					charOffset.set(0, -350);
+				}
+				else
+				{
+					addOffset("idle", 0, -10);
+					addOffset("singLEFT", 33, -6);
+					addOffset("singDOWN", -48, -31);
+					addOffset("singUP", -45, 11);
+					addOffset("singRIGHT", -61, -14);
+					camOffset.set(0, -5);
+					// flipX = false;
+				}
+
+			// healthColor = [161, 161, 161];
+
 			default:
 				switch (charType)
 				{
 					case PSYCH_ENGINE:
-						/**
-							@author Shadow_Mario_
-						**/
-						var json:PsychCharFile = cast Json.parse(AssetHandler.grabAsset('$character', JSON, 'data/characters/$character'));
-
-						var spriteType:String = "SparrowAtlas";
-
-						try
-						{
-							var textAsset = AssetHandler.grabAsset(json.image.replace('characters/', ''), TEXT, 'data/characters/$character');
-							if (FileSystem.exists(textAsset))
-								spriteType = "PackerAtlas";
-							else
-								spriteType = "SparrowAtlas";
-						}
-						catch (e)
-						{
-							trace('Could not define Sprite Type, Uncaught Error: ' + e);
-						}
-
-						switch (spriteType)
-						{
-							case "PackerAtlas":
-								frames = AssetHandler.grabAsset(json.image.replace('characters/', ''), PACKER, 'data/characters/$character');
-							default:
-								frames = AssetHandler.grabAsset(json.image.replace('characters/', ''), SPARROW, 'data/characters/$character');
-						}
-
-						psychAnimationsArray = json.animations;
-						for (anim in psychAnimationsArray)
-						{
-							var animAnim:String = '' + anim.anim;
-							var animName:String = '' + anim.name;
-							var animFps:Int = anim.fps;
-							var animLoop:Bool = !!anim.loop; // Bruh
-							var animIndices:Array<Int> = anim.indices;
-							if (animIndices != null && animIndices.length > 0)
-								animation.addByIndices(animAnim, animName, animIndices, "", animFps, animLoop);
-							else
-								animation.addByPrefix(animAnim, animName, animFps, animLoop);
-
-							if (anim.offsets != null && anim.offsets.length > 1)
-								addOffset(anim.anim, anim.offsets[0], anim.offsets[1]);
-						}
-
-						flipX = json.flip_x;
-						antialiasing = !json.no_antialiasing;
-						// healthColor = json.healthbar_colors;
-						// healthIcon = json.healthicon;
-						dadVar = json.sing_duration;
-
-						if (json.scale != 1)
-						{
-							setGraphicSize(Std.int(width * json.scale));
-							updateHitbox();
-						}
-
-						camOffset.set(json.camera_position[0], json.camera_position[1]);
-						setPosition(json.position[0], json.position[1]);
-
+						generatePsych(character);
+					case FOREVER_FEATHER:
+						generateFEFeather(character);
 					default:
-						generatePlaceholder();
+						return setCharacter(x, y, 'placeholder');
 				}
 		}
 
-		for (i in 0...funkin.objects.ui.notes.BabyArrow.actions.length)
+		var noteActions:Array<String> = funkin.objects.ui.notes.BabyArrow.actions;
+		for (i in 0...noteActions.length)
 		{
-			if (animOffsets.exists('sing' + funkin.objects.ui.notes.BabyArrow.actions[i].toUpperCase() + 'miss'))
+			if (animOffsets.exists('sing' + noteActions[i].toUpperCase() + 'miss'))
 				hasMissAnims = true;
 		}
 
@@ -180,12 +159,6 @@ class Character extends FeatherSprite
 		}
 		else if (character.startsWith('bf'))
 			flipLeftRight();
-
-		// "Preloads" animations so they dont lag in the song
-		// author @DiogoTV
-		var allAnims:Array<String> = animation.getNameList();
-		for (anim in allAnims)
-			playAnim(anim);
 
 		dance();
 
@@ -215,39 +188,6 @@ class Character extends FeatherSprite
 		}
 	}
 
-	function generatePlaceholder():Character
-	{
-		frames = AssetHandler.grabAsset("BOYFRIEND", SPARROW, "data/characters/bf");
-
-		animation.addByPrefix('idle', 'BF idle dance', 24, false);
-		animation.addByPrefix('singUP', 'BF NOTE UP0', 24, false);
-		animation.addByPrefix('singLEFT', 'BF NOTE LEFT0', 24, false);
-		animation.addByPrefix('singRIGHT', 'BF NOTE RIGHT0', 24, false);
-		animation.addByPrefix('singDOWN', 'BF NOTE DOWN0', 24, false);
-		animation.addByPrefix('singUPmiss', 'BF NOTE UP MISS', 24, false);
-		animation.addByPrefix('singLEFTmiss', 'BF NOTE LEFT MISS', 24, false);
-		animation.addByPrefix('singRIGHTmiss', 'BF NOTE RIGHT MISS', 24, false);
-		animation.addByPrefix('singDOWNmiss', 'BF NOTE DOWN MISS', 24, false);
-		animation.addByPrefix('hey', 'BF HEY', 24, false);
-
-		addOffset('idle', -5);
-		addOffset('hey', -3, 5);
-		addOffset('singLEFT', 5, -6);
-		addOffset('singDOWN', -20, -51);
-		addOffset('singUP', -46, 27);
-		addOffset('singRIGHT', -48, -7);
-		addOffset('singLEFTmiss', 7, 19);
-		addOffset('singDOWNmiss', -15, -19);
-		addOffset('singUPmiss', -46, 27);
-		addOffset('singRIGHTmiss', -44, 22);
-
-		playAnim('idle');
-
-		flipX = true;
-
-		return this;
-	}
-
 	override function update(elapsed:Float):Void
 	{
 		if (animation.curAnim != null)
@@ -275,9 +215,9 @@ class Character extends FeatherSprite
 				dance();
 			}
 
-			if (!player && !onSpecial)
+			if (!player)
 			{
-				if (animation.curAnim.name.startsWith('sing'))
+				if (!onSpecial && animation.curAnim.name.startsWith('sing'))
 					holdTimer += elapsed;
 
 				if (holdTimer >= Conductor.stepCrochet * dadVar * 0.001)
@@ -286,18 +226,26 @@ class Character extends FeatherSprite
 					holdTimer = 0;
 				}
 			}
-			else if (!onSpecial)
+			else
 			{
-				if (animation.curAnim.name.startsWith('sing'))
+				if (!onSpecial && animation.curAnim.name.startsWith('sing'))
 					holdTimer += elapsed;
 				else
 					holdTimer = 0;
 
-				if (animation.curAnim.name.endsWith('miss') && animation.curAnim.finished)
+				if (!onSpecial && animation.curAnim.name.endsWith('miss') && animation.curAnim.finished)
 					playAnim('idle', true, false, 10);
 
 				if (animation.curAnim.name == 'firstDeath' && animation.curAnim.finished)
 					playAnim('deathLoop');
+			}
+
+			if (isQuickDancer)
+			{
+				if (animation.curAnim.name == 'hairFall' && animation.curAnim.finished)
+					playAnim('danceRight');
+				if ((animation.curAnim.name.startsWith('sad')) && (animation.curAnim.finished))
+					playAnim('danceLeft');
 			}
 		}
 
@@ -310,7 +258,7 @@ class Character extends FeatherSprite
 	{
 		if (animation.curAnim != null || !onSpecial)
 		{
-			onSpecial = false;
+			onSpecial = false; // safety measure
 
 			if (isQuickDancer)
 			{
@@ -324,5 +272,246 @@ class Character extends FeatherSprite
 			else
 				playAnim("idle" + idleSuffix);
 		}
+	}
+
+	function generateFeather(char:String = 'bf'):Character
+	{
+		// yaml format.
+
+		return this;
+	}
+
+	public var characterScripts:Array<FeatherModule> = [];
+
+	function generateFEFeather(char:String = 'bf'):Character
+	{
+		var pushedChars:Array<String> = [];
+
+		var overrideFrames:String = null;
+		var framesPath:String = null;
+
+		if (!pushedChars.contains(char))
+		{
+			var script:FeatherModule = new FeatherModule(AssetHandler.grabAsset('config', MODULE, "data/characters/" + char));
+
+			if (script.interp == null)
+				trace("Something terrible occured! Skipping.");
+
+			characterScripts.push(script);
+			pushedChars.push(char);
+		}
+
+		var spriteType:AssetType = SPARROW;
+
+		try
+		{
+			var textAsset = AssetHandler.grabAsset(char, TEXT, "data/characters/" + char);
+			if (FileSystem.exists(textAsset))
+				spriteType = PACKER;
+			else
+				spriteType = SPARROW;
+		}
+		catch (e)
+		{
+			trace('Could not define Sprite Type, Uncaught Error: ' + e);
+			spriteType = SPARROW;
+		}
+
+		// frame overrides because why not;
+		setVar('setFrames', function(newFrames:String, newFramesPath:String)
+		{
+			if (newFrames != null || newFrames != '')
+				overrideFrames = newFrames;
+			if (newFramesPath != null && newFramesPath != '')
+				framesPath = newFramesPath;
+		});
+
+		var mainFrame:String = (overrideFrames == null ? char : overrideFrames);
+		var framePath:String = (framesPath == null ? 'data/characters/$char' : framesPath);
+
+		frames = AssetHandler.grabAsset(mainFrame, spriteType, framePath);
+
+		setVar('addByPrefix', function(name:String, prefix:String, ?frames:Int = 24, ?loop:Bool = false)
+		{
+			animation.addByPrefix(name, prefix, frames, loop);
+		});
+
+		setVar('addByIndices', function(name:String, prefix:String, indices:Array<Int>, ?frames:Int = 24, ?loop:Bool = false)
+		{
+			animation.addByIndices(name, prefix, indices, "", frames, loop);
+		});
+
+		setVar('addOffset', function(?name:String = "idle", ?x:Float = 0, ?y:Float = 0)
+		{
+			addOffset(name, x, y);
+		});
+
+		setVar('set', function(name:String, value:Dynamic)
+		{
+			Reflect.setProperty(this, name, value);
+		});
+
+		setVar('setSingDuration', function(amount:Int)
+		{
+			dadVar = amount;
+		});
+
+		setVar('setOffsets', function(x:Float = 0, y:Float = 0)
+		{
+			charOffset.set(x, y);
+		});
+
+		setVar('setCamOffsets', function(x:Float = 0, y:Float = 0)
+		{
+			camOffset.set(x, y);
+		});
+
+		setVar('setScale', function(?x:Float = 1, ?y:Float = 1)
+		{
+			scale.set(x, y);
+		});
+
+		setVar('setIcon', function(swag:String = 'face') icon = swag);
+
+		setVar('quickDancer', function(quick:Bool = false)
+		{
+			isQuickDancer = quick;
+		});
+
+		/**
+			setVar('setBarColor', function(rgb:Array<Float>)
+			{
+				if (healthColor != null)
+					healthColor = rgb;
+				else
+					healthColor = [161, 161, 161];
+				return true;
+			});
+
+			setVar('setDeathChar',
+				function(char:String = 'bf-dead', lossSfx:String = 'fnf_loss_sfx', song:String = 'gameOver', confirmSound:String = 'gameOverEnd', bpm:Int)
+				{
+					substates.GameOverSubstate.bfType = char;
+					substates.GameOverSubstate.deathNoise = lossSfx;
+					substates.GameOverSubstate.deathTrack = song;
+					substates.GameOverSubstate.leaveTrack = confirmSound;
+					substates.GameOverSubstate.trackBpm = bpm;
+				});
+		**/
+
+		setVar('get', function(variable:String)
+		{
+			return Reflect.getProperty(this, variable);
+		});
+
+		setVar('setGraphicSize', function(width:Int = 0, height:Int = 0)
+		{
+			setGraphicSize(width, height);
+			updateHitbox();
+		});
+
+		setVar('playAnim', function(name:String, ?force:Bool = false, ?reversed:Bool = false, ?frames:Int = 0)
+		{
+			playAnim(name, force, reversed, frames);
+		});
+
+		setVar('isPlayer', player);
+		setVar('player', player);
+		if (PlayState.song != null)
+			setVar('songName', PlayState.song.name.toLowerCase());
+		setVar('flipLeftRight', flipLeftRight);
+
+		if (characterScripts != null)
+		{
+			for (i in characterScripts)
+				i.call('loadAnimations', []);
+		}
+
+		return this;
+	}
+
+	public function setVar(key:String, value:Dynamic):Bool
+	{
+		var allSucceed:Bool = true;
+		if (characterScripts != null)
+		{
+			for (i in characterScripts)
+			{
+				i.set(key, value);
+
+				if (!i.exists(key))
+				{
+					trace('${i.scriptFile} failed to set $key for its interpreter, continuing.');
+					allSucceed = false;
+					continue;
+				}
+			}
+		}
+
+		return allSucceed;
+	}
+
+	public var psychAnimationsArray:Array<PsychAnimsArray> = [];
+
+	function generatePsych(char:String = 'bf'):Character
+	{
+		/**
+			@author Shadow_Mario_
+		**/
+		var json:PsychCharFile = cast Json.parse(AssetHandler.grabAsset(char, JSON, "data/characters/" + char));
+
+		var spriteType:AssetType = SPARROW;
+
+		try
+		{
+			var textAsset = AssetHandler.grabAsset(json.image.replace('characters/', ''), TEXT, "data/characters/" + char);
+			if (FileSystem.exists(textAsset))
+				spriteType = PACKER;
+			else
+				spriteType = SPARROW;
+		}
+		catch (e)
+		{
+			trace('Could not define Sprite Type, Uncaught Error: ' + e);
+			spriteType = SPARROW;
+		}
+
+		frames = AssetHandler.grabAsset(json.image.replace('characters/', ''), spriteType, "data/characters/" + char);
+
+		trace(frames);
+
+		psychAnimationsArray = json.animations;
+		for (anim in psychAnimationsArray)
+		{
+			var animAnim:String = '' + anim.anim;
+			var animName:String = '' + anim.name;
+			var animFps:Int = anim.fps;
+			var animLoop:Bool = !!anim.loop; // Bruh
+			var animIndices:Array<Int> = anim.indices;
+			if (animIndices != null && animIndices.length > 0)
+				animation.addByIndices(animAnim, animName, animIndices, "", animFps, animLoop);
+			else
+				animation.addByPrefix(animAnim, animName, animFps, animLoop);
+
+			if (anim.offsets != null && anim.offsets.length > 1)
+				addOffset(anim.anim, anim.offsets[0], anim.offsets[1]);
+		}
+
+		flipX = json.flip_x;
+		antialiasing = !json.no_antialiasing;
+		// healthColor = json.healthbar_colors;
+		// healthIcon = json.healthicon;
+		dadVar = json.sing_duration;
+
+		if (json.scale != 1)
+		{
+			setGraphicSize(Std.int(width * json.scale));
+			updateHitbox();
+		}
+
+		camOffset.set(json.camera_position[0], json.camera_position[1]);
+		setPosition(json.position[0], json.position[1]);
+
+		return this;
 	}
 }

@@ -72,6 +72,13 @@ class AssetHandler
 
 	/**
 		Returns a specified asset
+
+		example usage:
+
+		`AssetHandler.grabAsset("default/base/NOTE_assets", SPARROW, "data/notes");`
+
+		-----------------------------
+
 		@param asset the asset name
 		@param type the asset type (like: IMAGE, SOUND, FONT for example)
 		@param directory the directory we should look for the specified asset name
@@ -105,6 +112,7 @@ class AssetHandler
 					return path;
 			}
 		}
+
 		trace('$type asset is returning null at $path');
 		return null;
 	}
@@ -112,7 +120,7 @@ class AssetHandler
 	/**
 		Stores a graphic asset from the specified directory, then returns it
 		@param outputDir the directory we should look for
-		@return uses FlxGraphic's `fromBitmapData` function to return your graphic asset
+		@return uses `FlxGraphic`'s `fromBitmapData` function to return your graphic asset
 	**/
 	public static function grabGraphic(outputDir:String):FlxGraphic
 	{

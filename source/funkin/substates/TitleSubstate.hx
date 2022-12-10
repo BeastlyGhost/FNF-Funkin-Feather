@@ -10,7 +10,7 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
-import funkin.objects.ui.Alphabet;
+import funkin.objects.ui.fonts.Alphabet;
 import funkin.song.Conductor;
 import funkin.song.MusicState;
 import funkin.states.menus.MainMenu;

@@ -11,9 +11,9 @@ package funkin.backend.data;
 class Interfaces {} // nothing, I just wanna leave the comment haha
 
 /**
-	Handles variales used on the `MusicState` class
+	Handles variables used on the `MusicState` class
 **/
-interface MusicInterface
+interface IMusicBeat
 {
 	public var curBeat:Int; // Defines the Current Beat on the Current Song
 	public var curStep:Int; // Defines the Current Step on the Current Song
@@ -22,4 +22,13 @@ interface MusicInterface
 	public function sectionHit():Void; // Decides what to do when a Section is hit
 	public function stepHit():Void; // Decides what to do when a Step is hit, also updates beats
 	public function endSong():Void; // a Function to decide what to do when a song ends
+}
+
+/**
+	Handles variables used on the `Alphabet` Class
+**/
+interface ILetters
+{
+	// TODO: everything, literally
+	public function getLetter(letter:String):Void;
 }

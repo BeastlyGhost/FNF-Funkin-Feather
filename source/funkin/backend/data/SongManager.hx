@@ -79,7 +79,7 @@ class SongManager
 		{
 			songList.push({
 				name: songs[i],
-				week: 1, // change this to the ACTUAL week number later...
+				week: 0, // change this to the ACTUAL week number later...
 				character: 'bf',
 				diffs: defaultDiffs,
 				color: -1

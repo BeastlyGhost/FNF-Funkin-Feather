@@ -9,7 +9,7 @@ import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import funkin.backend.data.SongManager;
 import funkin.backend.dependencies.PlayerInfo;
-import funkin.objects.ui.Alphabet;
+import funkin.objects.ui.fonts.Alphabet;
 import funkin.objects.ui.Icon;
 import funkin.song.MusicState;
 import openfl.media.Sound;
@@ -81,7 +81,7 @@ class FreeplayMenu extends MusicBeatState
 			songText.targetY = i;
 			itemContainer.add(songText);
 
-			var songIcon:Icon = new Icon('bf');
+			var songIcon:Icon = new Icon(songList[i].character);
 			songIcon.parentSprite = songText;
 			iconContainer.push(songIcon);
 			add(songIcon);

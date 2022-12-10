@@ -1,15 +1,13 @@
 package funkin.song;
 
+import funkin.states.ScriptableState;
 import flixel.FlxG;
 import flixel.FlxState;
-import flixel.FlxSubState;
 import flixel.addons.transition.FlxTransitionableState;
-import flixel.addons.ui.FlxUIState;
-import flixel.math.FlxMath;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxTimer;
-import funkin.backend.data.Interfaces.MusicInterface;
+import funkin.backend.data.Interfaces.IMusicBeat;
 import funkin.backend.Transition;
 import funkin.song.Conductor.BPMChangeEvent;
 import funkin.states.PlayState;
@@ -17,8 +15,6 @@ import funkin.states.PlayState;
 /**
 	Music State is a simple class in which doesn't extend anything
 	it is meant only for storing useful functions
-
-	however, in the HX file, we also keep `MusicBeatState` and `MusicBeatSubstate` 
 **/
 class MusicState
 {
@@ -59,10 +55,9 @@ class MusicState
 }
 
 /**
-	a State that is widely used by the other game states
-	it contains useful tools for song control that can be used by every other state
+	State used by most classes which use tools related to game songs
 **/
-class MusicBeatState extends FlxUIState implements MusicInterface
+class MusicBeatState extends ScriptableState implements IMusicBeat
 {
 	public var curBeat:Int = 0;
 	public var curStep:Int = 0;
@@ -72,8 +67,7 @@ class MusicBeatState extends FlxUIState implements MusicInterface
 	public var lastStep:Int = 0;
 	public var lastSection:Int = 0;
 
-	public var selection:Int = 0; // Defines the Current Selected Item on a State
-	public var wrappableGroup:Array<Dynamic> = []; // Defines the `selection` limits
+	public var musicInter:IMusicBeat;
 
 	override public function create():Void
 	{
@@ -149,25 +143,22 @@ class MusicBeatState extends FlxUIState implements MusicInterface
 		{
 			if (curStep > 0)
 				stepHit();
-
 			lastStep = curStep;
-
-			if (PlayState.song != null)
-			{
-				if (lastStep < curStep)
-					sectionHit();
-			}
 		}
 	}
 
 	public function sectionHit():Void
 	{
+		// trace('Section $curSection - Prev $lastSection');
 		if (lastSection < curSection)
 			lastSection = curSection;
 	}
 
 	public function beatHit():Void
 	{
+		if (curBeat % 4 == 0)
+			sectionHit();
+
 		if (lastBeat < curBeat)
 			lastBeat = curBeat;
 	}
@@ -182,12 +173,9 @@ class MusicBeatState extends FlxUIState implements MusicInterface
 	public var isEndingSong:Bool = false;
 
 	public function endSong():Void {}
-
-	public function updateSelection(newSelection:Int = 0):Void
-		selection = FlxMath.wrap(Math.floor(selection) + newSelection, 0, wrappableGroup.length - 1);
 }
 
-class MusicBeatSubstate extends FlxSubState implements MusicInterface
+class MusicBeatSubstate extends ScriptableSubstate implements IMusicBeat
 {
 	public var curBeat:Int = 0;
 	public var curStep:Int = 0;
@@ -196,15 +184,6 @@ class MusicBeatSubstate extends FlxSubState implements MusicInterface
 	public var lastBeat:Int = 0;
 	public var lastStep:Int = 0;
 	public var lastSection:Int = 0;
-
-	public var selection:Int = 0;
-
-	public var wrappableGroup:Array<Dynamic> = [];
-
-	override public function create():Void
-	{
-		super.create();
-	}
 
 	override public function update(elapsed:Float):Void
 	{
@@ -266,7 +245,4 @@ class MusicBeatSubstate extends FlxSubState implements MusicInterface
 	}
 
 	public function endSong():Void {}
-
-	public function updateSelection(newSelection:Int = 0):Void
-		selection = FlxMath.wrap(Math.floor(selection) + newSelection, 0, wrappableGroup.length - 1);
 }

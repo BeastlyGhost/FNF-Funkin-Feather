@@ -1,6 +1,4 @@
-package funkin.objects.ui;
-
-import funkin.objects.ui.Alphabet;
+package funkin.objects.ui.fonts;
 
 /**
 	a `Alphabet` extension, for dialogue boxes
