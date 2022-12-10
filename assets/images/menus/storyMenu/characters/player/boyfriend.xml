@@ -1,45 +1,50 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<TextureAtlas imagePath="boyfriend.png">
-	<!-- Created with Adobe Flash CS6 version 12.0.0.481 -->
-	<!-- http://www.adobe.com/products/flash.html -->
-	<SubTexture name="boyfriend confirm0000" x="0" y="0" width="415" height="419" />
-	<SubTexture name="boyfriend confirm0001" x="0" y="0" width="415" height="419" />
-	<SubTexture name="boyfriend confirm0002" x="415" y="0" width="415" height="419" />
-	<SubTexture name="boyfriend confirm0003" x="415" y="0" width="415" height="419" />
-	<SubTexture name="boyfriend confirm0004" x="0" y="419" width="415" height="419" />
-	<SubTexture name="boyfriend confirm0005" x="0" y="419" width="415" height="419" />
-	<SubTexture name="boyfriend confirm0006" x="0" y="419" width="415" height="419" />
-	<SubTexture name="boyfriend confirm0007" x="0" y="419" width="415" height="419" />
-	<SubTexture name="boyfriend confirm0008" x="0" y="419" width="415" height="419" />
-	<SubTexture name="boyfriend confirm0009" x="0" y="419" width="415" height="419" />
-	<SubTexture name="boyfriend confirm0010" x="0" y="419" width="415" height="419" />
-	<SubTexture name="boyfriend confirm0011" x="0" y="419" width="415" height="419" />
-	<SubTexture name="boyfriend confirm0012" x="0" y="419" width="415" height="419" />
-	<SubTexture name="boyfriend confirm0013" x="0" y="419" width="415" height="419" />
-	<SubTexture name="boyfriend confirm0014" x="0" y="419" width="415" height="419" />
-	<SubTexture name="boyfriend confirm0015" x="0" y="419" width="415" height="419" />
-	<SubTexture name="boyfriend confirm0016" x="0" y="419" width="415" height="419" />
-	<SubTexture name="boyfriend confirm0017" x="0" y="419" width="415" height="419" />
-	<SubTexture name="boyfriend confirm0018" x="0" y="419" width="415" height="419" />
-	<SubTexture name="boyfriend confirm0019" x="0" y="419" width="415" height="419" />
-	<SubTexture name="boyfriend confirm0020" x="0" y="419" width="415" height="419" />
-	<SubTexture name="boyfriend confirm0021" x="0" y="419" width="415" height="419" />
-	<SubTexture name="boyfriend confirm0022" x="0" y="419" width="415" height="419" />
-	<SubTexture name="boyfriend confirm0023" x="0" y="419" width="415" height="419" />
-	<SubTexture name="boyfriend confirm0024" x="0" y="419" width="415" height="419" />
-	<SubTexture name="boyfriend confirm0025" x="0" y="419" width="415" height="419" />
-	<SubTexture name="boyfriend idle0000" x="415" y="419" width="411" height="413" />
-	<SubTexture name="boyfriend idle0001" x="415" y="419" width="411" height="413" />
-	<SubTexture name="boyfriend idle0002" x="0" y="838" width="411" height="413" />
-	<SubTexture name="boyfriend idle0003" x="0" y="838" width="411" height="413" />
-	<SubTexture name="boyfriend idle0004" x="411" y="838" width="411" height="413" />
-	<SubTexture name="boyfriend idle0005" x="411" y="838" width="411" height="413" />
-	<SubTexture name="boyfriend idle0006" x="0" y="1251" width="411" height="413" />
-	<SubTexture name="boyfriend idle0007" x="0" y="1251" width="411" height="413" />
-	<SubTexture name="boyfriend idle0008" x="411" y="1251" width="411" height="413" />
-	<SubTexture name="boyfriend idle0009" x="411" y="1251" width="411" height="413" />
-	<SubTexture name="boyfriend idle0010" x="411" y="1251" width="411" height="413" />
-	<SubTexture name="boyfriend idle0011" x="411" y="1251" width="411" height="413" />
-	<SubTexture name="boyfriend idle0012" x="411" y="1251" width="411" height="413" />
-	<SubTexture name="boyfriend idle0013" x="411" y="1251" width="411" height="413" />
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Free texture packer v0.6.7 http://free-tex-packer.com -->
+<TextureAtlas imagePath="boyfriend.png" width="1636" height="1631">
+
+  <!-- _________________________________________ IDLE _________________________________________ -->
+
+  <SubTexture name="boyfriend idle0000" x="0" y="0" width="406" height="392" frameX="-1" frameY="-21" frameWidth="411" frameHeight="413" />
+  <SubTexture name="boyfriend idle0001" x="406" y="0" width="406" height="392" frameX="-0" frameY="-0" frameWidth="411" frameHeight="413" />
+  <SubTexture name="boyfriend idle0002" x="812" y="0" width="408" height="394" frameX="-0" frameY="-19" frameWidth="411" frameHeight="413" />
+  <SubTexture name="boyfriend idle0003" x="1220" y="0" width="408" height="394" frameX="-0" frameY="-0" frameWidth="411" frameHeight="413" />
+  <SubTexture name="boyfriend idle0004" x="0" y="392" width="405" height="399" frameX="-3" frameY="-14" frameWidth="411" frameHeight="413" />
+  <SubTexture name="boyfriend idle0005" x="405" y="392" width="405" height="399" frameX="-0" frameY="-0" frameWidth="411" frameHeight="413" />
+  <SubTexture name="boyfriend idle0006" x="0" y="791" width="410" height="412" frameX="-1" frameY="-1" frameWidth="411" frameHeight="413" />
+  <SubTexture name="boyfriend idle0007" x="805" y="805" width="410" height="412" frameX="-0" frameY="-0" frameWidth="411" frameHeight="413" />
+  <SubTexture name="boyfriend idle0008" x="0" y="1203" width="409" height="413" frameX="-2" frameY="-0" frameWidth="411" frameHeight="413" />
+  <SubTexture name="boyfriend idle0009" x="823" y="1218" width="409" height="413" frameX="-0" frameY="-0" frameWidth="411" frameHeight="413" />
+  <SubTexture name="boyfriend idle0010" x="823" y="1218" width="409" height="413" frameX="-0" frameY="-0" frameWidth="411" frameHeight="413" />
+  <SubTexture name="boyfriend idle0011" x="823" y="1218" width="409" height="413" frameX="-0" frameY="-0" frameWidth="411" frameHeight="413" />
+  <SubTexture name="boyfriend idle0012" x="823" y="1218" width="409" height="413" frameX="-0" frameY="-0" frameWidth="411" frameHeight="413" />
+  <SubTexture name="boyfriend idle0013" x="823" y="1218" width="409" height="413" frameX="-0" frameY="-0" frameWidth="411" frameHeight="413" />
+
+  <!-- _________________________________________ CONFIRM _________________________________________ -->
+
+  <SubTexture name="boyfriend confirm0000" x="410" y="791" width="395" height="417" frameX="-0" frameY="-0" frameWidth="415" frameHeight="419" />
+  <SubTexture name="boyfriend confirm0001" x="410" y="791" width="395" height="417" frameX="-0" frameY="-0" frameWidth="415" frameHeight="419" />
+  <SubTexture name="boyfriend confirm0002" x="810" y="394" width="413" height="411" frameX="-1" frameY="-8" frameWidth="415" frameHeight="419" />
+  <SubTexture name="boyfriend confirm0003" x="1223" y="394" width="413" height="411" frameX="-0" frameY="-0" frameWidth="415" frameHeight="419" />
+  <SubTexture name="boyfriend confirm0004" x="1215" y="805" width="414" height="413" frameX="-1" frameY="-6" frameWidth="415" frameHeight="419" />
+  <SubTexture name="boyfriend confirm0005" x="409" y="1217" width="414" height="413" frameX="-0" frameY="-0" frameWidth="415" frameHeight="419" />
+  <SubTexture name="boyfriend confirm0006" x="409" y="1217" width="414" height="413" frameX="-0" frameY="-0" frameWidth="415" frameHeight="419" />
+  <SubTexture name="boyfriend confirm0007" x="409" y="1217" width="414" height="413" frameX="-0" frameY="-0" frameWidth="415" frameHeight="419" />
+  <SubTexture name="boyfriend confirm0008" x="409" y="1217" width="414" height="413" frameX="-0" frameY="-0" frameWidth="415" frameHeight="419" />
+  <SubTexture name="boyfriend confirm0009" x="409" y="1217" width="414" height="413" frameX="-0" frameY="-0" frameWidth="415" frameHeight="419" />
+  <SubTexture name="boyfriend confirm0010" x="409" y="1217" width="414" height="413" frameX="-0" frameY="-0" frameWidth="415" frameHeight="419" />
+  <SubTexture name="boyfriend confirm0011" x="409" y="1217" width="414" height="413" frameX="-0" frameY="-0" frameWidth="415" frameHeight="419" />
+  <SubTexture name="boyfriend confirm0012" x="409" y="1217" width="414" height="413" frameX="-0" frameY="-0" frameWidth="415" frameHeight="419" />
+  <SubTexture name="boyfriend confirm0013" x="409" y="1217" width="414" height="413" frameX="-0" frameY="-0" frameWidth="415" frameHeight="419" />
+  <SubTexture name="boyfriend confirm0014" x="409" y="1217" width="414" height="413" frameX="-0" frameY="-0" frameWidth="415" frameHeight="419" />
+  <SubTexture name="boyfriend confirm0015" x="409" y="1217" width="414" height="413" frameX="-0" frameY="-0" frameWidth="415" frameHeight="419" />
+  <SubTexture name="boyfriend confirm0016" x="409" y="1217" width="414" height="413" frameX="-0" frameY="-0" frameWidth="415" frameHeight="419" />
+  <SubTexture name="boyfriend confirm0017" x="409" y="1217" width="414" height="413" frameX="-0" frameY="-0" frameWidth="415" frameHeight="419" />
+  <SubTexture name="boyfriend confirm0018" x="409" y="1217" width="414" height="413" frameX="-0" frameY="-0" frameWidth="415" frameHeight="419" />
+  <SubTexture name="boyfriend confirm0019" x="409" y="1217" width="414" height="413" frameX="-0" frameY="-0" frameWidth="415" frameHeight="419" />
+  <SubTexture name="boyfriend confirm0020" x="409" y="1217" width="414" height="413" frameX="-0" frameY="-0" frameWidth="415" frameHeight="419" />
+  <SubTexture name="boyfriend confirm0021" x="409" y="1217" width="414" height="413" frameX="-0" frameY="-0" frameWidth="415" frameHeight="419" />
+  <SubTexture name="boyfriend confirm0022" x="409" y="1217" width="414" height="413" frameX="-0" frameY="-0" frameWidth="415" frameHeight="419" />
+  <SubTexture name="boyfriend confirm0023" x="409" y="1217" width="414" height="413" frameX="-0" frameY="-0" frameWidth="415" frameHeight="419" />
+  <SubTexture name="boyfriend confirm0024" x="409" y="1217" width="414" height="413" frameX="-0" frameY="-0" frameWidth="415" frameHeight="419" />
+  <SubTexture name="boyfriend confirm0025" x="409" y="1217" width="414" height="413" frameX="-0" frameY="-0" frameWidth="415" frameHeight="419" />
 </TextureAtlas>
