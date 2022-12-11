@@ -164,7 +164,7 @@ class FeatherSprite extends FlxSprite
 **/
 class FeatherAttachedSprite extends FeatherSprite
 {
-	public var parentSprite:FeatherSprite;
+	public var parentSprite:FlxSprite;
 
 	public var addX:Float = 0;
 	public var addY:Float = 0;

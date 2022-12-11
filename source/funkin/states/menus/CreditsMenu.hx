@@ -74,8 +74,19 @@ class CreditsMenu extends MusicBeatState
 
 			personText.targetY = i;
 			personText.isMenuItem = true;
+			personText.alpha = 0.6;
 
 			itemContainer.add(personText);
+
+			if (userCredits.icon != null || userCredits.icon.length > 1)
+			{
+				var personIcon:FeatherAttachedSprite = new FeatherAttachedSprite(userCredits.icon, 'images/menus/creditsMenu');
+				personIcon.parentSprite = personText;
+				personIcon.addX = -50;
+				personIcon.addY = -30;
+				iconContainer.push(personIcon);
+				add(personIcon);
+			}
 		}
 
 		wrappableGroup = creditsData.userList;

@@ -1,11 +1,5 @@
 userList:
-  - name: "BeastlyGhost"
-    icon: "ghost"
-    profession: "Lead Programmer"
-    description: "Venha pequena fruta, venha comigo."
-    socials: [["Twitter"], ["https://twitter.com/BeastlyGabi"]]
-
-  - name: "Test"
+  - name: "Funkin Feather"
     type: "separator"
 
   - name: "BeastlyGhost"
