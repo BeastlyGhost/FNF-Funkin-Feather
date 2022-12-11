@@ -67,13 +67,8 @@ class MusicBeatState extends ScriptableState implements IMusicBeat
 	public var lastStep:Int = 0;
 	public var lastSection:Int = 0;
 
-	public var musicInter:IMusicBeat;
-
 	override public function create():Void
 	{
-		// clear assets cache
-		AssetHandler.clear(true, true);
-
 		// play the transition if we are allowed to
 		if (!FlxTransitionableState.skipNextTransOut)
 			Transition.start(0.3, false, Fade, FlxEase.linear);

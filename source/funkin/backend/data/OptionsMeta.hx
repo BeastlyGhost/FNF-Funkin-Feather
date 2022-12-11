@@ -105,16 +105,10 @@ class OptionsMeta
 			value: true
 		},
 		{
-			name: "Show VRAM Info",
-			description: "if the current GPU memory usage should be shown on the Info Counter.",
-			type: CHECKMARK,
-			value: true
-		},
-		{
-			name: "Show Debug Info",
+			name: "Show Engine Mark",
 			description: "If the current state folder location and object count should be shown on the Info Counter.",
 			type: CHECKMARK,
-			value: false
+			value: true
 		},
 		{
 			name: "Framerate Cap",
@@ -220,13 +214,7 @@ class OptionsMeta
 	public static var optionList:Map<String, Array<String>> = [
 		"gameplay" => ["Downscroll", "Ghost Tapping", "Center Notes", "Show Grades", "Safe Frames"],
 		"accessibility" => ["Auto Pause", "Anti Aliasing", "Flashing Lights"],
-		"debugging" => [
-			"Framerate Cap",
-			"Show FPS Info",
-			"Show RAM Info",
-			"Show VRAM Info",
-			"Show Debug Info"
-		],
+		"debugging" => ["Framerate Cap", "Show FPS Info", "Show RAM Info", "Show Engine Mark"],
 		"custom settings" => [],
 	];
 }
