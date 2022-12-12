@@ -4,18 +4,19 @@ import sys.FileSystem;
 /**
 	Basically Project.xml
 	but as a script
+
+	This just sets up the main game settings according to our needs
+	it's simply just project.xml in pure code format, which could be better
+	to work with in the future
+
+	TODO: specify variables for scripts
 **/
 class Project extends HXProject
 {
-	/**
-		This just sets up the main game settings according to our needs
-		it's simply just project.xml in pure code format, which could be better
-		to work with in the future
+	/*
+	 * Whether to enable Discord Rich Presence support, defaults to true
 	**/
-	// DEFAULT VARIABLES FOR CUSTOMIZATION
-	public static var RPC_ALLOWED:Bool = true; // Discord Rich Presence
-
-	public static var SCRIPTS_ALLOWED:Bool = true; // Script Support
+	public static var RPC_ALLOWED:Bool = true;
 
 	override public function new():Void
 	{
@@ -25,10 +26,11 @@ class Project extends HXProject
 		setAppIcons();
 		setWindowMeta();
 
-		setAssetPaths("assets");
+		setAssetsPath("assets");
 
-		addDefaultLibs();
+		setDefaultLibs();
 		setDefaultDefines();
+		setDefaultFlags();
 	}
 
 	function setAppMeta():Void
@@ -63,7 +65,7 @@ class Project extends HXProject
 		@param incMeta [array with files to include from the previously specified folder]
 		@param excMeta [array with files to exclude from the previously specified folder]
 	**/
-	function setAssetPaths(assetsDefault:String, assetsRename:String = null, incMeta:Array<String> = null, excMeta:Array<String> = null):Void
+	function setAssetsPath(assetsDefault:String, assetsRename:String = null, incMeta:Array<String> = null, excMeta:Array<String> = null):Void
 	{
 		if (assetsRename == null)
 			assetsRename = assetsDefault;
@@ -116,7 +118,7 @@ class Project extends HXProject
 		addAppIcon("art/icons/iconOG.png");
 	}
 
-	function addDefaultLibs():Void
+	function setDefaultLibs():Void
 	{
 		// add here all the default libraries for the project
 
@@ -130,8 +132,7 @@ class Project extends HXProject
 
 		if (RPC_ALLOWED)
 			addHaxeLib("discord_rpc");
-		if (SCRIPTS_ALLOWED)
-			addHaxeLib("SScript");
+		addHaxeLib("SScript");
 
 		if (debug)
 			addHaxeLib("hxcpp-debug-server");
@@ -153,9 +154,12 @@ class Project extends HXProject
 		haxedefs.set("HXCPP_STACK_LINE", "true");
 		haxedefs.set("FLX_NO_FOCUS_LOST_SCREEN", "true");
 
-		if (SCRIPTS_ALLOWED)
-			haxedefs.set("hscriptPos", "true");
+		haxedefs.set("hscriptPos", "true");
+	}
 
+	function setDefaultFlags():Void
+	{
+		// literally a single one
 		haxeflags.push("-dce no");
 	}
 
