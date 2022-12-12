@@ -20,10 +20,16 @@ haxelib run formatter -s <path>
 ## Variable naming
 Variable names should be concise and properly labled for the sake of explaining their functionality.
 
-## Long functions / Important variables
-If a funcion is long or if a variable is imporant, you should leave a comment explaining it / what it does. 
+It is also recommended for you to **declare** a type for your Variables and Functions
 
-For example: `// this function/variable is cool 'cause [insert explanation here]`
+e.g `var stringSect = 'UP';` -> `var stringSect:String = 'UP';`
+
+or `function getSect(stringSect:String)` -> `function getSect(stringSect:String):String`
+
+## Long functions / Important variables
+If a function is long or if a variable is important, you should leave a comment explaining it / what it does. 
+
+For example: `/** this function/variable is cool 'cause [insert explanation here] **/`
 
 ## Optimization
 *Obviously*, before contributing to the repository it is **required** that you test the changes that you want to push and see if they're stable and running properly.
