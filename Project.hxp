@@ -1,0 +1,197 @@
+import lime.tools.*;
+import sys.FileSystem;
+
+/**
+	Basically Project.xml
+	but as a script
+
+	This just sets up the main game settings according to our needs
+	it's simply just project.xml in pure code format, which could be better
+	to work with in the future
+
+	TODO: specify variables for scripts
+**/
+class Project extends HXProject
+{
+	override public function new():Void
+	{
+		super();
+
+		setAppMeta();
+		setAppIcons();
+		setWindowMeta();
+
+		setAssetsPath("assets");
+
+		setDefaultDefines();
+		setDefaultFlags();
+		setDefaultLibs();
+	}
+
+	function setAppMeta():Void
+	{
+		// Application Title
+		meta.title = "Friday Night Funkin': Feather";
+
+		// Application Company (Save Folder) name
+		meta.company = "BeastlyGhost";
+
+		// App Version
+		meta.version = "1.0.0";
+
+		// Main Class State
+		app.main = "Main";
+
+		// Executable Name
+		app.file = "Funkin-Feather";
+
+		// Application Preloader
+		app.preloader = "flixel.system.FlxPreloader";
+
+		// Default App Build Path
+		app.path = 'export/' + (debug ? 'debug' : 'release') + (architectures.contains(Architecture.X86) ? '-x86' : '');
+	}
+
+	/**
+		Sets up the Default assets folder
+
+		@param assetsDefault [specifies the folder name]
+		@param assetsRename [specifies the new name for the folder, if null, use the default one]
+		@param incMeta [array with files to include from the previously specified folder]
+		@param excMeta [array with files to exclude from the previously specified folder]
+	**/
+	function setAssetsPath(assetsDefault:String, assetsRename:String = null, incMeta:Array<String> = null, excMeta:Array<String> = null):Void
+	{
+		if (assetsRename == null)
+			assetsRename = assetsDefault;
+
+		if (incMeta == null)
+			incMeta = ["*"]; // star means EVERYTHING from within the specified folder
+
+		if (excMeta == null)
+			excMeta = [];
+
+		// Default Source Path
+		sources.push('source');
+
+		// Default Assets Path
+		includeAssets(assetsDefault, assetsRename, incMeta, excMeta);
+	}
+
+	function setWindowMeta():Void
+	{
+		// Set the game framerate.
+		window.fps = 60;
+
+		// Set the window size.
+		window.width = 1280;
+		window.height = 720;
+
+		// Set the window background, null is transparent
+		window.background = null;
+
+		// Enable hardware acceleration
+		window.hardware = true;
+
+		// Disable VSYNC
+		window.vsync = false;
+
+		// Set whether the window should be fullscreen or not
+		window.fullscreen = (platformType == PlatformType.MOBILE);
+
+		// set the window orientation and if it's resizable according to your platform
+		window.orientation = Orientation.LANDSCAPE;
+		window.resizable = (platformType == PlatformType.DESKTOP);
+	}
+
+	function setAppIcons():Void
+	{
+		// uuurgh...
+		addAppIcon("art/icons/icon16.png", 16);
+		addAppIcon("art/icons/icon32.png", 32);
+		addAppIcon("art/icons/icon64.png", 64);
+		addAppIcon("art/icons/iconOG.png");
+	}
+
+	function setDefaultLibs():Void
+	{
+		// add here all the default libraries for the project
+
+		addHaxelib("flixel");
+
+		// addHaxelib("lime");
+		// addHaxelib("openfl"); /** i don't think we need those for now **/
+		addHaxelib("flixel-addons");
+		addHaxelib("flixel-ui");
+		addHaxelib("yaml");
+
+		if (haxedefs.exists("RPC_ALLOWED"))
+			addHaxelib("discord_rpc");
+		if (haxedefs.exists("HSCRIPT_ALLOWED"))
+			addHaxelib("SScript");
+
+		if (debug)
+			addHaxelib("hxcpp-debug-server");
+	}
+
+	function setDefaultDefines():Void
+	{
+		if (platformType == PlatformType.DESKTOP)
+		{
+			haxedefs.set("RPC_ALLOWED", "true");
+			haxedefs.set("HSCRIPT_ALLOWED", "true");
+			haxedefs.set("FLX_NO_TOUCH", "true");
+		}
+
+		if (!debug)
+		{
+			haxedefs.set("FLX_NO_DEBUG", "true");
+			haxedefs.set("NAPE_RELEASE_BUILD", "true");
+		}
+
+		haxedefs.set("HXCPP_CHECK_POINTER", "true");
+		haxedefs.set("HXCPP_GC_BIG_BLOCKS", "true");
+		haxedefs.set("HXCPP_STACK_LINE", "true");
+		haxedefs.set("FLX_NO_FOCUS_LOST_SCREEN", "true");
+
+		haxedefs.set("hscriptPos", "true");
+	}
+
+	function setDefaultFlags():Void
+	{
+		// literally a single one
+		haxeflags.push("-dce no");
+	}
+
+	/**
+		Adds a new Haxe Library to the list
+		@param name [the library name]
+		@param version [the library version]
+	**/
+	function addHaxelib(name:String, version:String = ""):Void
+		haxelibs.push(new hxp.Haxelib(name, version));
+
+	/**
+		Adds the application icons to the icon list
+		@param icon [the icon file name, it should have it's file extesion specified]
+		@param size [the icon size]
+	**/
+	function addAppIcon(icon:String, size:Int = null)
+		icons.push(new Icon(icon, size));
+
+	/**
+		Adds a new assets library to our libraries list
+		@param lib [the library name, e.g: "tutorial"]
+		@param embed [whether the library should be bundled with the executable, not the assets folder]
+		@param preload [whether the library should be loaded when the application begins]
+	**/
+	function addAssetsLib(lib:String, embed:Bool = false, preload:Bool = false):Void
+	{
+		var path:String = null;
+		var type:String = null;
+		var prefix:String = "";
+
+		var myLib:Library = new Library(path, lib, type, embed, preload, false, prefix);
+		libraries.push(myLib);
+	}
+}

@@ -20,7 +20,7 @@ class Main extends Sprite
 		framerate: 60, // the game's default framerate
 		skipSplash: false, // whether the game boot splash should be skipped (defaults to false, changes true when seen once)
 		fullscreen: false, // whether the game should start at fullscreen
-		version: '0.0.1-PA', // the engine game version
+		version: 'INDEV', // the engine game version
 	};
 
 	public static var __justcompiled:Bool = false;
@@ -59,6 +59,13 @@ class Main extends Sprite
 			__justcompiled = true;
 		// compiling via terminal will set this to true, else it's false
 		#end
+
+		FlxG.signals.preStateCreate.add(function(state:flixel.FlxState)
+		{
+			AssetHandler.clear(true, false);
+			if (!Std.isOfType(state, funkin.states.PlayState))
+				AssetHandler.clear(true, true);
+		});
 
 		FlxG.stage.application.window.onClose.add(function()
 		{

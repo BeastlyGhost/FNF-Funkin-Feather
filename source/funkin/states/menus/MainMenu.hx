@@ -118,7 +118,7 @@ class MainMenu extends MusicBeatState
 
 		FlxG.camera.follow(camFollow, null, MusicState.boundFramerate(0.06));
 
-		versionText = new FlxText(5, FlxG.height - 18, 0, "Funkin' Feather v" + Main.game.version, 12);
+		versionText = new FlxText(5, FlxG.height - 18, 0, 'Funkin\' Feather ${Main.game.version}', 12);
 		versionText.setFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 16, 0xFFFFFFFF, LEFT, OUTLINE, 0xFF000000);
 		versionText.scrollFactor.set();
 		add(versionText);

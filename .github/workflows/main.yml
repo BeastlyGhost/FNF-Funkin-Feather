@@ -28,6 +28,8 @@ jobs:
           haxelib install flixel --quiet
           haxelib install flixel-addons --quiet
           haxelib install yaml --quiet
+          haxelib install hxp --quiet
+          haxelib install format --quiet
           haxelib install flixel-ui --quiet
           haxelib install hxcpp-debug-server --quiet
           haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc --quiet
@@ -61,6 +63,8 @@ jobs:
           haxelib install flixel --quiet
           haxelib install flixel-addons --quiet
           haxelib install yaml --quiet
+          haxelib install hxp --quiet
+          haxelib install format --quiet
           haxelib install flixel-ui --quiet
           haxelib install hxcpp-debug-server --quiet
           haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc --quiet
@@ -68,7 +72,7 @@ jobs:
         shell: cmd
 
       - name: Compile
-        run: haxelib run lime build windows -release
+        run: haxelib run lime build Project.xml windows -release
 
       - name: Publish Artifact
         uses: actions/upload-artifact@main
@@ -95,6 +99,8 @@ jobs:
           haxelib install flixel --quiet
           haxelib install flixel-addons --quiet
           haxelib install yaml --quiet
+          haxelib install hxp --quiet
+          haxelib install format --quiet
           haxelib install flixel-ui --quiet
           haxelib install hxcpp-debug-server --quiet
           haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc --quiet

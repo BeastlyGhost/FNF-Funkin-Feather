@@ -21,9 +21,9 @@ import sys.thread.Thread;
 class PauseSubstate extends MusicBeatSubstate
 {
 	var listMap:Map<String, Array<String>> = [
-		"default" => ["Resume Song", "Restart Song", "Exit to Options", "Exit to menu"],
-		"charting" => ["Exit to Charter", "Leave Charting Mode", "Exit to menu"],
-		"no-resume" => ["Restart Song", "Exit to Options", "Exit to menu"],
+		"default" => ["Resume Song", "Restart Song", "Change Keys", "Exit to Options", "Exit to menu"],
+		"charting" => ["Exit to Charter", "Leave Charting Mode", "Change Keys", "Exit to menu"],
+		"no-resume" => ["Restart Song", "Change Keys", "Exit to Options", "Exit to menu"],
 	];
 
 	var itemContainer:FlxTypedGroup<Alphabet>;
@@ -123,6 +123,8 @@ class PauseSubstate extends MusicBeatSubstate
 				case "leave charting mode":
 					PlayState.gameplayMode = FREEPLAY;
 					MusicState.resetState();
+				case "change keys":
+					openSubState(new KeybindsSubstate());
 				case "exit to menu":
 					PlayerInfo.deaths = 0;
 

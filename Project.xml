@@ -19,21 +19,21 @@
 	<!-- ___________ Window Settings ___________ -->
 
 	<!--These window settings apply to all targets-->
-	<window width="1280" height="720" fps="60" background="#000000" hardware="true" vsync="false" />
+	<window width="1280" height="720" orientation="landscape" fps="60" background="#000000" hardware="true" vsync="false" />
 
 	<!--HTML5-specific-->
 	<window if="html5" resizable="false" />
 
 	<!--Desktop-specific-->
-	<window if="desktop" orientation="landscape" fullscreen="false" resizable="true" />
+	<window if="desktop" fullscreen="false" resizable="true" />
 
 	<!--Mobile-specific-->
-	<window if="mobile" orientation="landscape" fullscreen="true" width="0" height="0" />
+	<window if="mobile" fullscreen="true" resizable="false" />
 
 	<!-- ___________ Custom Defines ___________ -->
 
 	<define name="RPC_ALLOWED" if="desktop" />
-	<define name="MODULES_ALLOWED" if="desktop" />
+	<define name="HSCRIPT_ALLOWED" if="desktop" />
 
 	<!-- ___________ Path Settings ___________ -->
 
@@ -55,7 +55,7 @@
 	<haxelib name="flixel-ui" />
 
 	<haxelib name="discord_rpc" if="RPC_ALLOWED" />
-	<haxelib name="SScript" if="MODULES_ALLOWED" />
+	<haxelib name="SScript" if="HSCRIPT_ALLOWED" />
 
 	<haxelib name="hxcpp-debug-server" if="debug" />
 
@@ -77,6 +77,10 @@
 
 	<!--Increases memory allocation to bypass memory limits-->
 	<haxedef name="HXCPP_GC_BIG_BLOCKS" />
+
+	<!-- Always enable Null Object Reference check -->
+	<haxedef name="HXCPP_CHECK_POINTER" if="release" />
+	<haxedef name="HXCPP_STACK_LINE" if="release" />
 
 	<!-- ___________ Haxeflags ___________ -->
 

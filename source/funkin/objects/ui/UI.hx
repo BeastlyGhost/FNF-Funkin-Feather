@@ -58,11 +58,11 @@ class UI extends FlxSpriteGroup
 		scoreText.scrollFactor.set();
 		add(scoreText);
 
-		autoPlayText = new FlxText(-5, PlayState.strumsP1.downscroll ? FlxG.height - 80 : 80, FlxG.width - 800, '[AUTOPLAY]\n', 32);
+		autoPlayText = new FlxText(-5, PlayState.playerStrum.downscroll ? FlxG.height - 80 : 80, FlxG.width - 800, '[AUTOPLAY]\n', 32);
 		autoPlayText.setFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 32, 0xFFFFFFFF, CENTER, SHADOW, 0xFF000000);
 		autoPlayText.shadowOffset.set(2, 2);
 		autoPlayText.screenCenter(X);
-		autoPlayText.visible = PlayState.strumsP1.autoplay;
+		autoPlayText.visible = PlayState.playerStrum.autoplay;
 
 		// repositioning for it to not be covered by the receptors
 		if (OptionsMeta.getPref('Center Notes'))
@@ -146,15 +146,13 @@ class UI extends FlxSpriteGroup
 	public function showInfoCard():Void
 	{
 		var blackBy, byText;
-		blackBy = new FlxSprite().loadGraphic(AssetHandler.grabAsset('infobox', IMAGE, 'images/ui/base'));
+		blackBy = new FlxSprite(0, FlxG.height - 120).loadGraphic(AssetHandler.grabAsset('base/infobox', IMAGE, 'images/ui'));
 		blackBy.screenCenter();
 		blackBy.x -= FlxG.width;
 		blackBy.alpha = 0.7;
-		blackBy.y = FlxG.height - 120;
+
 		byText = new FlxText(0, 0, 425);
 		byText.setFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 28, 0xFFFFFFFF, CENTER);
-		// byText.borderSize *= 1.25;
-		// byText.borderQuality *= 1.25;
 		byText.screenCenter();
 		byText.x -= FlxG.width;
 		byText.y = FlxG.height - 80.5;

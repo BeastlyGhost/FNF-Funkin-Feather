@@ -279,7 +279,7 @@ class PlayState extends MusicBeatState
 		// cache ratings
 		popUpScore('sick', true, true);
 
-		if (countdownWasActive && !isPaused && !hasDied && skipCountdown)
+		if (countdownWasActive && posCount > 3 && !isPaused && !hasDied && skipCountdown)
 		{
 			Conductor.songPosition = -(Conductor.crochet * 1);
 			startSong();
@@ -347,8 +347,6 @@ class PlayState extends MusicBeatState
 	function startSong():Void
 	{
 		callFunc('startSong', []);
-
-		AssetHandler.clear(false, false);
 
 		Conductor.playSong(song.name);
 		isStartingSong = false;

@@ -67,8 +67,7 @@ class FPS extends TextField
 			text = ""
 				+ (OptionsMeta.getPref("Show FPS Info") ? 'FPS: ${times.length}\n' : '')
 				+ (OptionsMeta.getPref("Show RAM Info") ? 'RAM: ${getInterval(memory)} / ${getInterval(memoryTotal)}\n' : '')
-				+ (OptionsMeta.getPref("Show VRAM Info") ? 'VRAM: ${getInterval(Std.int(FlxG.stage.context3D.totalGPUMemory / 1024 / 1024))}\n' : '')
-				+ (OptionsMeta.getPref("Show Debug Info") ? '${Type.getClassName(Type.getClass(FlxG.state))} (Objects: ${FlxG.state.members.length})\n' : '');
+				+ (OptionsMeta.getPref("Show Engine Mark") ? 'Funkin\' Feather ${Main.game.version}\n' : '');
 		}
 	}
 }
