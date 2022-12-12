@@ -122,20 +122,20 @@ class Project extends HXProject
 	{
 		// add here all the default libraries for the project
 
-		addHaxeLib("flixel");
+		addHaxelib("flixel");
 
-		// addHaxeLib("lime");
-		// addHaxeLib("openfl"); /** i don't think we need those for now **/
-		addHaxeLib("flixel-addons");
-		addHaxeLib("flixel-ui");
-		addHaxeLib("yaml");
+		// addHaxelib("lime");
+		// addHaxelib("openfl"); /** i don't think we need those for now **/
+		addHaxelib("flixel-addons");
+		addHaxelib("flixel-ui");
+		addHaxelib("yaml");
 
 		if (RPC_ALLOWED)
-			addHaxeLib("discord_rpc");
-		addHaxeLib("SScript");
+			addHaxelib("discord_rpc");
+		addHaxelib("SScript");
 
 		if (debug)
-			addHaxeLib("hxcpp-debug-server");
+			addHaxelib("hxcpp-debug-server");
 	}
 
 	function setDefaultDefines():Void
@@ -168,7 +168,7 @@ class Project extends HXProject
 		@param name [the library name]
 		@param version [the library version]
 	**/
-	function addHaxeLib(name:String, version:String = ""):Void
+	function addHaxelib(name:String, version:String = ""):Void
 		haxelibs.push(new hxp.Haxelib(name, version));
 
 	/**
