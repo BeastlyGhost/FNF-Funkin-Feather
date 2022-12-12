@@ -1,4 +1,4 @@
 #!/bin/bash
 
-cd ../..
+cd ../../../..
 haxelib run lime test linux -debug
