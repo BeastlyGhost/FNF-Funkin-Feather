@@ -22,4 +22,4 @@ However, it will be distributed separately, like a mod in it of itself.
 4. Type ``lime build [target platform (windows, linux, html5, etc)]``
 
 ---
-## To contribute, please read the [Contributing](https://github.com/BeastlyGhost/FNF-Funkin-Feather/wiki/Contirbuting) section of the Wiki.
+## To contribute, please read the [Contributing](https://github.com/BeastlyGhost/FNF-Funkin-Feather/wiki/Contributing) section of the Wiki.
