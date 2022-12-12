@@ -12,6 +12,7 @@ The base game won't be included with Funkin': Feather, as it's made specifically
 However, it will be distributed separately, like a mod in it of itself.
 
 **FUNKIN' FEATHER IS NOT REALLY READY FOR MOD USE YET, IT IS STILL A WORK IN PROGRESS AND VERY UNFINISHED**
+
 **IF YOU WISH TO HELP DEVELOPMENT GO FASTER, FEEL FREE TO DO SO ON A [PULL REQUEST](https://github.com/BeastlyGhost/FNF-Funkin-Feather/pulls)**
 
 ---
