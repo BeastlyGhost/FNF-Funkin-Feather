@@ -138,9 +138,6 @@ class FeatherSprite extends FlxSprite
 	public function new(x:Float, y:Float):Void
 	{
 		animOffsets = new Map<String, Array<Dynamic>>();
-
-		antialiasing = OptionsMeta.getPref('Anti Aliasing');
-
 		super();
 	}
 
@@ -148,7 +145,7 @@ class FeatherSprite extends FlxSprite
 	{
 		animation.play(AnimName, Force, Reversed, Frame);
 
-		var daOffset = animOffsets.get(AnimName);
+		var daOffset:Array<Dynamic> = animOffsets.get(AnimName);
 		if (animOffsets.exists(AnimName))
 			offset.set(daOffset[0], daOffset[1]);
 		else
@@ -157,6 +154,13 @@ class FeatherSprite extends FlxSprite
 
 	public function addOffset(name:String, x:Float = 0, y:Float = 0):Void
 		animOffsets[name] = [x, y];
+
+	override public function destroy()
+	{
+		if (graphic != null)
+			graphic.dump();
+		super.destroy();
+	}
 }
 
 /**
