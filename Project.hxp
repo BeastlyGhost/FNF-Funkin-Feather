@@ -13,18 +13,6 @@ import sys.FileSystem;
 **/
 class Project extends HXProject
 {
-	/*
-	 * Whether to enable Discord Rich Presence support, defaults to true
-	 * -- haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
-	**/
-	public static var RPC_ALLOWED:Bool = true;
-
-	/*
-	 * Whether to enable Haxe Script support with SScript, defaults to true
-	 * -- haxelib git SScript https://github.com/AltronMaxX/SScript
-	**/
-	public static var HSCRIPT_ALLOWED:Bool = true;
-
 	override public function new():Void
 	{
 		super();
@@ -61,7 +49,7 @@ class Project extends HXProject
 		app.preloader = "flixel.system.FlxPreloader";
 
 		// Default App Build Path
-		app.path = 'export/${debug ? 'debug' : 'release'}';
+		app.path = 'export/' + (debug ? 'debug' : 'release') + (architectures.contains(Architecture.X86) ? '-x86' : '');
 	}
 
 	/**
@@ -93,7 +81,7 @@ class Project extends HXProject
 	function setWindowMeta():Void
 	{
 		// Set the game framerate.
-		window.fps = 0;
+		window.fps = 60;
 
 		// Set the window size.
 		window.width = 1280;
@@ -137,7 +125,7 @@ class Project extends HXProject
 		addHaxelib("flixel-ui");
 		addHaxelib("yaml");
 
-		if (RPC_ALLOWED)
+		if (haxedefs.exists("RPC_ALLOWED"))
 			addHaxelib("discord_rpc");
 		addHaxelib("SScript");
 
@@ -154,6 +142,12 @@ class Project extends HXProject
 		{
 			haxedefs.set("FLX_NO_DEBUG", "true");
 			haxedefs.set("NAPE_RELEASE_BUILD", "true");
+		}
+
+		if (platformType == PlatformType.DESKTOP)
+		{
+			haxedefs.set("RPC_ALLOWED", "true");
+			haxedefs.set("HSCRIPT_ALLOWED", "true");
 		}
 
 		haxedefs.set("HXCPP_CHECK_POINTER", "true");

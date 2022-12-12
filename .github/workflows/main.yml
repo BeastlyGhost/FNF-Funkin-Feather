@@ -23,7 +23,7 @@ jobs:
         run: |
           haxelib setup ~/haxelib
           haxelib install hxcpp > /dev/null --quiet
-          haxelib git lime https://github.com/BeastlyGhost/lime hxp-dirty-patch --quiet
+          haxelib install lime --quiet
           haxelib install openfl --quiet
           haxelib install flixel --quiet
           haxelib install flixel-addons --quiet
@@ -58,7 +58,7 @@ jobs:
         run: |
           haxelib setup C:/haxelib
           haxelib install hxcpp > /dev/null --quiet
-          haxelib git lime https://github.com/BeastlyGhost/lime hxp-dirty-patch --quiet
+          haxelib install lime --quiet
           haxelib install openfl --quiet
           haxelib install flixel --quiet
           haxelib install flixel-addons --quiet
@@ -72,7 +72,7 @@ jobs:
         shell: cmd
 
       - name: Compile
-        run: haxelib run lime build windows -release
+        run: haxelib run lime build windows Project.xml -release
 
       - name: Publish Artifact
         uses: actions/upload-artifact@main
@@ -94,7 +94,7 @@ jobs:
         run: |
           haxelib setup ~/haxelib
           haxelib install hxcpp > /dev/null --quiet
-          haxelib git lime https://github.com/BeastlyGhost/lime hxp-dirty-patch --quiet
+          haxelib install lime --quiet
           haxelib install openfl --quiet
           haxelib install flixel --quiet
           haxelib install flixel-addons --quiet
