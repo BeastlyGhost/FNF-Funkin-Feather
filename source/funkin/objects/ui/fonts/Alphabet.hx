@@ -1,5 +1,6 @@
 package funkin.objects.ui.fonts;
 
+import flixel.util.FlxColor;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
@@ -30,6 +31,21 @@ class Alphabet extends FlxTypedSpriteGroup<AlphaCharacter>
 	var splitWords:Array<String> = [];
 
 	var isBold:Bool = false;
+
+	override public function set_color(color:Int):Int
+	{
+		for (char in group.members)
+		{
+			if (char is AlphaCharacter) // this *should* address errors hopefully
+			{
+				//
+				var myChar = cast(char, AlphaCharacter);
+				myChar.changeColor(color, isBold);
+			}
+		}
+
+		return super.set_color(color);
+	}
 
 	public function new(x:Float = 0, y:Float = 0, text:String = "", isBold:Bool = false):Void
 	{
@@ -119,6 +135,22 @@ class AlphaCharacter extends FlxSprite
 
 		frames = AssetHandler.grabAsset('alphabet', SPARROW, "images/ui/base");
 		antialiasing = true;
+	}
+
+	public function changeColor(c:FlxColor, bold:Bool):Void
+	{
+		if (bold)
+		{
+			colorTransform.redMultiplier = c.redFloat;
+			colorTransform.greenMultiplier = c.greenFloat;
+			colorTransform.blueMultiplier = c.blueFloat;
+		}
+		else
+		{
+			colorTransform.redOffset = c.red;
+			colorTransform.greenOffset = c.green;
+			colorTransform.blueOffset = c.blue;
+		}
 	}
 
 	/**
