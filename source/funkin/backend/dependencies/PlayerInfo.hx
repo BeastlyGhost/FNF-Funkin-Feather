@@ -54,7 +54,7 @@ class PlayerInfo
 			score: 350,
 			health: 100,
 			percentMod: 100,
-			timingMod: 45,
+			timingMod: 33.33, // BASED ON FNF BASE GAME TIMING WINDOWS!!! -- https://twitter.com/kade0912/status/1511477162469113859
 			noteSplash: true,
 			causesBreak: false,
 			comboReturn: "SFC"
@@ -64,7 +64,7 @@ class PlayerInfo
 			score: 150,
 			health: 50,
 			percentMod: 85,
-			timingMod: 90,
+			timingMod: 91.67,
 			noteSplash: false,
 			causesBreak: false,
 			comboReturn: "GFC"
@@ -74,7 +74,7 @@ class PlayerInfo
 			score: 50,
 			health: -50,
 			percentMod: 50,
-			timingMod: 135,
+			timingMod: 133.33,
 			noteSplash: false,
 			causesBreak: false,
 			comboReturn: "FC"
@@ -84,7 +84,7 @@ class PlayerInfo
 			score: -50,
 			health: -100,
 			percentMod: 0,
-			timingMod: 180,
+			timingMod: 166.67,
 			noteSplash: false,
 			causesBreak: true,
 			comboReturn: "FC"
