@@ -2,8 +2,10 @@
   "dependencies": [
     {
       "name": "SScript",
-      "type": "haxelib",
-      "version": null
+      "type": "git",
+      "dir": null,
+      "ref": "master",
+      "url": "https://github.com/AltronMaxX/SScript"
     },
     {
       "name": "discord_rpc",
@@ -28,7 +30,22 @@
       "version": null
     },
     {
+      "name": "format",
+      "type": "haxelib",
+      "version": null
+    },
+    {
+      "name": "hxcpp",
+      "type": "haxelib",
+      "version": null
+    },
+    {
       "name": "hxcpp-debug-server",
+      "type": "haxelib",
+      "version": null
+    },
+    {
+      "name": "hxp",
       "type": "haxelib",
       "version": null
     },
