@@ -43,8 +43,8 @@
 
   <SubTexture name="down confirm0000" x="2" y="2" width="229" height="227" frameX="-2" frameY="-2" frameWidth="238" frameHeight="235" />
   <SubTexture name="down confirm0001" x="2" y="233" width="229" height="227" frameX="-2" frameY="-2" frameWidth="238" frameHeight="235" />
-  <SubTexture name="down confirm0002" x="688" y="219" width="210" height="210" frameX="-9" frameY="-14" frameWidth="238" frameHeight="235" />
-  <SubTexture name="down confirm0003" x="688" y="219" width="210" height="210" frameX="-9" frameY="-14" frameWidth="238" frameHeight="235" />
+  <SubTexture name="down confirm0002" x="688" y="219" width="210" height="210" frameX="-10" frameY="-14" frameWidth="238" frameHeight="235" />
+  <SubTexture name="down confirm0003" x="688" y="219" width="210" height="210" frameX="-10" frameY="-14" frameWidth="238" frameHeight="235" />
 
   <SubTexture name="up confirm0001" x="235" y="2" width="227" height="225" frameX="-3" frameY="-2" frameWidth="236" frameHeight="232" />
   <SubTexture name="up confirm0002" x="235" y="231" width="227" height="225" frameX="-3" frameY="-2" frameWidth="236" frameHeight="232" />
@@ -65,13 +65,13 @@
 
   <!-- _________________________________________ NOTE HOLDS _________________________________________ -->
 
-  <SubTexture name="pruple end hold" x="801" y="737" width="50" height="64" frameX="-0" frameY="-0" frameWidth="50" frameHeight="64" />
-  <SubTexture name="blue hold end" x="909" y="737" width="50" height="64" frameX="-0" frameY="-0" frameWidth="50" frameHeight="64" />
-  <SubTexture name="green hold end" x="855" y="737" width="50" height="64" frameX="-0" frameY="-0" frameWidth="50" frameHeight="64" />
-  <SubTexture name="red hold end" x="801" y="641" width="50" height="64" frameX="-0" frameY="-0" frameWidth="50" frameHeight="64" />
+  <SubTexture name="pruple end hold" x="801" y="737" width="50" height="64" frameX="-35" frameY="-0" frameWidth="50" frameHeight="64" />
+  <SubTexture name="blue hold end" x="909" y="737" width="50" height="64" frameX="-35" frameY="-0" frameWidth="50" frameHeight="64" />
+  <SubTexture name="green hold end" x="855" y="737" width="50" height="64" frameX="-35" frameY="-0" frameWidth="50" frameHeight="64" />
+  <SubTexture name="red hold end" x="801" y="641" width="50" height="64" frameX="-35" frameY="-0" frameWidth="50" frameHeight="64" />
 
-  <SubTexture name="purple hold piece" x="991" y="833" width="50" height="44" frameX="-0" frameY="-0" frameWidth="50" frameHeight="44" />
-  <SubTexture name="blue hold piece" x="963" y="785" width="50" height="44" frameX="-0" frameY="-0" frameWidth="50" frameHeight="44" />
-  <SubTexture name="green hold piece" x="937" y="833" width="50" height="44" frameX="-0" frameY="-0" frameWidth="50" frameHeight="44" />
-  <SubTexture name="red hold piece" x="963" y="737" width="50" height="44" frameX="-0" frameY="-0" frameWidth="50" frameHeight="44" />
+  <SubTexture name="purple hold piece" x="991" y="833" width="50" height="44" frameX="-35" frameY="-0" frameWidth="50" frameHeight="44" />
+  <SubTexture name="blue hold piece" x="963" y="785" width="50" height="44" frameX="-35" frameY="-0" frameWidth="50" frameHeight="44" />
+  <SubTexture name="green hold piece" x="937" y="833" width="50" height="44" frameX="-35" frameY="-0" frameWidth="50" frameHeight="44" />
+  <SubTexture name="red hold piece" x="963" y="737" width="50" height="44" frameX="-35" frameY="-0" frameWidth="50" frameHeight="44" />
 </TextureAtlas>
