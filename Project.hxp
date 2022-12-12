@@ -127,7 +127,8 @@ class Project extends HXProject
 
 		if (haxedefs.exists("RPC_ALLOWED"))
 			addHaxelib("discord_rpc");
-		addHaxelib("SScript");
+		if (haxedefs.exists("HSCRIPT_ALLOWED"))
+			addHaxelib("SScript");
 
 		if (debug)
 			addHaxelib("hxcpp-debug-server");
