@@ -3,7 +3,7 @@ color 0a
 title Running Game (RELEASE MODE)
 cd ../../..
 echo BUILDING...
-haxelib run lime test windows -final
+haxelib run lime test windows Project.xml -final
 echo.
 echo DONE.
 pause
