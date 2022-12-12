@@ -23,7 +23,7 @@ jobs:
         run: |
           haxelib setup ~/haxelib
           haxelib install hxcpp > /dev/null --quiet
-          haxelib install lime --quiet
+          haxelib git lime https://github.com/BeastlyGhost/lime hxp-dirty-patch --quiet
           haxelib install openfl --quiet
           haxelib install flixel --quiet
           haxelib install flixel-addons --quiet
@@ -57,7 +57,7 @@ jobs:
         run: |
           haxelib setup C:/haxelib
           haxelib install hxcpp > /dev/null --quiet
-          haxelib install lime --quiet
+          haxelib git lime https://github.com/BeastlyGhost/lime hxp-dirty-patch --quiet
           haxelib install openfl --quiet
           haxelib install flixel --quiet
           haxelib install flixel-addons --quiet
@@ -92,7 +92,7 @@ jobs:
         run: |
           haxelib setup ~/haxelib
           haxelib install hxcpp > /dev/null --quiet
-          haxelib install lime --quiet
+          haxelib git lime https://github.com/BeastlyGhost/lime hxp-dirty-patch --quiet
           haxelib install openfl --quiet
           haxelib install flixel --quiet
           haxelib install flixel-addons --quiet
