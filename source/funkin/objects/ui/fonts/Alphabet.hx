@@ -86,6 +86,7 @@ class Alphabet extends FlxTypedSpriteGroup<AlphaCharacter>
 				var letter:AlphaCharacter = new AlphaCharacter(xPos, 0);
 
 				letter.createChar(character, type);
+				letter.changeColor(color, type == BOLD);
 				add(letter);
 
 				lastSprite = letter;
