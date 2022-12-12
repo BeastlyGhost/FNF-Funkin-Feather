@@ -106,7 +106,10 @@ class CreditsMenu extends MusicBeatState
 		if (Controls.isJustPressed("accept")) {}
 
 		if (Controls.isJustPressed("back"))
+		{
 			MusicState.switchState(new MainMenu());
+			FlxG.sound.play(AssetHandler.grabAsset('cancelMenu', SOUND, "sounds/menus"));
+		}
 	}
 
 	override public function updateSelection(newSelection:Int = 0):Void

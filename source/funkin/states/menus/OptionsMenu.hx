@@ -77,6 +77,7 @@ class OptionsMenu extends MusicBeatState
 				MusicState.switchState(new funkin.states.PlayState());
 			else
 				MusicState.switchState(new funkin.states.menus.MainMenu());
+			FlxG.sound.play(AssetHandler.grabAsset('cancelMenu', SOUND, "sounds/menus"));
 		}
 	}
 
