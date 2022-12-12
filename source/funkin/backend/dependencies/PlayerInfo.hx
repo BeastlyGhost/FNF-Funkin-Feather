@@ -178,44 +178,6 @@ class PlayerInfo
 			curComboGrade = (misses < 10 ? 'SDCB' : '');
 	}
 
-	public static function generateRating(skin:String = 'default'):FlxSprite
-	{
-		var width:Int = (skin == "pixel" ? 60 : 346);
-		var height:Int = (skin == "pixel" ? 21 : 155);
-
-		var rating:FlxSprite = new FlxSprite();
-		rating.loadGraphic(AssetHandler.grabAsset("ratings", IMAGE, "images/ui/" + skin), true, width, height);
-
-		for (i in 0...judgeTable.length)
-			rating.animation.add(judgeTable[i].name, [i]);
-
-		rating.setGraphicSize(Std.int(rating.width * (skin == "pixel" ? PlayState.pixelAssetSize : 0.7)));
-		rating.updateHitbox();
-
-		rating.antialiasing = (skin != "pixel");
-
-		return rating;
-	}
-
-	public static function generateCombo(skin:String = 'default'):FlxSprite
-	{
-		var width:Int = (skin == "pixel" ? 12 : 108);
-		var height:Int = (skin == "pixel" ? 12 : 142);
-
-		var combo:FlxSprite = new FlxSprite();
-		combo.loadGraphic(AssetHandler.grabAsset("combo_numbers", IMAGE, "images/ui/" + skin), true, width, height);
-
-		for (i in 0...10)
-			combo.animation.add('num' + i, [i]);
-
-		combo.setGraphicSize(Std.int(combo.width * (skin == "pixel" ? PlayState.pixelAssetSize : 0.5)));
-		combo.updateHitbox();
-
-		combo.antialiasing = (skin != "pixel");
-
-		return combo;
-	}
-
 	public static function increaseScore(rating:Int):Void
 	{
 		score += judgeTable[rating].score;
@@ -254,6 +216,48 @@ class PlayerInfo
 
 		if (health < 0)
 			health = 0;
+	}
+
+	/**
+		Sprite Generation Scripts
+	**/
+	//
+	public static function generateRating(skin:String = 'default'):FlxSprite
+	{
+		var width:Int = (skin == "pixel" ? 60 : 352);
+		var height:Int = (skin == "pixel" ? 21 : 155);
+
+		var rating:FlxSprite = new FlxSprite();
+		rating.loadGraphic(AssetHandler.grabAsset("ratings", IMAGE, "images/ui/" + skin), true, width, height);
+
+		for (i in 0...judgeTable.length)
+			rating.animation.add(judgeTable[i].name, [i]);
+
+		rating.setGraphicSize(Std.int(rating.width * (skin == "pixel" ? PlayState.pixelAssetSize : 0.7)));
+		rating.updateHitbox();
+
+		rating.antialiasing = (skin != "pixel");
+
+		return rating;
+	}
+
+	public static function generateCombo(skin:String = 'default'):FlxSprite
+	{
+		var width:Int = (skin == "pixel" ? 12 : 108);
+		var height:Int = (skin == "pixel" ? 12 : 142);
+
+		var combo:FlxSprite = new FlxSprite();
+		combo.loadGraphic(AssetHandler.grabAsset("combo_numbers", IMAGE, "images/ui/" + skin), true, width, height);
+
+		for (i in 0...10)
+			combo.animation.add('num' + i, [i]);
+
+		combo.setGraphicSize(Std.int(combo.width * (skin == "pixel" ? PlayState.pixelAssetSize : 0.5)));
+		combo.updateHitbox();
+
+		combo.antialiasing = (skin != "pixel");
+
+		return combo;
 	}
 
 	/**
