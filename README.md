@@ -18,4 +18,4 @@ However, it will be distributed separately, like a mod in it of itself.
 ---
 ## Want to contact me?
 
-You can do so on either [Twitter](https://twitter.com/BeastlyGabi) or [Discord](https://discord.com/users/597124141530742805), you can also [open an issue](https://github.com/BeastlyGhost/FNF-Funkin-Feather/issues), as this would give me the same level of contact that these other platforms do.
+You can do so on either [Twitter](https://twitter.com/BeastlyGabi) or [Discord](https://discord.com/users/597124141530742805), you can also [open an issue](https://github.com/BeastlyGhost/FNF-Funkin-Feather/issues), as that would give me the same level of contact that these other platforms do.
