@@ -135,7 +135,7 @@ class FeatherSprite extends FlxSprite
 	//
 	public var animOffsets:Map<String, Array<Dynamic>>;
 
-	public function new(x:Float, y:Float):Void
+	public function new(x:Float = 0, y:Float = 0):Void
 	{
 		animOffsets = new Map<String, Array<Dynamic>>();
 		super();

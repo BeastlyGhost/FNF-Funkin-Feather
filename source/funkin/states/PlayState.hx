@@ -724,7 +724,7 @@ class PlayState extends MusicBeatState
 
 	public function popUpScore(myRating:String = 'sick', combo:Bool = true, preload:Bool = false):Void
 	{
-		var rating:FlxSprite = PlayerInfo.generateRating(assetSkin);
+		var rating:FlxSprite = CustomAssets.generateRating(assetSkin);
 
 		rating.screenCenter();
 		rating.x = (FlxG.width * 0.55) - 40;
@@ -754,7 +754,7 @@ class PlayState extends MusicBeatState
 
 			for (i in 0...splitCombo.length)
 			{
-				var numScore:FlxSprite = PlayerInfo.generateCombo(assetSkin);
+				var numScore:FlxSprite = CustomAssets.generateCombo(assetSkin);
 
 				numScore.alpha = 1;
 				numScore.screenCenter();
@@ -889,6 +889,8 @@ class PlayState extends MusicBeatState
 		callFunc('endSong', []);
 
 		isEndingSong = true;
+		canPause = false;
+
 		Conductor.songPosition = Conductor.songMusic.length;
 
 		if (Conductor.songMusic != null && Conductor.songMusic.playing)

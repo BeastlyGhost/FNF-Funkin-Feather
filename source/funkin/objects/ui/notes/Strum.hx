@@ -38,37 +38,7 @@ class Strum extends FlxGroup
 			babyArrow.setPosition(x, y);
 			babyArrow.ID = index;
 
-			switch (PlayState.assetSkin)
-			{
-				case "pixel":
-					babyArrow.loadGraphic(AssetHandler.grabAsset('NOTE_assets', IMAGE, 'data/notes/default/pixel'), true, 17, 17);
-					//
-					babyArrow.animation.add('static', [index]);
-					babyArrow.animation.add('pressed', [4 + index, 8 + index], 12, false);
-					babyArrow.animation.add('confirm', [12 + index, 16 + index], 12, false);
-
-					babyArrow.setGraphicSize(Std.int(babyArrow.width * PlayState.pixelAssetSize));
-					babyArrow.updateHitbox();
-					babyArrow.antialiasing = false;
-
-					babyArrow.addOffset('static', -67, -50);
-					babyArrow.addOffset('pressed', -67, -50);
-					babyArrow.addOffset('confirm', -67, -50);
-
-					babyArrow.x += 5;
-					babyArrow.y += 25;
-
-				default:
-					babyArrow.frames = AssetHandler.grabAsset('NOTE_assets', SPARROW, 'data/notes/default/base');
-					//
-					babyArrow.animation.addByPrefix(BabyArrow.colors[index], 'arrow' + BabyArrow.actions[index].toUpperCase());
-					babyArrow.animation.addByPrefix('static', 'arrow${BabyArrow.actions[index].toUpperCase()}');
-					babyArrow.animation.addByPrefix('pressed', '${BabyArrow.actions[index]} press', 24, false);
-					babyArrow.animation.addByPrefix('confirm', '${BabyArrow.actions[index]} confirm', 24, false);
-
-					babyArrow.setGraphicSize(Std.int(babyArrow.width * 0.7));
-					babyArrow.antialiasing = true;
-			}
+			CustomAssets.generateStrums(babyArrow, index);
 
 			babyArrow.x += (index - ((4 / 2))) * BabyArrow.swagWidth;
 			babyArrow.y -= 10;

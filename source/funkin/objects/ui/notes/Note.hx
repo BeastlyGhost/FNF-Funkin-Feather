@@ -76,51 +76,12 @@ class Note extends FeatherSprite
 		this.prevNote = prevNote;
 		this.isSustain = isSustain;
 
-		var stringSect = BabyArrow.colors[index];
-
-		switch (PlayState.assetSkin)
-		{
-			case "pixel":
-				var indexPixel:Array<Int> = [4, 5, 6, 7];
-
-				if (!isSustain)
-				{
-					loadGraphic(AssetHandler.grabAsset('NOTE_assets', IMAGE, 'data/notes/default/pixel'));
-					animation.add(stringSect + 'Scroll', [indexPixel[index]], 12);
-				}
-				else
-				{
-					loadGraphic(AssetHandler.grabAsset('HOLD_assets', IMAGE, 'data/notes/default/pixel'));
-					animation.add(stringSect + 'holdend', [indexPixel[index]]);
-					animation.add(stringSect + 'hold', [indexPixel[index] - 4]);
-				}
-
-				setGraphicSize(Std.int(width * PlayState.pixelAssetSize));
-				updateHitbox();
-				antialiasing = false;
-
-			default:
-				frames = AssetHandler.grabAsset('NOTE_assets', SPARROW, 'data/notes/default/base');
-
-				if (!isSustain)
-					animation.addByPrefix(stringSect + 'Scroll', stringSect + '0');
-				else
-				{
-					animation.addByPrefix(stringSect + 'hold', stringSect + ' hold piece');
-					animation.addByPrefix(stringSect + 'holdend', stringSect + ' hold end');
-
-					// i'm going after phantomarcade @BeastlyGhost
-					animation.addByPrefix('purpleholdend', 'pruple end hold');
-				}
-
-				setGraphicSize(Std.int(width * 0.7));
-				antialiasing = true;
-		}
+		CustomAssets.generateNotes(this, index, isSustain);
 
 		updateHitbox();
 
 		if (!isSustain)
-			playAnim(stringSect + "Scroll");
+			playAnim(BabyArrow.colors[index] + "Scroll");
 		else
 		{
 			earlyHitMult = 0.5;
@@ -138,7 +99,7 @@ class Note extends FeatherSprite
 
 			offsetX = width / 2;
 
-			playAnim(stringSect + 'holdend');
+			playAnim(BabyArrow.colors[index] + 'holdend');
 			updateHitbox();
 
 			offsetX -= width / 2;
@@ -147,7 +108,7 @@ class Note extends FeatherSprite
 
 			if (prevNote.isSustain)
 			{
-				prevNote.playAnim(stringSect + 'hold');
+				prevNote.playAnim(BabyArrow.colors[index] + 'hold');
 				prevNote.scale.y *= Conductor.stepCrochet / 100 * 1.5 * PlayState.song.speed;
 				prevNote.updateHitbox();
 			}
