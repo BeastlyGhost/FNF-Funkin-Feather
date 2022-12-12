@@ -16,6 +16,13 @@ However, it will be distributed separately, like a mod in it of itself.
 **IF YOU WISH TO HELP DEVELOPMENT GO FASTER, FEEL FREE TO DO SO ON A [PULL REQUEST](https://github.com/BeastlyGhost/FNF-Funkin-Feather/pulls)**
 
 ---
+## How to build?
+1. Install Haxe
+2. Install the hmm library (Type ``haxelib install hmm`` in console)
+3. Open console in engine folder and type ``haxelib run hmm install``. This command will install all libraries, which are needed for engine.
+4. Type ``lime build [target platform (windows, linux, html5, etc)]``
+
+---
 ## Want to contact me?
 
 You can do so on either [Twitter](https://twitter.com/BeastlyGabi) or [Discord](https://discord.com/users/597124141530742805), you can also [open an issue](https://github.com/BeastlyGhost/FNF-Funkin-Feather/issues), as that would give me the same level of contact that these other platforms do.
