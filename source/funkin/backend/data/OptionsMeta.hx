@@ -63,6 +63,12 @@ class OptionsMeta
 			values: ["FNF Minimal", "FNF Detailed", "Feather Minimal", "Feather Detailed"]
 		},
 		{
+			name: "Show Info Card",
+			description: "If the card with the Song Name and author should be shown when the song begins.",
+			type: CHECKMARK,
+			value: true
+		},
+		{
 			name: "Downscroll",
 			description: "If the notes should come from top to bottom.",
 			type: CHECKMARK,
@@ -212,7 +218,15 @@ class OptionsMeta
 	}
 
 	public static var optionList:Map<String, Array<String>> = [
-		"gameplay" => ["Downscroll", "Ghost Tapping", "Center Notes", "Show Grades", "Safe Frames"],
+		"gameplay" => [
+			"Downscroll",
+			"Ghost Tapping",
+			"Center Notes",
+			"Safe Frames",
+			"User Interface Style",
+			"Note Quantization",
+			"Show Info Card"
+		],
 		"accessibility" => ["Auto Pause", "Anti Aliasing", "Flashing Lights"],
 		"debugging" => ["Framerate Cap", "Show FPS Info", "Show RAM Info", "Show Engine Mark"],
 		"custom settings" => [],

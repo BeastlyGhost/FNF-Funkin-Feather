@@ -145,10 +145,14 @@ class UI extends FlxSpriteGroup
 
 	public function showInfoCard():Void
 	{
-		var blackBy, byText;
-		blackBy = new FlxSprite(0, FlxG.height - 120).loadGraphic(AssetHandler.grabAsset('base/infobox', IMAGE, 'images/ui'));
+		if (!OptionsMeta.getPref("Show Info Card"))
+			return;
+
+		var blackBy:FlxSprite, byText:FlxText;
+		blackBy = new FlxSprite(0).loadGraphic(AssetHandler.grabAsset('base/infobox', IMAGE, 'images/ui'));
 		blackBy.screenCenter();
 		blackBy.x -= FlxG.width;
+		blackBy.y = FlxG.height - 120;
 		blackBy.alpha = 0.7;
 
 		byText = new FlxText(0, 0, 425);
