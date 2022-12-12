@@ -163,7 +163,10 @@ class FreeplayMenu extends MusicBeatState
 			songRating = 1;
 
 		if (Controls.isJustPressed("back"))
+		{
 			MusicState.switchState(new MainMenu());
+			FlxG.sound.play(AssetHandler.grabAsset('cancelMenu', SOUND, "sounds/menus"));
+		}
 
 		if (Controls.isJustPressed("accept"))
 		{

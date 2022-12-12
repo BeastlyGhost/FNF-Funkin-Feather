@@ -107,10 +107,10 @@ class Project extends HXProject
 	function setAppIcons():Void
 	{
 		// uuurgh...
-		addAppIcon("art/icons/icon16.png", 16);
-		addAppIcon("art/icons/icon32.png", 32);
-		addAppIcon("art/icons/icon64.png", 64);
-		addAppIcon("art/icons/iconOG.png");
+		addAppIcon("other/art/icons/icon16.png", 16);
+		addAppIcon("other/art/icons/icon32.png", 32);
+		addAppIcon("other/art/icons/icon64.png", 64);
+		addAppIcon("other/art/icons/iconOG.png");
 	}
 
 	function setDefaultLibs():Void

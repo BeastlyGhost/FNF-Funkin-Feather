@@ -88,8 +88,8 @@
 
 	<!-- ___________ Custom Nodes ___________ -->
 
-	<icon path="art/icons/icon16.png" size='16' />
-	<icon path="art/icons/icon32.png" size='32' />
-	<icon path="art/icons/icon64.png" size='64' />
-	<icon path="art/icons/iconOG.png" />
+	<icon path="other/art/icons/icon16.png" size='16' />
+	<icon path="other/art/icons/icon32.png" size='32' />
+	<icon path="other/art/icons/icon64.png" size='64' />
+	<icon path="other/art/icons/iconOG.png" />
 </project>

@@ -88,6 +88,9 @@ class StoryMenu extends MusicBeatState
 	override function update(elapsed:Float):Void
 	{
 		if (Controls.isJustPressed("back"))
+		{
 			MusicState.switchState(new MainMenu());
+			FlxG.sound.play(AssetHandler.grabAsset('cancelMenu', SOUND, "sounds/menus"));
+		}
 	}
 }

@@ -1,8 +1,10 @@
 # Funkin': Feather
 
-A Work in Progress rewrite of [Friday Night Funkin'](https://github.com/ninjamuffin99/Funkin).
+![repo-size](https://img.shields.io/github/repo-size/BeastlyGhost/FNF-Funkin-Feather)
 
-![Repo size](https://img.shields.io/github/repo-size/BeastlyGhost/FNF-Funkin-Feather)
+A rewrite of [Friday Night Funkin'](https://github.com/ninjamuffin99/Funkin).
+
+**Note: Funkin': Feather, in its current state, is not ready for mod use and is unfinished**.
 
 ---
 Made for learning purposes and as a love letter for Friday Night Funkin's modding community.
@@ -10,10 +12,6 @@ While still being very early in development, feedback and help with this project
 
 The base game won't be included with Funkin': Feather, as it's made specifically for mods and mods *only*.
 However, it will be distributed separately, like a mod in it of itself.
-
-**FUNKIN' FEATHER IS NOT REALLY READY FOR MOD USE YET, IT IS STILL A WORK IN PROGRESS AND VERY UNFINISHED**
-
-**IF YOU WISH TO HELP DEVELOPMENT GO FASTER, FEEL FREE TO DO SO ON A [PULL REQUEST](https://github.com/BeastlyGhost/FNF-Funkin-Feather/pulls)**
 
 ---
 ## How to build?
@@ -24,6 +22,4 @@ However, it will be distributed separately, like a mod in it of itself.
 4. Type ``lime build [target platform (windows, linux, html5, etc)]``
 
 ---
-## Want to contact me?
-
-You can do so on either [Twitter](https://twitter.com/BeastlyGabi) or [Discord](https://discord.com/users/597124141530742805), you can also [open an issue](https://github.com/BeastlyGhost/FNF-Funkin-Feather/issues), as that would give me the same level of contact that these other platforms do.
+## To contribute, please read the [Contributing](https://github.com/BeastlyGhost/FNF-Funkin-Feather/wiki/Contirbuting) section of the Wiki.
