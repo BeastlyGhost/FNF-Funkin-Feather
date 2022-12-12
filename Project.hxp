@@ -1,0 +1,171 @@
+import lime.tools.*;
+import sys.FileSystem;
+
+/**
+	Basically Project.xml
+	but as a script
+**/
+class Project extends HXProject
+{
+	/**
+		This just sets up the main game settings according to our needs
+		it's simply just project.xml in pure code format, which could be better
+		to work with in the future
+	**/
+	// DEFAULT VARIABLES FOR CUSTOMIZATION
+	public static var RPC_ALLOWED:Bool = true; // Discord Rich Presence
+
+	public static var SCRIPTS_ALLOWED:Bool = true; // Script Support
+
+	public function new():Void
+	{
+		super();
+
+		setAppMeta();
+		setAppIcons();
+		setWindowMeta();
+
+		setAssetPaths("assets");
+
+		addDefaultLibs();
+		setDefaultDefines();
+	}
+
+	function setAppMeta():Void
+	{
+		// Application Title
+		meta.title = "Friday Night Funkin': Feather";
+
+		// Application Company (Save Folder) name
+		meta.company = "BeastlyGhost";
+
+		// App Version
+		meta.version = "1.0.0";
+
+		// Main Class State
+		app.main = "Main";
+
+		// Executable Name
+		app.file = "Funkin-Feather";
+
+		// Application Preloader
+		app.preloader = "flixel.system.FlxPreloader";
+
+		// Default App Build Path
+		app.path = 'export/${debug ? 'debug' : 'release'}';
+	}
+
+	function setAssetPaths(assetsDefault:String, assetsRename:String = null, incMeta:Array<String> = null, excMeta:Array<String> = null):Void
+	{
+		if (assetsRename == null)
+			assetsRename = assetsDefault;
+
+		if (incMeta == null)
+			incMeta = ["*"]; // star means EVERYTHING from within the specified folder
+
+		if (excMeta == null)
+			excMeta = [];
+
+		// Default Source Path
+		sources.push('source');
+
+		// Default Assets Path
+		includeAssets(assetsDefault, assetsRename, incMeta, excMeta);
+	}
+
+	function setWindowMeta():Void
+	{
+		// Set the game framerate.
+		window.fps = 0;
+
+		// Set the window size.
+		window.width = 1280;
+		window.height = 720;
+
+		// Set the window background, null is transparent
+		window.background = null;
+
+		// Enable hardware acceleration
+		window.hardware = true;
+
+		// Disable VSYNC
+		window.vsync = false;
+
+		// Set whether the window should be fullscreen or not
+		window.fullscreen = (platformType == PlatformType.MOBILE);
+
+		// set the window orientation and if it's resizable according to your platform
+		window.orientation = Orientation.LANDSCAPE;
+		window.resizable = (platformType == PlatformType.DESKTOP);
+	}
+
+	function setAppIcons():Void
+	{
+		// uuurgh...
+		addAppIcon("art/icons/icon16.png", 16);
+		addAppIcon("art/icons/icon32.png", 32);
+		addAppIcon("art/icons/icon64.png", 64);
+		addAppIcon("art/icons/iconOG.png");
+	}
+
+	function addDefaultLibs():Void
+	{
+		/**
+			add here all the default libraries for the project
+		**/
+
+		addHaxeLib("flixel");
+
+		// addHaxeLib("lime");
+		// addHaxeLib("openfl"); /** i don't think we need those for now **/
+		addHaxeLib("flixel-addons");
+		addHaxeLib("flixel-ui");
+		addHaxeLib("yaml");
+
+		if (RPC_ALLOWED)
+			addHaxeLib("discord_rpc");
+		if (SCRIPTS_ALLOWED)
+			addHaxeLib("SScript");
+
+		if (debug)
+			addHaxeLib("hxcpp-debug-server");
+	}
+
+	function setDefaultDefines():Void
+	{
+		if (platformType == PlatformType.DESKTOP)
+			haxedefs.set("FLX_NO_TOUCH", "true");
+
+		if (!debug)
+		{
+			haxedefs.set("FLX_NO_DEBUG", "true");
+			haxedefs.set("NAPE_RELEASE_BUILD", "true");
+		}
+
+		haxedefs.set("HXCPP_CHECK_POINTER", "true");
+		haxedefs.set("HXCPP_GC_BIG_BLOCKS", "true");
+		haxedefs.set("HXCPP_STACK_LINE", "true");
+		haxedefs.set("FLX_NO_FOCUS_LOST_SCREEN", "true");
+
+		if (SCRIPTS_ALLOWED)
+			haxedefs.set("hscriptPos", "true");
+
+		haxeflags.push("-dce no");
+	}
+
+	function addHaxeLib(name:String, version:String = ""):Void
+		haxelibs.push(new hxp.Haxelib(name, version));
+
+	function addAppIcon(icon:String, size:Int = null)
+		icons.push(new Icon(icon, size));
+
+	function addAssetsLib(lib:String, embed:Bool = false, preload:Bool = false):Void
+	{
+		var path:String = null;
+		var type:String = null;
+		var prefix:String = "";
+
+		var myLib:Library = new Library(path, lib, type, embed, preload, false, prefix);
+		libraries.push(myLib);
+	}
+}
