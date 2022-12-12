@@ -14,12 +14,5 @@ The base game won't be included with Funkin': Feather, as it's made specifically
 However, it will be distributed separately, like a mod in it of itself.
 
 ---
-## How to build?
--- in this section, "terminal / Command prompt or powershell" will be referred as "Console"
-1. Install Haxe
-2. Install the hmm library (Type ``haxelib install hmm`` in your Console)
-3. Open the console in the engine folder and type ``haxelib run hmm install``. This command will install all libraries from within the `hmm.json` file, which are needed as dependencies for the engine.
-4. Type ``lime build [target platform (windows, linux, html5, etc)]``
-
----
+## On how to build the engine, please look through the [Building](https://github.com/BeastlyGhost/FNF-Funkin-Feather/wiki/Building) section of the Wiki.
 ## To contribute, please read the [Contributing](https://github.com/BeastlyGhost/FNF-Funkin-Feather/wiki/Contributing) section of the Wiki.
