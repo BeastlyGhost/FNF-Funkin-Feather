@@ -529,7 +529,7 @@ class PlayState extends MusicBeatState
 
 	public function onKeyPressed(key:Int, action:String, isGamepad:Bool):Void
 	{
-		if (isPaused || isEndingSong)
+		if (isPaused || isEndingSong || playerStrum.autoplay)
 			return;
 
 		if (action != null && BabyArrow.actions.contains(action))
@@ -539,7 +539,7 @@ class PlayState extends MusicBeatState
 
 	public function onKeyReleased(key:Int, action:String, isGamepad:Bool):Void
 	{
-		if (isPaused || isEndingSong)
+		if (isPaused || isEndingSong || playerStrum.autoplay)
 			return;
 
 		if (action != null && BabyArrow.actions.contains(action))
@@ -558,7 +558,7 @@ class PlayState extends MusicBeatState
 
 		if (pressed)
 		{
-			if (song != null && !playerStrum.autoplay && countdownWasActive)
+			if (song != null && countdownWasActive)
 			{
 				var prevTime:Float = Conductor.songPosition;
 
@@ -608,12 +608,17 @@ class PlayState extends MusicBeatState
 			if (idx >= 0 && babyArrow != null)
 				babyArrow.playAnim('static');
 
-			for (player in playerStrum.characters)
-			{
-				if (player.holdTimer > Conductor.stepCrochet * 4 * 0.001 && !keysHeld.contains(true))
-					if (player.animation.curAnim.name.startsWith('sing') && !player.animation.curAnim.name.endsWith('miss'))
-						player.dance();
-			}
+			resetPlayer();
+		}
+	}
+
+	function resetPlayer():Void
+	{
+		for (player in playerStrum.characters)
+		{
+			if (player.holdTimer > Conductor.stepCrochet * 4 * 0.001 && !keysHeld.contains(true))
+				if (player.animation.curAnim.name.startsWith('sing') && !player.animation.curAnim.name.endsWith('miss'))
+					player.dance();
 		}
 	}
 

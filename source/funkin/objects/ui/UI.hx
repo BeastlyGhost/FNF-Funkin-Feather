@@ -53,13 +53,13 @@ class UI extends FlxSpriteGroup
 		add(iconP2);
 
 		scoreText = new FlxText(healthBG.x + healthBG.width - 190, healthBG.y + 30, 0, '', 20);
-		scoreText.setFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 20, 0xFFFFFFFF, CENTER, SHADOW, 0xFF000000);
+		scoreText.setFormat(AssetHandler.grabAsset((uiStyle.contains("Feather") ? "muff-bold" : "vcr"), FONT, "data/fonts"), 20, 0xFFFFFFFF, CENTER, SHADOW, 0xFF000000);
 		scoreText.shadowOffset.set(2, 2);
 		scoreText.scrollFactor.set();
 		add(scoreText);
 
 		autoPlayText = new FlxText(-5, PlayState.playerStrum.downscroll ? FlxG.height - 80 : 80, FlxG.width - 800, '[AUTOPLAY]\n', 32);
-		autoPlayText.setFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 32, 0xFFFFFFFF, CENTER, SHADOW, 0xFF000000);
+		autoPlayText.setFormat(AssetHandler.grabAsset((uiStyle.contains("Feather") ? "muff-bold" : "vcr"), FONT, "data/fonts"), 32, 0xFFFFFFFF, CENTER, SHADOW, 0xFF000000);
 		autoPlayText.shadowOffset.set(2, 2);
 		autoPlayText.screenCenter(X);
 		autoPlayText.visible = PlayState.playerStrum.autoplay;
