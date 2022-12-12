@@ -15,8 +15,15 @@ class Project extends HXProject
 {
 	/*
 	 * Whether to enable Discord Rich Presence support, defaults to true
+	 * -- haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
 	**/
 	public static var RPC_ALLOWED:Bool = true;
+
+	/*
+	 * Whether to enable Haxe Script support with SScript, defaults to true
+	 * -- haxelib git SScript https://github.com/AltronMaxX/SScript
+	**/
+	public static var HSCRIPT_ALLOWED:Bool = true;
 
 	override public function new():Void
 	{
