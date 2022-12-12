@@ -78,6 +78,10 @@
 	<!--Increases memory allocation to bypass memory limits-->
 	<haxedef name="HXCPP_GC_BIG_BLOCKS" />
 
+	<!-- Always enable Null Object Reference check -->
+	<haxedef name="HXCPP_CHECK_POINTER" if="release" />
+	<haxedef name="HXCPP_STACK_LINE" if="release" />
+
 	<!-- ___________ Haxeflags ___________ -->
 
 	<haxeflag name="-dce no" />
