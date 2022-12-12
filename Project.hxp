@@ -17,7 +17,7 @@ class Project extends HXProject
 
 	public static var SCRIPTS_ALLOWED:Bool = true; // Script Support
 
-	public function new():Void
+	override public function new():Void
 	{
 		super();
 
@@ -55,6 +55,14 @@ class Project extends HXProject
 		app.path = 'export/${debug ? 'debug' : 'release'}';
 	}
 
+	/**
+		Sets up the Default assets folder
+
+		@param assetsDefault [specifies the folder name]
+		@param assetsRename [specifies the new name for the folder, if null, use the default one]
+		@param incMeta [array with files to include from the previously specified folder]
+		@param excMeta [array with files to exclude from the previously specified folder]
+	**/
 	function setAssetPaths(assetsDefault:String, assetsRename:String = null, incMeta:Array<String> = null, excMeta:Array<String> = null):Void
 	{
 		if (assetsRename == null)
@@ -110,9 +118,7 @@ class Project extends HXProject
 
 	function addDefaultLibs():Void
 	{
-		/**
-			add here all the default libraries for the project
-		**/
+		// add here all the default libraries for the project
 
 		addHaxeLib("flixel");
 
@@ -153,12 +159,28 @@ class Project extends HXProject
 		haxeflags.push("-dce no");
 	}
 
+	/**
+		Adds a new Haxe Library to the list
+		@param name [the library name]
+		@param version [the library version]
+	**/
 	function addHaxeLib(name:String, version:String = ""):Void
 		haxelibs.push(new hxp.Haxelib(name, version));
 
+	/**
+		Adds the application icons to the icon list
+		@param icon [the icon file name, it should have it's file extesion specified]
+		@param size [the icon size]
+	**/
 	function addAppIcon(icon:String, size:Int = null)
 		icons.push(new Icon(icon, size));
 
+	/**
+		Adds a new assets library to our libraries list
+		@param lib [the library name, e.g: "tutorial"]
+		@param embed [whether the library should be bundled with the executable, not the assets folder]
+		@param preload [whether the library should be loaded when the application begins]
+	**/
 	function addAssetsLib(lib:String, embed:Bool = false, preload:Bool = false):Void
 	{
 		var path:String = null;
