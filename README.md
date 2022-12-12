@@ -14,5 +14,5 @@ The base game won't be included with Funkin': Feather, as it's made specifically
 However, it will be distributed separately, like a mod in it of itself.
 
 ---
-## On how to build the engine, please look through the [Building](https://github.com/BeastlyGhost/FNF-Funkin-Feather/wiki/Building) section of the Wiki.
+## For building, please look through the [Building](https://github.com/BeastlyGhost/FNF-Funkin-Feather/wiki/Building) section of the Wiki.
 ## To contribute, please read the [Contributing](https://github.com/BeastlyGhost/FNF-Funkin-Feather/wiki/Contributing) section of the Wiki.
