@@ -23,9 +23,9 @@ class Project extends HXProject
 
 		setAssetsPath("assets");
 
-		setDefaultLibs();
 		setDefaultDefines();
 		setDefaultFlags();
+		setDefaultLibs();
 	}
 
 	function setAppMeta():Void
@@ -137,18 +137,16 @@ class Project extends HXProject
 	function setDefaultDefines():Void
 	{
 		if (platformType == PlatformType.DESKTOP)
+		{
+			haxedefs.set("RPC_ALLOWED", "true");
+			haxedefs.set("HSCRIPT_ALLOWED", "true");
 			haxedefs.set("FLX_NO_TOUCH", "true");
+		}
 
 		if (!debug)
 		{
 			haxedefs.set("FLX_NO_DEBUG", "true");
 			haxedefs.set("NAPE_RELEASE_BUILD", "true");
-		}
-
-		if (platformType == PlatformType.DESKTOP)
-		{
-			haxedefs.set("RPC_ALLOWED", "true");
-			haxedefs.set("HSCRIPT_ALLOWED", "true");
 		}
 
 		haxedefs.set("HXCPP_CHECK_POINTER", "true");
