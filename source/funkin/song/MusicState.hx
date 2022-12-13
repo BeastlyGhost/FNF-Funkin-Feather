@@ -25,7 +25,7 @@ class MusicState
 	{
 		if (!FlxTransitionableState.skipNextTransIn)
 		{
-			Transition.start(0.3, true, Fade, FlxEase.linear, function()
+			Transition.start(0.3, true, Slide_UpDown, FlxEase.linear, function()
 			{
 				FlxG.switchState(state);
 			});
@@ -43,7 +43,7 @@ class MusicState
 	{
 		if (!skipTransition)
 		{
-			Transition.start(0.3, true, Fade, FlxEase.linear, function()
+			Transition.start(0.3, true, Slide_UpDown, FlxEase.linear, function()
 			{
 				FlxG.resetState();
 			});
@@ -71,7 +71,7 @@ class MusicBeatState extends ScriptableState implements IMusicBeat
 	{
 		// play the transition if we are allowed to
 		if (!FlxTransitionableState.skipNextTransOut)
-			Transition.start(0.3, false, Fade, FlxEase.linear);
+			Transition.start(0.3, false, Slide_UpDown, FlxEase.linear);
 
 		super.create();
 	}
@@ -82,6 +82,9 @@ class MusicBeatState extends ScriptableState implements IMusicBeat
 			Conductor.songMusic.onComplete = endSong;
 
 		updateTime();
+
+		if (lastStep != curStep && curStep > 0)
+			stepHit();
 
 		FlxG.watch.add(Conductor, "songPosition");
 		FlxG.watch.add(this, "curBeat");
@@ -133,13 +136,6 @@ class MusicBeatState extends ScriptableState implements IMusicBeat
 
 		curBeat = Math.floor(curStep / 4);
 		curSection = Math.floor(curBeat / 4);
-
-		if (lastStep != curStep)
-		{
-			if (curStep > 0)
-				stepHit();
-			lastStep = curStep;
-		}
 	}
 
 	public function sectionHit():Void
@@ -162,6 +158,9 @@ class MusicBeatState extends ScriptableState implements IMusicBeat
 	{
 		if (curStep % 4 == 0)
 			beatHit();
+
+		if (lastStep < curStep)
+			lastStep = curStep;
 	}
 
 	public var isStartingSong:Bool = false;
@@ -184,6 +183,9 @@ class MusicBeatSubstate extends ScriptableSubstate implements IMusicBeat
 	{
 		updateTime();
 
+		if (lastStep != curStep && curStep > 0)
+			stepHit();
+
 		super.update(elapsed);
 	}
 
@@ -204,19 +206,6 @@ class MusicBeatSubstate extends ScriptableSubstate implements IMusicBeat
 
 		curStep = lastChange.stepTime + Math.floor((Conductor.songPosition - lastChange.songTime) / Conductor.stepCrochet);
 
-		if (lastStep != curStep)
-		{
-			if (curStep > 0)
-				stepHit();
-			lastStep = curStep;
-
-			if (PlayState.song != null)
-			{
-				if (lastStep < curStep)
-					sectionHit();
-			}
-		}
-
 		curBeat = Math.floor(curStep / 4);
 		curSection = Math.floor(curBeat / 4);
 	}
@@ -229,6 +218,9 @@ class MusicBeatSubstate extends ScriptableSubstate implements IMusicBeat
 
 	public function beatHit():Void
 	{
+		if (curBeat % 4 == 0)
+			sectionHit();
+
 		if (lastBeat < curBeat)
 			lastBeat = curBeat;
 	}
@@ -237,6 +229,9 @@ class MusicBeatSubstate extends ScriptableSubstate implements IMusicBeat
 	{
 		if (curStep % 4 == 0)
 			beatHit();
+
+		if (lastStep < curStep)
+			lastStep = curStep;
 	}
 
 	public function endSong():Void {}

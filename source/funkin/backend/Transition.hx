@@ -42,7 +42,19 @@ class Transition
 		switch (type)
 		{
 			case Slide_UpDown:
-			//
+				var bgSpr:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, 0xFF000000);
+				bgSpr.alpha = (transIn ? 0 : 1);
+				grpTrans.add(bgSpr);
+
+				FlxTween.tween(bgSpr, {alpha: (transIn ? 1 : 0)}, speed, {
+					onComplete: function(t:FlxTween)
+					{
+						if (onEnd != null)
+							onEnd();
+					},
+					ease: fadeEase
+				});
+
 			default:
 				var bgSpr:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, 0xFF000000);
 				bgSpr.alpha = (transIn ? 0 : 1);

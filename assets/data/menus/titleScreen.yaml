@@ -1,52 +1,12 @@
 bg: null
 gf: "titleScreen/gfDanceTitle"
-ng: "titleScreen/newgroundsLogo"
+ng: "titleScreen/newgrounds_logo"
 bgFolder: null
 gfFolder: "images/menus"
 ngFolder: "images/menus"
 bgAntialias: true
 gfAntialias: true
 ngAntialias: true
-
-stepText:
-  - steps: [4]
-    lines: ["ninjamuffin99", "phantomArcade", "kawaisprite", "evilsk8er"]
-    func: "create"
-  - steps: [12]
-    lines: ["PRESENT"]
-    func: "add"
-  - steps: [16]
-    func: "delete"
-  - steps: [20]
-    lines: ["In association", "with"]
-    func: "create"
-  - steps: [28]
-    lines: ["Newgrounds"]
-    func: "add"
-    ngVisible: true
-  - steps: [32]
-    func: "delete"
-    ngVisible: false
-  - steps: [36]
-    func: "create"
-    showRandom: true
-  - steps: [44]
-    func: "add"
-    showRandom: true
-  - steps: [48]
-    func: "delete"
-    showRandom: false
-  - steps: [52]
-    lines: ["Friday"]
-    func: "add"
-  - steps: [56]
-    lines: ["Night"]
-    func: "add"
-  - steps: [60]
-    lines: ["Funkin"]
-    func: "add"
-  - steps: [64]
-    func: "end"
 
 randomText:
   - ["shoutouts to tom fulp", "lmao"]
@@ -97,3 +57,4 @@ randomText:
   - ["devin chat", "what an honorable man"]
   - ["kickstarter exclusive", "intro text"]
   - ["cussing", "we have it"]
+  - ["fucking", "feather"]
