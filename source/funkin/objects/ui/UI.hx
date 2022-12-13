@@ -83,7 +83,7 @@ class UI extends FlxSpriteGroup
 
 	override function update(elapsed:Float):Void
 	{
-		healthBar.percent = (PlayerInfo.health * 50);
+		healthBar.percent = (PlayerInfo.stats.health * 50);
 
 		// attach to health
 		iconP1.doBops(true);
@@ -116,11 +116,11 @@ class UI extends FlxSpriteGroup
 	{
 		var tempScore:String;
 
-		tempScore = "Score: " + PlayerInfo.score;
+		tempScore = "Score: " + PlayerInfo.stats.score;
 
 		if (uiStyle.contains("Detailed"))
 		{
-			tempScore += separator + "Misses: " + PlayerInfo.misses;
+			tempScore += separator + "Misses: " + PlayerInfo.stats.misses;
 			tempScore += separator + "Grade: " + PlayerInfo.curGrade + PlayerInfo.returnGradePercent();
 		}
 

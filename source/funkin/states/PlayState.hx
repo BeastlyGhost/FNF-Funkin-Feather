@@ -507,11 +507,11 @@ class PlayState extends MusicBeatState
 
 	public function playerDeathCheck():Bool
 	{
-		if (PlayerInfo.health <= 0 && !hasDied)
+		if (PlayerInfo.stats.health <= 0 && !hasDied)
 		{
 			pauseGame();
 			Conductor.stopSong(); // *beep boops stop*
-			PlayerInfo.deaths++;
+			PlayerInfo.stats.deaths += 1;
 			hasDied = true;
 
 			callFunc('onDeath', []);
@@ -594,7 +594,7 @@ class PlayState extends MusicBeatState
 				else if (!OptionsMeta.getPref("Ghost Tapping"))
 				{
 					noteMiss(idx, playerStrum);
-					PlayerInfo.ghostMisses++;
+					PlayerInfo.stats.ghostMisses++;
 				}
 
 				Conductor.songPosition = prevTime;
@@ -680,7 +680,7 @@ class PlayState extends MusicBeatState
 				if (!note.isSustain)
 				{
 					if (PlayerInfo.judgeTable[ratingInteger].causesBreak)
-						PlayerInfo.breaks += 1;
+						PlayerInfo.stats.breaks += 1;
 
 					if (ratingInteger > PlayerInfo.greatestJudgement)
 						PlayerInfo.greatestJudgement = ratingInteger;
@@ -712,7 +712,7 @@ class PlayState extends MusicBeatState
 		if (babyStrum.autoplay)
 			return;
 
-		if (PlayerInfo.combo >= 5)
+		if (PlayerInfo.stats.combo >= 5)
 			if (crowd != null && crowd.animOffsets.exists("sad"))
 				crowd.playAnim("sad");
 
@@ -754,7 +754,7 @@ class PlayState extends MusicBeatState
 
 		if (combo)
 		{
-			var stringCombo:String = Std.string(PlayerInfo.combo);
+			var stringCombo:String = Std.string(PlayerInfo.stats.combo);
 			var splitCombo:Array<String> = stringCombo.split("");
 
 			for (i in 0...splitCombo.length)
@@ -915,11 +915,11 @@ class PlayState extends MusicBeatState
 			case STORY:
 				// playlist conditions go here
 				if (PlayerInfo.validScore)
-					PlayerInfo.saveScore(song.name, PlayerInfo.score, difficulty, true);
+					PlayerInfo.saveScore(song.name, PlayerInfo.stats.score, difficulty, true);
 				MusicState.switchState(new funkin.states.menus.StoryMenu());
 			case FREEPLAY:
 				if (PlayerInfo.validScore)
-					PlayerInfo.saveScore(song.name, PlayerInfo.score, difficulty, false);
+					PlayerInfo.saveScore(song.name, PlayerInfo.stats.score, difficulty, false);
 				MusicState.switchState(new funkin.states.menus.FreeplayMenu());
 			case CHARTING:
 				pauseGame();

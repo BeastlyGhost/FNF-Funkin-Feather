@@ -72,7 +72,7 @@ class OptionsMeta
 			name: "Downscroll",
 			description: "If the notes should come from top to bottom.",
 			type: CHECKMARK,
-			value: false
+			value: true
 		},
 		{
 			name: "Center Notes",

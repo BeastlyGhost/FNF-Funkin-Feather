@@ -63,7 +63,7 @@ class PauseSubstate extends MusicBeatSubstate
 		add(levelInfo);
 
 		var levelDeaths:FlxText = new FlxText(20, 15 + 32, 0, "", 32);
-		levelDeaths.text = 'Blue balled: ' + PlayerInfo.deaths;
+		levelDeaths.text = 'Blue balled: ' + PlayerInfo.stats.deaths;
 		levelDeaths.scrollFactor.set();
 		levelDeaths.setFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 32);
 		levelDeaths.updateHitbox();
@@ -126,7 +126,7 @@ class PauseSubstate extends MusicBeatSubstate
 				case "change keys":
 					openSubState(new KeybindsSubstate());
 				case "exit to menu":
-					PlayerInfo.deaths = 0;
+					PlayerInfo.stats.deaths = 0;
 
 					if (PlayState.gameplayMode == STORY)
 						MusicState.switchState(new funkin.states.menus.MainMenu());

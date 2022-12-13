@@ -1,8 +1,6 @@
 package funkin.backend.dependencies;
 
 import flixel.FlxG;
-import flixel.FlxSprite;
-import funkin.states.PlayState;
 
 typedef Judgement =
 {
@@ -22,13 +20,16 @@ typedef Judgement =
  */
 class PlayerInfo
 {
-	public static var score:Int = 0;
-	public static var misses:Int = 0;
-	public static var combo:Int = 0;
-	public static var breaks:Int = 0; // KE players going completely wild now
-	public static var ghostMisses:Int = 0;
-	public static var health:Float = 1;
-	public static var deaths:Float = 0;
+	public static var stats:Dynamic = {
+		score: 0,
+		misses: 0,
+		combo: 0,
+		breaks: 0, // KE players going completely wild now
+		ghostMisses: 0,
+		health: 1.0,
+		deaths: 0
+	};
+
 	public static var validScore:Bool = true;
 
 	public static var noteRatingMod:Float;
@@ -107,12 +108,12 @@ class PlayerInfo
 
 	public static function resetScore():Void
 	{
-		score = 0;
-		misses = 0;
-		ghostMisses = 0;
-		combo = 0;
-		breaks = 0;
-		health = 1;
+		stats.score = 0;
+		stats.misses = 0;
+		stats.ghostMisses = 0;
+		stats.combo = 0;
+		stats.breaks = 0;
+		stats.health = 1;
 		validScore = true;
 
 		totalNotesHit = 0;
@@ -174,48 +175,48 @@ class PlayerInfo
 		if (judgeTable[greatestJudgement].comboReturn != null)
 			curComboGrade = judgeTable[greatestJudgement].comboReturn;
 
-		if (misses > 0)
-			curComboGrade = (misses < 10 ? 'SDCB' : '');
+		if (stats.misses > 0)
+			curComboGrade = (stats.misses < 10 ? 'SDCB' : '');
 	}
 
 	public static function increaseScore(rating:Int):Void
 	{
-		score += judgeTable[rating].score;
-		health += 0.04 * (judgeTable[rating].health) / 100;
+		stats.score += judgeTable[rating].score;
+		stats.health += 0.04 * (judgeTable[rating].health) / 100;
 
-		if (combo < 0)
-			combo = 0;
-		combo += 1;
+		if (stats.combo < 0)
+			stats.combo = 0;
+		stats.combo += 1;
 
 		// increase gotten judges count
 		gottenJudges.set(judgeTable[rating].name, gottenJudges.get(judgeTable[rating].name) + 1);
 
 		// update combo breaks counter
 		if (judgeTable[rating].causesBreak)
-			breaks = misses + gottenJudges.get(judgeTable[rating].name);
+			stats.breaks = stats.misses + gottenJudges.get(judgeTable[rating].name);
 
 		PlayerInfo.updateGradePercent(Std.int(judgeTable[rating].percentMod));
 
-		if (health > 2)
-			health = 2;
+		if (stats.health > 2)
+			stats.health = 2;
 	}
 
 	public static function decreaseScore():Void
 	{
-		score += judgeTable[3].score;
-		health += 0.04 * (judgeTable[3].health) / 100;
-		misses += 1;
+		stats.score += judgeTable[3].score;
+		stats.health += 0.04 * (judgeTable[3].health) / 100;
+		stats.misses += 1;
 
-		combo = 0;
+		stats.combo = 0;
 
 		// update combo breaks counter
 		if (judgeTable[3].causesBreak)
-			breaks = misses + gottenJudges.get(judgeTable[3].name);
+			stats.breaks = stats.misses + gottenJudges.get(judgeTable[3].name);
 
 		PlayerInfo.updateGradePercent(Std.int(judgeTable[3].percentMod));
 
-		if (health < 0)
-			health = 0;
+		if (stats.health < 0)
+			stats.health = 0;
 	}
 
 	/**
@@ -246,10 +247,10 @@ class PlayerInfo
 
 		var songFinal = song + FeatherTools.getDifficulty(diff);
 
-		if (!chosenMap.exists(song + FeatherTools.getDifficulty(diff)))
-			chosenMap.set(song + FeatherTools.getDifficulty(diff), 0);
+		if (!chosenMap.exists(songFinal))
+			chosenMap.set(songFinal, 0);
 
-		return chosenMap.get(song + FeatherTools.getDifficulty(diff));
+		return chosenMap.get(songFinal);
 	}
 
 	public static function loadHighscores():Void
