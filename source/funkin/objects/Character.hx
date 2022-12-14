@@ -387,17 +387,19 @@ class Character extends FeatherSprite
 					healthColor = [161, 161, 161];
 				return true;
 			});
-
-			setVar('setDeathChar',
-				function(char:String = 'bf-dead', lossSfx:String = 'fnf_loss_sfx', song:String = 'gameOver', confirmSound:String = 'gameOverEnd', bpm:Int)
-				{
-					substates.GameOverSubstate.bfType = char;
-					substates.GameOverSubstate.deathNoise = lossSfx;
-					substates.GameOverSubstate.deathTrack = song;
-					substates.GameOverSubstate.leaveTrack = confirmSound;
-					substates.GameOverSubstate.trackBpm = bpm;
-				});
 		**/
+
+		setVar('setDeathChar',
+			function(char:String = 'bf-dead', lossSfx:String = 'fnf_loss_sfx', song:String = 'gameOver', confirmSound:String = 'gameOverEnd', bpm:Int)
+			{
+				funkin.substates.GameOverSubstate.preferences = {
+					character: char,
+					sound: lossSfx,
+					music: song,
+					confirm: confirmSound,
+					bpm: bpm
+				};
+			});
 
 		setVar('get', function(variable:String)
 		{

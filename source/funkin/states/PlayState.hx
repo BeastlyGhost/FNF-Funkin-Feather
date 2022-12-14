@@ -1,5 +1,6 @@
 package funkin.states;
 
+import funkin.substates.GameOverSubstate;
 import flixel.math.FlxPoint;
 import flixel.FlxCamera;
 import flixel.FlxG;
@@ -481,10 +482,22 @@ class PlayState extends MusicBeatState
 							spawnedNotes.remove(note);
 						}
 
-						if (note.mustPress && !note.isSustain && !note.tooLate && !note.wasGoodHit && !note.isMine && !note.ignoreNote)
+						if (note.mustPress && !note.tooLate && !note.wasGoodHit && !note.isMine && !note.ignoreNote)
 						{
-							note.tooLate = true;
-							noteMiss(note.index, babyStrum);
+							if (!note.isSustain)
+							{
+								note.tooLate = true;
+
+								// declare children as late
+								for (hold in note.children)
+									hold.tooLate = true;
+
+								// ignore misses if it's a mine or ignore note
+								if (note.ignoreNote || note.isMine)
+									return;
+
+								noteMiss(note.index, babyStrum);
+							}
 						}
 					}
 				});
@@ -521,7 +534,10 @@ class PlayState extends MusicBeatState
 
 			FlxG.sound.play(AssetHandler.grabAsset("fnf_loss_sfx", SOUND, "sounds/" + assetSkin));
 
+			var playerPos:FlxPoint = player.getScreenPosition();
+
 			changePresence("Dead - ");
+			openSubState(new GameOverSubstate(playerPos.x, playerPos.y));
 			return true;
 		}
 		return false;
