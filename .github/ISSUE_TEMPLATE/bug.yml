@@ -27,7 +27,7 @@ body:
       label: "If you have selected 'Yes' in the previous field, describe what you modified within your build of the engine"
       description: If you have selected "No", you can leave this field blank.
     validations:
-      required: true
+      required: false
 
   - type: textarea
     id: terminal-output
@@ -35,4 +35,4 @@ body:
       label: "Provide the log that the terminal outputs"
       description: Terminal could be either Command Prompt, Powershell, etc.
     validations:
-      required: true
+      required: false
