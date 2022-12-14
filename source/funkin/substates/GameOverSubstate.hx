@@ -78,7 +78,7 @@ class GameOverSubstate extends MusicBeatSubstate
 			isEnding = true;
 			char.playAnim('deathConfirm', true);
 			FlxG.sound.music.stop();
-			FlxG.sound.play(AssetHandler.grabAsset(preferences.confirm, SOUND, "music"));
+			FeatherTools.playSound(preferences.confirm, "music", true);
 			new FlxTimer().start(0.7, function(tmr:FlxTimer)
 			{
 				FlxG.camera.fade(0xFF000000, 1, false, function()

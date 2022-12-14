@@ -117,7 +117,19 @@ class FeatherTools
 		return funkin.backend.data.SongManager.defaultDiffs[diff];
 	}
 
-	inline public static function openURL(link:String)
+	inline public static function playSound(name:String, folder:String = "sounds", persist:Bool = false, volume:Float = 1, ?onEnd:Void->Void):Void
+	{
+		var mySound:flixel.system.FlxSound = new flixel.system.FlxSound();
+		mySound.loadEmbedded(AssetHandler.grabAsset(name, SOUND, folder));
+		mySound.volume = volume;
+		mySound.persist = persist;
+		mySound.play();
+
+		if (onEnd != null)
+			mySound.onComplete = onEnd;
+	}
+
+	inline public static function openURL(link:String):Void
 	{
 		#if linux
 		Sys.command('/usr/bin/xdg-open', [link]);
