@@ -68,6 +68,8 @@ class AlphaLetters
 		"]" => null,
 		"^" => null,
 		"_" => null,
+		"#" => {anim: "hashtag"},
+		"$" => {anim: "dollarsign"},
 		"<" => {anim: "lessThan"},
 		">" => {anim: "greaterThan"},
 		"=" => {anim: "equal"},

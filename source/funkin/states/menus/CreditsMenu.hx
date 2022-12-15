@@ -74,7 +74,6 @@ class CreditsMenu extends MusicBeatState
 
 			personText.targetY = i;
 			personText.isMenuItem = true;
-			personText.displacement.x = 100;
 			personText.alpha = 0.6;
 
 			itemContainer.add(personText);

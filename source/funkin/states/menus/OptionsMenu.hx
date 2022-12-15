@@ -229,7 +229,6 @@ class OptionsMenu extends MusicBeatState
 
 				optionTxt.targetY = i;
 				optionTxt.disableX = true;
-				optionTxt.displacement.x = 100;
 
 				if (activeCategory != 'master')
 					optionTxt.isMenuItem = true;

@@ -111,7 +111,10 @@ class Alphabet extends FlxTypedSpriteGroup<LetterSprite>
 			if (forceX != Math.NEGATIVE_INFINITY)
 				x = forceX;
 			else if (disableX)
+			{
+				displacement.x = 100;
 				x = FlxMath.lerp(x, displacement.x, elapsed * 6);
+			}
 			else
 				x = FlxMath.lerp(x, (targetY * 20) + 90, 0.16);
 		}
