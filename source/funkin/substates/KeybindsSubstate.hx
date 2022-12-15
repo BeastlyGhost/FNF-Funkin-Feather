@@ -1,17 +1,15 @@
 package funkin.substates;
 
+import feather.BaseMenu.BaseSubMenu;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import funkin.objects.ui.fonts.Alphabet;
-import funkin.song.MusicState;
 
-class KeybindsSubstate extends MusicBeatSubstate
+class KeybindsSubstate extends BaseSubMenu
 {
-	var itemContainer:FlxTypedGroup<Alphabet>;
 	var horizontalContainer:FlxTypedGroup<Alphabet>;
 
-	var bg:FlxSprite;
 	var generateBG:Bool = false;
 
 	override public function new(generateBG:Bool = false):Void
@@ -27,17 +25,13 @@ class KeybindsSubstate extends MusicBeatSubstate
 
 		if (!generateBG)
 		{
-			bg = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, 0xFF000000);
-			bg.alpha = 0.6;
+			menuBG = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, 0xFF000000);
+			menuBG.scrollFactor.set();
+			menuBG.alpha = 0.6;
+			add(menuBG);
 		}
 		else
-		{
-			bg = new FlxSprite(-80).loadGraphic(AssetHandler.grabAsset('menuBGMagenta', IMAGE, 'images/menus'));
-			bg.scrollFactor.set();
-			bg.screenCenter(X);
-		}
-		bg.scrollFactor.set();
-		add(bg);
+			bgImage = 'menuBGMagenta';
 
 		itemContainer = generateKeys();
 
@@ -93,10 +87,7 @@ class KeybindsSubstate extends MusicBeatSubstate
 	{
 		super.update(elapsed);
 
-		if (Controls.isJustPressed("up"))
-			updateSelection(-1);
-		if (Controls.isJustPressed("down"))
-			updateSelection(1);
+		updateSelection(Controls.isJustPressed("up") ? -1 : Controls.isJustPressed("down") ? 1 : 0);
 
 		if (Controls.isJustPressed("back"))
 			close();
@@ -108,18 +99,8 @@ class KeybindsSubstate extends MusicBeatSubstate
 
 		var selectionJumper:Int = ((selection < newSelection) ? -1 : 1);
 
-		FlxG.sound.play(AssetHandler.grabAsset('scrollMenu', SOUND, "sounds/menus"));
-
-		var blah:Int = 0;
-		for (item in itemContainer.members)
-		{
-			item.targetY = blah - selection;
-			blah++;
-
-			item.alpha = 0.6;
-			if (item.targetY == 0)
-				item.alpha = 1;
-		}
+		if (newSelection != 0)
+			FeatherTools.playSound("scrollMenu", 'sounds/menus');
 
 		if (itemContainer.members[selection].text == null || itemContainer.members[selection].text == '')
 			updateSelection(selection + selectionJumper);

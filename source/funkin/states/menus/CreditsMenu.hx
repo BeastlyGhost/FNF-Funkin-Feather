@@ -1,7 +1,7 @@
 package funkin.states.menus;
 
+import feather.BaseMenu;
 import flixel.FlxG;
-import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import funkin.objects.ui.fonts.Alphabet;
 import funkin.song.MusicState;
@@ -24,28 +24,21 @@ typedef CreditsUserData =
 	var socials:Array<Array<String>>;
 }
 
-class CreditsMenu extends MusicBeatState
+class CreditsMenu extends BaseMenu
 {
-	var itemContainer:FlxTypedGroup<Alphabet>;
 	var iconContainer:Array<FeatherAttachedSprite> = [];
-
 	var creditsData:CreditsData;
-	var menuBG:FlxSprite;
 
 	override function create()
 	{
 		super.create();
 
+		bgImage = 'menuDesat';
+
 		creditsData = Yaml.read(AssetHandler.grabAsset("credits", YAML, "data/menus"), yaml.Parser.options().useObjects());
 
 		DiscordRPC.update("CREDITS MENU", "Reading through Descriptions.");
-
 		FeatherTools.menuMusicCheck(false);
-
-		menuBG = new FlxSprite(-80).loadGraphic(AssetHandler.grabAsset('menuDesat', IMAGE, 'images/menus'));
-		menuBG.scrollFactor.set();
-		menuBG.screenCenter(X);
-		add(menuBG);
 
 		itemContainer = new FlxTypedGroup<Alphabet>();
 		add(itemContainer);
@@ -98,17 +91,14 @@ class CreditsMenu extends MusicBeatState
 	{
 		super.update(elapsed);
 
-		if (Controls.isJustPressed("up"))
-			updateSelection(-1);
-		if (Controls.isJustPressed("down"))
-			updateSelection(1);
+		updateSelection(Controls.isJustPressed("up") ? -1 : Controls.isJustPressed("down") ? 1 : 0);
 
 		if (Controls.isJustPressed("accept")) {}
 
 		if (Controls.isJustPressed("back"))
 		{
 			MusicState.switchState(new MainMenu());
-			FlxG.sound.play(AssetHandler.grabAsset('cancelMenu', SOUND, "sounds/menus"));
+			FeatherTools.playSound("cancelMenu", "sounds/menus");
 		}
 	}
 
@@ -119,25 +109,14 @@ class CreditsMenu extends MusicBeatState
 		var selectionJumper:Int = ((newSelection < selection) ? -1 : 1);
 
 		if (newSelection != 0)
-			FlxG.sound.play(AssetHandler.grabAsset('scrollMenu', SOUND, "sounds/menus"));
+			FeatherTools.playSound("scrollMenu", "sounds/menus");
 
-		/*
-			for (i in 0...iconContainer.length)
+		for (i in 0...iconContainer.length)
+			if (iconContainer[i] != null)
 				iconContainer[i].alpha = 0.6;
 
+		if (iconContainer[selection] != null)
 			iconContainer[selection].alpha = 1;
-		 */
-
-		var blah:Int = 0;
-		for (item in itemContainer.members)
-		{
-			item.targetY = blah - selection;
-			blah++;
-
-			item.alpha = 0.6;
-			if (item.targetY == 0)
-				item.alpha = 1;
-		}
 
 		/*
 			if (wrappableGroup[selection].type != null && wrappableGroup[selection].type == "divider")

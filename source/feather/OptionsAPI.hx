@@ -1,4 +1,4 @@
-package feather.apis;
+package feather;
 
 import flixel.FlxG;
 
@@ -189,26 +189,47 @@ class OptionsAPI
 	{
 		FlxG.save.bind("Feather-Settings" #if (flixel < "5.0.0"), "BeastlyGhost" #end);
 
-		for (category => array in preferencesList)
+		if (FlxG.save.data.preferences != null)
 		{
-			if (myPreferences.get(category) == null)
-				myPreferences.set(category, array);
-		}
+			// clear your preferences
+			myPreferences.clear();
 
-		/*
-			if (FlxG.save.data.preferences != null)
+			// grab from your save file
+			var savedPreferences:Map<String, Array<OptionData>> = FlxG.save.data.preferences;
+			for (key => keys in savedPreferences)
 			{
-				var savedPreferences = FlxG.save.data.preferences;
-				for (key in savedPreferences.keys())
+				// key means Category Name, keys mean the Data Associated with the Category
+				if (key == null || (key != null && keys == null))
+					return;
+
+				// if your keys are not the same as the save keys
+				if (myPreferences.get(key) != keys)
 				{
-					for (j in 0...savedPreferences.get(key).length)
+					// set your keys to the save one if they even exist
+					if (savedPreferences.exists(key))
 					{
-						if (myPreferences.contains(savedPreferences[j]) && !myPreferences[j].attributes.contains(UNCHANGEABLE))
-							//
+						myPreferences.set(key, keys);
+						// trace('save key found, for: $key');
+					}
+					else
+					{
+						// else disregard the save one, and set to default
+						for (defKey => defKeys in preferencesList)
+						{
+							if (preferencesList.exists(defKey))
+								myPreferences.set(defKey, defKeys);
+							// trace('save key was not found, using default for: $key');
+						}
 					}
 				}
 			}
-		 */
+		}
+		else
+		{
+			for (category => array in preferencesList)
+				if (myPreferences.get(category) == null)
+					myPreferences.set(category, array);
+		}
 
 		if (FlxG.save.data.volume != null)
 			FlxG.sound.volume = FlxG.save.data.volume;

@@ -159,18 +159,14 @@ class MainMenu extends MusicBeatState
 
 		if (!lockedMovement)
 		{
-			if (Controls.isJustPressed("up"))
-				updateSelection(-1);
-
-			if (Controls.isJustPressed("down"))
-				updateSelection(1);
+			updateSelection(Controls.isJustPressed("up") ? -1 : Controls.isJustPressed("down") ? 1 : 0);
 
 			if (FlxG.keys.justPressed.SEVEN)
 				MusicState.switchState(new TestState());
 
 			if (Controls.isJustPressed("accept"))
 			{
-				FlxG.sound.play(AssetHandler.grabAsset('confirmMenu', SOUND, "sounds/menus"));
+				FeatherTools.playSound("confirmMenu", "sounds/menus");
 				lockedMovement = true;
 
 				if (OptionsAPI.getPref("Flashing Lights"))
@@ -222,7 +218,7 @@ class MainMenu extends MusicBeatState
 		super.updateSelection(newSelection);
 
 		if (newSelection != 0)
-			FlxG.sound.play(AssetHandler.grabAsset('scrollMenu', SOUND, "sounds/menus"));
+			FeatherTools.playSound("scrollMenu", 'sounds/menus');
 
 		itemContainer.forEach(function(spr:FlxSprite)
 		{

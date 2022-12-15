@@ -546,7 +546,7 @@ class PlayState extends MusicBeatState
 			persistentUpdate = false;
 			persistentDraw = false;
 
-			FlxG.sound.play(AssetHandler.grabAsset("fnf_loss_sfx", SOUND, "sounds/" + assetSkin));
+			FeatherTools.playSound("fnf_loss_sfx", 'sounds/$assetSkin');
 
 			var playerPos:FlxPoint = player.getScreenPosition();
 
@@ -749,7 +749,7 @@ class PlayState extends MusicBeatState
 			if (char.hasMissAnims)
 				charPlayAnim(char, 'sing' + BabyArrow.actions[idx].toUpperCase() + 'miss');
 
-		FlxG.sound.play(AssetHandler.grabAsset("miss" + FlxG.random.int(1, 3), SOUND, "sounds/" + assetSkin), FlxG.random.float(0.1, 0.2));
+		FeatherTools.playSound("miss" + FlxG.random.int(1, 3), 'sounds/$assetSkin', false, FlxG.random.float(0.1, 0.2));
 		Conductor.songVocals.volume = 0;
 
 		PlayerInfo.decreaseScore();

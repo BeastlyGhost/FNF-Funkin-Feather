@@ -90,7 +90,7 @@ class StoryMenu extends MusicBeatState
 		if (Controls.isJustPressed("back"))
 		{
 			MusicState.switchState(new MainMenu());
-			FlxG.sound.play(AssetHandler.grabAsset('cancelMenu', SOUND, "sounds/menus"));
+			FeatherTools.playSound("cancelMenu", 'sounds/menus');
 		}
 	}
 }

@@ -1,9 +1,9 @@
 package funkin.states.menus;
 
-import feather.apis.OptionsAPI;
+import feather.BaseMenu;
+import feather.OptionsAPI;
 import flixel.FlxBasic;
 import flixel.FlxG;
-import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxMath;
 import funkin.objects.ui.fonts.Alphabet;
@@ -13,16 +13,12 @@ import funkin.song.MusicState;
 /**
 	the Options Menu, used for managing game options
 **/
-class OptionsMenu extends MusicBeatState
+class OptionsMenu extends BaseMenu
 {
-	var itemContainer:FlxTypedGroup<Alphabet>;
-
 	var attachedSprites:FlxTypedGroup<FlxBasic>;
 	var attachedSpriteMap:Map<Alphabet, Dynamic>;
 
 	var activeCategory:String = 'master';
-
-	var menuBG:FlxSprite;
 
 	var fromPlayState:Bool = false;
 
@@ -37,12 +33,11 @@ class OptionsMenu extends MusicBeatState
 	{
 		super.create();
 
+		bgImage = 'menuBGBlue';
+
 		DiscordRPC.update("OPTIONS MENU", "Setting things up");
 
-		menuBG = new FlxSprite(-80).loadGraphic(AssetHandler.grabAsset('menuBGBlue', IMAGE, 'images/menus'));
-		menuBG.scrollFactor.set();
-		menuBG.screenCenter(X);
-		add(menuBG);
+		FeatherTools.menuMusicCheck(false);
 
 		switchCategory("master");
 	}
@@ -63,10 +58,7 @@ class OptionsMenu extends MusicBeatState
 			}
 		}
 
-		if (Controls.isJustPressed("up"))
-			updateSelection(-1);
-		if (Controls.isJustPressed("down"))
-			updateSelection(1);
+		updateSelection(Controls.isJustPressed("up") ? -1 : Controls.isJustPressed("down") ? 1 : 0);
 
 		/**
 			this part sucks
@@ -109,7 +101,7 @@ class OptionsMenu extends MusicBeatState
 					MusicState.switchState(new funkin.states.menus.MainMenu());
 			}
 
-			FlxG.sound.play(AssetHandler.grabAsset('cancelMenu', SOUND, "sounds/menus"));
+			FeatherTools.playSound("cancelMenu", 'sounds/menus');
 		}
 	}
 
@@ -120,24 +112,7 @@ class OptionsMenu extends MusicBeatState
 		var selectionJumper:Int = ((newSelection < selection) ? -1 : 1);
 
 		if (newSelection != 0)
-			FlxG.sound.play(AssetHandler.grabAsset('scrollMenu', SOUND, "sounds/menus"));
-
-		var blah:Int = 0;
-		for (item in itemContainer.members)
-		{
-			item.targetY = blah - selection;
-			blah++;
-
-			item.alpha = 0.6;
-			if (item.targetY == 0)
-				item.alpha = 1;
-
-			if (attachedSpriteMap != null)
-			{
-				if (attachedSpriteMap.get(item) != null)
-					attachedSpriteMap.get(item).alpha = item.alpha;
-			}
-		}
+			FeatherTools.playSound("scrollMenu", 'sounds/menus');
 
 		// doesn't quite work yet, eeeh
 		if (wrappableGroup[selection].attributes != null && wrappableGroup[selection].attributes.contains(UNSELECTABLE))
@@ -311,6 +286,8 @@ class OptionsMenu extends MusicBeatState
 			default:
 				// do nothing
 		}
+
+		OptionsAPI.updatePrefs();
 	}
 
 	private function updateHorizontal(selector:SelectorThingie, amount:Int):Void
@@ -335,12 +312,11 @@ class OptionsMenu extends MusicBeatState
 						selectionB = i;
 			}
 
-			newSelection = selectionB + amount;
-			newSelection = FlxMath.wrap(Math.floor(selectionB) + newSelection, 0, selector.ops.length - 1);
+			newSelection = FlxMath.wrap(Math.floor(selectionB) + amount, 0, selector.ops.length - 1);
 
 			selector.changeArrow(amount == -1 ? false : true);
 
-			FeatherTools.playSound("scrollMenu");
+			FeatherTools.playSound("scrollMenu", "sounds/menus");
 
 			selector.choice = selector.ops[newSelection];
 
@@ -355,15 +331,14 @@ class OptionsMenu extends MusicBeatState
 		var originalValue = OptionsAPI.getPref(object.name);
 		var increase = 15 * steps;
 
-		if (originalValue + increase < min)
-			increase = 0;
 		// cap
-		if (originalValue + increase > max)
+		var valueFull:Float = originalValue + increase;
+		if (valueFull < min || valueFull > max)
 			increase = 0;
 
 		object.changeArrow(steps == -1 ? false : true);
 
-		FlxG.sound.play(Paths.sound('scrollMenu'));
+		FeatherTools.playSound("scrollMenu", 'sounds/menus');
 
 		originalValue += increase;
 		object.choice = Std.string(originalValue);

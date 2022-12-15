@@ -39,7 +39,7 @@ class Start extends FlxState
 		add(bianca);
 
 		FlxTween.tween(bianca, {x: bianca.x + 980}, 0.9, {ease: FlxEase.quintInOut});
-		FlxG.sound.play(AssetHandler.grabAsset("splashRingSound", SOUND, "sounds"));
+		FeatherTools.playSound("splashRingSound");
 
 		FlxTween.tween(bianca, {alpha: 0}, 2, {
 			onComplete: function(t:FlxTween)

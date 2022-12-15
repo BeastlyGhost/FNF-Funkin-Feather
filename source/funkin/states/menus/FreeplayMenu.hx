@@ -1,5 +1,6 @@
 package funkin.states.menus;
 
+import feather.BaseMenu;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
@@ -7,8 +8,8 @@ import flixel.math.FlxMath;
 import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
-import funkin.backend.data.SongManager;
 import funkin.backend.data.PlayerInfo;
+import funkin.backend.data.SongManager;
 import funkin.objects.ui.Icon;
 import funkin.objects.ui.fonts.Alphabet;
 import funkin.song.MusicState;
@@ -19,11 +20,9 @@ import openfl.media.Sound;
 
 	when selecting songs here, things like the Chart Editor will be allowed during gameplay
 **/
-class FreeplayMenu extends MusicBeatState
+class FreeplayMenu extends BaseMenu
 {
 	var songList:Array<SongListForm> = [];
-
-	var itemContainer:FlxTypedGroup<Alphabet>;
 
 	var iconContainer:Array<Icon> = [];
 
@@ -40,7 +39,6 @@ class FreeplayMenu extends MusicBeatState
 	var inst:Sound;
 	var vocals:Sound;
 
-	var menuBG:FlxSprite;
 	var scoreBG:FlxSprite;
 	var scoreTxt:FlxText;
 	var diffTxt:FlxText;
@@ -52,6 +50,8 @@ class FreeplayMenu extends MusicBeatState
 	{
 		super.create();
 
+		bgImage = 'menuDesat';
+
 		DiscordRPC.update("FREEPLAY MENU", "Choosing a Song");
 
 		FeatherTools.menuMusicCheck(false);
@@ -60,11 +60,6 @@ class FreeplayMenu extends MusicBeatState
 		songList = SongManager.get_songList();
 
 		funkin.song.Conductor.songRate = songRating;
-
-		menuBG = new FlxSprite(-80).loadGraphic(AssetHandler.grabAsset('menuDesat', IMAGE, 'images/menus'));
-		menuBG.scrollFactor.set();
-		menuBG.screenCenter(X);
-		add(menuBG);
 
 		generateUI();
 	}
@@ -142,21 +137,14 @@ class FreeplayMenu extends MusicBeatState
 
 		repositionScore();
 
-		if (Controls.isJustPressed("up"))
-			updateSelection(-1);
-		if (Controls.isJustPressed("down"))
-			updateSelection(1);
+		updateSelection(Controls.isJustPressed("up") ? -1 : Controls.isJustPressed("down") ? 1 : 0);
 
-		if (Controls.isJustPressed("left") && !FlxG.keys.pressed.SHIFT)
-			updateDifficulty(-1);
-		if (Controls.isJustPressed("right") && !FlxG.keys.pressed.SHIFT)
-			updateDifficulty(1);
+		if (!FlxG.keys.pressed.SHIFT)
+			updateDifficulty(Controls.isJustPressed("left") ? -1 : Controls.isJustPressed("right") ? 1 : 0);
 
 		#if (flixel >= "5.0.0")
-		if (Controls.isJustPressed("left") && FlxG.keys.pressed.SHIFT)
-			songRating -= 0.05;
-		if (Controls.isJustPressed("right") && FlxG.keys.pressed.SHIFT)
-			songRating += 0.05;
+		if (FlxG.keys.pressed.SHIFT)
+			songRating += Controls.isJustPressed("left") ? -0.05 : Controls.isJustPressed("right") ? 0.05 : 0;
 
 		// stupid wrapper
 		if (songRating > 3)
@@ -171,7 +159,7 @@ class FreeplayMenu extends MusicBeatState
 		if (Controls.isJustPressed("back"))
 		{
 			MusicState.switchState(new MainMenu());
-			FlxG.sound.play(AssetHandler.grabAsset('cancelMenu', SOUND, "sounds/menus"));
+			FeatherTools.playSound("cancelMenu", "sounds/menus");
 		}
 
 		if (Controls.isJustPressed("accept"))
@@ -209,24 +197,9 @@ class FreeplayMenu extends MusicBeatState
 	{
 		super.updateSelection(newSelection);
 
-		if (newSelection != 0)
-			FlxG.sound.play(AssetHandler.grabAsset('scrollMenu', SOUND, "sounds/menus"));
-
 		for (i in 0...iconContainer.length)
 			iconContainer[i].alpha = 0.6;
-
 		iconContainer[selection].alpha = 1;
-
-		var blah:Int = 0;
-		for (item in itemContainer.members)
-		{
-			item.targetY = blah - selection;
-			blah++;
-
-			item.alpha = 0.6;
-			if (item.targetY == 0)
-				item.alpha = 1;
-		}
 
 		intendedScore = PlayerInfo.getScore(songList[selection].name, selDifficulty, false);
 

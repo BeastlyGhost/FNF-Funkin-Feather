@@ -1,5 +1,6 @@
 package funkin.substates;
 
+import feather.BaseMenu.BaseSubMenu;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
@@ -19,7 +20,7 @@ import sys.thread.Thread;
 	a Subclass for when you pause on `PlayState`
 	initializes simple options with simple functions
 **/
-class PauseSubstate extends MusicBeatSubstate
+class PauseSubstate extends BaseSubMenu
 {
 	var listMap:Map<String, Array<String>> = [
 		"default" => [
@@ -32,8 +33,6 @@ class PauseSubstate extends MusicBeatSubstate
 		"charting" => ["Exit to Charter", "Leave Charting Mode", "Change Keybinds", "Exit to menu"],
 		"no-resume" => ["Restart Song", "Change Keybinds", "Exit to Options", "Exit to menu"],
 	];
-
-	var itemContainer:FlxTypedGroup<Alphabet>;
 
 	var pauseMusic:FlxSound;
 	var mutex:Mutex;
@@ -105,10 +104,7 @@ class PauseSubstate extends MusicBeatSubstate
 	{
 		super.update(elapsed);
 
-		if (Controls.isJustPressed("up"))
-			updateSelection(-1);
-		if (Controls.isJustPressed("down"))
-			updateSelection(1);
+		updateSelection(Controls.isJustPressed("up") ? -1 : Controls.isJustPressed("down") ? 1 : 0);
 
 		if (Controls.isJustPressed("accept"))
 		{
@@ -154,18 +150,8 @@ class PauseSubstate extends MusicBeatSubstate
 	{
 		super.updateSelection(newSelection);
 
-		FlxG.sound.play(AssetHandler.grabAsset('scrollMenu', SOUND, "sounds/menus"));
-
-		var blah:Int = 0;
-		for (item in itemContainer.members)
-		{
-			item.targetY = blah - selection;
-			blah++;
-
-			item.alpha = 0.6;
-			if (item.targetY == 0)
-				item.alpha = 1;
-		}
+		if (newSelection != 0)
+			FeatherTools.playSound("scrollMenu", 'sounds/menus');
 	}
 
 	override function destroy():Void

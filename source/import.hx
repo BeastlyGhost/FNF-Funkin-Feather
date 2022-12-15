@@ -6,7 +6,7 @@
 import yaml.Yaml;
 
 using StringTools;
-using feather.apis.OptionsAPI;
+using feather.OptionsAPI;
 using feather.tools.FeatherTools;
 using funkin.backend.AssetHandler;
 using funkin.backend.Controls;

@@ -198,7 +198,7 @@ class TitleSubstate extends MusicBeatSubstate
 					var color:FlxColor = (OptionsAPI.getPref("Flashing Lights") ? FlxColor.WHITE : FlxColor.BLACK);
 
 					FlxG.camera.flash(color, 1);
-					FlxG.sound.play(AssetHandler.grabAsset("confirmMenu", SOUND, "sounds/menus"));
+					FeatherTools.playSound("confirmMenu", 'sounds/menus');
 
 					// give the main menu the heads up that this is done
 					MainMenu.firstStart = false;
