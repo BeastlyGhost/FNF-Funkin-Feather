@@ -1,6 +1,5 @@
 package funkin.objects.ui;
 
-import funkin.song.Conductor;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
@@ -10,7 +9,8 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.ui.FlxBar;
 import flixel.util.FlxTimer;
-import funkin.backend.dependencies.PlayerInfo;
+import funkin.backend.data.PlayerInfo;
+import funkin.song.Conductor;
 import funkin.states.PlayState;
 
 /**

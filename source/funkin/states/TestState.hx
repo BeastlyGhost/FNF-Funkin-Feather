@@ -2,8 +2,8 @@ package funkin.states;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
-import funkin.objects.ui.fonts.Alphabet;
 import flixel.FlxState;
+import funkin.objects.ui.fonts.Alphabet;
 import funkin.objects.ui.menus.OptionThingie.SelectorThingie;
 import funkin.song.MusicState;
 import funkin.states.menus.MainMenu;

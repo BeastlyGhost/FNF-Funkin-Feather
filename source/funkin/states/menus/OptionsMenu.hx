@@ -1,11 +1,11 @@
 package funkin.states.menus;
 
-import flixel.math.FlxMath;
+import feather.apis.OptionsAPI;
 import flixel.FlxBasic;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
-import funkin.backend.data.OptionsAPI;
+import flixel.math.FlxMath;
 import funkin.objects.ui.fonts.Alphabet;
 import funkin.objects.ui.menus.OptionThingie;
 import funkin.song.MusicState;

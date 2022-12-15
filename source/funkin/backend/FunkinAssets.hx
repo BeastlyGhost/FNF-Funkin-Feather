@@ -1,13 +1,14 @@
-package funkin.backend.dependencies;
+package funkin.backend;
 
+import funkin.backend.data.PlayerInfo;
 import funkin.objects.ui.notes.BabyArrow;
 import funkin.objects.ui.notes.Note;
 import funkin.states.PlayState;
 
 /**
-	CustomAssets matches together a lot of functions for creating assets
+	FunkinAssets matches together a lot of functions for creating assets
 **/
-class CustomAssets
+class FunkinAssets
 {
 	/**
 		Pop Ups, like Ratings and Combo

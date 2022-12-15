@@ -1,6 +1,5 @@
 package funkin.substates;
 
-import funkin.song.Conductor;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
@@ -8,8 +7,9 @@ import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
-import funkin.backend.dependencies.PlayerInfo;
+import funkin.backend.data.PlayerInfo;
 import funkin.objects.ui.fonts.Alphabet;
+import funkin.song.Conductor;
 import funkin.song.MusicState;
 import funkin.states.PlayState;
 import sys.thread.Mutex;

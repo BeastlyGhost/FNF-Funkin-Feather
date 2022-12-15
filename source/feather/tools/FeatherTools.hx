@@ -1,4 +1,4 @@
-package funkin.backend.dependencies;
+package feather.tools;
 
 import flixel.FlxCamera;
 import flixel.FlxG;

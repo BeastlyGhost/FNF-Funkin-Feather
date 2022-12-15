@@ -5,7 +5,7 @@ import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
-import funkin.backend.dependencies.PlayerInfo;
+import funkin.backend.data.PlayerInfo;
 
 /**
 	Starting Class for the game

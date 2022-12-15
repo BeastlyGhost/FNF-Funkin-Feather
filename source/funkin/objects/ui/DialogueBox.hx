@@ -46,7 +46,7 @@ class DialogueBox extends FlxSpriteGroup
 		// dialogue box defaults
 		boxData = {
 			texture: "speech_bubble_talking",
-			texturePath: "images/dialogue",
+			texturePath: "images/dialogue/boxes",
 			animated: true,
 			textForm: BASE,
 			position: [0, 0],

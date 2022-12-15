@@ -6,10 +6,10 @@
 import yaml.Yaml;
 
 using StringTools;
+using feather.apis.OptionsAPI;
+using feather.tools.FeatherTools;
 using funkin.backend.AssetHandler;
 using funkin.backend.Controls;
+using funkin.backend.FunkinAssets;
 using funkin.backend.Paths;
-using funkin.backend.data.OptionsAPI;
-using funkin.backend.dependencies.CustomAssets;
-using funkin.backend.dependencies.DiscordRPC;
-using funkin.backend.dependencies.FeatherTools;
+using funkin.backend.data.DiscordRPC;

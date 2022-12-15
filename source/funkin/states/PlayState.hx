@@ -1,5 +1,6 @@
 package funkin.states;
 
+import feather.tools.FeatherModule;
 import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxObject;
@@ -12,8 +13,7 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxSort;
 import flixel.util.FlxTimer;
-import funkin.backend.dependencies.FeatherModule;
-import funkin.backend.dependencies.PlayerInfo;
+import funkin.backend.data.PlayerInfo;
 import funkin.objects.Character;
 import funkin.objects.Stage;
 import funkin.objects.ui.*;
@@ -758,7 +758,7 @@ class PlayState extends MusicBeatState
 
 	public function popUpScore(myRating:String = 'sick', combo:Bool = true, preload:Bool = false):Void
 	{
-		var rating:FlxSprite = CustomAssets.generateRating(assetSkin);
+		var rating:FlxSprite = FunkinAssets.generateRating(assetSkin);
 
 		rating.screenCenter();
 		rating.x = (FlxG.width * 0.55) - 40;
@@ -788,7 +788,7 @@ class PlayState extends MusicBeatState
 
 			for (i in 0...splitCombo.length)
 			{
-				var numScore:FlxSprite = CustomAssets.generateCombo(assetSkin);
+				var numScore:FlxSprite = FunkinAssets.generateCombo(assetSkin);
 
 				numScore.alpha = 1;
 				numScore.screenCenter();

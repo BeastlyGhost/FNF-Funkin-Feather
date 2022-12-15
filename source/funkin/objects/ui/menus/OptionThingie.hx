@@ -1,10 +1,10 @@
 package funkin.objects.ui.menus;
 
+import feather.tools.FeatherModule;
 import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
-import funkin.backend.dependencies.FeatherModule;
 import funkin.objects.ui.fonts.Alphabet;
 import sys.FileSystem;
 

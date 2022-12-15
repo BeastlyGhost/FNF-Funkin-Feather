@@ -1,9 +1,9 @@
 package funkin.states;
 
+import feather.tools.FeatherModule;
 import flixel.FlxSubState;
 import flixel.addons.ui.FlxUIState;
 import flixel.math.FlxMath;
-import funkin.backend.dependencies.FeatherModule;
 
 /**
 	Parent State that handles the entire state structure from the project

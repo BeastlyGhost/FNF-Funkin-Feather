@@ -45,7 +45,7 @@ class Strum extends FlxGroup
 			babyArrow.setPosition(x, y);
 			babyArrow.ID = index;
 
-			CustomAssets.generateStrums(babyArrow, index);
+			FunkinAssets.generateStrums(babyArrow, index);
 
 			babyArrow.x += (index - ((4 / 2))) * babyArrow.swagWidth;
 			babyArrow.y -= 10;

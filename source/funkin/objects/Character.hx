@@ -1,8 +1,8 @@
 package funkin.objects;
 
+import feather.tools.FeatherModule;
+import feather.tools.FeatherTools.FeatherSprite;
 import flixel.math.FlxPoint;
-import funkin.backend.dependencies.FeatherModule;
-import funkin.backend.dependencies.FeatherTools.FeatherSprite;
 import funkin.song.Conductor;
 import funkin.states.PlayState;
 import haxe.Json;

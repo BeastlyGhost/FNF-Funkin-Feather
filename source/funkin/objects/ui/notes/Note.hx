@@ -1,6 +1,6 @@
 package funkin.objects.ui.notes;
 
-import funkin.backend.dependencies.FeatherTools.FeatherSprite;
+import feather.tools.FeatherTools.FeatherSprite;
 import funkin.objects.ui.notes.BabyArrow;
 import funkin.song.Conductor;
 import funkin.states.PlayState;
@@ -113,7 +113,7 @@ class Note extends FeatherSprite
 
 		babyInstance = new BabyArrow(index);
 
-		CustomAssets.generateNotes(this, index, isSustain);
+		FunkinAssets.generateNotes(this, index, isSustain);
 
 		updateHitbox();
 
