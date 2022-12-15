@@ -1,6 +1,8 @@
 image: "player/boyfriend"
 position: [-25, 35]
+animations: {
+  idle: ["boyfriend idle", 24, true],
+  hey: ["boyfriend confirm", 24, false]
+}
 scale: 0.8
 flipX: false
-idleAnim: ["boyfriend idle", 24, true]
-heyAnim: ["boyfriend confirm", 24, false]
