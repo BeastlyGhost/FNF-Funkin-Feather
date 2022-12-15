@@ -63,7 +63,7 @@ class CreditsMenu extends MusicBeatState
 			{
 				personText.screenCenter(X);
 				personText.forceX = personText.x;
-				personText.yAdd = -55;
+				personText.displacement.y = -55;
 				personText.scrollFactor.set();
 			}
 			else
@@ -74,6 +74,7 @@ class CreditsMenu extends MusicBeatState
 
 			personText.targetY = i;
 			personText.isMenuItem = true;
+			personText.displacement.x = 100;
 			personText.alpha = 0.6;
 
 			itemContainer.add(personText);

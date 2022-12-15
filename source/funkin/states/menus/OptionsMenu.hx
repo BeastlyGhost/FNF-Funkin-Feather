@@ -218,7 +218,7 @@ class OptionsMenu extends MusicBeatState
 				{
 					optionTxt.screenCenter(X);
 					optionTxt.forceX = optionTxt.x;
-					optionTxt.yAdd = -55;
+					optionTxt.displacement.y = -55;
 					optionTxt.scrollFactor.set();
 				}
 				else
@@ -229,6 +229,8 @@ class OptionsMenu extends MusicBeatState
 
 				optionTxt.targetY = i;
 				optionTxt.disableX = true;
+				optionTxt.displacement.x = 100;
+
 				if (activeCategory != 'master')
 					optionTxt.isMenuItem = true;
 				optionTxt.alpha = 0.6;

@@ -4,42 +4,48 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxMath;
+import flixel.math.FlxPoint;
 import flixel.util.FlxColor;
+import funkin.objects.ui.fonts.AlphaLetters;
 
 /**
 	Loosley based on FlxTypeText lolol
 **/
-class Alphabet extends FlxTypedSpriteGroup<AlphaCharacter>
+class Alphabet extends FlxTypedSpriteGroup<LetterSprite>
 {
+	public var text(default, set):String;
+	public var words:Array<String> = [];
+
+	public function set_text(tempText:String):String
+	{
+		tempText = tempText.replace('\\n', '\n');
+		this.text = tempText;
+		return tempText;
+	}
+
+	public var isBold:Bool = false;
+
 	// for menu shit
 	public var isMenuItem:Bool = false;
 	public var forceX:Float = Math.NEGATIVE_INFINITY;
 	public var disableX:Bool = false;
+	public var displacement:FlxPoint;
 	public var targetY:Float = 0;
-	public var xAdd:Float = 0;
-	public var yAdd:Float = 0;
-	public var xTo = 100;
-
-	public var text:String = "";
-
-	public var isBold:Bool = false;
 
 	// custom shit
 	// amp, backslash, question mark, apostrophy, comma, angry faic, period
-	var lastSprite:AlphaCharacter;
+	var lastSprite:LetterSprite;
 	var xPosResetted:Bool = false;
 	var lastWasSpace:Bool = false;
-
-	var splitWords:Array<String> = [];
 
 	override public function set_color(color:Int):Int
 	{
 		for (char in group.members)
 		{
-			if (char is AlphaCharacter) // this *should* address errors hopefully
+			if (char is LetterSprite) // this *should* address errors hopefully
 			{
 				//
-				var myChar = cast(char, AlphaCharacter);
+				var myChar = cast(char, LetterSprite);
 				myChar.changeColor(color, isBold);
 			}
 		}
@@ -50,6 +56,8 @@ class Alphabet extends FlxTypedSpriteGroup<AlphaCharacter>
 	public function new(x:Float = 0, y:Float = 0, text:String = "", isBold:Bool = false):Void
 	{
 		super(x, y);
+
+		displacement = new FlxPoint(0, 0);
 
 		forceX = Math.NEGATIVE_INFINITY;
 
@@ -62,15 +70,15 @@ class Alphabet extends FlxTypedSpriteGroup<AlphaCharacter>
 
 	public function addText():Void
 	{
-		splitWords = text.split("");
+		words = text.split("");
 
 		var xPos:Float = 0;
-		for (character in splitWords)
+		for (character in words)
 		{
 			if (character == " " || character == "-")
 				lastWasSpace = true;
 
-			if (AlphaCharacter.alphabet.indexOf(character.toLowerCase()) != -1)
+			if (LetterSprite.alphabet.indexOf(character.toLowerCase()) != -1)
 			{
 				if (lastSprite != null)
 					xPos = lastSprite.x + lastSprite.width;
@@ -82,11 +90,9 @@ class Alphabet extends FlxTypedSpriteGroup<AlphaCharacter>
 				}
 
 				var type:LetterType = (isBold ? BOLD : LETTER);
-
-				var letter:AlphaCharacter = new AlphaCharacter(xPos, 0);
+				var letter:LetterSprite = new LetterSprite(xPos, 0);
 
 				letter.createChar(character, type);
-				letter.changeColor(color, type == BOLD);
 				add(letter);
 
 				lastSprite = letter;
@@ -105,7 +111,7 @@ class Alphabet extends FlxTypedSpriteGroup<AlphaCharacter>
 			if (forceX != Math.NEGATIVE_INFINITY)
 				x = forceX;
 			else if (disableX)
-				x = FlxMath.lerp(x, xTo, elapsed * 6);
+				x = FlxMath.lerp(x, displacement.x, elapsed * 6);
 			else
 				x = FlxMath.lerp(x, (targetY * 20) + 90, 0.16);
 		}
@@ -114,19 +120,44 @@ class Alphabet extends FlxTypedSpriteGroup<AlphaCharacter>
 	}
 }
 
-enum LetterType
-{
-	LETTER;
-	BOLD;
-	NUMBER;
-	SYMBOL;
-}
-
-class AlphaCharacter extends FlxSprite
+/**
+	---- TODO ----
+	Letter Offsets
+	Symbol Support
+	Latin Support
+**/
+class LetterSprite extends FlxSprite
 {
 	public static var alphabet:String = "abcdefghijklmnopqrstuvwxyz";
 	public static var symbols:String = "\\/|~#$%()*+-:;<=>@[]^_.,'!?";
 	public static var numbers:String = "1234567890";
+
+	public var offsetIncrement:FlxPoint;
+	public var texture(default, set):String = 'base/alphabet';
+	public var defaultFramerate:Int = 24;
+
+	public function set_texture(tex:String):String
+	{
+		// safety check
+		var pastAnim:String = null;
+
+		if (animation != null)
+			pastAnim = animation.name;
+
+		texture = tex;
+		frames = AssetHandler.grabAsset(tex, SPARROW, "images/ui");
+
+		// set the framerate
+		defaultFramerate = 24;
+
+		if (pastAnim != null)
+		{
+			animation.addByPrefix(pastAnim, pastAnim, defaultFramerate);
+			animation.play(pastAnim, true);
+			updateHitbox();
+		}
+		return tex;
+	}
 
 	public var row:Int = 0;
 
@@ -134,8 +165,12 @@ class AlphaCharacter extends FlxSprite
 	{
 		super(x, y);
 
-		frames = AssetHandler.grabAsset('alphabet', SPARROW, "images/ui/base");
-		antialiasing = true;
+		texture = 'base/alphabet';
+
+		offsetIncrement = new FlxPoint(0, 0);
+
+		x += offsetIncrement.x;
+		y += offsetIncrement.y;
 	}
 
 	public function changeColor(c:FlxColor, bold:Bool):Void
@@ -159,8 +194,6 @@ class AlphaCharacter extends FlxSprite
 	**/
 	public function createChar(letter:String, type:LetterType):Void
 	{
-		// TODO: make this easier maybe
-
 		var letterCase:String = "";
 
 		switch (type)
@@ -176,39 +209,27 @@ class AlphaCharacter extends FlxSprite
 				letterCase = "";
 		}
 
-		switch (letter)
+		/**
+			I have no names for these
+			https://cdn.discordapp.com/attachments/1000603105265733749/1051670973029564426/FjsH6O6WIAEPclK.jpg
+		**/
+
+		for (lettah => thingies in AlphaLetters.letterMap)
 		{
-			case '#':
-				animation.addByPrefix(letter, 'hashtag', 24);
-			case '$':
-				animation.addByPrefix(letter, 'dollarsign', 24);
-			case '|':
-				animation.addByPrefix(letter, 'pipe', 24);
-			case '~':
-				animation.addByPrefix(letter, 'tilde', 24);
-			case '<':
-				animation.addByPrefix(letter, 'lessThan', 24);
-			case '>':
-				animation.addByPrefix(letter, 'greaterThan', 24);
-			case '=':
-				animation.addByPrefix(letter, 'equal', 24);
-			case '\\':
-				animation.addByPrefix(letter, 'backslash', 24);
-			case '@':
-				animation.addByPrefix(letter, 'atSign', 24);
-			case '.':
-				animation.addByPrefix(letter, 'period', 24);
-				y += 50;
-			case "'":
-				animation.addByPrefix(letter, 'apostraphie', 24);
-			case "?":
-				animation.addByPrefix(letter, 'question mark', 24);
-			case "!":
-				animation.addByPrefix(letter, 'exclamation point', 24);
-			default:
-				animation.addByPrefix(letter, (type == BOLD ? letter.toUpperCase() : letter) + letterCase, 24);
+			if (lettah != null && thingies != null)
+			{
+				if (thingies.anim != null)
+					animation.addByPrefix(letter, thingies.anim, defaultFramerate);
+				// trace('added: ${thingies.anim} to Alphabet');
+
+				var chosenAdjustArray:Array<Float> = (type == BOLD ? thingies.boldOffset : thingies.normalOffset);
+
+				if (chosenAdjustArray != null)
+					offsetIncrement.set(chosenAdjustArray[0], chosenAdjustArray[1]);
+			}
 		}
 
+		animation.addByPrefix(letter, (type == BOLD ? letter.toUpperCase() : letter) + letterCase, defaultFramerate);
 		animation.play(letter);
 		updateHitbox();
 
