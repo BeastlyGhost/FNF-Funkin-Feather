@@ -6,7 +6,7 @@ package funkin.objects.ui.notes;
 **/
 class BabyArrow extends FeatherSprite
 {
-	public static var swagWidth:Float = 160 * 0.7;
+	public var swagWidth:Float = 160 * 0.7;
 
 	public static var actions:Array<String> = ['left', 'down', 'up', 'right'];
 	public static var colors:Array<String> = ['purple', 'blue', 'green', 'red'];

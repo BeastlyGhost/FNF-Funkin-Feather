@@ -4,7 +4,6 @@ import flixel.group.FlxGroup;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import funkin.song.Conductor;
-import funkin.states.PlayState;
 
 /**
 	Strumline class, initializes the gray notes at the top / bottom of the screen,
@@ -15,6 +14,9 @@ class Strum extends FlxGroup
 	public var characters:Array<Character>;
 
 	public var babyArrows:FlxTypedGroup<BabyArrow>;
+
+	public var notes:FlxTypedGroup<Note>;
+	public var holds:FlxTypedGroup<Note>;
 	public var splashes:FlxTypedGroup<NoteSplash>;
 
 	public var downscroll:Bool = false;
@@ -29,7 +31,12 @@ class Strum extends FlxGroup
 		this.downscroll = downscroll;
 
 		babyArrows = new FlxTypedGroup<BabyArrow>();
-		add(babyArrows);
+
+		/*
+			notes = new FlxTypedGroup<Note>();
+			holds = new FlxTypedGroup<Note>();
+		 */
+		splashes = new FlxTypedGroup<NoteSplash>();
 
 		for (index in 0...4)
 		{
@@ -40,7 +47,7 @@ class Strum extends FlxGroup
 
 			CustomAssets.generateStrums(babyArrow, index);
 
-			babyArrow.x += (index - ((4 / 2))) * BabyArrow.swagWidth;
+			babyArrow.x += (index - ((4 / 2))) * babyArrow.swagWidth;
 			babyArrow.y -= 10;
 
 			babyArrow.animation.play('static');
@@ -51,7 +58,7 @@ class Strum extends FlxGroup
 				{ease: FlxEase.circOut, startDelay: 0.5 + (0.2 * index)});
 		}
 
-		splashes = new FlxTypedGroup<NoteSplash>();
+		add(babyArrows);
 		add(splashes);
 
 		// cache the splash stuff

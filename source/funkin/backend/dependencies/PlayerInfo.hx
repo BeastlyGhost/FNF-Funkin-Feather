@@ -225,6 +225,8 @@ class PlayerInfo
 	//
 	public static function saveScore(song:String, score:Int, diff:Int = 0, isStory:Bool):Void
 	{
+		FlxG.save.bind("Feather-Scores" #if (flixel < "5.0.0"), "BeastlyGhost" #end);
+
 		var chosenMap = (isStory ? weekScoreMap : scoreMap);
 		var chosenSave = (isStory ? FlxG.save.data.weekScores : FlxG.save.data.songScores);
 
@@ -243,6 +245,8 @@ class PlayerInfo
 
 	public static function getScore(song:String, diff:Int, isStory:Bool = false):Int
 	{
+		FlxG.save.bind("Feather-Scores" #if (flixel < "5.0.0"), "BeastlyGhost" #end);
+
 		var chosenMap = (isStory ? weekScoreMap : scoreMap);
 
 		var songFinal = song + FeatherTools.getDifficulty(diff);
@@ -255,6 +259,8 @@ class PlayerInfo
 
 	public static function loadHighscores():Void
 	{
+		FlxG.save.bind("Feather-Scores" #if (flixel < "5.0.0"), "BeastlyGhost" #end);
+
 		if (FlxG.save.data.songScores != null)
 			scoreMap = FlxG.save.data.songScores;
 		if (FlxG.save.data.weekScores != null)

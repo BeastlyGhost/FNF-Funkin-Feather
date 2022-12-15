@@ -18,7 +18,7 @@ class Notefield extends FlxTypedGroup<Note>
 		note.x = babyArrow.x + note.offsetX;
 
 		var strumY:Float = babyArrow.y + note.offsetY;
-		var center:Float = strumY + BabyArrow.swagWidth / 2;
+		var center:Float = strumY + babyArrow.swagWidth / 2;
 		note.y = strumY - (Conductor.songPosition - note.step) * (0.45 * note.speed) * (strum.downscroll ? -1 : 1);
 
 		if (note.isSustain)
@@ -33,7 +33,8 @@ class Notefield extends FlxTypedGroup<Note>
 					note.y += note.height / 2;
 
 				if (note.y - note.offset.y * note.scale.y + note.height >= center
-					&& (!note.mustPress || (note.wasGoodHit || (note.prevNote.wasGoodHit && !note.canBeHit))))
+					&& (!note.noteData.mustPress
+						|| (note.noteData.wasGoodHit || (note.prevNote.noteData.wasGoodHit && !note.noteData.canBeHit))))
 				{
 					var swagRect = new FlxRect(0, 0, note.frameWidth, note.frameHeight);
 					swagRect.height = (center - note.y) / note.scale.y;
@@ -43,7 +44,8 @@ class Notefield extends FlxTypedGroup<Note>
 				}
 			}
 			else if (note.y + note.offset.y * note.scale.y <= center
-				&& (!note.mustPress || (note.wasGoodHit || (note.prevNote.wasGoodHit && !note.canBeHit))))
+				&& (!note.noteData.mustPress
+					|| (note.noteData.wasGoodHit || (note.prevNote.noteData.wasGoodHit && !note.noteData.canBeHit))))
 			{
 				var swagRect = new FlxRect(0, 0, note.width / note.scale.x, note.height / note.scale.y);
 				swagRect.y = (center - note.y) / note.scale.y;
@@ -54,9 +56,9 @@ class Notefield extends FlxTypedGroup<Note>
 		}
 	}
 
-	public function removeNote(note:Note):Void
+	public function removeNote(note:Note, ?container:Array<Note>):Void
 	{
-		if (!note.canDie)
+		if (!note.typeData.canDie)
 			return;
 
 		note.active = false;
@@ -64,6 +66,9 @@ class Notefield extends FlxTypedGroup<Note>
 
 		if (members.contains(note))
 			remove(note, true);
+
+		if (container != null && container.contains(note))
+			container.remove(note);
 
 		note.kill();
 		note.destroy();

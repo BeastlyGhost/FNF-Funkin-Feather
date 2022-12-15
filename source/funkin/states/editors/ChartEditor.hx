@@ -351,7 +351,7 @@ class ChartEditor extends MusicBeatState
 		var index:Null<Int> = note.index;
 		var isMustPress:Bool = song.sectionNotes[curSection].cameraPoint == "player";
 
-		if (index > -1 && note.mustPress != isMustPress)
+		if (index > -1 && note.noteData.mustPress != isMustPress)
 			index += 4;
 
 		if (index > -1)

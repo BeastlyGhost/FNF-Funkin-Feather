@@ -17,7 +17,7 @@ class Start extends FlxState
 	{
 		super.create();
 
-		OptionsMeta.loadPrefs();
+		OptionsAPI.loadPrefs();
 		PlayerInfo.loadHighscores();
 
 		FlxG.fixedTimestep = true;

@@ -1,9 +1,9 @@
 package funkin.states.menus;
 
 import flixel.FlxG;
-import funkin.objects.ui.fonts.Alphabet;
-import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.FlxSprite;
+import flixel.group.FlxGroup.FlxTypedGroup;
+import funkin.objects.ui.fonts.Alphabet;
 import funkin.song.MusicState;
 
 typedef CreditsData =
@@ -116,7 +116,7 @@ class CreditsMenu extends MusicBeatState
 	{
 		super.updateSelection(newSelection);
 
-		var selectionJumper = ((newSelection > selection) ? 1 : -1);
+		var selectionJumper:Int = ((newSelection < selection) ? -1 : 1);
 
 		if (newSelection != 0)
 			FlxG.sound.play(AssetHandler.grabAsset('scrollMenu', SOUND, "sounds/menus"));

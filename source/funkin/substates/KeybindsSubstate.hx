@@ -11,12 +11,31 @@ class KeybindsSubstate extends MusicBeatSubstate
 	var itemContainer:FlxTypedGroup<Alphabet>;
 	var horizontalContainer:FlxTypedGroup<Alphabet>;
 
+	var bg:FlxSprite;
+	var generateBG:Bool = false;
+
+	override public function new(generateBG:Bool = false):Void
+	{
+		super();
+
+		this.generateBG = generateBG;
+	}
+
 	override function create():Void
 	{
 		super.create();
 
-		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, 0xFF000000);
-		bg.alpha = 0.6;
+		if (!generateBG)
+		{
+			bg = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, 0xFF000000);
+			bg.alpha = 0.6;
+		}
+		else
+		{
+			bg = new FlxSprite(-80).loadGraphic(AssetHandler.grabAsset('menuBGMagenta', IMAGE, 'images/menus'));
+			bg.scrollFactor.set();
+			bg.screenCenter(X);
+		}
 		bg.scrollFactor.set();
 		add(bg);
 
@@ -87,7 +106,7 @@ class KeybindsSubstate extends MusicBeatSubstate
 	{
 		super.updateSelection(newSelection);
 
-		var selectionJumper = ((newSelection > selection) ? 1 : -1);
+		var selectionJumper:Int = ((selection < newSelection) ? -1 : 1);
 
 		FlxG.sound.play(AssetHandler.grabAsset('scrollMenu', SOUND, "sounds/menus"));
 

@@ -1,7 +1,5 @@
 package funkin.states;
 
-import funkin.substates.GameOverSubstate;
-import flixel.math.FlxPoint;
 import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxObject;
@@ -9,6 +7,7 @@ import flixel.FlxSprite;
 import flixel.graphics.FlxGraphic;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxMath;
+import flixel.math.FlxPoint;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxSort;
@@ -23,6 +22,7 @@ import funkin.song.ChartParser;
 import funkin.song.Conductor;
 import funkin.song.MusicState;
 import funkin.song.SongFormat.FeatherSong;
+import funkin.substates.GameOverSubstate;
 import openfl.media.Sound;
 
 enum GameModes
@@ -39,7 +39,7 @@ enum GameModes
 class PlayState extends MusicBeatState
 {
 	public static var main:PlayState;
-	public static var modules:Array<FeatherModule> = [];
+	public static var localScripts:Array<FeatherModule> = [];
 
 	// Song
 	public static var song(default, set):FeatherSong;
@@ -50,9 +50,9 @@ class PlayState extends MusicBeatState
 		if (newSong != null && song != newSong)
 		{
 			// clear notes prior to storing new ones
+			noteContainer = [];
 			if (notesGroup != null)
 				notesGroup.destroy();
-			spawnedNotes = [];
 
 			if (FlxG.sound.music != null && FlxG.sound.music.playing)
 				FlxG.sound.music.stop();
@@ -64,14 +64,14 @@ class PlayState extends MusicBeatState
 			Conductor.changeBPM(song.bpm);
 			// Conductor.mapBPMChanges(song);
 
-			spawnedNotes = ChartParser.loadChartNotes(song);
+			noteContainer = ChartParser.loadChartNotes(song);
 		}
 
 		return song;
 	}
 
 	public static function get_songSpeed():Float
-		return FlxMath.roundDecimal(songSpeed, 2) / Conductor.songRate;
+		return FlxMath.roundDecimal(songSpeed, 2) /* / Conductor.songRate*/;
 
 	public static var songName:String = 'test';
 	public static var difficulty:Int = 0;
@@ -82,7 +82,7 @@ class PlayState extends MusicBeatState
 	// User Interface
 	public static var strumsGroup:FlxTypedGroup<Strum>;
 	public static var notesGroup:Notefield;
-	public static var spawnedNotes:Array<Note>;
+	public static var noteContainer:Array<Note>;
 
 	public static var gameUI:UI;
 
@@ -130,7 +130,7 @@ class PlayState extends MusicBeatState
 
 		main = this;
 
-		modules = [];
+		localScripts = [];
 
 		FlxG.mouse.visible = false;
 
@@ -162,7 +162,7 @@ class PlayState extends MusicBeatState
 		// generate the song
 		song = ChartParser.loadChartData(songName, difficulty);
 
-		FeatherModule.initArray(modules);
+		FeatherModule.initArray(localScripts);
 
 		gameStage.setStage('stage');
 		add(gameStage);
@@ -185,16 +185,20 @@ class PlayState extends MusicBeatState
 		strumsGroup.cameras = [camHUD];
 		notesGroup.cameras = [camHUD];
 
-		var isDownscroll = OptionsMeta.getPref("Downscroll");
-		var height = (isDownscroll ? FlxG.height - 170 : 25);
+		var strumX = (FlxG.width / 2);
+		var strumWidthX = (FlxG.width / 4);
+		var strumY = (OptionsAPI.getPref("Downscroll") ? FlxG.height - 170 : 25);
 
-		strumsP1 = new Strum((FlxG.width / 2) + FlxG.width / 4, height, [player], false, isDownscroll);
-		strumsP2 = new Strum((FlxG.width / 2) - FlxG.width / 4 - 30, height, [opponent], true, isDownscroll);
+		strumsP1 = new Strum(strumX + (OptionsAPI.getPref("Center Notes") ? 0 : strumWidthX), strumY, [player], false, OptionsAPI.getPref("Downscroll"));
+		strumsP2 = new Strum(strumX - strumWidthX + 30, strumY, [opponent], true, OptionsAPI.getPref("Downscroll"));
 
 		strumsGroup.add(strumsP1);
 		strumsGroup.add(strumsP2);
 
 		playerStrum = strumsP1;
+
+		if (OptionsAPI.getPref("Hide Opponent Notes") || OptionsAPI.getPref("Center Notes"))
+			strumsP2.visible = false;
 
 		add(strumsGroup);
 		add(notesGroup);
@@ -358,8 +362,10 @@ class PlayState extends MusicBeatState
 		if (pointString == null)
 			return;
 
-		/** Does this even work properly?
-			@BeastlyGhost **/
+		/**
+			Does this even work properly? @BeastlyGhost
+			- no (Future @BeastlyGhost)
+		**/
 
 		var char:Character = opponent;
 
@@ -394,8 +400,8 @@ class PlayState extends MusicBeatState
 				if (FlxG.keys.justPressed.SIX)
 				{
 					PlayerInfo.validScore = false;
-					strumsP1.autoplay = !strumsP1.autoplay;
-					gameUI.autoPlayText.visible = strumsP1.autoplay;
+					playerStrum.autoplay = !playerStrum.autoplay;
+					gameUI.autoPlayText.visible = playerStrum.autoplay;
 					gameUI.autoPlaySine = 1;
 				}
 
@@ -403,6 +409,7 @@ class PlayState extends MusicBeatState
 				{
 					PlayerInfo.validScore = false;
 					gameplayMode = CHARTING;
+					Conductor.pauseSong();
 					Conductor.stopSong();
 					MusicState.switchState(new funkin.states.editors.ChartEditor());
 				}
@@ -428,13 +435,22 @@ class PlayState extends MusicBeatState
 			openSubState(new funkin.substates.PauseSubstate(player.getScreenPosition().x, player.getScreenPosition().y, "default"));
 		}
 
-		while (spawnedNotes[0] != null)
+		while (noteContainer[0] != null)
 		{
-			if (spawnedNotes[0].step - Conductor.songPosition > 2000)
+			var spicyNote:Note = noteContainer[0];
+
+			if (!spicyNote.noteData.mustPress)
+			{
+				spicyNote.visible = !OptionsAPI.getPref("Hide Opponent Notes");
+				if (OptionsAPI.getPref("Center Notes"))
+					spicyNote.alpha = 0.3;
+			}
+
+			if (spicyNote.step - Conductor.songPosition > 2000)
 				break;
 
-			notesGroup.add(spawnedNotes[0]);
-			spawnedNotes.shift();
+			notesGroup.add(spicyNote);
+			noteContainer.shift();
 		}
 
 		if (song != null)
@@ -452,10 +468,10 @@ class PlayState extends MusicBeatState
 
 				notesGroup.forEachAlive(function(note:Note)
 				{
-					var babyStrum:Strum = note.mustPress ? strumsP1 : strumsP2;
+					var babyStrum:Strum = note.noteData.mustPress ? playerStrum : strumsP2;
 
-					if (!babyStrum.autoplay && keysHeld.contains(true) && keysHeld[note.index] && note.canBeHit && note.mustPress && note.isSustain
-						&& !note.tooLate)
+					if (!babyStrum.autoplay && keysHeld.contains(true) && keysHeld[note.index] && note.noteData.canBeHit && note.noteData.mustPress
+						&& note.isSustain && !note.noteData.tooLate)
 						noteHit(note, babyStrum);
 
 					note.speed = songSpeed;
@@ -471,29 +487,26 @@ class PlayState extends MusicBeatState
 					var killRangeReached:Bool = babyStrum.downscroll ? note.y > FlxG.height : note.y < -note.height;
 
 					// kill offscreen notes and cause misses if needed
-					if (Conductor.songPosition > note.missOffset + note.step)
+					if (Conductor.songPosition > note.judgeData.missOffset + note.step)
 					{
 						note.active = false;
 						note.visible = false;
 
 						if (killRangeReached)
-						{
-							notesGroup.removeNote(note);
-							spawnedNotes.remove(note);
-						}
+							notesGroup.removeNote(note, noteContainer);
 
-						if (note.mustPress && !note.tooLate && !note.wasGoodHit && !note.isMine && !note.ignoreNote)
+						if (note.noteData.mustPress && !note.noteData.tooLate && !note.noteData.wasGoodHit)
 						{
 							if (!note.isSustain)
 							{
-								note.tooLate = true;
+								note.noteData.tooLate = true;
 
 								// declare children as late
 								for (hold in note.children)
-									hold.tooLate = true;
+									hold.noteData.tooLate = true;
 
 								// ignore misses if it's a mine or ignore note
-								if (note.ignoreNote || note.isMine)
+								if (note.typeData.ignoreNote || note.typeData.isMine)
 									return;
 
 								noteMiss(note.index, babyStrum);
@@ -507,8 +520,8 @@ class PlayState extends MusicBeatState
 				// prevent hits if the countdown was not active
 				notesGroup.forEachAlive(function(note:Note)
 				{
-					note.canBeHit = false;
-					note.wasGoodHit = false;
+					note.noteData.canBeHit = false;
+					note.noteData.wasGoodHit = false;
 				});
 			}
 		}
@@ -523,6 +536,7 @@ class PlayState extends MusicBeatState
 		if (PlayerInfo.stats.health <= 0 && !hasDied)
 		{
 			pauseGame();
+			Conductor.pauseSong();
 			Conductor.stopSong(); // *beep boops stop*
 			PlayerInfo.stats.deaths += 1;
 			hasDied = true;
@@ -576,16 +590,16 @@ class PlayState extends MusicBeatState
 		{
 			if (song != null && countdownWasActive)
 			{
-				var prevTime:Float = Conductor.songPosition;
-
-				Conductor.songPosition = Conductor.songMusic.time;
-
 				var noteList:Array<Note> = [];
 				var notePresses:Array<Note> = [];
 
+				var prevTime:Float = Conductor.songPosition;
+				Conductor.songPosition = Conductor.songMusic.time;
+
 				notesGroup.forEachAlive(function(note:Note)
 				{
-					if (note.index == idx && note.mustPress && note.canBeHit && !note.isSustain && !note.tooLate && !note.wasGoodHit)
+					if (note.index == idx && note.noteData.mustPress && note.noteData.canBeHit && !note.isSustain && !note.noteData.tooLate
+						&& !note.noteData.wasGoodHit)
 						noteList.push(note);
 				});
 				noteList.sort(sortHitNotes);
@@ -600,14 +614,14 @@ class PlayState extends MusicBeatState
 							if (Math.abs(epicNote.step - troubleNote.step) > 10)
 								notePossible = false;
 
-						if (notePossible && epicNote.canBeHit)
+						if (notePossible && epicNote.noteData.canBeHit)
 						{
 							noteHit(epicNote, playerStrum);
 							notePresses.push(epicNote);
 						}
 					}
 				}
-				else if (!OptionsMeta.getPref("Ghost Tapping"))
+				else if (!OptionsAPI.getPref("Ghost Tapping"))
 				{
 					noteMiss(idx, playerStrum);
 					PlayerInfo.stats.ghostMisses++;
@@ -617,7 +631,7 @@ class PlayState extends MusicBeatState
 			}
 
 			if (babyArrow != null && babyArrow.animation.curAnim.name != 'confirm')
-				babyArrow.playAnim('pressed');
+				babyArrow.playAnim('pressed', true);
 		}
 		else
 		{
@@ -644,9 +658,9 @@ class PlayState extends MusicBeatState
 	**/
 	function sortHitNotes(a:Note, b:Note):Int
 	{
-		if (a.lowPriority && !b.lowPriority)
+		if (a.typeData.lowPriority && !b.typeData.lowPriority)
 			return 1;
-		else if (!a.lowPriority && b.lowPriority)
+		else if (!a.typeData.lowPriority && b.typeData.lowPriority)
 			return -1;
 
 		return FlxSort.byValues(FlxSort.ASCENDING, a.step, b.step);
@@ -654,9 +668,9 @@ class PlayState extends MusicBeatState
 
 	public function noteHit(note:Note, babyStrum:Strum):Void
 	{
-		if (!note.wasGoodHit)
+		if (!note.noteData.wasGoodHit)
 		{
-			note.wasGoodHit = true;
+			note.noteData.wasGoodHit = true;
 
 			callFunc('goodNoteHit', [note, babyStrum]);
 
@@ -681,7 +695,7 @@ class PlayState extends MusicBeatState
 			var noteDiff:Float = Math.abs(note.step - Conductor.songPosition);
 			var ratingInteger:Int = 3; // 3 is "Shit"
 
-			if (note.mustPress && !babyStrum.autoplay) // being hit by the player
+			if (note.noteData.mustPress && !babyStrum.autoplay) // being hit by the player
 			{
 				for (i in 0...PlayerInfo.judgeTable.length)
 				{
@@ -710,15 +724,14 @@ class PlayState extends MusicBeatState
 
 			if (!note.isSustain)
 			{
-				if (note.mustPress)
+				if (note.noteData.mustPress)
 				{
-					if (PlayerInfo.judgeTable[ratingInteger].noteSplash || note.doSplash || babyStrum.autoplay)
+					if (PlayerInfo.judgeTable[ratingInteger].noteSplash || note.typeData.doSplash || babyStrum.autoplay)
 						babyStrum.popUpSplash(note.index);
 					popUpScore(PlayerInfo.judgeTable[babyStrum.autoplay ? 0 : ratingInteger].name, !babyStrum.autoplay);
 				}
 
-				notesGroup.removeNote(note);
-				spawnedNotes.remove(note);
+				notesGroup.removeNote(note, noteContainer);
 			}
 		}
 	}
@@ -821,7 +834,6 @@ class PlayState extends MusicBeatState
 				if (i != null)
 				{
 					var boppingBeat = (i.isQuickDancer ? beat % Math.round(crowdSpeed) * i.bopTimer == 0 : beat % i.bopTimer == 0);
-
 					if (!i.animation.curAnim.name.startsWith("sing") && boppingBeat)
 						i.dance();
 				}
@@ -840,8 +852,11 @@ class PlayState extends MusicBeatState
 	{
 		charDancing(curBeat);
 
-		FeatherTools.cameraBumpReset(curBeat, camGame, bumpSpeed, 0.015);
-		FeatherTools.cameraBumpReset(curBeat, camHUD, bumpSpeed, 0.03);
+		if (!OptionsAPI.getPref("Reduce Motion"))
+		{
+			FeatherTools.cameraBumpReset(curBeat, camGame, bumpSpeed, 0.015);
+			FeatherTools.cameraBumpReset(curBeat, camHUD, bumpSpeed, 0.03);
+		}
 
 		gameUI.beatHit(curBeat);
 		gameStage.stageBeatHit(curBeat, player, opponent, crowd);
@@ -913,18 +928,8 @@ class PlayState extends MusicBeatState
 		canPause = false;
 
 		Conductor.songPosition = Conductor.songMusic.length;
-
-		if (Conductor.songMusic != null && Conductor.songMusic.playing)
-		{
-			Conductor.songMusic.volume = 0;
-			Conductor.songMusic.pause();
-		}
-
-		if (Conductor.songVocals != null && Conductor.songVocals.playing)
-		{
-			Conductor.songVocals.volume = 0;
-			Conductor.songVocals.pause();
-		}
+		Conductor.pauseSong();
+		Conductor.stopSong();
 
 		switch (gameplayMode)
 		{
@@ -951,12 +956,12 @@ class PlayState extends MusicBeatState
 		super.destroy();
 	}
 
-	// MODULES
+	// SCRIPTS
 	public function callFunc(key:String, args:Array<Dynamic>):Void
 	{
-		if (modules != null)
+		if (localScripts != null)
 		{
-			for (i in modules)
+			for (i in localScripts)
 				i.call(key, args);
 			if (song != null)
 				callModuleLocals();
@@ -966,9 +971,9 @@ class PlayState extends MusicBeatState
 	public function setVar(key:String, value:Dynamic):Bool
 	{
 		var allSucceed:Bool = true;
-		if (modules != null)
+		if (localScripts != null)
 		{
-			for (i in modules)
+			for (i in localScripts)
 			{
 				i.set(key, value);
 

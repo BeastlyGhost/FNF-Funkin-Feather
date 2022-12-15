@@ -1,10 +1,10 @@
 package funkin.objects.ui.fonts;
 
-import flixel.util.FlxColor;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxMath;
+import flixel.util.FlxColor;
 
 /**
 	Loosley based on FlxTypeText lolol
@@ -22,6 +22,8 @@ class Alphabet extends FlxTypedSpriteGroup<AlphaCharacter>
 
 	public var text:String = "";
 
+	public var isBold:Bool = false;
+
 	// custom shit
 	// amp, backslash, question mark, apostrophy, comma, angry faic, period
 	var lastSprite:AlphaCharacter;
@@ -29,8 +31,6 @@ class Alphabet extends FlxTypedSpriteGroup<AlphaCharacter>
 	var lastWasSpace:Bool = false;
 
 	var splitWords:Array<String> = [];
-
-	var isBold:Bool = false;
 
 	override public function set_color(color:Int):Int
 	{

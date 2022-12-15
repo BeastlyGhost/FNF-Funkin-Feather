@@ -178,7 +178,7 @@ class ChartParser
 			var swagNote:Note = new Note(note.time, note.index, note.type, oldNote);
 			swagNote.speed = song.speed;
 			swagNote.sustainLength = note.holdLength;
-			swagNote.type = note.type;
+			swagNote.typeData.type = note.type;
 			swagNote.scrollFactor.set(0, 0);
 			dunces.push(swagNote);
 
@@ -190,9 +190,9 @@ class ChartParser
 				sustainNote.scrollFactor.set();
 				dunces.push(sustainNote);
 
-				sustainNote.mustPress = note.cameraPoint == "player";
+				sustainNote.noteData.mustPress = note.cameraPoint == "player";
 
-				if (sustainNote.mustPress)
+				if (sustainNote.noteData.mustPress)
 				{
 					sustainNote.x += FlxG.width / 2; // general offset
 					sustainNote.x += 25;
@@ -200,8 +200,8 @@ class ChartParser
 				sustainNote.x += 15;
 			}
 
-			swagNote.mustPress = note.cameraPoint == "player";
-			if (swagNote.mustPress)
+			swagNote.noteData.mustPress = note.cameraPoint == "player";
+			if (swagNote.noteData.mustPress)
 			{
 				swagNote.x += FlxG.width / 2; // general offset
 				swagNote.x += 25;
@@ -238,7 +238,7 @@ class ChartParser
 				var swagNote:Note = new Note(daStrumTime, daNoteData, 'default', oldNote);
 				swagNote.speed = dataSent.speed;
 				swagNote.sustainLength = songNotes[2];
-				swagNote.type = songNotes[3];
+				swagNote.typeData.type = songNotes[3];
 				swagNote.scrollFactor.set(0, 0);
 
 				var susLength:Float = swagNote.sustainLength;
@@ -255,10 +255,10 @@ class ChartParser
 					sustainNote.scrollFactor.set();
 					arrayNotes.push(sustainNote);
 
-					sustainNote.mustPress = gottaHitNote;
+					sustainNote.noteData.mustPress = gottaHitNote;
 				}
 
-				swagNote.mustPress = gottaHitNote;
+				swagNote.noteData.mustPress = gottaHitNote;
 			}
 		}
 

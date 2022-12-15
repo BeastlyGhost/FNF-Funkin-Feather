@@ -5,6 +5,32 @@ import funkin.objects.ui.notes.BabyArrow;
 import funkin.song.Conductor;
 import funkin.states.PlayState;
 
+// just to make it easier to add into note parameters and such
+typedef DefaultNote =
+{
+	var canBeHit:Bool;
+	var mustPress:Bool;
+	var wasGoodHit:Bool;
+	var tooLate:Bool;
+}
+
+typedef NoteType =
+{
+	var type:String;
+	var lowPriority:Bool;
+	var ignoreNote:Bool;
+	var doSplash:Bool;
+	var isMine:Bool;
+	var canDie:Bool;
+}
+
+typedef NoteJudge =
+{
+	var earlyHitMult:Float;
+	var lateHitMult:Float;
+	var missOffset:Float;
+}
+
 class NoteTools
 {
 	// based on forever engine
@@ -28,28 +54,37 @@ class NoteTools
 **/
 class Note extends FeatherSprite
 {
-	public var canBeHit:Bool = false;
-	public var mustPress:Bool = false;
-	public var wasGoodHit:Bool = false;
-	public var canDie:Bool = true;
-	public var tooLate:Bool = false;
+	public var noteData:DefaultNote = {
+		canBeHit: false,
+		mustPress: false,
+		wasGoodHit: false,
+		tooLate: false
+	};
 
-	public var lowPriority:Bool = false;
-	public var ignoreNote:Bool = false;
-	public var doSplash:Bool = false;
-	public var isMine:Bool = false;
+	public var typeData:NoteType = {
+		type: 'default',
+		lowPriority: false,
+		ignoreNote: false,
+		doSplash: false,
+		isMine: false,
+		canDie: true
+	};
 
 	// modifiable gameplay variables
-	public var earlyHitMult:Float = 1;
-	public var lateHitMult:Float = 1;
-	public var missOffset:Float = 200;
+	public var judgeData:NoteJudge = {
+		earlyHitMult: 1,
+		lateHitMult: 1,
+		missOffset: 200
+	};
 
-	public var type:String = 'default';
+	public var babyInstance:BabyArrow;
+
 	public var prevNote:Note;
 	public var parentNote:Note;
 	public var children:Array<Note> = [];
 
 	public var speed:Float = 1;
+
 	public var step:Float = 0;
 	public var index:Int = 0;
 
@@ -71,10 +106,12 @@ class Note extends FeatherSprite
 
 		this.step = step;
 		this.index = index;
-		this.type = type;
+		typeData.type = type;
 
 		this.prevNote = prevNote;
 		this.isSustain = isSustain;
+
+		babyInstance = new BabyArrow(index);
 
 		CustomAssets.generateNotes(this, index, isSustain);
 
@@ -84,7 +121,7 @@ class Note extends FeatherSprite
 			playAnim(BabyArrow.colors[index] + "Scroll");
 		else
 		{
-			earlyHitMult = 0.5;
+			judgeData.earlyHitMult = 0.5;
 
 			parentNote = prevNote;
 			while (parentNote.isSustain && parentNote.prevNote != null)
@@ -94,8 +131,8 @@ class Note extends FeatherSprite
 
 		if (isSustain && prevNote != null)
 		{
-			alpha = 0.6;
 			speed = prevNote.speed;
+			alpha = 0.6;
 
 			offsetX = width / 2;
 
@@ -119,13 +156,15 @@ class Note extends FeatherSprite
 	{
 		super.update(elapsed);
 
-		if (mustPress)
-			canBeHit = step > Conductor.songPosition - Conductor.safeZoneOffset * lateHitMult
-				&& step < Conductor.songPosition + Conductor.safeZoneOffset * earlyHitMult;
+		if (noteData.mustPress)
+		{
+			noteData.canBeHit = (step > Conductor.songPosition - Conductor.safeZoneOffset * judgeData.lateHitMult
+				&& step < Conductor.songPosition + Conductor.safeZoneOffset * judgeData.earlyHitMult);
+		}
 		else
-			canBeHit = false;
+			noteData.canBeHit = false;
 
-		if (tooLate || (prevNote != null && prevNote.isSustain && prevNote.tooLate))
+		if (noteData.tooLate || (prevNote != null && prevNote.isSustain && prevNote.noteData.tooLate))
 		{
 			if (alpha > 0.3)
 				alpha = 0.3;

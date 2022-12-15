@@ -2,7 +2,9 @@ package funkin.objects.ui;
 
 import flixel.FlxSprite;
 import flixel.graphics.FlxGraphic;
-import flixel.math.FlxMath;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
+import funkin.song.Conductor;
 import sys.FileSystem;
 
 /**
@@ -27,18 +29,17 @@ class Icon extends FlxSprite
 		setIcon(character, flip);
 	}
 
-	public function doBops(onUpdate:Bool = false)
+	var bopTween:FlxTween;
+
+	public function doBops(time:Float):Void
 	{
 		if (!shouldBop)
 			return;
 
-		// TODO: replace this with customizable one later
-		if (onUpdate)
-			setGraphicSize(Std.int(FlxMath.lerp(150, width, 0.85)));
-		else
-			setGraphicSize(Std.int(width + 30));
-
-		updateHitbox();
+		scale.set(1.2, 1.2);
+		if (bopTween != null)
+			bopTween.cancel();
+		bopTween = FlxTween.tween(this.scale, {x: 1, y: 1}, time / Conductor.songRate, {ease: FlxEase.expoOut});
 	}
 
 	public dynamic function updateFrame(health:Float):Void

@@ -1,5 +1,6 @@
 package funkin.substates;
 
+import funkin.song.Conductor;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
@@ -21,9 +22,15 @@ import sys.thread.Thread;
 class PauseSubstate extends MusicBeatSubstate
 {
 	var listMap:Map<String, Array<String>> = [
-		"default" => ["Resume Song", "Restart Song", "Change Keys", "Exit to Options", "Exit to menu"],
-		"charting" => ["Exit to Charter", "Leave Charting Mode", "Change Keys", "Exit to menu"],
-		"no-resume" => ["Restart Song", "Change Keys", "Exit to Options", "Exit to menu"],
+		"default" => [
+			"Resume Song",
+			"Restart Song",
+			"Change Keybinds",
+			"Exit to Options",
+			"Exit to menu"
+		],
+		"charting" => ["Exit to Charter", "Leave Charting Mode", "Change Keybinds", "Exit to menu"],
+		"no-resume" => ["Restart Song", "Change Keybinds", "Exit to Options", "Exit to menu"],
 	];
 
 	var itemContainer:FlxTypedGroup<Alphabet>;
@@ -107,26 +114,27 @@ class PauseSubstate extends MusicBeatSubstate
 		{
 			var mySelection = wrappableGroup[selection].toLowerCase();
 
-			if (mySelection != "resume song")
-				funkin.song.Conductor.stopSong();
-
 			switch (mySelection)
 			{
 				case "resume song":
 					close();
 				case "restart song":
 					MusicState.resetState();
+					Conductor.stopSong();
 				case "exit to options":
 					MusicState.switchState(new funkin.states.menus.OptionsMenu(true));
+					Conductor.stopSong();
 				case "exit to charter":
 					MusicState.switchState(new funkin.states.editors.ChartEditor());
+					Conductor.stopSong();
 				case "leave charting mode":
 					PlayState.gameplayMode = FREEPLAY;
 					MusicState.resetState();
-				case "change keys":
-					openSubState(new KeybindsSubstate());
+				case "change keybinds":
+					openSubState(new KeybindsSubstate(false));
 				case "exit to menu":
 					PlayerInfo.stats.deaths = 0;
+					Conductor.stopSong();
 
 					if (PlayState.gameplayMode == STORY)
 						MusicState.switchState(new funkin.states.menus.MainMenu());

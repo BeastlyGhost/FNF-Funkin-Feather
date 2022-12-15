@@ -33,7 +33,7 @@ class Conductor
 	public static var songRate:Float = 1; // the Song Playback Rate / Speed
 	public static var canStartSong:Bool = false; // Whether or not we can begin to play the song
 
-	public static var safeZoneOffset:Float = (OptionsMeta.getPref("Safe Frames") / 60) * 1000; // is calculated in create(), is safeFrames in milliseconds
+	public static var safeZoneOffset:Float = (OptionsAPI.getPref("Safe Frames") / 60) * 1000; // is calculated in create(), is safeFrames in milliseconds
 
 	public static function mapBPMChanges(song:FeatherSong):Void
 	{

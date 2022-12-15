@@ -1,11 +1,11 @@
 package funkin.backend;
 
-import openfl.ui.Keyboard;
-import openfl.events.KeyboardEvent;
 import flixel.FlxG;
-import flixel.util.FlxSignal.FlxTypedSignal;
 import flixel.input.gamepad.FlxGamepad;
 import flixel.input.gamepad.FlxGamepadInputID;
+import flixel.util.FlxSignal.FlxTypedSignal;
+import openfl.events.KeyboardEvent;
+import openfl.ui.Keyboard;
 
 typedef Action =
 {

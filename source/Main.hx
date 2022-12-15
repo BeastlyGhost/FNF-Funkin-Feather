@@ -20,7 +20,7 @@ class Main extends Sprite
 		framerate: 60, // the game's default framerate
 		skipSplash: false, // whether the game boot splash should be skipped (defaults to false, changes true when seen once)
 		fullscreen: false, // whether the game should start at fullscreen
-		version: 'INDEV', // the engine game version
+		version: 'INFDEV', // the engine game version
 	};
 
 	public static var __justcompiled:Bool = false;

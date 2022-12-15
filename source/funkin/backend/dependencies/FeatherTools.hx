@@ -156,12 +156,12 @@ class FeatherSprite extends FlxSprite
 	public function playAnim(AnimName:String, Force:Bool = false, Reversed:Bool = false, Frame:Int = 0):Void
 	{
 		animation.play(AnimName, Force, Reversed, Frame);
+		centerOffsets();
+		centerOrigin();
 
 		var daOffset:Array<Dynamic> = animOffsets.get(AnimName);
 		if (animOffsets.exists(AnimName))
 			offset.set(daOffset[0], daOffset[1]);
-		else
-			offset.set(0, 0);
 	}
 
 	public function addOffset(name:String, x:Float = 0, y:Float = 0):Void

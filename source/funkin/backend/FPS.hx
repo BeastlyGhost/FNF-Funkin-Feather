@@ -1,6 +1,5 @@
 package funkin.backend;
 
-import flixel.FlxG;
 import haxe.Timer;
 import openfl.events.Event;
 import openfl.system.System;
@@ -26,7 +25,7 @@ class FPS extends TextField
 		autoSize = LEFT;
 		selectable = false;
 
-		defaultTextFormat = new TextFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 15, -1);
+		defaultTextFormat = new TextFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 14, -1);
 		text = "";
 
 		width = 150;
@@ -65,9 +64,9 @@ class FPS extends TextField
 		if (visible)
 		{
 			text = ""
-				+ (OptionsMeta.getPref("Show FPS Info") ? 'FPS: ${times.length}\n' : '')
-				+ (OptionsMeta.getPref("Show RAM Info") ? 'RAM: ${getInterval(memory)} / ${getInterval(memoryTotal)}\n' : '')
-				+ (OptionsMeta.getPref("Show Engine Mark") ? 'Funkin\' Feather ${Main.game.version}\n' : '');
+				+ (OptionsAPI.getPref("Show FPS Info") ? 'FPS: ${times.length}\n' : '')
+				+ (OptionsAPI.getPref("Show RAM Info") ? 'RAM: ${getInterval(memory)} / ${getInterval(memoryTotal)}\n' : '')
+				+ (OptionsAPI.getPref("Show Engine Mark") ? 'Funkin\' Feather ${Main.game.version}\n' : '');
 		}
 	}
 }

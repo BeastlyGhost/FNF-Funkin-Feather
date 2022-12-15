@@ -165,12 +165,15 @@ class MainMenu extends MusicBeatState
 			if (Controls.isJustPressed("down"))
 				updateSelection(1);
 
+			if (FlxG.keys.justPressed.SEVEN)
+				MusicState.switchState(new TestState());
+
 			if (Controls.isJustPressed("accept"))
 			{
 				FlxG.sound.play(AssetHandler.grabAsset('confirmMenu', SOUND, "sounds/menus"));
 				lockedMovement = true;
 
-				if (OptionsMeta.getPref("Flashing Lights"))
+				if (OptionsAPI.getPref("Flashing Lights"))
 					FlxFlicker.flicker(menuFlash, 1.1, 0.15, false);
 
 				itemContainer.forEach(function(spr:FlxSprite)

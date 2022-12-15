@@ -9,8 +9,8 @@ import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import funkin.backend.data.SongManager;
 import funkin.backend.dependencies.PlayerInfo;
-import funkin.objects.ui.fonts.Alphabet;
 import funkin.objects.ui.Icon;
+import funkin.objects.ui.fonts.Alphabet;
 import funkin.song.MusicState;
 import openfl.media.Sound;
 
@@ -157,6 +157,12 @@ class FreeplayMenu extends MusicBeatState
 			songRating -= 0.05;
 		if (Controls.isJustPressed("right") && FlxG.keys.pressed.SHIFT)
 			songRating += 0.05;
+
+		// stupid wrapper
+		if (songRating > 3)
+			songRating = 3;
+		if (songRating < 0.5)
+			songRating = 0.5;
 		#end
 
 		if (FlxG.keys.pressed.SHIFT && FlxG.keys.justPressed.R)

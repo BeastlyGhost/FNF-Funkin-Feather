@@ -1,8 +1,8 @@
 package funkin.states;
 
-import flixel.math.FlxMath;
 import flixel.FlxSubState;
 import flixel.addons.ui.FlxUIState;
+import flixel.math.FlxMath;
 import funkin.backend.dependencies.FeatherModule;
 
 /**

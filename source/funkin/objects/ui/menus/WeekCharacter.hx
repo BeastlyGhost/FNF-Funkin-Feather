@@ -8,8 +8,11 @@ typedef WeekCharacterData =
 	var image:String;
 	var scale:Float;
 	var position:Array<Int>;
-	var idleAnim:Array<Dynamic>;
-	var heyAnim:Array<Dynamic>;
+	var animations:
+		{
+			var idle:Array<Dynamic>;
+			var confirm:Array<Dynamic>;
+		};
 	var flipX:Bool;
 }
 
@@ -59,10 +62,10 @@ class WeekCharacter extends FlxSprite
 
 			if (frames != null)
 			{
-				animation.addByPrefix('idle', charData.idleAnim[0], charData.idleAnim[1], charData.idleAnim[2]);
+				animation.addByPrefix('idle', charData.animations.idle[0], charData.animations.confirm[1], charData.animations.confirm[2]);
 
-				if (charData.heyAnim != null)
-					animation.addByPrefix('hey', charData.heyAnim[0], charData.heyAnim[1], charData.heyAnim[2]);
+				if (charData.animations.confirm != null)
+					animation.addByPrefix('hey', charData.animations.confirm[0], charData.animations.confirm[1], charData.animations.confirm[2]);
 
 				animation.play('idle');
 

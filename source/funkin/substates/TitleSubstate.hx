@@ -114,7 +114,7 @@ class TitleSubstate extends MusicBeatSubstate
 		{
 			newTitle = true;
 			titleEnter.animation.addByPrefix('static', "ENTER IDLE", 24);
-			titleEnter.animation.addByPrefix('confirm', OptionsMeta.getPref("Flashing Lights") ? "ENTER PRESSED" : "ENTER FREEZE", 24);
+			titleEnter.animation.addByPrefix('confirm', OptionsAPI.getPref("Flashing Lights") ? "ENTER PRESSED" : "ENTER FREEZE", 24);
 		}
 		else
 		{
@@ -195,7 +195,7 @@ class TitleSubstate extends MusicBeatSubstate
 						titleEnter.animation.play('confirm');
 					}
 
-					var color:FlxColor = (OptionsMeta.getPref("Flashing Lights") ? FlxColor.WHITE : FlxColor.BLACK);
+					var color:FlxColor = (OptionsAPI.getPref("Flashing Lights") ? FlxColor.WHITE : FlxColor.BLACK);
 
 					FlxG.camera.flash(color, 1);
 					FlxG.sound.play(AssetHandler.grabAsset("confirmMenu", SOUND, "sounds/menus"));
@@ -339,7 +339,7 @@ class TitleSubstate extends MusicBeatSubstate
 		remove(txtContainer);
 		remove(ngSpr);
 
-		var color:FlxColor = (OptionsMeta.getPref("Flashing Lights") ? FlxColor.WHITE : FlxColor.BLACK);
+		var color:FlxColor = (OptionsAPI.getPref("Flashing Lights") ? FlxColor.WHITE : FlxColor.BLACK);
 
 		FlxG.camera.flash(color, 4);
 		onIntro = false;

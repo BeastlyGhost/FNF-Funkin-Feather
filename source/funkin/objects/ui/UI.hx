@@ -1,5 +1,6 @@
 package funkin.objects.ui;
 
+import funkin.song.Conductor;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
@@ -28,7 +29,7 @@ class UI extends FlxSpriteGroup
 	public var iconP1:Icon;
 	public var iconP2:Icon;
 
-	public var uiStyle:String = OptionsMeta.getPref("User Interface Style");
+	public var uiStyle:String = OptionsAPI.getPref("User Interface Style");
 
 	public function new():Void
 	{
@@ -67,7 +68,7 @@ class UI extends FlxSpriteGroup
 		autoPlayText.visible = PlayState.playerStrum.autoplay;
 
 		// repositioning for it to not be covered by the receptors
-		if (OptionsMeta.getPref('Center Notes'))
+		if (OptionsAPI.getPref('Center Notes'))
 		{
 			if (PlayState.playerStrum.downscroll)
 				autoPlayText.y = autoPlayText.y - 125;
@@ -85,10 +86,7 @@ class UI extends FlxSpriteGroup
 	{
 		healthBar.percent = (PlayerInfo.stats.health * 50);
 
-		// attach to health
-		iconP1.doBops(true);
-		iconP2.doBops(true);
-
+		// attach to healthbar
 		var iconOffset:Int = 26;
 
 		iconP1.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01) - iconOffset);
@@ -141,13 +139,16 @@ class UI extends FlxSpriteGroup
 	public function beatHit(curBeat:Int):Void
 	{
 		//
-		iconP1.doBops(false);
-		iconP2.doBops(false);
+		if (!OptionsAPI.getPref("Reduce Motion"))
+		{
+			iconP1.doBops(60 / Conductor.bpm);
+			iconP2.doBops(60 / Conductor.bpm);
+		}
 	}
 
 	public function showInfoCard():Void
 	{
-		if (!OptionsMeta.getPref("Show Info Card"))
+		if (!OptionsAPI.getPref("Show Info Card"))
 			return;
 
 		var blackBy:FlxSprite, byText:FlxText;

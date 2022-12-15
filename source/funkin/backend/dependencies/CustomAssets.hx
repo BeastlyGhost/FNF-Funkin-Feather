@@ -1,8 +1,8 @@
 package funkin.backend.dependencies;
 
+import funkin.objects.ui.notes.BabyArrow;
 import funkin.objects.ui.notes.Note;
 import funkin.states.PlayState;
-import funkin.objects.ui.notes.BabyArrow;
 
 /**
 	CustomAssets matches together a lot of functions for creating assets

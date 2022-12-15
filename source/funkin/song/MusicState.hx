@@ -1,16 +1,15 @@
 package funkin.song;
 
-import funkin.states.ScriptableState;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxTimer;
-import funkin.backend.data.Interfaces.IMusicBeat;
 import funkin.backend.Transition;
+import funkin.backend.data.Interfaces.IMusicBeat;
 import funkin.song.Conductor.BPMChangeEvent;
-import funkin.states.PlayState;
+import funkin.states.ScriptableState;
 
 /**
 	Music State is a simple class in which doesn't extend anything
