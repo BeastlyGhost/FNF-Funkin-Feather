@@ -2,10 +2,26 @@ package feather.tools;
 
 class FeatherModule extends SScript
 {
-	public function new(file:String, ?preset:Bool = true):Void
+	public var scriptLibrary:AssetLibrary;
+
+	public function new(file:String, ?directory:String = null, ?preset:Bool = true):Void
 	{
 		super(file, preset);
 		traces = false;
+
+		scriptLibrary = setLibrary(directory);
+	}
+
+	private function setLibrary(path:String):AssetLibrary
+	{
+		if (path == null)
+			return null;
+
+		var newLibrary:AssetLibrary = new AssetLibrary(path);
+
+		set('Paths', newLibrary);
+
+		return newLibrary;
 	}
 
 	override public function preset():Void
@@ -24,18 +40,8 @@ class FeatherModule extends SScript
 		// CLASSES (FLIXEL);
 		set('FlxG', flixel.FlxG);
 		set('FlxBasic', flixel.FlxBasic);
-		set('FlxObject', flixel.FlxObject);
 		set('FlxSprite', flixel.FlxSprite);
 		set('FlxSound', flixel.system.FlxSound);
-		set('FlxSort', flixel.util.FlxSort);
-		set('FlxStringUtil', flixel.util.FlxStringUtil);
-		set('FlxState', flixel.FlxState);
-		set('FlxSubState', flixel.FlxSubState);
-		set('FlxText', flixel.text.FlxText);
-		set('FlxTimer', flixel.util.FlxTimer);
-		set('FlxTween', flixel.tweens.FlxTween);
-		set('FlxEase', flixel.tweens.FlxEase);
-		set('FlxTrail', flixel.addons.effects.FlxTrail);
 
 		// CLASSES (FUNKIN);
 		set('Alphabet', funkin.objects.ui.fonts.Alphabet);
@@ -48,12 +54,12 @@ class FeatherModule extends SScript
 		set('Note', funkin.objects.ui.notes.Note);
 		set('game', funkin.states.PlayState.main);
 		set('PlayState', funkin.states.PlayState);
-		set('Paths', Paths);
+		if (scriptLibrary == null)
+			set('Paths', Paths);
 
 		// CLASSES (FEATHER);
-		set('Main', Main);
 		set('Stage', funkin.objects.Stage);
-		set('OptionsAPI', OptionsAPI);
+		set('OptionsAPI', feather.OptionsAPI);
 		set('FeatherTools', feather.tools.FeatherTools);
 		set('FeatherSprite', feather.tools.FeatherSpriteManager.FeatherSprite);
 		set('ChildSprite', feather.tools.FeatherSpriteManager.ChildSprite);

@@ -156,7 +156,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 		if (!sys.FileSystem.exists(modulePath))
 			return;
 
-		stageModule = new FeatherModule(modulePath);
+		stageModule = new FeatherModule(modulePath, 'data/stages/$stageName');
 
 		/* ===== SCRIPT VARIABLES ===== */
 

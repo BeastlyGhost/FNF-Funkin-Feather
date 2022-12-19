@@ -11,9 +11,6 @@ import openfl.media.Sound;
 **/
 class Paths
 {
-	inline public static function getPreloadPath(file:String):String
-		return AssetHelper.grabRoot(file);
-
 	inline public static function image(key:String, ?library:String):FlxGraphic
 	{
 		if (library == null)
@@ -21,58 +18,86 @@ class Paths
 		return AssetHelper.grabAsset(key, IMAGE, library);
 	}
 
-	inline public static function font(key:String, ?library:String):String
-	{
-		if (library == null)
-			library = "data/fonts";
-		return AssetHelper.grabAsset(key, FONT, library);
-	}
-
-	inline public static function txt(key:String, ?library:String):String
-		return AssetHelper.grabAsset(key, TEXT, library);
-
-	inline public static function json(key:String, ?library:String):String
-		return AssetHelper.grabAsset(key, JSON, library);
-
-	inline public static function sound(key:String, ?library:String):Sound
-	{
-		if (library == null)
-			library = "sounds";
-		return AssetHelper.grabAsset(key, SOUND, library);
-	}
-
-	inline public static function soundRandom(key:String, min:Int, max:Int, ?library:String):Sound
-	{
-		if (library == null)
-			library = "sounds";
-		return AssetHelper.grabAsset(key + FlxG.random.int(min, max), SOUND, library);
-	}
-
-	inline public static function music(key:String, ?library:String):Sound
-	{
-		if (library == null)
-			library = "music";
-		return AssetHelper.grabAsset(key, SOUND, library);
-	}
-
-	inline public static function module(key:String, ?library:String):String
-	{
-		if (library == null)
-			library = 'scripts';
-		return AssetHelper.grabAsset(key, MODULE, library);
-	}
-
-	inline public static function getSparrowAtlas(key:String, ?library:String):FlxAtlasFrames
+	inline public static function getSparrowAtlas(key:String, ?library:String):FlxGraphic
 	{
 		if (library == null)
 			library = "images";
 		return AssetHelper.grabAsset(key, SPARROW, library);
 	}
+}
 
-	inline public static function getPackerAtlas(key:String, ?library:String):FlxAtlasFrames
+/**
+	Asset Library Class, basically a copy of paths for use with scripts
+	so you can access folders from within the script's origin folder
+**/
+class AssetLibrary
+{
+	public var localLibrary:String;
+
+	public function new(?localLibrary:String):Void
+		this.localLibrary = localLibrary;
+
+	inline function getPreloadPath(file:String):String
+		return AssetHelper.grabRoot(file);
+
+	inline function image(key:String, ?library:String):FlxGraphic
 	{
-		if (library == null)
-			library = "images";
+		library = reloadLibrary("images");
+		return AssetHelper.grabAsset(key, IMAGE, library);
+	}
+
+	inline function font(key:String, ?library:String):String
+	{
+		library = reloadLibrary("data/fonts");
+		return AssetHelper.grabAsset(key, FONT, library);
+	}
+
+	inline function txt(key:String, ?library:String):String
+		return AssetHelper.grabAsset(key, TEXT, library);
+
+	inline function json(key:String, ?library:String):String
+		return AssetHelper.grabAsset(key, JSON, library);
+
+	inline function sound(key:String, ?library:String):Sound
+	{
+		library = reloadLibrary("sounds");
+		return AssetHelper.grabAsset(key, SOUND, library);
+	}
+
+	inline function soundRandom(key:String, min:Int, max:Int, ?library:String):Sound
+	{
+		library = reloadLibrary("sounds");
+		return AssetHelper.grabAsset(key + FlxG.random.int(min, max), SOUND, library);
+	}
+
+	inline function music(key:String, ?library:String):Sound
+	{
+		library = reloadLibrary("music");
+		return AssetHelper.grabAsset(key, SOUND, library);
+	}
+
+	inline function module(key:String, ?library:String):String
+	{
+		library = reloadLibrary("scripts");
+		return AssetHelper.grabAsset(key, MODULE, library);
+	}
+
+	inline function getSparrowAtlas(key:String, ?library:String):FlxAtlasFrames
+	{
+		library = reloadLibrary("images");
+		return AssetHelper.grabAsset(key, SPARROW, library);
+	}
+
+	inline function getPackerAtlas(key:String, ?library:String):FlxAtlasFrames
+	{
+		library = reloadLibrary("images");
 		return AssetHelper.grabAsset(key, PACKER, library);
+	}
+
+	inline private final function reloadLibrary(newLibrary:String):String
+	{
+		var library:String = null;
+		library = (localLibrary != null ? localLibrary + '/$newLibrary' : newLibrary);
+		return library;
 	}
 }

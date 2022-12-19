@@ -261,12 +261,13 @@ class Character extends FeatherSprite
 	{
 		var pushedChars:Array<String> = [];
 
+		var charPath:String = 'data/characters/$char';
 		var overrideFrames:String = null;
 		var framesPath:String = null;
 
 		if (!pushedChars.contains(char))
 		{
-			var script:FeatherModule = new FeatherModule(AssetHelper.grabAsset('config', MODULE, "data/characters/" + char));
+			var script:FeatherModule = new FeatherModule(AssetHelper.grabAsset('config', MODULE, charPath), charPath);
 
 			if (script.interp == null)
 				trace("Something terrible occured! Skipping.");
