@@ -38,6 +38,7 @@ class CheckboxThingie extends FeatherSprite
 		}
 	}
 }
+
 class SelectorThingie extends FlxTypedSpriteGroup<FlxSprite>
 {
 	/**
