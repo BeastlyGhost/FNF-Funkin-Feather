@@ -1,7 +1,7 @@
 package funkin.essentials;
 
 import funkin.essentials.PlayerInfo;
-import funkin.objects.ui.notes.BabyArrow;
+import funkin.objects.ui.notes.Strum.BabyArrow;
 import funkin.objects.ui.notes.Note;
 import funkin.states.PlayState;
 

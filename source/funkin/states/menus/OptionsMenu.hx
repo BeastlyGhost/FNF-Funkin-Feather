@@ -298,28 +298,28 @@ class OptionsMenu extends BaseMenu
 
 	private function updateHorizontal(selector:SelectorThingie, amount:Int):Void
 	{
-		switch (selector.type)
+		if (selector.number)
 		{
-			case NUMBER:
-				switch (selector.name)
-				{
-					case "Framerate Cap":
-						createNumberSelector(amount, selector, 30, 360, 15);
-					default:
-						createNumberSelector(amount, selector);
-				}
-			default:
-				var choiceSel:Int = 0, selLimiter:Int = 0;
+			switch (selector.name)
+			{
+				case "Framerate Cap":
+					createNumberSelector(amount, selector, 30, 360, 15);
+				default:
+					createNumberSelector(amount, selector);
+			}
+		}
+		else
+		{
+			var choiceSel:Int = 0, selLimiter:Int = 0;
+			if (selector.ops != null)
+			{
+				for (i in 0...selector.ops.length)
+					if (selector.ops[i] == selector.choice)
+						choiceSel = i;
 
-				if (selector.ops != null)
-				{
-					for (i in 0...selector.ops.length)
-						if (selector.ops[i] == selector.choice)
-							choiceSel = i;
-
-					selLimiter = FlxMath.wrap(choiceSel + amount, 0, selector.ops.length - 1);
-					manageSelector(selector, selector.ops[selLimiter], amount);
-				}
+				selLimiter = FlxMath.wrap(choiceSel + amount, 0, selector.ops.length - 1);
+				manageSelector(selector, selector.ops[selLimiter], amount);
+			}
 		}
 	}
 
@@ -339,9 +339,10 @@ class OptionsMenu extends BaseMenu
 	{
 		object.choice = Std.string(value);
 		object.changeArrow(steps == -1 ? false : true);
-		trace("Value is: " + object.choice);
 
 		FSound.playSound("scrollMenu", 'sounds/menus');
+
+		trace("Value is: " + object.choice);
 
 		if (object.choice != null)
 		{

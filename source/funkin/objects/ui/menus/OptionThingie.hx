@@ -16,26 +16,15 @@ class CheckboxThingie extends FeatherSprite
 	{
 		super(x, y);
 
-		var path:String = AssetHelper.grabAsset('checkboxThingie', MODULE, 'images/menus/optionsMenu');
+		frames = AssetHelper.grabAsset('checkboxThingie', SPARROW, 'images/menus/optionsMenu');
+		animation.addByPrefix('true', 'Check Box unselected', 24, false);
+		animation.addByPrefix('false', 'Check Box selecting animation', 24, false);
 
-		if (path != null && FileSystem.exists(path))
-		{
-			// private module
-			var module:FeatherModule = new FeatherModule(path);
-			module.call('createCheckmark', [this]);
-		}
-		else
-		{
-			frames = AssetHelper.grabAsset('checkboxThingie', SPARROW, 'images/menus/optionsMenu');
-			animation.addByPrefix('true', 'Check Box unselected', 24, false);
-			animation.addByPrefix('false', 'Check Box selecting animation', 24, false);
+		addOffset('true', 0, -30);
+		addOffset('false', 25, 55);
 
-			addOffset('true', 0, -30);
-			addOffset('false', 25, 55);
-
-			setGraphicSize(Std.int(width * 0.7));
-			updateHitbox();
-		}
+		setGraphicSize(Std.int(width * 0.7));
+		updateHitbox();
 	}
 
 	override function update(elapsed:Float):Void
@@ -49,13 +38,6 @@ class CheckboxThingie extends FeatherSprite
 		}
 	}
 }
-
-enum SelectorType
-{
-	WORD;
-	NUMBER;
-}
-
 class SelectorThingie extends FlxTypedSpriteGroup<FlxSprite>
 {
 	/**
@@ -75,13 +57,13 @@ class SelectorThingie extends FlxTypedSpriteGroup<FlxSprite>
 	public var arrowRight:Alphabet;
 
 	public var name(default, null):String;
-	public var type(default, null):SelectorType;
+	public var number(default, null):Bool;
 	public var choice(default, set):String;
 
 	public inline function set_choice(myChoice:String):String
 	{
 		choice = myChoice;
-		type = (Std.parseInt(myChoice) != null ? NUMBER : WORD);
+		number = (Std.parseInt(myChoice) != null ? true : false);
 		if (choice != null)
 			nameSprite.text = myChoice;
 		return myChoice;

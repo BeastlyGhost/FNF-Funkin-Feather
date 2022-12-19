@@ -144,7 +144,7 @@ class Character extends FeatherSprite
 				}
 		}
 
-		var noteActions:Array<String> = funkin.objects.ui.notes.BabyArrow.actions;
+		var noteActions:Array<String> = funkin.objects.ui.notes.Strum.BabyArrow.actions;
 		for (i in 0...noteActions.length)
 		{
 			if (animOffsets.exists('sing' + noteActions[i].toUpperCase() + 'miss'))

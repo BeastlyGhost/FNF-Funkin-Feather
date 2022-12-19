@@ -50,7 +50,7 @@ class FeatherModule extends SScript
 		set('Icon', funkin.objects.ui.Icon);
 		set('Strum', funkin.objects.ui.notes.Strum);
 		set('Strumline', funkin.objects.ui.notes.Strum);
-		set('BabyArrow', funkin.objects.ui.notes.BabyArrow);
+		set('BabyArrow', funkin.objects.ui.notes.Strum.BabyArrow);
 		set('Note', funkin.objects.ui.notes.Note);
 		set('game', funkin.states.PlayState.main);
 		set('PlayState', funkin.states.PlayState);
