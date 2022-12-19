@@ -21,7 +21,7 @@ class FeatherSoundManager
 
 	public static function loseFocus():Void
 	{
-		if (FlxG.autoPause)
+		if (!FlxG.autoPause)
 			return;
 
 		if (createdSound != null)
