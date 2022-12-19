@@ -36,7 +36,7 @@ class Alphabet extends FlxTypedSpriteGroup<LetterSprite>
 	// amp, backslash, question mark, apostrophy, comma, angry faic, period
 	var lastSprite:LetterSprite;
 	var xPosResetted:Bool = false;
-	var lastWasSpace:Bool = false;
+	var sectionSpaces:Int = 0;
 
 	override public function set_color(color:Int):Int
 	{
@@ -75,24 +75,34 @@ class Alphabet extends FlxTypedSpriteGroup<LetterSprite>
 		var xPos:Float = 0;
 		for (character in words)
 		{
-			if (character == " " || character == "-")
-				lastWasSpace = true;
+			var isSpace:Bool = (character == " " || character == "_");
+			if (isSpace)
+				sectionSpaces++;
 
-			if (LetterSprite.alphabet.indexOf(character.toLowerCase()) != -1)
+			var indexLetter:Bool = LetterSprite.getIndex(character, LETTER) != -1;
+			var indexSymbol:Bool = LetterSprite.getIndex(character, SYMBOL) != -1;
+			var indexNumber:Bool = LetterSprite.getIndex(character, NUMBER) != -1;
+
+			if ((indexLetter || indexSymbol || indexNumber) && (!isBold || !isSpace))
 			{
 				if (lastSprite != null)
 					xPos = lastSprite.x + lastSprite.width;
 
-				if (lastWasSpace)
-				{
-					xPos += 40;
-					lastWasSpace = false;
-				}
+				if (sectionSpaces > 0)
+					xPos += 40 * sectionSpaces;
+				sectionSpaces = 0;
 
-				var type:LetterType = (isBold ? BOLD : LETTER);
 				var letter:LetterSprite = new LetterSprite(xPos, 0);
+				var type:LetterType = LETTER;
 
-				letter.createChar(character, type);
+				if (indexNumber)
+					type = NUMBER;
+				else if (indexSymbol)
+					type = SYMBOL;
+				else
+					type = LETTER;
+
+				letter.createChar(character, type, isBold);
 				add(letter);
 
 				lastSprite = letter;
@@ -126,18 +136,19 @@ class Alphabet extends FlxTypedSpriteGroup<LetterSprite>
 /**
 	---- TODO ----
 	Letter Offsets
-	Symbol Support
-	Latin Support
+	Latin Support (maybe, just maybe)
 **/
 class LetterSprite extends FlxSprite
 {
-	public static var alphabet:String = "abcdefghijklmnopqrstuvwxyz";
-	public static var symbols:String = "\\/|~#$%()*+-:;<=>@[]^_.,'!?";
-	public static var numbers:String = "1234567890";
-
 	public var offsetIncrement:FlxPoint;
-	public var texture(default, set):String = 'base/alphabet';
+	public var texture(default, set):String = 'default/alphabet';
 	public var defaultFramerate:Int = 24;
+
+	public static function getIndex(char:String, type:LetterType):Int
+	{
+		var index:String = AlphaLetters.letterList.get(type);
+		return index.indexOf(char.toLowerCase());
+	}
 
 	public function set_texture(tex:String):String
 	{
@@ -148,7 +159,7 @@ class LetterSprite extends FlxSprite
 			pastAnim = animation.name;
 
 		texture = tex;
-		frames = AssetHandler.grabAsset(tex, SPARROW, "images/ui");
+		frames = AssetHelper.grabAsset(tex, SPARROW, "images/ui");
 
 		// set the framerate
 		defaultFramerate = 24;
@@ -168,7 +179,7 @@ class LetterSprite extends FlxSprite
 	{
 		super(x, y);
 
-		texture = 'base/alphabet';
+		texture = 'default/alphabet';
 
 		offsetIncrement = new FlxPoint(0, 0);
 
@@ -195,21 +206,30 @@ class LetterSprite extends FlxSprite
 	/**
 		Combined all functions into one
 	**/
-	public function createChar(letter:String, type:LetterType):Void
+	public function createChar(letter:String, type:LetterType, isBold:Bool = false):Void
 	{
-		var letterCase:String = "";
+		var letterCase:String = null;
 
-		switch (type)
+		if (letterCase == null)
 		{
-			case LETTER:
-				if (letter.toUpperCase() != letter)
-					letterCase = " lowercase";
-				else
-					letterCase = " capital";
-			case BOLD:
-				letterCase = " bold";
-			default:
-				letterCase = "";
+			switch (type)
+			{
+				case LETTER:
+					if (isBold)
+					{
+						if (letter.toUpperCase() != letter)
+							letterCase = " lower bold";
+						else
+							letterCase = " upper bold";
+					}
+					else
+						letterCase = " normal";
+				default:
+					if (isBold)
+						letterCase = " bold";
+					else
+						letterCase = " normal";
+			}
 		}
 
 		/**
@@ -217,31 +237,37 @@ class LetterSprite extends FlxSprite
 			https://cdn.discordapp.com/attachments/1000603105265733749/1051670973029564426/FjsH6O6WIAEPclK.jpg
 		**/
 
-		for (lettah => thingies in AlphaLetters.letterMap)
+		for (lettah => thingies in AlphaLetters.symbolMap)
 		{
 			if (lettah != null && thingies != null)
 			{
 				if (thingies.anim != null)
-					animation.addByPrefix(letter, thingies.anim, defaultFramerate);
+					animation.addByPrefix(lettah, thingies.anim + letterCase, defaultFramerate);
 				// trace('added: ${thingies.anim} to Alphabet');
 
-				var chosenAdjustArray:Array<Float> = (type == BOLD ? thingies.boldOffset : thingies.normalOffset);
-
+				var chosenAdjustArray:Array<Float> = (isBold ? thingies.boldOffset : thingies.offset);
 				if (chosenAdjustArray != null)
 					offsetIncrement.set(chosenAdjustArray[0], chosenAdjustArray[1]);
 			}
 		}
 
-		animation.addByPrefix(letter, (type == BOLD ? letter.toUpperCase() : letter) + letterCase, defaultFramerate);
+		animation.addByPrefix(letter, letter.toUpperCase() + letterCase, defaultFramerate);
 		animation.play(letter);
 		updateHitbox();
 
-		if (type == LETTER)
-		{
-			FlxG.log.add('the row' + row);
+		/**
+			// so uhh this is basically useless now and causes more problems than solves them??
+			// it's only really useful for old alphabet
+			// leaving it here just in case yk
+			// @BeastlyGhost
 
-			y = (110 - height);
-			y += row * 60;
-		}
+			if (type == LETTER)
+			{
+				// FlxG.log.add('the row' + row);
+
+				y = (110 - height);
+				y += row * 60;
+			}
+		**/
 	}
 }

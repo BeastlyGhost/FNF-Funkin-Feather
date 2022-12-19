@@ -5,7 +5,7 @@ import flixel.group.FlxSpriteGroup;
 
 @:enum abstract BoxTextForm(String) to String
 {
-	var BASE = 'base';
+	var BASE = 'default';
 	var PIXEL = 'pixel';
 }
 
@@ -61,13 +61,13 @@ class DialogueBox extends FlxSpriteGroup
 
 	public function initBox(tex:String, file:String):FlxSprite
 	{
-		var type:AssetType = (boxData.animated ? SPARROW : IMAGE);
+		var texType:AssetType = (boxData.animated ? SPARROW : IMAGE);
 
 		var diagBox:FlxSprite = new FlxSprite();
-		if (type == SPARROW)
-			diagBox.frames = AssetHandler.grabAsset(tex, SPARROW, boxData.texturePath)
+		if (texType == SPARROW)
+			diagBox.frames = AssetHelper.grabAsset(tex, SPARROW, boxData.texturePath)
 		else
-			diagBox.loadGraphic(AssetHandler.grabAsset(tex, IMAGE, boxData.texturePath));
+			diagBox.loadGraphic(AssetHelper.grabAsset(tex, IMAGE, boxData.texturePath));
 
 		diagBox.screenCenter();
 		diagBox.setPosition(boxData.position[0], boxData.position[1]);

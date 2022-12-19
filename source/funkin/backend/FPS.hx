@@ -1,5 +1,8 @@
 package funkin.backend;
 
+import haxe.macro.Type;
+import flixel.FlxG;
+import flixel.math.FlxMath;
 import haxe.Timer;
 import openfl.events.Event;
 import openfl.system.System;
@@ -13,7 +16,7 @@ import openfl.text.TextFormat;
 class FPS extends TextField
 {
 	public var times:Array<Float> = [];
-	public var memoryTotal:UInt = 0;
+	public var memoryTotal:Float = 0;
 
 	public function new(x:Float, y:Float):Void
 	{
@@ -25,7 +28,7 @@ class FPS extends TextField
 		autoSize = LEFT;
 		selectable = false;
 
-		defaultTextFormat = new TextFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 14, -1);
+		defaultTextFormat = new TextFormat(AssetHelper.grabAsset("vcr", FONT, "data/fonts"), 14, -1);
 		text = "";
 
 		width = 150;
@@ -36,7 +39,7 @@ class FPS extends TextField
 
 	static final intervalArray:Array<String> = ['B', 'KB', 'MB', 'GB', 'TB']; // shoutouts to the Myth Engine modders
 
-	inline public static function getInterval(num:UInt):String
+	inline public static function getInterval(num:Float):String
 	{
 		var size:Float = num;
 		var data = 0;
@@ -57,16 +60,28 @@ class FPS extends TextField
 		while (times[0] < now - 1)
 			times.shift();
 
-		var memory = System.totalMemory;
+		var fpsDisplay:String = '${FlxMath.roundDecimal(1 / FlxG.elapsed, 1)}';
+		if (OptionsAPI.getPref("Accurate FPS Info"))
+			fpsDisplay = '${times.length}';
+
+		var memory:Float = System.totalMemory;
 		if (memory > memoryTotal)
 			memoryTotal = memory;
 
 		if (visible)
 		{
-			text = ""
-				+ (OptionsAPI.getPref("Show FPS Info") ? 'FPS: ${times.length}\n' : '')
-				+ (OptionsAPI.getPref("Show RAM Info") ? 'RAM: ${getInterval(memory)} / ${getInterval(memoryTotal)}\n' : '')
-				+ (OptionsAPI.getPref("Show Engine Mark") ? 'Funkin\' Feather ${Main.game.version}\n' : '');
+			text = "";
+
+			// ESSENTIALS
+			text += (OptionsAPI.getPref("Show FPS Info") ? 'FPS: $fpsDisplay\n' : '');
+			text += (OptionsAPI.getPref("Show RAM Info") ? 'RAM: ${getInterval(memory)} / ${getInterval(memoryTotal)}\n' : '');
+
+			// DEBUG
+			if (OptionsAPI.getPref("Show Debug Info"))
+			{
+				text += 'State: ${Type.getClassName(Type.getClass(FlxG.state))}\n';
+				text += 'Objects: ${FlxG.state.members.length}\n';
+			}
 		}
 	}
 }

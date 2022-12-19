@@ -8,11 +8,11 @@ import flixel.math.FlxMath;
 import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
-import funkin.backend.data.PlayerInfo;
-import funkin.backend.data.SongManager;
+import funkin.essentials.PlayerInfo;
+import funkin.essentials.song.SongManager;
 import funkin.objects.ui.Icon;
 import funkin.objects.ui.fonts.Alphabet;
-import funkin.song.MusicState;
+import funkin.essentials.song.MusicState;
 import openfl.media.Sound;
 
 /**
@@ -59,7 +59,7 @@ class FreeplayMenu extends BaseMenu
 		// get the song list
 		songList = SongManager.get_songList();
 
-		funkin.song.Conductor.songRate = songRating;
+		funkin.essentials.song.Conductor.songRate = songRating;
 
 		generateUI();
 	}
@@ -71,7 +71,7 @@ class FreeplayMenu extends BaseMenu
 
 		for (i in 0...songList.length)
 		{
-			var songText:Alphabet = new Alphabet(0, (70 * i) + 30, songList[i].name, true);
+			var songText:Alphabet = new Alphabet(0, (70 * i) + 30, songList[i].name, false);
 			songText.isMenuItem = true;
 			songText.targetY = i;
 			itemContainer.add(songText);
@@ -91,10 +91,10 @@ class FreeplayMenu extends BaseMenu
 		#end
 		scoreBG = new FlxSprite(scoreTxt.x - 6, 0).makeGraphic(1, #if (flixel >= "5.0.0") 106 #else 66 #end, 0xFF000000);
 
-		scoreTxt.setFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 32, 0xFFFFFFFF, RIGHT);
-		diffTxt.setFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 24, 0xFFFFFFFF, RIGHT);
+		scoreTxt.setFormat(AssetHelper.grabAsset("vcr", FONT, "data/fonts"), 32, 0xFFFFFFFF, RIGHT);
+		diffTxt.setFormat(AssetHelper.grabAsset("vcr", FONT, "data/fonts"), 24, 0xFFFFFFFF, RIGHT);
 		#if (flixel >= "5.0.0")
-		rateTxt.setFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 24, 0xFFFFFFFF, RIGHT);
+		rateTxt.setFormat(AssetHelper.grabAsset("vcr", FONT, "data/fonts"), 24, 0xFFFFFFFF, RIGHT);
 		#end
 
 		scoreBG.antialiasing = false;
@@ -159,7 +159,7 @@ class FreeplayMenu extends BaseMenu
 		if (Controls.isJustPressed("back"))
 		{
 			MusicState.switchState(new MainMenu());
-			FeatherTools.playSound("cancelMenu", "sounds/menus");
+			FSound.playSound("cancelMenu", "sounds/menus");
 		}
 
 		if (Controls.isJustPressed("accept"))
@@ -173,7 +173,7 @@ class FreeplayMenu extends BaseMenu
 			PlayState.gameplayMode = FREEPLAY;
 
 			#if (flixel >= "5.0.0")
-			funkin.song.Conductor.songRate = songRating;
+			funkin.essentials.song.Conductor.songRate = songRating;
 			#end
 
 			MusicState.switchState(new PlayState());
@@ -208,7 +208,7 @@ class FreeplayMenu extends BaseMenu
 
 	function updateDifficulty(newDifficulty:Int = 0):Void
 	{
-		selDifficulty = FlxMath.wrap(Math.floor(selDifficulty) + newDifficulty, 0, songList[selection].diffs.length - 1);
+		selDifficulty = FlxMath.wrap(selDifficulty + newDifficulty, 0, songList[selection].diffs.length - 1);
 
 		var stringDiff = FeatherTools.getDifficulty(selDifficulty);
 		diffTxt.text = '< ${stringDiff.replace('-', '').toUpperCase()} >';

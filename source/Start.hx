@@ -5,7 +5,6 @@ import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
-import funkin.backend.data.PlayerInfo;
 
 /**
 	Starting Class for the game
@@ -16,9 +15,6 @@ class Start extends FlxState
 	override public function create():Void
 	{
 		super.create();
-
-		OptionsAPI.loadPrefs();
-		PlayerInfo.loadHighscores();
 
 		FlxG.fixedTimestep = true;
 		FlxG.mouse.useSystemCursor = true;
@@ -32,20 +28,23 @@ class Start extends FlxState
 		if (skip)
 			return FlxG.switchState(cast Type.createInstance(Main.game.initialState, []));
 
-		var bianca:FlxSprite = new FlxSprite().loadGraphic(AssetHandler.grabAsset("splashScreen/biancaSplash", IMAGE, "images/menus"));
+		FlxG.autoPause = false;
+
+		var bianca:FlxSprite = new FlxSprite().loadGraphic(AssetHelper.grabAsset("splashScreen/biancaSplash", IMAGE, "images/menus"));
 		bianca.setGraphicSize(Std.int(bianca.width * 0.6));
 		bianca.screenCenter(XY);
 		bianca.x -= 1000;
 		add(bianca);
 
 		FlxTween.tween(bianca, {x: bianca.x + 980}, 0.9, {ease: FlxEase.quintInOut});
-		FeatherTools.playSound("splashRingSound");
+		FSound.playSound("splashRingSound");
 
 		FlxTween.tween(bianca, {alpha: 0}, 2, {
 			onComplete: function(t:FlxTween)
 			{
 				FlxG.save.data.seenSplash = true;
 				FlxG.switchState(cast Type.createInstance(Main.game.initialState, []));
+				OptionsAPI.updatePrefs();
 			},
 			ease: FlxEase.sineOut
 		});

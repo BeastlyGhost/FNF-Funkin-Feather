@@ -1,9 +1,10 @@
 package funkin.objects;
 
 import feather.tools.FeatherModule;
-import feather.tools.FeatherTools.FeatherSprite;
+import feather.tools.FeatherSpriteManager.FeatherSprite;
 import flixel.math.FlxPoint;
-import funkin.song.Conductor;
+import flixel.util.FlxColor;
+import funkin.essentials.song.Conductor;
 import funkin.states.PlayState;
 import haxe.Json;
 import sys.FileSystem;
@@ -47,6 +48,7 @@ typedef PsychAnimsArray =
 **/
 class Character extends FeatherSprite
 {
+	public var healthColor:Null<FlxColor>;
 	public var charOffset:FlxPoint;
 	public var camOffset:FlxPoint;
 
@@ -57,10 +59,9 @@ class Character extends FeatherSprite
 
 	public var bopTimer:Float = 2;
 	public var holdTimer:Float = 0;
-	public var heyTimer:Float = 0;
+	public var animTimer:Float = 0;
 	public var dadVar:Float = 4; // this is the ONLY variable on this section that doesn't end with "Timer", oh lord
 
-	public var onSpecial:Bool = false;
 	public var hasMissAnims:Bool = false;
 	public var isQuickDancer:Bool = false;
 	public var danceIdle:Bool = false;
@@ -91,17 +92,17 @@ class Character extends FeatherSprite
 			danceIdle = true;
 
 		/**
-			if (FileSystem.exists(AssetHandler.grabAsset(character, MODULE, "data/characters/" + character)))
+			if (FileSystem.exists(AssetHelper.grabAsset(character, MODULE, "data/characters/" + character)))
 				charType = FOREVER_FEATHER;
 
-			if (FileSystem.exists(AssetHandler.grabAsset(character, JSON, "data/characters/" + character)))
+			if (FileSystem.exists(AssetHelper.grabAsset(character, JSON, "data/characters/" + character)))
 				charType = PSYCH_ENGINE;
 		**/
 
 		switch (character)
 		{
 			case 'placeholder':
-				frames = AssetHandler.grabAsset("placeholder", SPARROW, "data/characters/placeholder");
+				frames = AssetHelper.grabAsset("placeholder", SPARROW, "data/characters/placeholder");
 
 				animation.addByPrefix('idle', 'Idle', 24, false);
 				animation.addByPrefix('singLEFT', 'Left', 24, false);
@@ -112,10 +113,10 @@ class Character extends FeatherSprite
 				if (player)
 				{
 					addOffset("idle", 0, -350);
-					addOffset("singLEFT", 22, -353);
+					addOffset("singLEFT", 50, -348);
 					addOffset("singDOWN", 17, -375);
 					addOffset("singUP", 8, -334);
-					addOffset("singRIGHT", 50, -348);
+					addOffset("singRIGHT", 22, -353);
 					camOffset.set(30, 330);
 					charOffset.set(0, -350);
 				}
@@ -127,10 +128,9 @@ class Character extends FeatherSprite
 					addOffset("singUP", -45, 11);
 					addOffset("singRIGHT", -61, -14);
 					camOffset.set(0, -5);
-					// flipX = false;
 				}
 
-			// healthColor = [161, 161, 161];
+				healthColor = 0xFFA1A1A1;
 
 			default:
 				switch (charType)
@@ -162,9 +162,11 @@ class Character extends FeatherSprite
 
 		dance();
 
-		setPosition(x, y);
-		this.x += charOffset.x;
-		this.y += (charOffset.y - (frameHeight * scale.y));
+		// x += charOffset.x;
+		// y += (charOffset.y - (frameHeight * scale.y));
+
+		this.x = x;
+		this.y = y;
 
 		return this;
 	}
@@ -172,19 +174,28 @@ class Character extends FeatherSprite
 	function flipLeftRight():Void
 	{
 		// get the old right sprite
-		var oldRight = animation.getByName('singRIGHT').frames;
+		var oldRight:Array<Int> = animation.getByName('singRIGHT').frames;
+		var oldRightOff:Array<Dynamic> = animOffsets.get('singRIGHT');
 
 		// set the right to the left
 		animation.getByName('singRIGHT').frames = animation.getByName('singLEFT').frames;
+
+		addOffset('singLEFT', oldRightOff[0], oldRightOff[1]);
+		addOffset('singRIGHT', animOffsets.get('singLEFT')[0], animOffsets.get('singLEFT')[1]);
 
 		// set the left to the old right
 		animation.getByName('singLEFT').frames = oldRight;
 
 		if (animation.getByName('singRIGHTmiss') != null)
 		{
-			var oldMiss = animation.getByName('singRIGHTmiss').frames;
+			var oldMiss:Array<Int> = animation.getByName('singRIGHTmiss').frames;
+			var oldMissOff:Array<Dynamic> = animOffsets.get("singLEFTmiss");
+
 			animation.getByName('singRIGHTmiss').frames = animation.getByName('singLEFTmiss').frames;
 			animation.getByName('singLEFTmiss').frames = oldMiss;
+
+			addOffset('singLEFT', oldMissOff[0], oldMissOff[1]);
+			addOffset('singRIGHT', animOffsets.get('singLEFTmiss')[0], animOffsets.get('singLEFTmiss')[1]);
 		}
 	}
 
@@ -192,52 +203,17 @@ class Character extends FeatherSprite
 	{
 		if (animation.curAnim != null)
 		{
-			/**
-				Special Animation Behavior Code
-				@author Shadow_Mario_
-			**/
-			if (heyTimer > 0)
+			animTimer -= elapsed;
+			if (animTimer <= 0)
+				animation.finish();
+
+			if (animation.curAnim.name.startsWith('sing'))
+				holdTimer += elapsed;
+
+			if (holdTimer >= Conductor.stepCrochet * dadVar * 0.001)
 			{
-				heyTimer -= elapsed;
-				if (heyTimer <= 0)
-				{
-					if (onSpecial && animation.curAnim.name == 'hey' || animation.curAnim.name == 'cheer')
-					{
-						onSpecial = false;
-						dance();
-					}
-					heyTimer = 0;
-				}
-			}
-			else if (onSpecial && animation.curAnim.finished)
-			{
-				onSpecial = false;
 				dance();
-			}
-
-			if (!player)
-			{
-				if (!onSpecial && animation.curAnim.name.startsWith('sing'))
-					holdTimer += elapsed;
-
-				if (holdTimer >= Conductor.stepCrochet * dadVar * 0.001)
-				{
-					dance();
-					holdTimer = 0;
-				}
-			}
-			else
-			{
-				if (!onSpecial && animation.curAnim.name.startsWith('sing'))
-					holdTimer += elapsed;
-				else
-					holdTimer = 0;
-
-				if (!onSpecial && animation.curAnim.name.endsWith('miss') && animation.curAnim.finished)
-					playAnim('idle', true, false, 10);
-
-				if (animation.curAnim.name == 'firstDeath' && animation.curAnim.finished)
-					playAnim('deathLoop');
+				holdTimer = 0;
 			}
 
 			if (isQuickDancer)
@@ -256,10 +232,8 @@ class Character extends FeatherSprite
 
 	public function dance():Void
 	{
-		if (animation.curAnim != null || !onSpecial)
+		if (animation.curAnim != null || animTimer <= 0)
 		{
-			onSpecial = false; // safety measure
-
 			if (isQuickDancer)
 			{
 				isRight = !isRight;
@@ -292,7 +266,7 @@ class Character extends FeatherSprite
 
 		if (!pushedChars.contains(char))
 		{
-			var script:FeatherModule = new FeatherModule(AssetHandler.grabAsset('config', MODULE, "data/characters/" + char));
+			var script:FeatherModule = new FeatherModule(AssetHelper.grabAsset('config', MODULE, "data/characters/" + char));
 
 			if (script.interp == null)
 				trace("Something terrible occured! Skipping.");
@@ -305,7 +279,7 @@ class Character extends FeatherSprite
 
 		try
 		{
-			var textAsset = AssetHandler.grabAsset(char, TEXT, "data/characters/" + char);
+			var textAsset = AssetHelper.grabAsset(char, TEXT, "data/characters/" + char);
 			if (FileSystem.exists(textAsset))
 				spriteType = PACKER;
 			else
@@ -329,7 +303,7 @@ class Character extends FeatherSprite
 		var mainFrame:String = (overrideFrames == null ? char : overrideFrames);
 		var framePath:String = (framesPath == null ? 'data/characters/$char' : framesPath);
 
-		frames = AssetHandler.grabAsset(mainFrame, spriteType, framePath);
+		frames = AssetHelper.grabAsset(mainFrame, spriteType, framePath);
 
 		setVar('addByPrefix', function(name:String, prefix:String, ?frames:Int = 24, ?loop:Bool = false)
 		{
@@ -460,13 +434,13 @@ class Character extends FeatherSprite
 		/**
 			@author Shadow_Mario_
 		**/
-		var json:PsychCharFile = cast Json.parse(AssetHandler.grabAsset(char, JSON, "data/characters/" + char));
+		var json:PsychCharFile = cast Json.parse(AssetHelper.grabAsset(char, JSON, "data/characters/" + char));
 
 		var spriteType:AssetType = SPARROW;
 
 		try
 		{
-			var textAsset = AssetHandler.grabAsset(json.image.replace('characters/', ''), TEXT, "data/characters/" + char);
+			var textAsset = AssetHelper.grabAsset(json.image.replace('characters/', ''), TEXT, "data/characters/" + char);
 			if (FileSystem.exists(textAsset))
 				spriteType = PACKER;
 			else
@@ -478,7 +452,7 @@ class Character extends FeatherSprite
 			spriteType = SPARROW;
 		}
 
-		frames = AssetHandler.grabAsset(json.image.replace('characters/', ''), spriteType, "data/characters/" + char);
+		frames = AssetHelper.grabAsset(json.image.replace('characters/', ''), spriteType, "data/characters/" + char);
 
 		trace(frames);
 
@@ -501,7 +475,7 @@ class Character extends FeatherSprite
 
 		flipX = json.flip_x;
 		antialiasing = !json.no_antialiasing;
-		// healthColor = json.healthbar_colors;
+		healthColor = FlxColor.fromRGB(json.healthbar_colors[0], json.healthbar_colors[1], json.healthbar_colors[2]);
 		// healthIcon = json.healthicon;
 		dadVar = json.sing_duration;
 

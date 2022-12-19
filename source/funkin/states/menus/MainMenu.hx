@@ -10,7 +10,7 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
-import funkin.song.MusicState;
+import funkin.essentials.song.MusicState;
 
 typedef MainMenuData =
 {
@@ -54,7 +54,7 @@ class MainMenu extends MusicBeatState
 
 		persistentUpdate = persistentDraw = true;
 
-		menuData = Yaml.read(AssetHandler.grabAsset("mainMenu", YAML, "data/menus"), yaml.Parser.options().useObjects());
+		menuData = Yaml.read(AssetHelper.grabAsset("mainMenu", YAML, "data/menus"), yaml.Parser.options().useObjects());
 
 		DiscordRPC.update("MAIN MENU", "Navigating through the Main Menus");
 
@@ -75,13 +75,13 @@ class MainMenu extends MusicBeatState
 		lockedMovement = firstStart;
 		wrappableGroup = menuData.list;
 
-		menuBG = new FlxSprite(-80).loadGraphic(AssetHandler.grabAsset(menuData.bg, IMAGE, menuData.bgFolder));
+		menuBG = new FlxSprite(-80).loadGraphic(AssetHelper.grabAsset(menuData.bg, IMAGE, menuData.bgFolder));
 		add(menuBG);
 
 		camFollow = new FlxObject(0, 0, 1, 1);
 		add(camFollow);
 
-		menuFlash = new FlxSprite(-80).loadGraphic(AssetHandler.grabAsset(menuData.flash, IMAGE, menuData.flashFolder));
+		menuFlash = new FlxSprite(-80).loadGraphic(AssetHelper.grabAsset(menuData.flash, IMAGE, menuData.flashFolder));
 		menuFlash.visible = false;
 		menuFlash.color = menuData.flashColor;
 		add(menuFlash);
@@ -101,7 +101,7 @@ class MainMenu extends MusicBeatState
 		for (i in 0...wrappableGroup.length)
 		{
 			var item:FlxSprite = new FlxSprite(0, menuData.listY + (i * menuData.listSpacing));
-			item.frames = AssetHandler.grabAsset(wrappableGroup[i], SPARROW, "images/menus/attachements");
+			item.frames = AssetHelper.grabAsset(wrappableGroup[i], SPARROW, "images/menus/attachements");
 
 			item.animation.addByPrefix('idle', wrappableGroup[i] + " basic", 24);
 			item.animation.addByPrefix('selected', wrappableGroup[i] + " white", 24);
@@ -119,7 +119,7 @@ class MainMenu extends MusicBeatState
 		FlxG.camera.follow(camFollow, null, MusicState.boundFramerate(0.06));
 
 		versionText = new FlxText(5, FlxG.height - 18, 0, 'Funkin\' Feather ${Main.game.version}', 12);
-		versionText.setFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 16, 0xFFFFFFFF, LEFT, OUTLINE, 0xFF000000);
+		versionText.setFormat(AssetHelper.grabAsset("vcr", FONT, "data/fonts"), 16, 0xFFFFFFFF, LEFT, OUTLINE, 0xFF000000);
 		versionText.scrollFactor.set();
 		add(versionText);
 
@@ -164,9 +164,22 @@ class MainMenu extends MusicBeatState
 			if (FlxG.keys.justPressed.SEVEN)
 				MusicState.switchState(new TestState());
 
+			if (Controls.isJustPressed("back"))
+			{
+				persistentUpdate = false;
+				openSubState(new funkin.substates.WarningSubstate("Are you sure?", "Yes, close the game", "No, not now", function()
+				{
+					FlxG.sound.music.fadeOut(0.3);
+					FlxG.camera.fade(0xFF000000, 0.5, false, function()
+					{
+						Sys.exit(0);
+					}, false);
+				}));
+			}
+
 			if (Controls.isJustPressed("accept"))
 			{
-				FeatherTools.playSound("confirmMenu", "sounds/menus");
+				FSound.playSound("confirmMenu", "sounds/menus");
 				lockedMovement = true;
 
 				if (OptionsAPI.getPref("Flashing Lights"))
@@ -188,12 +201,14 @@ class MainMenu extends MusicBeatState
 					{
 						FlxFlicker.flicker(spr, 1, 0.1, false, false, function(flick:FlxFlicker)
 						{
-							switch (wrappableGroup[selection])
+							switch (wrappableGroup[selection].toLowerCase())
 							{
 								case "story mode":
 									MusicState.switchState(new StoryMenu());
 								case "freeplay":
 									MusicState.switchState(new FreeplayMenu());
+								// case "mods":
+								// MusicState.switchState(new ModsMenu());
 								case "credits":
 									MusicState.switchState(new CreditsMenu());
 								case "options":
@@ -218,7 +233,7 @@ class MainMenu extends MusicBeatState
 		super.updateSelection(newSelection);
 
 		if (newSelection != 0)
-			FeatherTools.playSound("scrollMenu", 'sounds/menus');
+			FSound.playSound("scrollMenu", 'sounds/menus');
 
 		itemContainer.forEach(function(spr:FlxSprite)
 		{

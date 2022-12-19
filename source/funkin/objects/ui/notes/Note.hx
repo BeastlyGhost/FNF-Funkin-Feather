@@ -1,8 +1,8 @@
 package funkin.objects.ui.notes;
 
-import feather.tools.FeatherTools.FeatherSprite;
+import feather.tools.FeatherSpriteManager.FeatherSprite;
 import funkin.objects.ui.notes.BabyArrow;
-import funkin.song.Conductor;
+import funkin.essentials.song.Conductor;
 import funkin.states.PlayState;
 
 // just to make it easier to add into note parameters and such
@@ -96,7 +96,7 @@ class Note extends FeatherSprite
 	public var offsetX:Float = 0;
 	public var offsetY:Float = 0;
 
-	public function new(step:Float, index:Int, type:String, ?prevNote:Note, isSustain:Bool = false):Void
+	public function new(step:Float, index:Int, type:String, isSustain:Bool = false, ?prevNote:Note):Void
 	{
 		// MAKE SURE ITS DEFINITELY OFF SCREEN?
 		super(0, -2000);
@@ -128,6 +128,8 @@ class Note extends FeatherSprite
 				parentNote = parentNote.prevNote;
 			parentNote.children.push(this);
 		}
+
+		offsetX += 15;
 
 		if (isSustain && prevNote != null)
 		{

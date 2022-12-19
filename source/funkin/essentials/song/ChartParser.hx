@@ -1,9 +1,9 @@
-package funkin.song;
+package funkin.essentials.song;
 
 import flixel.FlxG;
 import flixel.util.FlxSort;
 import funkin.objects.ui.notes.Note;
-import funkin.song.SongFormat;
+import funkin.essentials.song.SongFormat;
 import haxe.Json;
 
 enum DataFormat
@@ -19,18 +19,21 @@ class ChartParser
 {
 	public static var chartDataType:DataFormat = FEATHER;
 
+	public static var noteList:Array<Note> = [];
+	public static var eventList:Array<TimedEvent> = [];
+
 	public static function loadChartData(songName:String, songDiff:Int):FeatherSong
 	{
 		var timeBegin:Float = Sys.time();
 
-		var songDiff:String = funkin.backend.data.SongManager.defaultDiffs[songDiff];
+		var songDiff:String = SongManager.defaultDiffs[songDiff];
 
 		if (songDiff.toLowerCase() == "normal")
 			songDiff = '';
 		else
 			songDiff = '-${songDiff.toLowerCase()}';
 
-		var dataSong = AssetHandler.grabAsset(songName + songDiff, JSON, 'songs/' + songName);
+		var dataSong = AssetHelper.grabAsset(songName + songDiff, JSON, 'data/songs/' + songName);
 
 		var funkinSong:SwagSong = cast Json.parse(dataSong).song;
 		var featherSong:FeatherSong = cast Json.parse(dataSong).song;
@@ -100,18 +103,15 @@ class ChartParser
 						daNoteType = songNotes[3];
 					}
 
-					var pointer:String = 'opponent';
+					var sectionIndex:Int = 0;
 					var daMustHit:Bool = section.mustHitSection;
 					if (songNotes[1] > 3)
 						daMustHit = !section.mustHitSection;
 
-					pointer = (daMustHit ? "player" : "opponent");
+					sectionIndex = (daMustHit ? 1 : 0);
 
 					if (section.altAnim)
 						songNotes[4] = '-alt';
-
-					if (section.gfSection)
-						pointer = "crowd";
 
 					if (songNotes[1] >= 0) // if the note data is valid (AKA not a old psych event)
 					{
@@ -120,7 +120,7 @@ class ChartParser
 							time: daStrumTime,
 							index: daNoteData,
 							holdLength: daHoldLength,
-							cameraPoint: pointer,
+							hitIndex: sectionIndex,
 						}
 
 						if (daNoteType != null && daNoteType != 'default')
@@ -135,82 +135,70 @@ class ChartParser
 			}
 		}
 
-		// events
-		var timedEvents:Array<TimedEvent> = [];
-
-		if (featherSong.sectionEvents.length > 0)
-		{
-			for (i in 0...featherSong.sectionEvents.length)
-			{
-				var newEvent:TimedEvent = cast {
-					name: featherSong.sectionEvents[i].name,
-					step: featherSong.sectionEvents[i].step,
-					values: featherSong.sectionEvents[i].values,
-					/*colors: featherSong.sectionEvents[2][1],*/
-				};
-				timedEvents.push(newEvent);
-
-				if (featherSong.sectionEvents.length > 1) // no need to sort if there's a single one or none
-					timedEvents.sort(function(a:TimedEvent, b:TimedEvent):Int return FlxSort.byValues(FlxSort.ASCENDING, a.step, b.step));
-			}
-		}
-
-		if (featherSong.sectionNotes.length > 1)
-			featherSong.sectionNotes.sort(function(a:SectionBody, b:SectionBody):Int return FlxSort.byValues(FlxSort.ASCENDING, a.time, b.time));
-
 		var timeEnd:Float = Sys.time();
 		trace('parsing took: ${timeEnd - timeBegin}s');
 		return featherSong;
 	}
 
-	public static function loadChartNotes(song:FeatherSong):Array<Note>
+	public static function loadChartNotes(song:FeatherSong):FeatherSong
 	{
-		var dunces:Array<Note> = [];
+		noteList = [];
+		eventList = [];
 
 		for (note in song.sectionNotes)
 		{
 			var oldNote:Note;
-			if (dunces.length > 0)
-				oldNote = dunces[Std.int(dunces.length - 1)];
+			if (noteList.length > 0)
+				oldNote = noteList[Std.int(noteList.length - 1)];
 			else
 				oldNote = null;
 
-			var swagNote:Note = new Note(note.time, note.index, note.type, oldNote);
+			var swagNote:Note = new Note(note.time, note.index, note.type, false, oldNote);
 			swagNote.speed = song.speed;
 			swagNote.sustainLength = note.holdLength;
 			swagNote.typeData.type = note.type;
 			swagNote.scrollFactor.set(0, 0);
-			dunces.push(swagNote);
+			noteList.push(swagNote);
 
-			for (holdNote in 0...Math.floor(swagNote.sustainLength / Conductor.stepCrochet))
+			if (note.holdLength > 0)
 			{
-				oldNote = dunces[Std.int(dunces.length - 1)];
+				var holdLength:Int = Math.floor(swagNote.sustainLength / Conductor.stepCrochet);
 
-				var sustainNote:Note = new Note(note.time + (Conductor.stepCrochet * holdNote) + Conductor.stepCrochet, note.index, note.type, oldNote, true);
-				sustainNote.scrollFactor.set();
-				dunces.push(sustainNote);
-
-				sustainNote.noteData.mustPress = note.cameraPoint == "player";
-
-				if (sustainNote.noteData.mustPress)
+				for (holdNote in 0...holdLength)
 				{
-					sustainNote.x += FlxG.width / 2; // general offset
-					sustainNote.x += 25;
+					oldNote = noteList[Std.int(noteList.length - 1)];
+
+					var sustainNote:Note = new Note(note.time + (Conductor.stepCrochet * holdNote) + Conductor.stepCrochet, note.index, note.type, true,
+						oldNote);
+					sustainNote.scrollFactor.set();
+					noteList.push(sustainNote);
+
+					sustainNote.noteData.mustPress = (note.hitIndex == 1);
 				}
-				sustainNote.x += 15;
 			}
 
-			swagNote.noteData.mustPress = note.cameraPoint == "player";
-			if (swagNote.noteData.mustPress)
-			{
-				swagNote.x += FlxG.width / 2; // general offset
-				swagNote.x += 25;
-			}
-			swagNote.x += 15;
+			swagNote.noteData.mustPress = (note.hitIndex == 1);
 		}
 
-		dunces.sort(function(a:Note, b:Note):Int return FlxSort.byValues(FlxSort.ASCENDING, a.step, b.step));
-		return dunces;
+		noteList.sort(function(a:Note, b:Note):Int return FlxSort.byValues(FlxSort.ASCENDING, a.step, b.step));
+
+		// events
+		if (song.sectionEvents.length > 0)
+		{
+			for (i in 0...song.sectionEvents.length)
+			{
+				var newEvent:TimedEvent = cast {
+					name: song.sectionEvents[i].name,
+					step: song.sectionEvents[i].step,
+					values: song.sectionEvents[i].values,
+				};
+				eventList.push(newEvent);
+				eventList.sort(function(a:TimedEvent, b:TimedEvent):Int return FlxSort.byValues(FlxSort.ASCENDING, a.step, b.step));
+			}
+		}
+
+		// TODO: Camera Events
+		return song;
 	}
 
 	public static function parseChartLegacy(dataSent:SwagSong):Array<Note>
@@ -235,7 +223,7 @@ class ChartParser
 				else
 					oldNote = null;
 
-				var swagNote:Note = new Note(daStrumTime, daNoteData, 'default', oldNote);
+				var swagNote:Note = new Note(daStrumTime, daNoteData, 'default', false, oldNote);
 				swagNote.speed = dataSent.speed;
 				swagNote.sustainLength = songNotes[2];
 				swagNote.typeData.type = songNotes[3];
@@ -250,8 +238,8 @@ class ChartParser
 				{
 					oldNote = arrayNotes[Std.int(arrayNotes.length - 1)];
 
-					var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet, daNoteData, 'default', oldNote,
-						true);
+					var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet, daNoteData, 'default', true,
+						oldNote);
 					sustainNote.scrollFactor.set();
 					arrayNotes.push(sustainNote);
 

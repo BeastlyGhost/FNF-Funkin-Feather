@@ -1,10 +1,9 @@
 package funkin.states.menus;
 
 import feather.BaseMenu;
-import flixel.FlxG;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import funkin.objects.ui.fonts.Alphabet;
-import funkin.song.MusicState;
+import funkin.essentials.song.MusicState;
 
 typedef CreditsData =
 {
@@ -26,7 +25,7 @@ typedef CreditsUserData =
 
 class CreditsMenu extends BaseMenu
 {
-	var iconContainer:Array<FeatherAttachedSprite> = [];
+	var iconContainer:Array<ChildSprite> = [];
 	var creditsData:CreditsData;
 
 	override function create()
@@ -35,7 +34,7 @@ class CreditsMenu extends BaseMenu
 
 		bgImage = 'menuDesat';
 
-		creditsData = Yaml.read(AssetHandler.grabAsset("credits", YAML, "data/menus"), yaml.Parser.options().useObjects());
+		creditsData = Yaml.read(AssetHelper.grabAsset("credits", YAML, "data/menus"), yaml.Parser.options().useObjects());
 
 		DiscordRPC.update("CREDITS MENU", "Reading through Descriptions.");
 		FeatherTools.menuMusicCheck(false);
@@ -47,7 +46,7 @@ class CreditsMenu extends BaseMenu
 		{
 			var userCredits = creditsData.userList[i];
 
-			var personText:Alphabet = new Alphabet(0, 0, userCredits.name, true);
+			var personText:Alphabet = new Alphabet(0, 0, userCredits.name, false);
 
 			if (userCredits.type == null)
 				userCredits.type = "person";
@@ -73,7 +72,7 @@ class CreditsMenu extends BaseMenu
 
 			if (userCredits.icon != null || userCredits.icon.length > 1)
 			{
-				var personIcon:FeatherAttachedSprite = new FeatherAttachedSprite(userCredits.icon, 'images/menus/creditsMenu');
+				var personIcon:ChildSprite = new ChildSprite(userCredits.icon, 'images/menus/creditsMenu');
 				personIcon.parentSprite = personText;
 				personIcon.addX = -50;
 				personIcon.addY = -30;
@@ -98,7 +97,7 @@ class CreditsMenu extends BaseMenu
 		if (Controls.isJustPressed("back"))
 		{
 			MusicState.switchState(new MainMenu());
-			FeatherTools.playSound("cancelMenu", "sounds/menus");
+			FSound.playSound("cancelMenu", "sounds/menus");
 		}
 	}
 
@@ -106,10 +105,10 @@ class CreditsMenu extends BaseMenu
 	{
 		super.updateSelection(newSelection);
 
-		var selectionJumper:Int = ((newSelection < selection) ? -1 : 1);
+		var selectionJumper:Int = ((newSelection > selection) ? 1 : -1);
 
 		if (newSelection != 0)
-			FeatherTools.playSound("scrollMenu", "sounds/menus");
+			FSound.playSound("scrollMenu", "sounds/menus");
 
 		for (i in 0...iconContainer.length)
 			if (iconContainer[i] != null)
@@ -118,9 +117,7 @@ class CreditsMenu extends BaseMenu
 		if (iconContainer[selection] != null)
 			iconContainer[selection].alpha = 1;
 
-		/*
-			if (wrappableGroup[selection].type != null && wrappableGroup[selection].type == "divider")
-				updateSelection(selection + selectionJumper);
-		 */
+		// if (wrappableGroup[selection].type != null && wrappableGroup[selection].type == "divider")
+		// 	updateSelection(selection + selectionJumper);
 	}
 }

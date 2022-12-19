@@ -4,10 +4,10 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
-import funkin.backend.data.SongManager.WeekForm;
+import funkin.essentials.song.SongManager.WeekForm;
 import funkin.objects.ui.menus.WeekCharacter;
 import funkin.objects.ui.menus.WeekItem;
-import funkin.song.MusicState;
+import funkin.essentials.song.MusicState;
 
 class StoryMenu extends MusicBeatState
 {
@@ -41,10 +41,10 @@ class StoryMenu extends MusicBeatState
 		characterContainer = new FlxTypedGroup<WeekCharacter>();
 
 		scoreTxt = new FlxText(10, 10, 0, "SCORE: 69420", 36);
-		scoreTxt.setFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 32);
+		scoreTxt.setFormat(AssetHelper.grabAsset("vcr", FONT, "data/fonts"), 32);
 
-		nameTxt = new FlxText(FlxG.width * 0.7, 10, 0, "", 32);
-		nameTxt.setFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 32, 0xFF000000, RIGHT);
+		nameTxt = new FlxText(FlxG.width * 0.7, 10, 0, "WEEK STORY NAME", 32);
+		nameTxt.setFormat(AssetHelper.grabAsset("vcr", FONT, "data/fonts"), 32, 0xFF000000, RIGHT);
 		nameTxt.alpha = 0.7;
 
 		var yellowBG:FlxSprite = new FlxSprite(0, 56).makeGraphic(FlxG.width, 400, 0xFFF9CF51);
@@ -73,12 +73,15 @@ class StoryMenu extends MusicBeatState
 
 		add(yellowBG);
 		add(characterContainer);
+
+		add(scoreTxt);
+		add(nameTxt);
 	}
 
 	function generateArrow(x:Float, y:Float, dir:String):FlxSprite
 	{
 		var arrow:FlxSprite = new FlxSprite(x, y);
-		arrow.frames = AssetHandler.grabAsset('campaign_menu_UI_assets', SPARROW, 'images/menus/storyMenu');
+		arrow.frames = AssetHelper.grabAsset('campaign_menu_UI_assets', SPARROW, 'images/menus/storyMenu');
 		arrow.animation.addByPrefix('idle', 'arrow $dir');
 		arrow.animation.addByPrefix('press', "arrow push $dir", 24, false);
 		arrow.animation.play('idle');
@@ -90,7 +93,7 @@ class StoryMenu extends MusicBeatState
 		if (Controls.isJustPressed("back"))
 		{
 			MusicState.switchState(new MainMenu());
-			FeatherTools.playSound("cancelMenu", 'sounds/menus');
+			FSound.playSound("cancelMenu", 'sounds/menus');
 		}
 	}
 }

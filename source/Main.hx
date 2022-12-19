@@ -1,8 +1,10 @@
 package;
 
+import flixel.FlxSprite;
 import flixel.FlxG;
 import flixel.FlxGame;
 import funkin.backend.FPS;
+import funkin.essentials.PlayerInfo;
 import openfl.Lib;
 import openfl.display.Sprite;
 
@@ -60,17 +62,47 @@ class Main extends Sprite
 		// compiling via terminal will set this to true, else it's false
 		#end
 
+		addEvents();
+	}
+
+	private function addEvents():Void
+	{
 		FlxG.signals.preStateCreate.add(function(state:flixel.FlxState)
 		{
-			AssetHandler.clear(true, false);
-			if (!Std.isOfType(state, funkin.states.PlayState))
-				AssetHandler.clear(true, true);
+			// if the next state is the main menu
+			if (Std.isOfType(state, funkin.states.menus.MainMenu))
+			{
+				// initialize the highscore containers
+				PlayerInfo.loadHighscores();
+
+				// initialize the options api
+				OptionsAPI.loadPrefs();
+			}
+
+			// clear unused (and stored, if allowed) memory
+			AssetHelper.clear(true, (!Std.isOfType(state, funkin.states.PlayState)));
+		});
+
+		FlxG.stage.application.onUpdate.add(function(elapsed:Float):Void
+		{
+			FSound.update();
+		});
+
+		FlxG.signals.focusGained.add(function()
+		{
+			FSound.gainFocus();
+		});
+
+		FlxG.signals.focusLost.add(function()
+		{
+			FSound.loseFocus();
 		});
 
 		FlxG.stage.application.window.onClose.add(function()
 		{
 			Controls.destroy();
 			DiscordRPC.destroy();
+			FSound.destroy();
 		});
 	}
 }

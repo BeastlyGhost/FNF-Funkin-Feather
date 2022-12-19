@@ -2,21 +2,26 @@ package funkin.objects.ui.fonts;
 
 typedef Letter =
 {
-	var anim:Null<String>;
-	var ?normalOffset:Array<Float>;
+	var ?anim:Null<String>;
+	var ?offset:Array<Float>;
 	var ?boldOffset:Array<Float>;
 }
 
 enum LetterType
 {
 	LETTER;
-	BOLD;
 	NUMBER;
 	SYMBOL;
 }
 
 class AlphaLetters
 {
+	public static var letterList:Map<LetterType, String> = [
+		LETTER => "abcdefghijklmnopqrstuvwxyz",
+		NUMBER => "\\/|~#$%()*+-:;<=>@[]^_.,'\"´!?",
+		SYMBOL => "1234567890",
+	];
+
 	public static var letterMap:Map<String, Null<Letter>> = [
 		// LETTERS
 		"a" => null,
@@ -56,31 +61,34 @@ class AlphaLetters
 		"7" => null,
 		"8" => null,
 		"9" => null,
+	];
+
+	public static var symbolMap:Map<String, Null<Letter>> = [
 		// SYMBOLS
 		"(" => null,
 		")" => null,
-		"*" => null,
-		"+" => null,
-		"-" => null,
 		":" => null,
 		";" => null,
 		"[" => null,
 		"]" => null,
 		"^" => null,
 		"_" => null,
-		"#" => {anim: "hashtag"},
-		"$" => {anim: "dollarsign"},
-		"<" => {anim: "lessThan"},
-		">" => {anim: "greaterThan"},
-		"=" => {anim: "equal"},
-		"@" => {anim: "atSign"},
-		"\\" => {anim: "backslash"},
-		"/" => {anim: "forward slash"},
-		"'" => {anim: "apostraphie"},
+		"#" => null,
+		"$" => null,
+		"*" => {anim: "star"},
+		"+" => {anim: "plus"},
+		"-" => {anim: "dash", offset: [0, 550]},
+		"<" => {anim: "less"},
+		">" => {anim: "greater"},
+		"=" => {anim: "equals"},
+		"\\" => {anim: "bslash"},
+		"/" => {anim: "fslash"},
+		"'" => {anim: "single quotes"},
+		'"' => {anim: "double quotes"},
 		"." => {anim: "period"},
 		"," => {anim: "comma"},
-		"?" => {anim: "question mark"},
-		"!" => {anim: "exclamation point"},
+		"?" => {anim: "question"},
+		"!" => {anim: "exclamation"},
 		"|" => {anim: "pipe"},
 		"~" => {anim: "tilde"},
 		// SPECIAL SYMBOLS

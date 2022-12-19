@@ -1,0 +1,2920 @@
+{
+	"song": {
+		"speed": 3,
+		"stage": null,
+		"opponent": "bf-pixel",
+		"sectionNotes": [
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 12800
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 0,
+				"time": 13199.999
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 13599.999
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 13999.999
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 0,
+				"time": 14399.999
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 0,
+				"time": 14799.999
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 0,
+				"time": 15199.999
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 0,
+				"time": 15599.999
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 15999.999
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 16199.999
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 0,
+				"time": 16400
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 0,
+				"time": 16600
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 16800
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 17000
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 17200
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 17400
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 0,
+				"time": 17600
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 0,
+				"time": 17800
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 0,
+				"time": 18000
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 0,
+				"time": 18200
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 0,
+				"time": 18400
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 0,
+				"time": 18600
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 0,
+				"time": 18800
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 0,
+				"time": 19000
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 300,
+				"time": 19200
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 300,
+				"time": 19600
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 300,
+				"time": 20000
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 300,
+				"time": 20400
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 300,
+				"time": 20800
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 300,
+				"time": 21200
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 300,
+				"time": 21600
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 300,
+				"time": 22000
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 700,
+				"time": 22400
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 300,
+				"time": 22800
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 700,
+				"time": 23200
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 300,
+				"time": 23600
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 700,
+				"time": 24000
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 300,
+				"time": 24400
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 700,
+				"time": 24800
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 300,
+				"time": 25200
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 25600
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 0,
+				"time": 25600
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 26399.998
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 26399.998
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 27199.998
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 27199.998
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 27599.998
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 27599.998
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 27999.998
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 0,
+				"time": 27999.998
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 0,
+				"time": 28199.998
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 28199.998
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 28399.998
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 0,
+				"time": 28399.998
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 0,
+				"time": 28799.998
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 0,
+				"time": 28799.998
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 0,
+				"time": 29599.998
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 0,
+				"time": 29599.998
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 0,
+				"time": 30399.998
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 0,
+				"time": 30399.998
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 0,
+				"time": 30799.998
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 0,
+				"time": 30799.998
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 0,
+				"time": 31199.998
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 0,
+				"time": 31199.998
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 0,
+				"time": 31399.998
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 0,
+				"time": 31399.998
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 0,
+				"time": 31599.998
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 0,
+				"time": 31599.998
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 31999.998
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 0,
+				"time": 32099.998
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 100,
+				"time": 32199.998
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 32399.998
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 32499.998
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 100,
+				"time": 32599.998
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 32800
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 0,
+				"time": 32900
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 100,
+				"time": 33000
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 33200
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 33300
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 100,
+				"time": 33400
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 33600
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 33700
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 100,
+				"time": 33800
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 0,
+				"time": 34000
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 34100
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 100,
+				"time": 34200
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 34400
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 34500
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 100,
+				"time": 34600
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 0,
+				"time": 34800
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 34900
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 100,
+				"time": 35000
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 0,
+				"time": 35200
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 0,
+				"time": 35300
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 100,
+				"time": 35400
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 0,
+				"time": 35600
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 0,
+				"time": 35700
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 100,
+				"time": 35800
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 0,
+				"time": 36000
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 0,
+				"time": 36100
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 100,
+				"time": 36200
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 0,
+				"time": 36400
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 0,
+				"time": 36500
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 100,
+				"time": 36600
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 0,
+				"time": 36800
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 0,
+				"time": 36900
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 100,
+				"time": 37000
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 0,
+				"time": 37200
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 0,
+				"time": 37300
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 100,
+				"time": 37400
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 0,
+				"time": 37600
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 0,
+				"time": 37700
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 100,
+				"time": 37800
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 0,
+				"time": 38000
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 0,
+				"time": 38100
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 100,
+				"time": 38200
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 38400
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 38600
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 0,
+				"time": 38800
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 38900
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 0,
+				"time": 39000
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 39100
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 39200
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 39400
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 0,
+				"time": 39600
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 39700
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 0,
+				"time": 39800
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 39900
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 40000
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 40200
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 0,
+				"time": 40400
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 40600
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 40800
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 41000
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 41200
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 41400
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 0,
+				"time": 41600
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 0,
+				"time": 41800
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 0,
+				"time": 42000
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 0,
+				"time": 42100
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 0,
+				"time": 42200
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 0,
+				"time": 42300
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 0,
+				"time": 42400
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 0,
+				"time": 42600
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 0,
+				"time": 42800
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 0,
+				"time": 42900
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 0,
+				"time": 43000
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 0,
+				"time": 43100
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 0,
+				"time": 43200
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 0,
+				"time": 43400
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 0,
+				"time": 43600
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 0,
+				"time": 43800
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 0,
+				"time": 44000
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 0,
+				"time": 44200
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 0,
+				"time": 44400
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 0,
+				"time": 44600
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 44800
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 45066.6641
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 45333.332
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 45600
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 45866.6641
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 46133.332
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 46266.6641
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 100,
+				"time": 46400
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 200,
+				"time": 46800
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 300,
+				"time": 47200
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 400,
+				"time": 47600
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 0,
+				"time": 48000
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 0,
+				"time": 48266.6641
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 0,
+				"time": 48533.332
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 0,
+				"time": 48800
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 0,
+				"time": 49066.6641
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 0,
+				"time": 49333.332
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 0,
+				"time": 49466.6641
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 100,
+				"time": 49600
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 200,
+				"time": 50000
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 300,
+				"time": 50400
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 400,
+				"time": 50800
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 800,
+				"time": 51200
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 800,
+				"time": 51200
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 0,
+				"time": 52599.9961
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 800,
+				"time": 52799.9961
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 800,
+				"time": 52799.9961
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 700,
+				"time": 53599.9961
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 499.999969,
+				"time": 53799.9961
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 300,
+				"time": 53999.9961
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 0,
+				"time": 53999.9961
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 53999.9961
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 0,
+				"time": 54199.9961
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 800,
+				"time": 54399.9961
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 800,
+				"time": 54399.9961
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 800,
+				"time": 54399.9961
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 800,
+				"time": 54399.9961
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 800,
+				"time": 54399.9961
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 800,
+				"time": 54399.9961
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 55799.9961
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 800,
+				"time": 55999.9961
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 800,
+				"time": 55999.9961
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 57199.9961
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 0,
+				"time": 57199.9961
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 800,
+				"time": 57599.9961
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 800,
+				"time": 57599.9961
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 0,
+				"time": 58999.9961
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 800,
+				"time": 59199.9961
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 800,
+				"time": 59199.9961
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 700,
+				"time": 59999.9961
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 499.999969,
+				"time": 60199.9961
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 300,
+				"time": 60399.9961
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 0,
+				"time": 60399.9961
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 0,
+				"time": 60399.9961
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 60599.9961
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 800,
+				"time": 60799.9961
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 800,
+				"time": 60799.9961
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 800,
+				"time": 60799.9961
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 800,
+				"time": 60799.9961
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 800,
+				"time": 60799.9961
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 800,
+				"time": 60799.9961
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 0,
+				"time": 62199.9961
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 800,
+				"time": 62399.9961
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 800,
+				"time": 62399.9961
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 63199.9961
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 63299.9961
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 63399.9961
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 63499.9961
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 63599.9961
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 0,
+				"time": 63599.9961
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 0,
+				"time": 63599.9961
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 0,
+				"time": 63649.9961
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 63699.9961
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 63749.9961
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 63799.9961
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 0,
+				"time": 63849.9961
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 63899.9961
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 0,
+				"time": 63949.9961
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 63999.9961
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 64199.9961
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 64399.9961
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 499.999969,
+				"time": 64599.9961
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 65199.9961
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 400,
+				"time": 65399.9961
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 66000
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 0,
+				"time": 66200
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 66400
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 66666.6641
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 66933.33
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 67200
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 67300
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 67800
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 449.999969,
+				"time": 67850
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 100,
+				"time": 68400
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 68600
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 68700
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 68800
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 0,
+				"time": 69000
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 69200
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 69400
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 69600
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 300,
+				"time": 69800
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 70200
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 70400
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 0,
+				"time": 70400
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 70600
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 0,
+				"time": 70600
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 70800
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 0,
+				"time": 70800
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 499.999969,
+				"time": 71000
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 499.999969,
+				"time": 71000
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 71600
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 0,
+				"time": 71600
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 400,
+				"time": 71800
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 400,
+				"time": 71800
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 72400
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 0,
+				"time": 72400
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 0,
+				"time": 72600
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 0,
+				"time": 72600
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 72800
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 0,
+				"time": 72800
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 73066.6641
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 0,
+				"time": 73066.6641
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 73333.33
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 0,
+				"time": 73333.33
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 73600
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 0,
+				"time": 73600
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 73700
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 0,
+				"time": 73700
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 74200
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 0,
+				"time": 74200
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 449.999969,
+				"time": 74250
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 449.999969,
+				"time": 74250
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 100,
+				"time": 74800
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 100,
+				"time": 74800
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 75000
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 0,
+				"time": 75000
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 75100
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 0,
+				"time": 75100
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 75200
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 0,
+				"time": 75200
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 0,
+				"time": 75400
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 0,
+				"time": 75400
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 75600
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 0,
+				"time": 75600
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 75800
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 0,
+				"time": 75800
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 76000
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 0,
+				"time": 76000
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 300,
+				"time": 76200
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 300,
+				"time": 76200
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 0,
+				"time": 76600
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 76600
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 76800
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 76900
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 77000
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 77100
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 77200
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 77300
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 77400
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 77500
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 700,
+				"time": 77600
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 77600
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 77700
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 77800
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 77900
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 78000
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 78100
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 78200
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 78300
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 700,
+				"time": 78400
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 78400
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 0,
+				"time": 78500
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 78600
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 0,
+				"time": 78700
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 78800
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 0,
+				"time": 78900
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 79000
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 0,
+				"time": 79100
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 400,
+				"time": 79200
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 79200
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 0,
+				"time": 79300
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 79400
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 0,
+				"time": 79500
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 79600
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 0,
+				"time": 79700
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 79800
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 0,
+				"time": 79900
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 0,
+				"time": 80000
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 0,
+				"time": 80100
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 0,
+				"time": 80200
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 0,
+				"time": 80300
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 0,
+				"time": 80400
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 0,
+				"time": 80500
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 0,
+				"time": 80600
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 0,
+				"time": 80700
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 700,
+				"time": 80800
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 0,
+				"time": 80800
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 0,
+				"time": 80900
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 0,
+				"time": 81000
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 0,
+				"time": 81100
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 0,
+				"time": 81200
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 0,
+				"time": 81300
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 0,
+				"time": 81400
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 0,
+				"time": 81500
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 700,
+				"time": 81600
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 0,
+				"time": 81600
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 0,
+				"time": 81700
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 0,
+				"time": 81800
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 0,
+				"time": 81900
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 0,
+				"time": 82000
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 0,
+				"time": 82100
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 0,
+				"time": 82200
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 0,
+				"time": 82300
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 400,
+				"time": 82400
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 0,
+				"time": 82400
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 0,
+				"time": 82500
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 0,
+				"time": 82600
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 0,
+				"time": 82700
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 0,
+				"time": 82800
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 0,
+				"time": 82900
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 0,
+				"time": 83000
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 0,
+				"time": 83100
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 83200
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 83300
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 83400
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 83500
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 83600
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 83700
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 83800
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 83900
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 84000
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 84100
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 84200
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 84300
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 0,
+				"time": 84400
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 0,
+				"time": 84500
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 0,
+				"time": 84600
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 0,
+				"time": 84700
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 84800
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 84933.33
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 85066.6641
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 85200
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 85333.33
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 85466.6641
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 85600
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 85733.33
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 85866.6641
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 86000
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 86133.33
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 0,
+				"time": 86266.6641
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 600,
+				"time": 86400
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 0,
+				"time": 86400
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 0,
+				"time": 86500
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 0,
+				"time": 86600
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 0,
+				"time": 86700
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 0,
+				"time": 86800
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 0,
+				"time": 86900
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 0,
+				"time": 87000
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 0,
+				"time": 87100
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 600,
+				"time": 87200
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 0,
+				"time": 87200
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 0,
+				"time": 87300
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 0,
+				"time": 87400
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 0,
+				"time": 87500
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 0,
+				"time": 87600
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 0,
+				"time": 87700
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 0,
+				"time": 87800
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 0,
+				"time": 87900
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 600,
+				"time": 88000
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 0,
+				"time": 88000
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 0,
+				"time": 88133.33
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 0,
+				"time": 88266.6641
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 0,
+				"time": 88400
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 0,
+				"time": 88533.33
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 0,
+				"time": 88666.6641
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 600,
+				"time": 88800
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 0,
+				"time": 88800
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 0,
+				"time": 88933.33
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 0,
+				"time": 89066.6641
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 0,
+				"time": 89200
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 0,
+				"time": 89333.33
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 0,
+				"time": 89466.6641
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 3200,
+				"time": 89600
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 300,
+				"time": 90000
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 300,
+				"time": 90400
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 300,
+				"time": 90800
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 91200
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 91400
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 91600
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 0,
+				"time": 91800
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 300,
+				"time": 92000
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 300,
+				"time": 92400
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 3200,
+				"time": 92800
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 300,
+				"time": 93200
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 300,
+				"time": 93600
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 300,
+				"time": 94000
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 0,
+				"time": 94400
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 0,
+				"time": 94600
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 0,
+				"time": 94800
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 0,
+				"time": 95000
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 300,
+				"time": 95200
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 300,
+				"time": 95600
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 0,
+				"holdLength": 2300,
+				"time": 96000
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 300,
+				"time": 96400
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 300,
+				"time": 96800
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 300,
+				"time": 97200
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 97600
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 0,
+				"time": 97800
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 0,
+				"time": 98000
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 0,
+				"time": 98200
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 1,
+				"holdLength": 700,
+				"time": 98400
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 2,
+				"holdLength": 300,
+				"time": 98400
+			},
+			{
+				"cameraPoint": "opponent",
+				"index": 3,
+				"holdLength": 300,
+				"time": 98800
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 300,
+				"time": 99200
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 700,
+				"time": 99200
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 0,
+				"time": 99600
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 0,
+				"time": 99800
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 300,
+				"time": 100000
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 300,
+				"time": 100000
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 300,
+				"time": 100400
+			},
+			{
+				"cameraPoint": "player",
+				"index": 0,
+				"holdLength": 300,
+				"time": 100400
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 300,
+				"time": 100800
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 700,
+				"time": 100800
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 300,
+				"time": 101200
+			},
+			{
+				"cameraPoint": "player",
+				"index": 3,
+				"holdLength": 300,
+				"time": 101600
+			},
+			{
+				"cameraPoint": "player",
+				"index": 1,
+				"holdLength": 700,
+				"time": 101600
+			},
+			{
+				"cameraPoint": "player",
+				"index": 2,
+				"holdLength": 300,
+				"time": 102000
+			}
+		],
+		"bpm": 150,
+		"internalName": "Test",
+		"player": "bf",
+		"sectionEvents": [],
+		"name": "test",
+		"crowd": "gf",
+		"author": "Kawai Sprite, MtH"
+	}
+}

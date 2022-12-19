@@ -4,7 +4,7 @@ import flixel.FlxSprite;
 import flixel.graphics.FlxGraphic;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
-import funkin.song.Conductor;
+import funkin.essentials.song.Conductor;
 import sys.FileSystem;
 
 /**
@@ -62,7 +62,7 @@ class Icon extends FlxSprite
 		if (stringTrim.contains('-'))
 			stringTrim = stringTrim.substring(0, stringTrim.indexOf('-'));
 
-		if (!FileSystem.exists(AssetHandler.grabAsset('$char/icon$suffix', IMAGE, 'data/characters')))
+		if (!FileSystem.exists(AssetHelper.grabAsset('$char/icon$suffix', IMAGE, 'data/characters')))
 		{
 			if (char != stringTrim)
 				char = stringTrim;
@@ -70,7 +70,7 @@ class Icon extends FlxSprite
 				char = 'placeholder';
 		}
 
-		var iconAsset:FlxGraphic = AssetHandler.grabAsset('$char/icon$suffix', IMAGE, 'data/characters');
+		var iconAsset:FlxGraphic = AssetHelper.grabAsset('$char/icon$suffix', IMAGE, 'data/characters');
 
 		loadGraphic(iconAsset); // get file size
 

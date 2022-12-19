@@ -3,7 +3,7 @@ package funkin.objects.ui.notes;
 import flixel.group.FlxGroup;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
-import funkin.song.Conductor;
+import funkin.essentials.song.Conductor;
 
 /**
 	Strumline class, initializes the gray notes at the top / bottom of the screen,
@@ -32,11 +32,11 @@ class Strum extends FlxGroup
 
 		babyArrows = new FlxTypedGroup<BabyArrow>();
 
-		/*
-			notes = new FlxTypedGroup<Note>();
-			holds = new FlxTypedGroup<Note>();
-		 */
-		splashes = new FlxTypedGroup<NoteSplash>();
+		notes = new FlxTypedGroup<Note>();
+		holds = new FlxTypedGroup<Note>();
+
+		if (OptionsAPI.getPref("Note Splash Opacity") > 0)
+			splashes = new FlxTypedGroup<NoteSplash>();
 
 		for (index in 0...4)
 		{
@@ -59,21 +59,35 @@ class Strum extends FlxGroup
 		}
 
 		add(babyArrows);
-		add(splashes);
+		if (splashes != null)
+			add(splashes);
+		add(notes);
+		add(holds);
 
 		// cache the splash stuff
-		var firework:NoteSplash = new NoteSplash(100, 100, 0);
-		firework.alpha = 0.000001;
-		splashes.add(firework);
+		popUpSplash(0, true);
 	}
 
-	public function popUpSplash(index:Int):Void
+	public function popUpSplash(index:Int = 0, ?cache:Bool = false):Void
 	{
-		var firework:NoteSplash = splashes.recycle(NoteSplash);
+		if (splashes == null)
+			return;
+
 		var babyArrow:BabyArrow = babyArrows.members[index];
-		firework.setupNoteSplash(babyArrow.x, babyArrow.y, index);
-		firework.alpha = 1;
-		splashes.add(firework);
+
+		if (cache)
+		{
+			var firework:NoteSplash = new NoteSplash(babyArrow.x, babyArrow.y, index);
+			firework.alpha = 0.000001;
+			splashes.add(firework);
+		}
+		else
+		{
+			var firework:NoteSplash = splashes.recycle(NoteSplash);
+			firework.setupNoteSplash(babyArrow.x, babyArrow.y, index);
+			firework.alpha = OptionsAPI.getPref("Note Splash Opacity") * 0.01;
+			splashes.add(firework);
+		}
 	}
 
 	override function update(elapsed:Float):Void

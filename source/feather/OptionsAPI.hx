@@ -1,6 +1,7 @@
 package feather;
 
 import flixel.FlxG;
+import funkin.essentials.song.MusicState.MusicBeatState;
 
 enum OptionType
 {
@@ -35,9 +36,12 @@ class OptionsAPI
 		this is our preferences list, it stores `category` names along with their contents
 
 		for information on how you can create options and customize their behavior
-		go to this link => 
+		go to this link => https://github.com/BeastlyGhost/FNF-Funkin-Feather/wiki/Source-Code-Guide#options-documentation
 	**/
 	public static var preferencesList:Map<String, Array<OptionData>> = [
+		/**
+			Main Categories
+		**/
 		"master" => [
 			{name: "preferences", type: DYNAMIC},
 			{name: "accessibility", type: DYNAMIC},
@@ -45,14 +49,10 @@ class OptionsAPI
 			// {name: "custom settings", type: DYNAMIC},
 			{name: "keybinds", type: DYNAMIC}
 		],
+		/**
+			Category Contents
+		**/
 		"preferences" => [
-			/*
-				{
-					name: "Gameplay",
-					type: DYNAMIC,
-					attributes: [UNSELECTABLE]
-				},
-			 */
 			{
 				name: "Downscroll",
 				description: "If the notes should come from top to bottom.",
@@ -67,7 +67,7 @@ class OptionsAPI
 			},
 			{
 				name: "Center Notes",
-				description: "If the notes should be centered	.",
+				description: "If the notes should be centered.",
 				type: CHECKMARK,
 				value: false
 			},
@@ -83,19 +83,18 @@ class OptionsAPI
 				type: SELECTOR,
 				value: 10
 			},
-			/*
-				{
-					name: "Appearance",
-					type: DYNAMIC,
-					attributes: [UNSELECTABLE]
-				},
-			 */
+			{
+				name: "Note Splash Opacity",
+				description: "Set the opacity for your Note Splashes, shown when hitting \"Sick!\" Ratings on Notes.",
+				type: SELECTOR,
+				value: 60
+			},
 			{
 				name: "User Interface Style",
 				description: "Choose your UI Style.",
 				type: SELECTOR,
-				value: "Feather Detailed",
-				values: ["FNF Minimal", "FNF Detailed", "Feather Minimal", "Feather Detailed"]
+				value: "Feather",
+				values: ["Vanilla", "Feather"]
 			},
 			/*
 				{
@@ -117,7 +116,7 @@ class OptionsAPI
 				name: "Auto Pause",
 				description: "If the game should pause itself when the window is unfocused.",
 				type: CHECKMARK,
-				value: false
+				value: true
 			},
 			{
 				name: "Anti Aliasing",
@@ -133,7 +132,7 @@ class OptionsAPI
 			},
 			{
 				name: "Reduce Motion",
-				description: "If moving instances like icons or Camera Zooms should be reduced.",
+				description: "If moving fields like icons and/or Camera Zooms should be reduced/stopped completely.",
 				type: CHECKMARK,
 				value: false
 			}
@@ -152,16 +151,22 @@ class OptionsAPI
 				value: true
 			},
 			{
+				name: "Accurate FPS Info",
+				description: "If the current framerate should be shown accurately.",
+				type: CHECKMARK,
+				value: false
+			},
+			{
 				name: "Show RAM Info",
-				description: "if the current memory usage should be shown on the Info Counter.",
+				description: "If the current memory usage should be shown on the Info Counter.",
 				type: CHECKMARK,
 				value: true
 			},
 			{
-				name: "Show Engine Mark",
+				name: "Show Debug Info",
 				description: "If the current state folder location and object count should be shown on the Info Counter.",
 				type: CHECKMARK,
-				value: true
+				value: false
 			}
 		],
 		"custom settings" => [{name: "NOTHING", type: DYNAMIC}],
@@ -170,15 +175,13 @@ class OptionsAPI
 	public static var myPreferences:Map<String, Array<OptionData>> = [];
 
 	/**
-		[Saves your game preferences]type
+		[Saves your game preferences]
 	**/
 	public static function savePrefs():Void
 	{
-		FlxG.save.bind("Feather-Settings" #if (flixel < "5.0.0"), "BeastlyGhost" #end);
-
-		if (FlxG.save.data.preferences == null)
-			FlxG.save.data.preferences = myPreferences;
-
+		bindSave("Feather-Settings");
+		if (myPreferences != null)
+			FlxG.save.data.globalSettings = myPreferences;
 		// FlxG.save.data.flush();
 	}
 
@@ -187,49 +190,30 @@ class OptionsAPI
 	**/
 	public static function loadPrefs():Void
 	{
-		FlxG.save.bind("Feather-Settings" #if (flixel < "5.0.0"), "BeastlyGhost" #end);
+		bindSave("Feather-Settings");
 
-		if (FlxG.save.data.preferences != null)
+		// reset your preferences to the defaults
+		for (key => keys in preferencesList)
 		{
-			// clear your preferences
-			myPreferences.clear();
+			if (key != "master" && key != "custom settings")
+				myPreferences.set(key, keys);
+		}
 
+		if (FlxG.save.data.globalSettings != null)
+		{
 			// grab from your save file
-			var savedPreferences:Map<String, Array<OptionData>> = FlxG.save.data.preferences;
-			for (key => keys in savedPreferences)
+			var savedPreferences:Map<String, Array<OptionData>> = FlxG.save.data.globalSettings;
+			for (saveKey in savedPreferences.keys())
 			{
-				// key means Category Name, keys mean the Data Associated with the Category
-				if (key == null || (key != null && keys == null))
-					return;
-
-				// if your keys are not the same as the save keys
-				if (myPreferences.get(key) != keys)
-				{
-					// set your keys to the save one if they even exist
-					if (savedPreferences.exists(key))
-					{
-						myPreferences.set(key, keys);
-						// trace('save key found, for: $key');
-					}
-					else
-					{
-						// else disregard the save one, and set to default
-						for (defKey => defKeys in preferencesList)
-						{
-							if (preferencesList.exists(defKey))
-								myPreferences.set(defKey, defKeys);
-							// trace('save key was not found, using default for: $key');
-						}
-					}
-				}
+				// this checks if the key exists on the DEFAULT preferences list
+				// if it does, then it sets your preferences to the save keys
+				// that way saves won't have to be deleted if preferences change overtime
+				if (preferencesList.get(saveKey) != null)
+					myPreferences.set(saveKey, savedPreferences.get(saveKey));
 			}
 		}
 		else
-		{
-			for (category => array in preferencesList)
-				if (myPreferences.get(category) == null)
-					myPreferences.set(category, array);
-		}
+			FlxG.save.data.globalSettings = new Map<String, Array<OptionData>>();
 
 		if (FlxG.save.data.volume != null)
 			FlxG.sound.volume = FlxG.save.data.volume;
@@ -237,8 +221,6 @@ class OptionsAPI
 			FlxG.sound.muted = FlxG.save.data.mute;
 		if (FlxG.save.data.seenSplash != null)
 			Main.game.skipSplash = FlxG.save.data.seenSplash;
-
-		updatePrefs();
 	}
 
 	/**
@@ -249,20 +231,21 @@ class OptionsAPI
 	**/
 	public static function getPref(name:String, getValue:Bool = true):Dynamic
 	{
-		for (category => array in preferencesList)
+		bindSave("Feather-Settings");
+
+		for (category => contents in preferencesList)
 		{
-			if (category != null && array != null)
+			var chosenMap:Map<String, Array<OptionData>> = [];
+			var hasCategory:Bool = (myPreferences != null && myPreferences.exists(category) && myPreferences.get(category) != null);
+
+			chosenMap = (hasCategory ? myPreferences : preferencesList);
+
+			for (i in 0...contents.length)
 			{
-				if (myPreferences.exists(category))
+				if (chosenMap.get(category)[i].name == name)
 				{
-					for (i in 0...array.length)
-					{
-						if (myPreferences.get(category)[i].name == name)
-						{
-							var retVal = myPreferences.get(category);
-							return (getValue ? retVal[i].value : retVal[i]);
-						}
-					}
+					var retVal = chosenMap.get(category);
+					return (getValue ? retVal[i].value : retVal[i]);
 				}
 			}
 		}
@@ -278,21 +261,18 @@ class OptionsAPI
 	**/
 	public static function setPref(name:String, newValue:Dynamic):Void
 	{
-		for (category => array in preferencesList)
+		bindSave("Feather-Settings");
+
+		for (category => contents in preferencesList)
 		{
-			if (category != null && array != null)
+			var hasCategory:Bool = (myPreferences.exists(category) && myPreferences.get(category) != null);
+			var chosenMap:Map<String, Array<OptionData>> = [];
+			chosenMap = (hasCategory ? myPreferences : preferencesList);
+
+			for (i in 0...contents.length)
 			{
-				if (myPreferences.exists(category))
-				{
-					for (i in 0...array.length)
-					{
-						if (myPreferences.get(category)[i].name == name)
-						{
-							var retVal = myPreferences.get(category);
-							retVal[i].value = newValue;
-						}
-					}
-				}
+				if (chosenMap.get(category)[i].name == name)
+					chosenMap.get(category)[i].value = newValue;
 			}
 		}
 	}
@@ -302,10 +282,31 @@ class OptionsAPI
 	**/
 	public static function updatePrefs():Void
 	{
+		bindSave("Feather-Settings");
+
 		#if (flixel >= "5.0.0")
 		flixel.FlxSprite.defaultAntialiasing = getPref('Anti Aliasing');
 		#end
-		FlxG.drawFramerate = FlxG.updateFramerate = getPref("Framerate Cap");
+
+		// to avoid a crash
+		var fpsPref:Int = 60;
+		if (getPref("Framerate Cap") != null)
+			fpsPref = getPref("Framerate Cap");
+
+		FlxG.drawFramerate = FlxG.updateFramerate = fpsPref;
 		FlxG.autoPause = getPref('Auto Pause');
+	}
+
+	public static function bindSave(name:String):Void
+	{
+		// FeatherSave.bind(name);
+		try
+		{
+			FlxG.save.bind(name #if (flixel < "5.0.0"), "BeastlyGhost" #end);
+		}
+		catch (e)
+		{
+			trace('Unexpected Error when binding save, file name was "$name"');
+		}
 	}
 }

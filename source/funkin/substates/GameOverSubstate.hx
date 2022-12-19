@@ -4,8 +4,8 @@ import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.util.FlxTimer;
 import funkin.objects.Character;
-import funkin.song.Conductor;
-import funkin.song.MusicState;
+import funkin.essentials.song.Conductor;
+import funkin.essentials.song.MusicState;
 import funkin.states.PlayState;
 
 class GameOverSubstate extends MusicBeatSubstate
@@ -66,7 +66,7 @@ class GameOverSubstate extends MusicBeatSubstate
 			FlxG.camera.follow(camFollow, LOCKON, 0.01);
 
 		if (char.animation.curAnim.name == 'firstDeath' && char.animation.curAnim.finished)
-			FlxG.sound.playMusic(AssetHandler.grabAsset(preferences.music, SOUND, "music"));
+			FlxG.sound.playMusic(AssetHelper.grabAsset(preferences.music, SOUND, "music"));
 	}
 
 	var isEnding:Bool = false;
@@ -78,7 +78,7 @@ class GameOverSubstate extends MusicBeatSubstate
 			isEnding = true;
 			char.playAnim('deathConfirm', true);
 			FlxG.sound.music.stop();
-			FeatherTools.playSound(preferences.confirm, "music", true);
+			FSound.playSound(preferences.confirm, "music", true);
 			new FlxTimer().start(0.7, function(tmr:FlxTimer)
 			{
 				FlxG.camera.fade(0xFF000000, 1, false, function()

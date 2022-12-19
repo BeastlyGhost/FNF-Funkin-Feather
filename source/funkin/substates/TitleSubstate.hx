@@ -11,8 +11,8 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import funkin.objects.ui.fonts.Alphabet;
-import funkin.song.Conductor;
-import funkin.song.MusicState;
+import funkin.essentials.song.Conductor;
+import funkin.essentials.song.MusicState;
 import funkin.states.menus.MainMenu;
 
 typedef TitleData =
@@ -63,7 +63,7 @@ class TitleSubstate extends MusicBeatSubstate
 	{
 		super.create();
 
-		introLines = Yaml.read(AssetHandler.grabAsset("titleScreen", YAML, "data/menus"), yaml.Parser.options().useObjects());
+		introLines = Yaml.read(AssetHelper.grabAsset("titleScreen", YAML, "data/menus"), yaml.Parser.options().useObjects());
 		textFinal = FlxG.random.getObject(getText());
 
 		addObjects();
@@ -85,7 +85,7 @@ class TitleSubstate extends MusicBeatSubstate
 		var bg:FlxSprite = new FlxSprite();
 		if (introLines.bg != null && introLines.bg.length > 1)
 		{
-			bg.loadGraphic(AssetHandler.grabAsset(introLines.bg, IMAGE, introLines.bgFolder));
+			bg.loadGraphic(AssetHelper.grabAsset(introLines.bg, IMAGE, introLines.bgFolder));
 			bg.setGraphicSize(Std.int(bg.width * introLines.bgSize));
 			bg.antialiasing = introLines.bgAntialias;
 			bg.updateHitbox();
@@ -96,14 +96,14 @@ class TitleSubstate extends MusicBeatSubstate
 
 		// gf
 		gfDance = new FlxSprite(FlxG.width * 0.4, FlxG.height * 0.07);
-		gfDance.frames = AssetHandler.grabAsset(introLines.gf, SPARROW, introLines.gfFolder);
+		gfDance.frames = AssetHelper.grabAsset(introLines.gf, SPARROW, introLines.gfFolder);
 		gfDance.animation.addByIndices('danceLeft', 'gfDance', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
 		gfDance.animation.addByIndices('danceRight', 'gfDance', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
 		gfDance.antialiasing = introLines.gfAntialias;
 		add(gfDance);
 
 		titleEnter = new FlxSprite(100, FlxG.height * 0.8);
-		titleEnter.frames = AssetHandler.grabAsset('titleScreen/titleEnter', SPARROW, "images/menus");
+		titleEnter.frames = AssetHelper.grabAsset('titleScreen/titleEnter', SPARROW, "images/menus");
 		var animFrames:Array<FlxFrame> = [];
 		@:privateAccess {
 			titleEnter.animation.findByPrefix(animFrames, "ENTER IDLE");
@@ -128,13 +128,13 @@ class TitleSubstate extends MusicBeatSubstate
 		add(titleEnter);
 
 		ngSpr = new FlxSprite(0, FlxG.height * 0.52);
-		ngSpr.loadGraphic(AssetHandler.grabAsset(introLines.ng, IMAGE, introLines.ngFolder));
+		ngSpr.loadGraphic(AssetHelper.grabAsset(introLines.ng, IMAGE, introLines.ngFolder));
 		ngSpr.setGraphicSize(Std.int(ngSpr.width * 0.8));
 		ngSpr.updateHitbox();
 		ngSpr.screenCenter(X);
 
 		logoBump = new FlxSprite(-10, 10);
-		logoBump.loadGraphic(AssetHandler.grabAsset('logo', IMAGE, "images/menus/titleScreen"));
+		logoBump.loadGraphic(AssetHelper.grabAsset('logo', IMAGE, "images/menus/titleScreen"));
 		add(logoBump);
 	}
 
@@ -198,7 +198,7 @@ class TitleSubstate extends MusicBeatSubstate
 					var color:FlxColor = (OptionsAPI.getPref("Flashing Lights") ? FlxColor.WHITE : FlxColor.BLACK);
 
 					FlxG.camera.flash(color, 1);
-					FeatherTools.playSound("confirmMenu", 'sounds/menus');
+					FSound.playSound("confirmMenu", 'sounds/menus');
 
 					// give the main menu the heads up that this is done
 					MainMenu.firstStart = false;
@@ -312,7 +312,7 @@ class TitleSubstate extends MusicBeatSubstate
 	{
 		for (i in 0...textArray.length)
 		{
-			var initialText:Alphabet = new Alphabet(0, 0, textArray[i], true);
+			var initialText:Alphabet = new Alphabet(0, 0, textArray[i], false);
 			initialText.screenCenter(X);
 			initialText.y += (i * 60) + 200;
 			txtContainer.add(initialText);
@@ -321,7 +321,7 @@ class TitleSubstate extends MusicBeatSubstate
 
 	function addText(text:String):Void
 	{
-		var textIntro:Alphabet = new Alphabet(0, 0, text, true);
+		var textIntro:Alphabet = new Alphabet(0, 0, text, false);
 		textIntro.screenCenter(X);
 		textIntro.y += (txtContainer.length * 60) + 200;
 		txtContainer.add(textIntro);

@@ -8,10 +8,10 @@ import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
-import funkin.backend.data.PlayerInfo;
+import funkin.essentials.PlayerInfo;
 import funkin.objects.ui.fonts.Alphabet;
-import funkin.song.Conductor;
-import funkin.song.MusicState;
+import funkin.essentials.song.Conductor;
+import funkin.essentials.song.MusicState;
 import funkin.states.PlayState;
 import sys.thread.Mutex;
 import sys.thread.Thread;
@@ -47,7 +47,7 @@ class PauseSubstate extends BaseSubMenu
 		Thread.create(function()
 		{
 			mutex.acquire();
-			pauseMusic = new FlxSound().loadEmbedded(AssetHandler.grabAsset('breakfast', SOUND, "music"), true, true);
+			pauseMusic = new FlxSound().loadEmbedded(AssetHelper.grabAsset('breakfast', SOUND, "music"), true, true);
 			pauseMusic.play(false, FlxG.random.int(0, Std.int(pauseMusic.length / 2)));
 			FlxG.sound.list.add(pauseMusic);
 			pauseMusic.volume = 0;
@@ -64,14 +64,14 @@ class PauseSubstate extends BaseSubMenu
 		var levelInfo:FlxText = new FlxText(20, 15, 0, "", 32);
 		levelInfo.text = FeatherTools.formatSong(PlayState.song.name) + ' [${stringDiff.replace('-', '').toUpperCase()}]';
 		levelInfo.scrollFactor.set();
-		levelInfo.setFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 32);
+		levelInfo.setFormat(AssetHelper.grabAsset("vcr", FONT, "data/fonts"), 32);
 		levelInfo.updateHitbox();
 		add(levelInfo);
 
 		var levelDeaths:FlxText = new FlxText(20, 15 + 32, 0, "", 32);
 		levelDeaths.text = 'Blue balled: ' + PlayerInfo.stats.deaths;
 		levelDeaths.scrollFactor.set();
-		levelDeaths.setFormat(AssetHandler.grabAsset("vcr", FONT, "data/fonts"), 32);
+		levelDeaths.setFormat(AssetHelper.grabAsset("vcr", FONT, "data/fonts"), 32);
 		levelDeaths.updateHitbox();
 		add(levelDeaths);
 
@@ -89,7 +89,7 @@ class PauseSubstate extends BaseSubMenu
 
 		for (i in 0...wrappableGroup.length)
 		{
-			var base:Alphabet = new Alphabet(0, (70 * i) + 30, wrappableGroup[i], true);
+			var base:Alphabet = new Alphabet(0, (70 * i) + 30, wrappableGroup[i], false);
 			base.isMenuItem = true;
 			base.targetY = i;
 			itemContainer.add(base);
@@ -151,7 +151,7 @@ class PauseSubstate extends BaseSubMenu
 		super.updateSelection(newSelection);
 
 		if (newSelection != 0)
-			FeatherTools.playSound("scrollMenu", 'sounds/menus');
+			FSound.playSound("scrollMenu", 'sounds/menus');
 	}
 
 	override function destroy():Void

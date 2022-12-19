@@ -13,15 +13,15 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxSort;
 import flixel.util.FlxTimer;
-import funkin.backend.data.PlayerInfo;
+import funkin.essentials.PlayerInfo;
 import funkin.objects.Character;
 import funkin.objects.Stage;
 import funkin.objects.ui.*;
 import funkin.objects.ui.notes.*;
-import funkin.song.ChartParser;
-import funkin.song.Conductor;
-import funkin.song.MusicState;
-import funkin.song.SongFormat.FeatherSong;
+import funkin.essentials.song.ChartParser;
+import funkin.essentials.song.Conductor;
+import funkin.essentials.song.MusicState;
+import funkin.essentials.song.SongFormat.FeatherSong;
 import funkin.substates.GameOverSubstate;
 import openfl.media.Sound;
 
@@ -50,7 +50,6 @@ class PlayState extends MusicBeatState
 		if (newSong != null && song != newSong)
 		{
 			// clear notes prior to storing new ones
-			noteContainer = [];
 			if (notesGroup != null)
 				notesGroup.destroy();
 
@@ -64,7 +63,14 @@ class PlayState extends MusicBeatState
 			Conductor.changeBPM(song.bpm);
 			// Conductor.mapBPMChanges(song);
 
-			noteContainer = ChartParser.loadChartNotes(song);
+			song = ChartParser.loadChartNotes(song);
+
+			if (ChartParser.noteList.length > 0)
+			{
+				noteContainer = [];
+				for (i in 0...ChartParser.noteList.length)
+					noteContainer.push(ChartParser.noteList[i]);
+			}
 		}
 
 		return song;
@@ -84,27 +90,25 @@ class PlayState extends MusicBeatState
 	public static var notesGroup:Notefield;
 	public static var noteContainer:Array<Note>;
 
-	public static var gameUI:UI;
+	public static var ui:UI;
 
 	public static var strumsP1:Strum;
 	public static var strumsP2:Strum;
 
 	public static var playerStrum:Strum;
 
-	public static var assetSkin:String = 'base';
+	public static var assetSkin:String = 'default';
 
 	// how big to stretch the pixel assets
 	public static var pixelAssetSize:Float = 6;
 
-	// Characters
+	// Objects
 	public static var player:Character;
-	public static var crowd:Character;
 	public static var opponent:Character;
 
-	public var crowdSpeed:Int = 1;
+	private var gameStage:Stage;
 
-	public var gameStage:Stage;
-	public var curStage:String = '';
+	public static var curStage:String = '';
 
 	// Camera
 	public var camGame:FlxCamera;
@@ -132,6 +136,8 @@ class PlayState extends MusicBeatState
 
 		localScripts = [];
 
+		curStage = "";
+
 		FlxG.mouse.visible = false;
 
 		PlayerInfo.resetScore();
@@ -145,12 +151,6 @@ class PlayState extends MusicBeatState
 		camHUD = new FlxCamera();
 		camOther = new FlxCamera();
 
-		gameStage = new Stage();
-
-		opponent = new Character();
-		crowd = new Character();
-		player = new Character();
-
 		camHUD.bgColor.alpha = 0;
 		camOther.bgColor.alpha = 0;
 
@@ -162,21 +162,15 @@ class PlayState extends MusicBeatState
 		// generate the song
 		song = ChartParser.loadChartData(songName, difficulty);
 
-		FeatherModule.initArray(localScripts);
+		FeatherModule.createInstance(localScripts);
 
-		gameStage.setStage('stage');
+		gameStage = new Stage().setStage("stage");
 		add(gameStage);
 
-		curStage = gameStage.getStageName();
-
-		crowd.setCharacter(300, 100, song.crowd);
-		add(crowd);
-
-		opponent.setCharacter(100, 100, song.opponent);
+		opponent = new Character(false).setCharacter(gameStage.opponentPos.x, gameStage.opponentPos.y, song.opponent);
+		player = new Character(true).setCharacter(gameStage.playerPos.x, gameStage.playerPos.y, song.player);
 
 		add(opponent);
-
-		player.setCharacter(770, 450, song.player);
 		add(player);
 
 		strumsGroup = new FlxTypedGroup<Strum>();
@@ -185,12 +179,12 @@ class PlayState extends MusicBeatState
 		strumsGroup.cameras = [camHUD];
 		notesGroup.cameras = [camHUD];
 
-		var strumX = (FlxG.width / 2);
-		var strumWidthX = (FlxG.width / 4);
-		var strumY = (OptionsAPI.getPref("Downscroll") ? FlxG.height - 170 : 25);
+		var strumX:Float = (FlxG.width / 2) - 30;
+		var strumWidthX:Float = (FlxG.width / 4);
+		var strumY:Float = (OptionsAPI.getPref("Downscroll") ? FlxG.height - 170 : 25);
 
 		strumsP1 = new Strum(strumX + (OptionsAPI.getPref("Center Notes") ? 0 : strumWidthX), strumY, [player], false, OptionsAPI.getPref("Downscroll"));
-		strumsP2 = new Strum(strumX - strumWidthX + 30, strumY, [opponent], true, OptionsAPI.getPref("Downscroll"));
+		strumsP2 = new Strum(strumX - strumWidthX, strumY, [opponent], true, OptionsAPI.getPref("Downscroll"));
 
 		strumsGroup.add(strumsP1);
 		strumsGroup.add(strumsP2);
@@ -203,15 +197,13 @@ class PlayState extends MusicBeatState
 		add(strumsGroup);
 		add(notesGroup);
 
-		gameUI = new UI();
-		gameUI.cameras = [camHUD];
-		add(gameUI);
+		ui = new UI();
+		ui.cameras = [camHUD];
+		add(ui);
 
 		camFollow = new FlxObject(0, 0, 1, 1);
-		camFollow.setPosition(player.getMidpoint().x + 50, player.getMidpoint().y - 100);
 		add(camFollow);
 
-		cameraZoom = gameStage.cameraZoom;
 		FlxG.camera.zoom = cameraZoom;
 
 		FlxG.camera.follow(camFollow, LOCKON, 0.04);
@@ -249,7 +241,8 @@ class PlayState extends MusicBeatState
 
 	public var canPause:Bool = false;
 	public var isPaused:Bool = false;
-	public var countdownWasActive:Bool = false;
+	public var countdownStarted:Bool = false;
+	public var countdownEnded:Bool = false;
 	public var skipCountdown:Bool = false;
 
 	public function songCutscene():Void
@@ -278,13 +271,13 @@ class PlayState extends MusicBeatState
 
 	public function startCountdown():Void
 	{
-		countdownWasActive = true;
+		countdownStarted = true;
 		canPause = true;
 
 		// cache ratings
 		popUpScore('sick', true, true);
 
-		if (countdownWasActive && posCount > 3 && !isPaused && !hasDied && skipCountdown)
+		if (countdownEnded && !isPaused && !hasDied && skipCountdown)
 		{
 			Conductor.songPosition = -(Conductor.crochet * 1);
 			startSong();
@@ -299,11 +292,13 @@ class PlayState extends MusicBeatState
 		var introGraphics:Array<FlxGraphic> = [];
 		var introSounds:Array<Sound> = [];
 
+		cameraPanChar(1);
+
 		for (graphic in introGraphicNames)
-			introGraphics.push(AssetHandler.grabAsset(graphic, IMAGE, 'images/ui/$assetSkin'));
+			introGraphics.push(AssetHelper.grabAsset(graphic, IMAGE, 'images/ui/$assetSkin'));
 
 		for (sound in introSoundNames)
-			introSounds.push(AssetHandler.grabAsset(sound, SOUND, 'sounds/$assetSkin'));
+			introSounds.push(AssetHelper.grabAsset(sound, SOUND, 'sounds/$assetSkin'));
 
 		new FlxTimer().start(Conductor.crochet / 1000 / Conductor.songRate, function(tmr:FlxTimer)
 		{
@@ -335,7 +330,7 @@ class PlayState extends MusicBeatState
 
 			// bop with countdown;
 			charDancing(curBeat);
-			gameStage.stageCountdownTick(curBeat, player, opponent, crowd);
+			gameStage.stageCountdownTick(curBeat);
 
 			Conductor.songPosition = -(Conductor.crochet * posSong);
 
@@ -345,7 +340,10 @@ class PlayState extends MusicBeatState
 			callFunc('countdownTick', [posCount]);
 
 			if (posCount == 4)
-				gameUI.showInfoCard();
+			{
+				ui.showInfoCard();
+				countdownEnded = true;
+			}
 		}, 5);
 	}
 
@@ -353,36 +351,8 @@ class PlayState extends MusicBeatState
 	{
 		callFunc('startSong', []);
 
-		Conductor.playSong(song.name);
+		Conductor.playSong(song.name, Conductor.songMusic.playing);
 		isStartingSong = false;
-	}
-
-	inline public function moveCameraSection(pointString:String = 'player'):Void
-	{
-		if (pointString == null)
-			return;
-
-		/**
-			Does this even work properly? @BeastlyGhost
-			- no (Future @BeastlyGhost)
-		**/
-
-		var char:Character = opponent;
-
-		switch (pointString)
-		{
-			case 'crowd':
-				char = crowd;
-			case 'player':
-				char = player;
-			default:
-				char = opponent;
-		}
-
-		var midpoint:FlxPoint = char.getMidpoint();
-		var player:Bool = (pointString == "player");
-
-		camFollow.setPosition(midpoint.x + char.camOffset.x + (player ? -100 : 100), midpoint.y - 100 + char.camOffset.y);
 	}
 
 	override public function update(elapsed:Float):Void
@@ -391,7 +361,7 @@ class PlayState extends MusicBeatState
 
 		super.update(elapsed);
 
-		gameStage.stageUpdate(elapsed, player, opponent, crowd);
+		gameStage.stageUpdate(elapsed);
 
 		if (!isPaused && !hasDied && !isEndingSong)
 		{
@@ -401,8 +371,8 @@ class PlayState extends MusicBeatState
 				{
 					PlayerInfo.validScore = false;
 					playerStrum.autoplay = !playerStrum.autoplay;
-					gameUI.autoPlayText.visible = playerStrum.autoplay;
-					gameUI.autoPlaySine = 1;
+					ui.autoPlayText.visible = playerStrum.autoplay;
+					ui.autoPlaySine = 1;
 				}
 
 				if (FlxG.keys.justPressed.SEVEN)
@@ -421,6 +391,12 @@ class PlayState extends MusicBeatState
 
 			if (Conductor.songPosition > Conductor.lastSongPos)
 				Conductor.lastSongPos = Conductor.songPosition;
+
+			if (song != null)
+			{
+				if (song.sectionNotes != null && song.sectionNotes[curSection] != null)
+					cameraPanChar();
+			}
 		}
 
 		FeatherTools.cameraBumpingZooms(camGame, cameraZoom, cameraSpeed);
@@ -443,7 +419,11 @@ class PlayState extends MusicBeatState
 			{
 				spicyNote.visible = !OptionsAPI.getPref("Hide Opponent Notes");
 				if (OptionsAPI.getPref("Center Notes"))
+				{
 					spicyNote.alpha = 0.3;
+					for (i in 0...strumsP1.babyArrows.members.length)
+						spicyNote.x = strumsP1.babyArrows.members[i].x;
+				}
 			}
 
 			if (spicyNote.step - Conductor.songPosition > 2000)
@@ -455,7 +435,7 @@ class PlayState extends MusicBeatState
 
 		if (song != null)
 		{
-			if (countdownWasActive)
+			if (countdownStarted)
 			{
 				for (babyStrum in strumsGroup)
 				{
@@ -546,7 +526,7 @@ class PlayState extends MusicBeatState
 			persistentUpdate = false;
 			persistentDraw = false;
 
-			FeatherTools.playSound("fnf_loss_sfx", 'sounds/$assetSkin');
+			FSound.playSound("fnf_loss_sfx", 'sounds/$assetSkin');
 
 			var playerPos:FlxPoint = player.getScreenPosition();
 
@@ -565,6 +545,15 @@ class PlayState extends MusicBeatState
 		if (action != null && BabyArrow.actions.contains(action))
 			inputSystem(BabyArrow.actions.indexOf(action), true);
 		callFunc('onKeyPress', [key, action, isGamepad]);
+	}
+
+	public function cameraPanChar(?force:Int):Void
+	{
+		var index:Int = (force != null ? force : song.sectionNotes[curSection].hitIndex);
+		var char:Character = (index == 1 ? player : opponent);
+		var midpoint:FlxPoint = char.getMidpoint();
+
+		camFollow.setPosition(midpoint.x + char.camOffset.x + (index == 1 ? -100 : 100), midpoint.y - 100 + char.camOffset.y);
 	}
 
 	public function onKeyReleased(key:Int, action:String, isGamepad:Bool):Void
@@ -588,7 +577,7 @@ class PlayState extends MusicBeatState
 
 		if (pressed)
 		{
-			if (song != null && countdownWasActive)
+			if (song != null && countdownStarted)
 			{
 				var noteList:Array<Note> = [];
 				var notePresses:Array<Note> = [];
@@ -718,7 +707,7 @@ class PlayState extends MusicBeatState
 					PlayerInfo.increaseScore(ratingInteger);
 
 					// update scoretext
-					gameUI.updateScoreText();
+					ui.updateScoreText();
 				}
 			}
 
@@ -741,19 +730,15 @@ class PlayState extends MusicBeatState
 		if (babyStrum.autoplay)
 			return;
 
-		if (PlayerInfo.stats.combo >= 5)
-			if (crowd != null && crowd.animOffsets.exists("sad"))
-				crowd.playAnim("sad");
-
 		for (char in babyStrum.characters)
 			if (char.hasMissAnims)
 				charPlayAnim(char, 'sing' + BabyArrow.actions[idx].toUpperCase() + 'miss');
 
-		FeatherTools.playSound("miss" + FlxG.random.int(1, 3), 'sounds/$assetSkin', false, FlxG.random.float(0.1, 0.2));
+		FSound.playSound("miss" + FlxG.random.int(1, 3), 'sounds/$assetSkin', false, FlxG.random.float(0.1, 0.2));
 		Conductor.songVocals.volume = 0;
 
 		PlayerInfo.decreaseScore();
-		gameUI.updateScoreText();
+		ui.updateScoreText();
 	}
 
 	public function popUpScore(myRating:String = 'sick', combo:Bool = true, preload:Bool = false):Void
@@ -833,23 +818,18 @@ class PlayState extends MusicBeatState
 			{
 				if (i != null)
 				{
-					var boppingBeat = (i.isQuickDancer ? beat % Math.round(crowdSpeed) * i.bopTimer == 0 : beat % i.bopTimer == 0);
+					var boppingBeat = (i.isQuickDancer ? beat % i.bopTimer == 0 : beat % i.bopTimer == 0);
 					if (!i.animation.curAnim.name.startsWith("sing") && boppingBeat)
 						i.dance();
 				}
 			}
 		}
-
-		if (crowd != null)
-		{
-			var boppingBeat = (crowd.isQuickDancer ? beat % Math.round(crowdSpeed) * crowd.bopTimer == 0 : beat % crowd.bopTimer == 0);
-			if (!crowd.animation.curAnim.name.startsWith("sing") && boppingBeat)
-				crowd.dance();
-		}
 	}
 
 	override function beatHit():Void
 	{
+		super.beatHit();
+
 		charDancing(curBeat);
 
 		if (!OptionsAPI.getPref("Reduce Motion"))
@@ -858,28 +838,26 @@ class PlayState extends MusicBeatState
 			FeatherTools.cameraBumpReset(curBeat, camHUD, bumpSpeed, 0.03);
 		}
 
-		gameUI.beatHit(curBeat);
-		gameStage.stageBeatHit(curBeat, player, opponent, crowd);
+		ui.beatHit(curBeat);
+		gameStage.stageBeatHit(curBeat);
 		callFunc('beatHit', [curBeat]);
-
-		super.beatHit();
 	}
 
 	override function stepHit():Void
 	{
-		Conductor.stepResync();
-		gameStage.stageStepHit(curStep, player, opponent, crowd);
-		callFunc('stepHit', [curStep]);
 		super.stepHit();
+
+		Conductor.stepResync();
+		gameStage.stageStepHit(curStep);
+		callFunc('stepHit', [curStep]);
 	}
 
 	override function sectionHit():Void
 	{
-		moveCameraSection(song.sectionNotes[curSection].cameraPoint);
-
-		gameStage.stageSectionHit(curBeat, player, opponent, crowd);
-		callFunc('sectionHit', [curSection]);
 		super.sectionHit();
+
+		gameStage.stageSectionHit(curSection);
+		callFunc('sectionHit', [curSection]);
 	}
 
 	override function openSubState(SubState:flixel.FlxSubState):Void

@@ -1,6 +1,6 @@
-package funkin.backend;
+package funkin.essentials;
 
-import funkin.backend.data.PlayerInfo;
+import funkin.essentials.PlayerInfo;
 import funkin.objects.ui.notes.BabyArrow;
 import funkin.objects.ui.notes.Note;
 import funkin.states.PlayState;
@@ -19,7 +19,7 @@ class FunkinAssets
 		var height:Int = (skin == "pixel" ? 21 : 155);
 
 		var rating:FeatherSprite = new FeatherSprite();
-		rating.loadGraphic(AssetHandler.grabAsset("ratings", IMAGE, "images/ui/" + skin), true, width, height);
+		rating.loadGraphic(AssetHelper.grabAsset("ratings", IMAGE, "images/ui/" + skin), true, width, height);
 
 		for (i in 0...PlayerInfo.judgeTable.length)
 			rating.animation.add(PlayerInfo.judgeTable[i].name, [i]);
@@ -38,7 +38,7 @@ class FunkinAssets
 		var height:Int = (skin == "pixel" ? 12 : 142);
 
 		var combo:FeatherSprite = new FeatherSprite();
-		combo.loadGraphic(AssetHandler.grabAsset("combo_numbers", IMAGE, "images/ui/" + skin), true, width, height);
+		combo.loadGraphic(AssetHelper.grabAsset("combo_numbers", IMAGE, "images/ui/" + skin), true, width, height);
 
 		for (i in 0...10)
 			combo.animation.add('num' + i, [i]);
@@ -59,7 +59,7 @@ class FunkinAssets
 		switch (PlayState.assetSkin)
 		{
 			case "pixel":
-				babyArrow.loadGraphic(AssetHandler.grabAsset(texture, IMAGE, 'data/notes/default/pixel'), true, 17, 17);
+				babyArrow.loadGraphic(AssetHelper.grabAsset(texture, IMAGE, 'data/notes/default'), true, 17, 17);
 
 				babyArrow.animation.add('static', [index]);
 				babyArrow.animation.add('pressed', [4 + index, 8 + index], 12, false);
@@ -77,7 +77,7 @@ class FunkinAssets
 				babyArrow.y += 25;
 
 			default:
-				babyArrow.frames = AssetHandler.grabAsset(texture, SPARROW, 'data/notes/default/base');
+				babyArrow.frames = AssetHelper.grabAsset(texture, SPARROW, 'data/notes/default');
 
 				babyArrow.animation.addByPrefix(BabyArrow.colors[index], 'arrow' + BabyArrow.actions[index].toUpperCase());
 				babyArrow.animation.addByPrefix('static', 'arrow${BabyArrow.actions[index].toUpperCase()}');
@@ -100,13 +100,13 @@ class FunkinAssets
 
 				if (isSustain)
 				{
-					note.loadGraphic(AssetHandler.grabAsset('HOLD_assets', IMAGE, 'data/notes/default/pixel'), true, 7, 6);
+					note.loadGraphic(AssetHelper.grabAsset('pixel_holds', IMAGE, 'data/notes/default'), true, 7, 6);
 					note.animation.add(BabyArrow.colors[index] + 'holdend', [indexPixel[index]]);
 					note.animation.add(BabyArrow.colors[index] + 'hold', [indexPixel[index] - 4]);
 				}
 				else
 				{
-					note.loadGraphic(AssetHandler.grabAsset('NOTE_assets', IMAGE, 'data/notes/default/pixel'), true, 17, 17);
+					note.loadGraphic(AssetHelper.grabAsset('pixel_notes', IMAGE, 'data/notes/default'), true, 17, 17);
 					note.animation.add(BabyArrow.colors[index] + 'Scroll', [indexPixel[index]], 12);
 				}
 
@@ -115,7 +115,7 @@ class FunkinAssets
 				note.antialiasing = false;
 
 			default:
-				note.frames = AssetHandler.grabAsset('NOTE_assets', SPARROW, 'data/notes/default/base');
+				note.frames = AssetHelper.grabAsset('NOTE_assets', SPARROW, 'data/notes/default');
 
 				if (!isSustain)
 					note.animation.addByPrefix(BabyArrow.colors[index] + 'Scroll', BabyArrow.colors[index] + '0');

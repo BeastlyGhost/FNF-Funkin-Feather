@@ -1,4 +1,4 @@
-package funkin.song;
+package funkin.essentials.song;
 
 /**
 	-- @BeastlyGhost --
@@ -8,12 +8,12 @@ package funkin.song;
 **/
 typedef SectionBody =
 {
-	var time:Float; // strum time
-	var index:Int; // note data
+	var time:Float; // note time
+	var index:Int; // note index
 	var ?type:String; // note type ("default" by default)
 	var ?animation:String; // note animation string (null by default)
-	var holdLength:Float; // note sustain length
-	var cameraPoint:String; // where should the camera point to
+	var ?holdLength:Float; // note sustain length
+	var ?hitIndex:Int;
 	var ?bpm:Float;
 }
 
@@ -64,7 +64,7 @@ typedef SwagSong =
 	var bpm:Int;
 	var needsVoices:Bool;
 	var speed:Float;
-
+	//
 	var player1:String;
 	var player2:String;
 	var player3:String;

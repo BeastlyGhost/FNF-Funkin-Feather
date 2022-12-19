@@ -1,4 +1,4 @@
-package funkin.song;
+package funkin.essentials.song;
 
 import flixel.FlxG;
 import flixel.FlxState;
@@ -7,8 +7,8 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxTimer;
 import funkin.backend.Transition;
-import funkin.backend.data.Interfaces.IMusicBeat;
-import funkin.song.Conductor.BPMChangeEvent;
+import funkin.essentials.Interfaces.IMusicBeat;
+import funkin.essentials.song.Conductor.BPMChangeEvent;
 import funkin.states.ScriptableState;
 
 /**
@@ -66,6 +66,10 @@ class MusicBeatState extends ScriptableState implements IMusicBeat
 	public var lastStep:Int = 0;
 	public var lastSection:Int = 0;
 
+	public var nextBeat:Int = 0;
+	public var nextStep:Int = 0;
+	public var nextSection:Int = 0;
+
 	override public function create():Void
 	{
 		// play the transition if we are allowed to
@@ -111,7 +115,7 @@ class MusicBeatState extends ScriptableState implements IMusicBeat
 		});
 
 		// clear assets cache
-		AssetHandler.clear(true, false);
+		AssetHelper.clear(true, false);
 
 		super.closeSubState();
 	}
@@ -142,6 +146,8 @@ class MusicBeatState extends ScriptableState implements IMusicBeat
 		// trace('Section $curSection - Prev $lastSection');
 		if (lastSection < curSection)
 			lastSection = curSection;
+
+		nextSection = curSection + 1;
 	}
 
 	public function beatHit():Void
@@ -151,6 +157,8 @@ class MusicBeatState extends ScriptableState implements IMusicBeat
 
 		if (lastBeat < curBeat)
 			lastBeat = curBeat;
+
+		nextBeat = curBeat + 1;
 	}
 
 	public function stepHit():Void
@@ -160,6 +168,8 @@ class MusicBeatState extends ScriptableState implements IMusicBeat
 
 		if (lastStep < curStep)
 			lastStep = curStep;
+
+		nextStep = curStep + 1;
 	}
 
 	public var isStartingSong:Bool = false;
@@ -177,6 +187,10 @@ class MusicBeatSubstate extends ScriptableSubstate implements IMusicBeat
 	public var lastBeat:Int = 0;
 	public var lastStep:Int = 0;
 	public var lastSection:Int = 0;
+
+	public var nextBeat:Int = 0;
+	public var nextStep:Int = 0;
+	public var nextSection:Int = 0;
 
 	override public function update(elapsed:Float):Void
 	{
@@ -213,6 +227,8 @@ class MusicBeatSubstate extends ScriptableSubstate implements IMusicBeat
 	{
 		if (lastSection < curSection)
 			lastSection = curSection;
+
+		nextSection = curSection + 1;
 	}
 
 	public function beatHit():Void
@@ -222,6 +238,8 @@ class MusicBeatSubstate extends ScriptableSubstate implements IMusicBeat
 
 		if (lastBeat < curBeat)
 			lastBeat = curBeat;
+
+		nextBeat = curBeat + 1;
 	}
 
 	public function stepHit():Void
@@ -231,6 +249,8 @@ class MusicBeatSubstate extends ScriptableSubstate implements IMusicBeat
 
 		if (lastStep < curStep)
 			lastStep = curStep;
+
+		nextStep = curStep + 1;
 	}
 
 	public function endSong():Void {}

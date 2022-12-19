@@ -1,8 +1,8 @@
-package funkin.song;
+package funkin.essentials.song;
 
 import flixel.FlxG;
 import flixel.system.FlxSound;
-import funkin.song.SongFormat.FeatherSong;
+import funkin.essentials.song.SongFormat.FeatherSong;
 
 typedef BPMChangeEvent =
 {
@@ -70,8 +70,8 @@ class Conductor
 
 	public static function callVocals(name:String):Void
 	{
-		songMusic = new FlxSound().loadEmbedded(AssetHandler.grabAsset("Inst", SOUND, "songs/" + name));
-		songVocals = new FlxSound().loadEmbedded(AssetHandler.grabAsset("Voices", SOUND, "songs/" + name));
+		songMusic = new FlxSound().loadEmbedded(AssetHelper.grabAsset("Inst", SOUND, "data/songs/" + name));
+		songVocals = new FlxSound().loadEmbedded(AssetHelper.grabAsset("Voices", SOUND, "data/songs/" + name));
 
 		#if (flixel >= "5.0.0")
 		songMusic.pitch = songRate;
@@ -88,12 +88,22 @@ class Conductor
 		}
 	}
 
-	public static function playSong(name:String):Void
+	public static function playSong(name:String, ?resume:Bool = true):Void
 	{
 		if (songMusic != null)
-			songMusic.play();
+		{
+			if (resume)
+				songMusic.resume();
+			else
+				songMusic.play();
+		}
 		if (songVocals != null)
-			songVocals.play();
+		{
+			if (resume)
+				songVocals.resume();
+			else
+				songVocals.play();
+		}
 	}
 
 	public static function pauseSong():Void

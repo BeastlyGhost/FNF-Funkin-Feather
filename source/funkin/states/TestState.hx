@@ -5,7 +5,7 @@ import flixel.FlxSprite;
 import flixel.FlxState;
 import funkin.objects.ui.fonts.Alphabet;
 import funkin.objects.ui.menus.OptionThingie.SelectorThingie;
-import funkin.song.MusicState;
+import funkin.essentials.song.MusicState;
 import funkin.states.menus.MainMenu;
 
 class TestState extends FlxState
@@ -20,7 +20,7 @@ class TestState extends FlxState
 		bg.scrollFactor.set();
 		add(bg);
 
-		var test = new Alphabet(0, 0, "Hello", true);
+		var test = new Alphabet(0, 0, "Hello", false);
 		test.color = 0xFFFFFFFF;
 		test.screenCenter(XY);
 		add(test);

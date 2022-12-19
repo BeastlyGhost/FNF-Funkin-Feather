@@ -14,7 +14,7 @@ class WeekItem extends FlxSpriteGroup
 	public function new(x:Float, y:Float, imageName:String = 'week0'):Void
 	{
 		super(x, y);
-		sprite = new FlxSprite().loadGraphic(AssetHandler.grabAsset(imageName, IMAGE, 'images/menus/storyMenu/weeks'));
+		sprite = new FlxSprite().loadGraphic(AssetHelper.grabAsset(imageName, IMAGE, 'images/menus/storyMenu/weeks'));
 		add(sprite);
 	}
 

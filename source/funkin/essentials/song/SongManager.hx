@@ -1,4 +1,4 @@
-package funkin.backend.data;
+package funkin.essentials.song;
 
 enum WeekAttribute
 {
@@ -71,7 +71,7 @@ class SongManager
 
 		var songs:Array<String> = [];
 
-		for (folder in sys.FileSystem.readDirectory('assets/songs'))
+		for (folder in sys.FileSystem.readDirectory(AssetHelper.grabRoot('data/songs')))
 			if (!folder.contains('.'))
 				songs.push(folder);
 

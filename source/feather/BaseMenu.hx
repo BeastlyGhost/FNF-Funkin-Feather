@@ -1,10 +1,9 @@
 package feather;
 
-import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import funkin.objects.ui.fonts.Alphabet;
-import funkin.song.MusicState;
+import funkin.essentials.song.MusicState;
 
 class BaseMenu extends MusicBeatState
 {
@@ -18,7 +17,7 @@ class BaseMenu extends MusicBeatState
 
 		if (bgImage != null)
 		{
-			menuBG = new FlxSprite(-80).loadGraphic(AssetHandler.grabAsset(bgImage, IMAGE, 'images/menus'));
+			menuBG = new FlxSprite(-80).loadGraphic(AssetHelper.grabAsset(bgImage, IMAGE, 'images/menus'));
 			menuBG.scrollFactor.set();
 			menuBG.screenCenter(X);
 			add(menuBG);
@@ -32,7 +31,7 @@ class BaseMenu extends MusicBeatState
 		super.updateSelection(newSelection);
 
 		if (newSelection != 0)
-			FeatherTools.playSound("scrollMenu", "sounds/menus");
+			FSound.playSound("scrollMenu", "sounds/menus");
 
 		if (itemContainer != null && itemContainer.members != null)
 		{
@@ -62,7 +61,7 @@ class BaseSubMenu extends MusicBeatSubstate
 
 		if (bgImage != null)
 		{
-			menuBG = new FlxSprite(-80).loadGraphic(AssetHandler.grabAsset(bgImage, IMAGE, 'images/menus'));
+			menuBG = new FlxSprite(-80).loadGraphic(AssetHelper.grabAsset(bgImage, IMAGE, 'images/menus'));
 			menuBG.scrollFactor.set();
 			menuBG.screenCenter(X);
 			add(menuBG);
@@ -76,7 +75,7 @@ class BaseSubMenu extends MusicBeatSubstate
 		super.updateSelection(newSelection);
 
 		if (newSelection != 0)
-			FeatherTools.playSound("scrollMenu", "sounds/menus");
+			FSound.playSound("scrollMenu", "sounds/menus");
 
 		if (itemContainer != null && itemContainer.members != null)
 		{

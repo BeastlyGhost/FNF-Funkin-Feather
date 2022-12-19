@@ -56,7 +56,7 @@ class KeybindsSubstate extends BaseSubMenu
 			if (myKeys[i] == null)
 				myKeys[i] = '';
 
-			var keyTxt:Alphabet = new Alphabet(0, 0, myKeys[i], true);
+			var keyTxt:Alphabet = new Alphabet(0, 0, myKeys[i], false);
 			keyTxt.screenCenter();
 
 			keyTxt.targetY = i;
@@ -97,13 +97,13 @@ class KeybindsSubstate extends BaseSubMenu
 	{
 		super.updateSelection(newSelection);
 
-		var selectionJumper:Int = ((selection < newSelection) ? -1 : 1);
+		var selectionJumper:Int = ((newSelection > selection) ? 1 : -1);
 
 		if (newSelection != 0)
-			FeatherTools.playSound("scrollMenu", 'sounds/menus');
+			FSound.playSound("scrollMenu", 'sounds/menus');
 
-		if (itemContainer.members[selection].text == null || itemContainer.members[selection].text == '')
-			updateSelection(selection + selectionJumper);
+		// if (itemContainer.members[selection].text == null || itemContainer.members[selection].text == '')
+		// 	updateSelection(selection + selectionJumper);
 	}
 
 	public function updateHorizontal(newSelection:Int = 0):Void {}

@@ -1,0 +1,6 @@
+xcf is a format used on the GIMP Image Editor
+it is basically an open source alternative to Photoshop in a way
+
+notesplashes were made outside of gimp or flash/animate
+so there's no entire file for editing them, just their individual
+frames

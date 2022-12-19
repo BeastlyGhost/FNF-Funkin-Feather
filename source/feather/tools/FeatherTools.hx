@@ -2,10 +2,10 @@ package feather.tools;
 
 import flixel.FlxCamera;
 import flixel.FlxG;
-import flixel.FlxSprite;
 import flixel.math.FlxMath;
-import funkin.song.Conductor;
-import funkin.song.MusicState;
+import flixel.util.FlxAxes;
+import funkin.essentials.song.Conductor;
+import funkin.essentials.song.MusicState;
 import sys.FileSystem;
 
 /**
@@ -71,7 +71,7 @@ class FeatherTools
 	{
 		if ((FlxG.sound.music == null || (FlxG.sound.music != null && !FlxG.sound.music.playing)))
 		{
-			FlxG.sound.playMusic(AssetHandler.grabAsset("freakyMenu", SOUND, "music"), (volumeReset) ? 0 : 0.7);
+			FlxG.sound.playMusic(AssetHelper.grabAsset("freakyMenu", SOUND, "music"), (volumeReset) ? 0 : 0.7);
 			if (volumeReset)
 				FlxG.sound.music.fadeIn(4, 0, 0.7);
 			Conductor.changeBPM(102);
@@ -89,7 +89,7 @@ class FeatherTools
 		if (!file.endsWith('/'))
 			file = '$file/';
 
-		var path:String = AssetHandler.grabRoot(file, DIRECTORY);
+		var path:String = AssetHelper.grabRoot(file, DIRECTORY);
 
 		var absolutePath:String = FileSystem.absolutePath(path);
 		var directory:Array<String> = FileSystem.readDirectory(absolutePath);
@@ -114,19 +114,21 @@ class FeatherTools
 
 	inline public static function getDifficulty(diff:Int = 0):String
 	{
-		return funkin.backend.data.SongManager.defaultDiffs[diff];
+		return funkin.essentials.song.SongManager.defaultDiffs[diff];
 	}
 
-	inline public static function playSound(name:String, folder:String = "sounds", persist:Bool = false, volume:Float = 1, ?onEnd:Void->Void):Void
+	inline public static function getAxes(axe:String = 'xy'):FlxAxes
 	{
-		var mySound:flixel.system.FlxSound = new flixel.system.FlxSound();
-		mySound.loadEmbedded(AssetHandler.grabAsset(name, SOUND, folder));
-		mySound.volume = volume;
-		mySound.persist = persist;
-		mySound.play();
-
-		if (onEnd != null)
-			mySound.onComplete = onEnd;
+		switch (axe)
+		{
+			case "x":
+				return FlxAxes.X;
+			case "y":
+				return FlxAxes.Y;
+			default:
+				return FlxAxes.XY;
+		}
+		return FlxAxes.XY;
 	}
 
 	inline public static function openURL(link:String):Void
@@ -136,97 +138,5 @@ class FeatherTools
 		#else
 		FlxG.openURL(link);
 		#end
-	}
-}
-
-/**
-	Flixel Sprite Extension made for characters! 
-**/
-class FeatherSprite extends FlxSprite
-{
-	//
-	public var animOffsets:Map<String, Array<Dynamic>>;
-
-	public function new(x:Float = 0, y:Float = 0):Void
-	{
-		animOffsets = new Map<String, Array<Dynamic>>();
-		super();
-	}
-
-	public function playAnim(AnimName:String, Force:Bool = false, Reversed:Bool = false, Frame:Int = 0):Void
-	{
-		animation.play(AnimName, Force, Reversed, Frame);
-		centerOffsets();
-		centerOrigin();
-
-		var daOffset:Array<Dynamic> = animOffsets.get(AnimName);
-		if (animOffsets.exists(AnimName))
-			offset.set(daOffset[0], daOffset[1]);
-	}
-
-	public function addOffset(name:String, x:Float = 0, y:Float = 0):Void
-		animOffsets[name] = [x, y];
-
-	override public function destroy()
-	{
-		if (graphic != null)
-			graphic.dump();
-		super.destroy();
-	}
-}
-
-/**
-	a Sprite that follows a parent sprite
-**/
-class FeatherAttachedSprite extends FeatherSprite
-{
-	public var parentSprite:FlxSprite;
-
-	public var addX:Float = 0;
-	public var addY:Float = 0;
-	public var addAngle:Float = 0;
-	public var addAlpha:Float = 0;
-
-	public var copyParentAngle:Bool = false;
-	public var copyParentAlpha:Bool = false;
-	public var copyParentVisib:Bool = false;
-
-	public function new(fileName:String, ?fileFolder:String, ?fileAnim:String, ?looped:Bool = false):Void
-	{
-		super(x, y);
-
-		if (fileName != null)
-		{
-			if (fileAnim != null)
-			{
-				frames = AssetHandler.grabAsset(fileName, SPARROW, fileFolder);
-				animation.addByPrefix('static', fileAnim, 24, looped);
-				animation.play('static');
-			}
-			else
-				loadGraphic(AssetHandler.grabAsset(fileName, IMAGE, fileFolder));
-			scrollFactor.set();
-		}
-	}
-
-	override function update(elapsed:Float):Void
-	{
-		super.update(elapsed);
-
-		// set parent sprite stuffs;
-		if (parentSprite != null)
-		{
-			setPosition(parentSprite.x + addX, parentSprite.y + addY);
-			scrollFactor.set(parentSprite.scrollFactor.x, parentSprite.scrollFactor.y);
-
-			if (copyParentAngle)
-				angle = parentSprite.angle + addAngle;
-
-			if (copyParentAlpha)
-				alpha = parentSprite.alpha * addAlpha;
-
-			if (copyParentVisib)
-				visible = parentSprite.visible;
-		}
 	}
 }

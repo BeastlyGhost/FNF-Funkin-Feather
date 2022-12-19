@@ -16,7 +16,7 @@ class CheckboxThingie extends FeatherSprite
 	{
 		super(x, y);
 
-		var path:String = AssetHandler.grabAsset('checkboxThingie', MODULE, 'images/menus/optionsMenu');
+		var path:String = AssetHelper.grabAsset('checkboxThingie', MODULE, 'images/menus/optionsMenu');
 
 		if (path != null && FileSystem.exists(path))
 		{
@@ -50,6 +50,12 @@ class CheckboxThingie extends FeatherSprite
 	}
 }
 
+enum SelectorType
+{
+	WORD;
+	NUMBER;
+}
+
 class SelectorThingie extends FlxTypedSpriteGroup<FlxSprite>
 {
 	/**
@@ -69,13 +75,13 @@ class SelectorThingie extends FlxTypedSpriteGroup<FlxSprite>
 	public var arrowRight:Alphabet;
 
 	public var name(default, null):String;
-	public var number(default, null):Bool;
+	public var type(default, null):SelectorType;
 	public var choice(default, set):String;
 
 	public inline function set_choice(myChoice:String):String
 	{
 		choice = myChoice;
-		number = Std.parseInt(myChoice) != null;
+		type = (Std.parseInt(myChoice) != null ? NUMBER : WORD);
 		if (choice != null)
 			nameSprite.text = myChoice;
 		return myChoice;
@@ -90,9 +96,9 @@ class SelectorThingie extends FlxTypedSpriteGroup<FlxSprite>
 		this.name = name;
 		this.ops = ops;
 
-		nameSprite = new Alphabet(0, 0, "", true);
-		arrowLeft = new Alphabet(0, 0, "", true);
-		arrowRight = new Alphabet(0, 0, "", true);
+		nameSprite = new Alphabet(0, 0, Std.string(choice), true);
+		arrowLeft = new Alphabet(0, 0, "<", true);
+		arrowRight = new Alphabet(0, 0, ">", true);
 
 		add(nameSprite);
 		add(arrowLeft);

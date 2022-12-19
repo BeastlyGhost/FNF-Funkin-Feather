@@ -3,7 +3,7 @@ package funkin.objects.ui.notes;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxRect;
 import funkin.objects.ui.notes.BabyArrow;
-import funkin.song.Conductor;
+import funkin.essentials.song.Conductor;
 
 /**
 	Notefield class, initializes *scrolling* note handling,
@@ -53,6 +53,15 @@ class Notefield extends FlxTypedGroup<Note>
 
 				note.clipRect = swagRect;
 			}
+		}
+	}
+
+	public function addNote(note:Note, strum:Strum):Void
+	{
+		if (note != null && strum != null)
+		{
+			if (!strum.notes.members.contains(note))
+				strum.notes.add(note);
 		}
 	}
 

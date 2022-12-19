@@ -11,10 +11,10 @@ import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import funkin.objects.ui.Icon;
 import funkin.objects.ui.notes.Note;
-import funkin.song.ChartParser;
-import funkin.song.Conductor;
-import funkin.song.MusicState;
-import funkin.song.SongFormat.FeatherSong;
+import funkin.essentials.song.ChartParser;
+import funkin.essentials.song.Conductor;
+import funkin.essentials.song.MusicState;
+import funkin.essentials.song.SongFormat.FeatherSong;
 import haxe.Json;
 import openfl.net.FileReference;
 
@@ -51,7 +51,7 @@ enum CharterTheme
 
 	-- Section Contents
 
-		[SONG]
+		[SONG]mustPress
 		- Song Name Box
 		- Song BPM Changer
 		- Song Scroll Speed Changer
@@ -105,9 +105,9 @@ class ChartEditor extends MusicBeatState
 	var iconP1:Icon;
 	var iconP2:Icon;
 
-	var renderedNotes:FlxTypedGroup<Note>;
-	var renderedHolds:FlxTypedGroup<Note>;
-	var renderedLabels:FlxTypedGroup<FlxText>;
+	var notesGroup:FlxTypedGroup<Note>;
+	var holdsGroup:FlxTypedGroup<Note>;
+	var labelsGroup:FlxTypedGroup<FlxText>;
 
 	var noteSelection:Int;
 
@@ -156,8 +156,9 @@ class ChartEditor extends MusicBeatState
 			iconP2.setPosition(gridMain.width / 2, -100);
 		 */
 
-		renderedNotes = new FlxTypedGroup<Note>();
-		renderedHolds = new FlxTypedGroup<Note>();
+		notesGroup = new FlxTypedGroup<Note>();
+		holdsGroup = new FlxTypedGroup<Note>();
+		labelsGroup = new FlxTypedGroup<FlxText>();
 
 		infoText = new FlxText(0, FlxG.height, 0, "", 16);
 		infoText.scrollFactor.set();
@@ -168,6 +169,10 @@ class ChartEditor extends MusicBeatState
 		mouseHighlight = new FlxSprite().makeGraphic(gridSize, gridSize);
 		mouseHighlight.screenCenter(XY);
 		add(mouseHighlight);
+
+		add(notesGroup);
+		add(holdsGroup);
+		add(labelsGroup);
 
 		var tabs = [
 			{name: "Song", label: 'Song Data'},
@@ -184,9 +189,9 @@ class ChartEditor extends MusicBeatState
 		boxUI.selected_tab = 3;
 		add(boxUI);
 
-		mousePosUpdate();
-
 		addSongUI();
+
+		mousePosUpdate();
 	}
 
 	function addSongUI():Void
@@ -213,6 +218,21 @@ class ChartEditor extends MusicBeatState
 		add(gridBlackLine);
 	}
 
+	private function mousePosUpdate():Void
+	{
+		if (FlxG.mouse.x > gridMain.x
+			&& FlxG.mouse.x < (gridMain.x + gridMain.width)
+			&& FlxG.mouse.y > 0
+			&& FlxG.mouse.y < getYfromStrum(FlxG.sound.music.length))
+		{
+			mouseHighlight.x = (Math.floor((FlxG.mouse.x - gridMain.x) / gridSize) * gridSize) + gridMain.x;
+			if (FlxG.keys.pressed.SHIFT)
+				mouseHighlight.y = FlxG.mouse.y;
+			else
+				mouseHighlight.y = Math.floor(FlxG.mouse.y / gridSize) * gridSize;
+		}
+	}
+
 	override function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
@@ -221,14 +241,12 @@ class ChartEditor extends MusicBeatState
 
 		if (FlxG.mouse.justPressed)
 		{
-			if (FlxG.mouse.overlaps(renderedNotes))
+			if (FlxG.mouse.overlaps(notesGroup))
 			{
-				renderedNotes.forEach(function(note:Note)
+				notesGroup.forEach(function(note:Note)
 				{
 					if (FlxG.mouse.overlaps(note))
-					{
 						removeNote(note);
-					}
 				});
 			}
 			else
@@ -238,6 +256,7 @@ class ChartEditor extends MusicBeatState
 					&& FlxG.mouse.y > 0
 					&& FlxG.mouse.y < getYfromStrum(FlxG.sound.music.length))
 				{
+					FlxG.log.add('added note');
 					placeNote();
 				}
 			}
@@ -263,8 +282,9 @@ class ChartEditor extends MusicBeatState
 		{
 			if (song != null && Conductor.songMusic != null)
 			{
-				if (!Conductor.songMusic.playing)
-					Conductor.playSong(song.name);
+				var wasPlaying:Bool = Conductor.songMusic.playing;
+				if (!wasPlaying)
+					Conductor.playSong(song.name, wasPlaying);
 				else
 					Conductor.pauseSong();
 			}
@@ -288,8 +308,8 @@ class ChartEditor extends MusicBeatState
 
 	function updateGrid():Void
 	{
-		renderedNotes.clear();
-		renderedHolds.clear();
+		notesGroup.clear();
+		holdsGroup.clear();
 
 		/*
 			if (song.sectionNotes[curSection].bpm > 0)
@@ -314,7 +334,7 @@ class ChartEditor extends MusicBeatState
 			var type:String = i.type;
 			var holdLength:Float = i.holdLength;
 
-			var note:Note = new Note(time, index, type, null, false);
+			var note:Note = new Note(time, index, type, false, null);
 			note.sustainLength = holdLength;
 			note.setGraphicSize(gridSize, gridSize);
 			note.updateHitbox();
@@ -322,15 +342,15 @@ class ChartEditor extends MusicBeatState
 
 			if (song.sectionNotes != null && song.sectionNotes[curSection] != null)
 			{
-				var isMustPress:Bool = song.sectionNotes[curSection].cameraPoint == "player";
+				var isMustPress:Bool = (song.sectionNotes[curSection].hitIndex == 1);
 
 				note.x -= ((gridSize * 6) - (gridSize / 2));
 				note.x += Math.floor((isMustPress ? (index + 4) % 8 : index) * gridSize);
 
 				note.y = Math.floor(getYfromStrum(time));
-
-				renderedNotes.add(note);
 				trace("Added Note at " + Math.floor(getYfromStrum(time)));
+
+				notesGroup.add(note);
 			}
 		}
 	}
@@ -342,6 +362,15 @@ class ChartEditor extends MusicBeatState
 		var length:Float = 0;
 
 		// noteSelection = song.sectionNotes[curSection].index;
+		song.sectionNotes.push({
+			time: time,
+			index: index,
+			holdLength: length,
+			// hitIndex: 0,
+			// animation: '',
+			// type: '',
+			// bpm: 100,
+		});
 
 		updateGrid();
 	}
@@ -349,7 +378,7 @@ class ChartEditor extends MusicBeatState
 	function removeNote(note:Note):Void
 	{
 		var index:Null<Int> = note.index;
-		var isMustPress:Bool = song.sectionNotes[curSection].cameraPoint == "player";
+		var isMustPress:Bool = (song.sectionNotes[curSection].hitIndex == 1);
 
 		if (index > -1 && note.noteData.mustPress != isMustPress)
 			index += 4;
@@ -367,21 +396,6 @@ class ChartEditor extends MusicBeatState
 		}
 
 		updateGrid();
-	}
-
-	function mousePosUpdate():Void
-	{
-		if (FlxG.mouse.x > gridMain.x
-			&& FlxG.mouse.x < (gridMain.x + gridMain.width)
-			&& FlxG.mouse.y > 0
-			&& FlxG.mouse.y < getYfromStrum(FlxG.sound.music.length))
-		{
-			mouseHighlight.x = (Math.floor((FlxG.mouse.x - gridMain.x) / gridSize) * gridSize) + gridMain.x;
-			if (FlxG.keys.pressed.SHIFT)
-				mouseHighlight.y = FlxG.mouse.y;
-			else
-				mouseHighlight.y = Math.floor(FlxG.mouse.y / gridSize) * gridSize;
-		}
 	}
 
 	function getStrumTime(yPos:Float):Float

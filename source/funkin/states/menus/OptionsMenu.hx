@@ -3,12 +3,11 @@ package funkin.states.menus;
 import feather.BaseMenu;
 import feather.OptionsAPI;
 import flixel.FlxBasic;
-import flixel.FlxG;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxMath;
 import funkin.objects.ui.fonts.Alphabet;
 import funkin.objects.ui.menus.OptionThingie;
-import funkin.song.MusicState;
+import funkin.essentials.song.MusicState;
 
 /**
 	the Options Menu, used for managing game options
@@ -73,20 +72,22 @@ class OptionsMenu extends BaseMenu
 
 		if (accept || (left || right))
 		{
-			if (wrappableGroup[selection].name != "keybinds")
+			var isDynamic:Bool = (wrappableGroup[selection].type == DYNAMIC);
+			var isOption:Bool = (wrappableGroup[selection].attributes != null && wrappableGroup[selection].attributes.contains(DEFAULT));
+
+			if (!isDynamic && isOption)
+				updateOption(wrappableGroup[selection].type);
+
+			if (accept)
 			{
-				switch (wrappableGroup[selection].type)
+				if (isDynamic)
 				{
-					case DYNAMIC:
-						if (accept)
-							switchCategory(wrappableGroup[selection].name);
-					default:
-						if (wrappableGroup[selection].attributes != null && wrappableGroup[selection].attributes.contains(DEFAULT))
-							updateOption(wrappableGroup[selection].type);
+					if (wrappableGroup[selection].name == "keybinds")
+						openSubState(new funkin.substates.KeybindsSubstate(true));
+					else
+						switchCategory(wrappableGroup[selection].name);
 				}
 			}
-			else
-				openSubState(new funkin.substates.KeybindsSubstate(true));
 		}
 
 		if (Controls.isJustPressed("back"))
@@ -101,7 +102,7 @@ class OptionsMenu extends BaseMenu
 					MusicState.switchState(new funkin.states.menus.MainMenu());
 			}
 
-			FeatherTools.playSound("cancelMenu", 'sounds/menus');
+			FSound.playSound("cancelMenu", 'sounds/menus');
 		}
 	}
 
@@ -109,14 +110,14 @@ class OptionsMenu extends BaseMenu
 	{
 		super.updateSelection(newSelection);
 
-		var selectionJumper:Int = ((newSelection < selection) ? -1 : 1);
+		var selectionJumper:Int = ((newSelection > selection) ? 1 : -1);
 
 		if (newSelection != 0)
-			FeatherTools.playSound("scrollMenu", 'sounds/menus');
+			FSound.playSound("scrollMenu", 'sounds/menus');
 
 		// doesn't quite work yet, eeeh
-		if (wrappableGroup[selection].attributes != null && wrappableGroup[selection].attributes.contains(UNSELECTABLE))
-			updateSelection(selection + selectionJumper);
+		// if (wrappableGroup[selection].attributes != null && wrappableGroup[selection].attributes.contains(UNSELECTABLE))
+		// 	updateSelection(selection + selectionJumper);
 	}
 
 	public function callAttachments():Void
@@ -153,6 +154,9 @@ class OptionsMenu extends BaseMenu
 
 	public function switchCategory(newCategory:String):Void
 	{
+		if (!OptionsAPI.preferencesList.exists(newCategory))
+			return;
+
 		activeCategory = newCategory;
 
 		generateOptions(OptionsAPI.preferencesList.get(newCategory));
@@ -186,7 +190,7 @@ class OptionsMenu extends BaseMenu
 
 			if (!option.attributes.contains(UNCHANGEABLE))
 			{
-				var optionTxt:Alphabet = new Alphabet(0, 0, option.name, true);
+				var optionTxt:Alphabet = new Alphabet(0, 0, option.name, false);
 
 				// find unselectable options for automatically centering them
 				if (option.attributes.contains(UNSELECTABLE))
@@ -245,7 +249,9 @@ class OptionsMenu extends BaseMenu
 							box.playAnim(Std.string(!OptionsAPI.getPref(option.text)));
 							mapFinal.set(option, box);
 						case SELECTOR:
-							var arrow:SelectorThingie = new SelectorThingie(10, option.y, option.text, OptionsAPI.getPref(option.text, false));
+							var values:Array<String> = OptionsAPI.getPref(option.text, false).values;
+
+							var arrow:SelectorThingie = new SelectorThingie(10, option.y, option.text, values);
 							arrow.scrollFactor.set();
 							mapFinal.set(option, arrow);
 						default:
@@ -279,9 +285,9 @@ class OptionsMenu extends BaseMenu
 				if (Controls.isJustPressed("left") || Controls.isJustPressed("right"))
 				{
 					var selector:SelectorThingie = attachedSpriteMap.get(item);
-					var diff:Int = (Controls.isJustPressed("left") ? -1 : Controls.isJustPressed("right") ? 1 : 0);
+					var amount:Int = (Controls.isJustPressed("left") ? -1 : Controls.isJustPressed("right") ? 1 : 0);
 
-					updateHorizontal(selector, diff);
+					updateHorizontal(selector, amount);
 				}
 			default:
 				// do nothing
@@ -292,36 +298,28 @@ class OptionsMenu extends BaseMenu
 
 	private function updateHorizontal(selector:SelectorThingie, amount:Int):Void
 	{
-		if (selector.number)
+		switch (selector.type)
 		{
-			switch (selector.name)
-			{
-				case "Framerate Cap":
-					createNumberSelector(amount, selector, 30, 360, 15);
-			}
-		}
-		else
-		{
-			var selectionB:Int = 0;
-			var newSelection:Int = selectionB;
+			case NUMBER:
+				switch (selector.name)
+				{
+					case "Framerate Cap":
+						createNumberSelector(amount, selector, 30, 360, 15);
+					default:
+						createNumberSelector(amount, selector);
+				}
+			default:
+				var choiceSel:Int = 0, selLimiter:Int = 0;
 
-			if (selector.ops != null)
-			{
-				for (i in 0...selector.ops.length)
-					if (selector.ops[i] == selector.choice)
-						selectionB = i;
-			}
+				if (selector.ops != null)
+				{
+					for (i in 0...selector.ops.length)
+						if (selector.ops[i] == selector.choice)
+							choiceSel = i;
 
-			newSelection = FlxMath.wrap(Math.floor(selectionB) + amount, 0, selector.ops.length - 1);
-
-			selector.changeArrow(amount == -1 ? false : true);
-
-			FeatherTools.playSound("scrollMenu", "sounds/menus");
-
-			selector.choice = selector.ops[newSelection];
-
-			OptionsAPI.setPref(selector.name, selector.choice);
-			OptionsAPI.savePrefs();
+					selLimiter = FlxMath.wrap(choiceSel + amount, 0, selector.ops.length - 1);
+					manageSelector(selector, selector.ops[selLimiter], amount);
+				}
 		}
 	}
 
@@ -331,18 +329,24 @@ class OptionsMenu extends BaseMenu
 		var originalValue = OptionsAPI.getPref(object.name);
 		var increase = 15 * steps;
 
-		// cap
-		var valueFull:Float = originalValue + increase;
-		if (valueFull < min || valueFull > max)
-			increase = 0;
-
-		object.changeArrow(steps == -1 ? false : true);
-
-		FeatherTools.playSound("scrollMenu", 'sounds/menus');
-
+		increase = FlxMath.wrap(originalValue + increase, Std.int(min), Std.int(max));
 		originalValue += increase;
-		object.choice = Std.string(originalValue);
-		OptionsAPI.setPref(object.name, originalValue);
-		OptionsAPI.savePrefs();
+
+		manageSelector(object, originalValue, steps);
+	}
+
+	function manageSelector(object:SelectorThingie, value:Any, steps:Int):Void
+	{
+		object.choice = Std.string(value);
+		object.changeArrow(steps == -1 ? false : true);
+		trace("Value is: " + object.choice);
+
+		FSound.playSound("scrollMenu", 'sounds/menus');
+
+		if (object.choice != null)
+		{
+			OptionsAPI.setPref(object.name, value);
+			OptionsAPI.savePrefs();
+		}
 	}
 }

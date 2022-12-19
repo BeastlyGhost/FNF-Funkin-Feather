@@ -1,4 +1,4 @@
-package funkin.backend.data;
+package funkin.essentials;
 
 /**
 	Interface methods are a way to generalize similar variables and functions,

@@ -1,4 +1,4 @@
-package funkin.backend;
+package feather;
 
 import flixel.FlxG;
 import flixel.graphics.FlxGraphic;
@@ -41,7 +41,7 @@ typedef CacheableAsset =
 /**
 	This is the Assets Class, meant to allow access to assets, and manage used ones
 **/
-class AssetHandler
+class AssetHelper
 {
 	/**
 		Stores only user-preferred assets that should not be cleared when `clear` is called
@@ -71,11 +71,31 @@ class AssetHandler
 	public static var trackedAssets:Array<String> = [];
 
 	/**
+		Stores every single group, used to create a neat list of existing groups
+	**/
+	public static var allGroups:Array<String> = [];
+
+	/**
+		Stores groups that will be taken into account while searching for assets
+	**/
+	public static var activeGroups:Array<String> = [];
+
+	/**
+		Specifies the master, after the main one, it will be looked first when searching for assets
+	**/
+	public static var currentGroup:String = null;
+
+	/**
+		Stores folder names that should be excluded when searching for groups
+	**/
+	public static var groupExclusions:Array<String> = ['data', 'images', 'music', 'scripts', 'sounds'];
+
+	/**
 		Returns a specified asset
 
 		example usage:
 
-		`AssetHandler.grabAsset("default/base/NOTE_assets", SPARROW, "data/notes");`
+		`AssetHelper.grabAsset("default/base/NOTE_assets", SPARROW, "data/notes");`
 
 		-----------------------------
 
@@ -84,10 +104,12 @@ class AssetHandler
 		@param directory the directory we should look for the specified asset name
 		@return your asset path along with the asset and its extensions (if null, then nothing)
 	**/
-	public static function grabAsset(asset:String, type:AssetType, directory:String):Dynamic
+	public static function grabAsset(asset:String, type:AssetType, directory:String, ?group:String):Dynamic
 	{
 		//
-		var path = grabRoot('$directory/$asset', type);
+		var pathExtend:String = (directory != null ? '$directory/' : '');
+
+		var path = grabRoot('$pathExtend$asset', group, type);
 		if (FileSystem.exists(path))
 		{
 			switch (type)
@@ -143,7 +165,7 @@ class AssetHandler
 	{
 		if (FlxG.bitmap.checkCache(outputDir))
 			return FlxG.bitmap.get(outputDir);
-		if (mappedAssets[IMAGE].exists(outputDir))
+		else if (mappedAssets[IMAGE].exists(outputDir))
 			return mappedAssets[IMAGE].get(outputDir).data;
 
 		trace('graphic asset is returning null at $outputDir');
@@ -169,13 +191,31 @@ class AssetHandler
 		@param type the type of asset you need, leave it as blank for returning a directory instead
 		@return the main assets directory with a specified subdirectory (and extension, if type is given)
 	**/
-	public static function grabRoot(directory:String, ?type:AssetType):String
+	public static function grabRoot(directory:String, ?group:String, ?type:AssetType):String
 	{
 		//
-		var dir:String = '';
+		var assetExtend:String = '';
+
+		if (type == null)
+			type = DIRECTORY;
+
+		for (folderGroup in sys.FileSystem.readDirectory('assets'))
+		{
+			if (folderGroup != null && !groupExclusions.contains(folderGroup) && !allGroups.contains(folderGroup))
+				allGroups.push(folderGroup);
+
+			if (group == null)
+				group = (currentGroup != null ? currentGroup : null);
+
+			// trace("Asset Groups: " + allGroups);
+		}
+
+		if (group != null)
+			assetExtend += '/$group';
+
 		if (directory != null)
-			dir = '/$directory';
-		return getExtensions('assets$dir', type);
+			assetExtend += '/$directory';
+		return getExtensions('assets$assetExtend', type);
 	}
 
 	/**

@@ -40,7 +40,7 @@ class FeatherModule extends SScript
 		// CLASSES (FUNKIN);
 		set('Alphabet', funkin.objects.ui.fonts.Alphabet);
 		set('Character', funkin.objects.Character);
-		set('Conductor', funkin.song.Conductor);
+		set('Conductor', funkin.essentials.song.Conductor);
 		set('Icon', funkin.objects.ui.Icon);
 		set('Strum', funkin.objects.ui.notes.Strum);
 		set('Strumline', funkin.objects.ui.notes.Strum);
@@ -55,8 +55,8 @@ class FeatherModule extends SScript
 		set('Stage', funkin.objects.Stage);
 		set('OptionsAPI', OptionsAPI);
 		set('FeatherTools', feather.tools.FeatherTools);
-		set('FeatherSprite', feather.tools.FeatherTools.FeatherSprite);
-		set('FeatherAttachedSprite', feather.tools.FeatherTools.FeatherAttachedSprite);
+		set('FeatherSprite', feather.tools.FeatherSpriteManager.FeatherSprite);
+		set('ChildSprite', feather.tools.FeatherSpriteManager.ChildSprite);
 		set('Controls', funkin.backend.Controls);
 
 		#if windows
@@ -76,12 +76,12 @@ class FeatherModule extends SScript
 		#end
 	}
 
-	public static function initArray(moduleArray:Array<FeatherModule>):Array<FeatherModule>
+	public static function createInstance(moduleArray:Array<FeatherModule>):Array<FeatherModule>
 	{
 		// set up the modules folder
 		var dirs:Array<Array<String>> = [
 			FeatherTools.absoluteDirectory('scripts'),
-			FeatherTools.absoluteDirectory('songs/${funkin.states.PlayState.song.name.toLowerCase()}')
+			FeatherTools.absoluteDirectory('data/songs/${funkin.states.PlayState.song.name.toLowerCase()}')
 		];
 
 		var pushedModules:Array<String> = [];
@@ -100,7 +100,7 @@ class FeatherModule extends SScript
 						if (!pushedModules.contains(script) && script != null && script.endsWith(ext))
 						{
 							moduleArray.push(new FeatherModule(script));
-							// trace('new module loaded: ' + script);
+							// trace('new script module loaded: ' + script);
 							pushedModules.push(script);
 						}
 					}
@@ -111,7 +111,7 @@ class FeatherModule extends SScript
 		if (moduleArray != null)
 		{
 			for (i in moduleArray)
-				i.call('scriptCreate', []);
+				i.call('onCreate', []);
 		}
 
 		return moduleArray;
@@ -139,7 +139,7 @@ class EventModule
 			if (event.contains('.'))
 			{
 				event = event.substring(0, event.indexOf('.', 0));
-				loadedEvents.set(event, new FeatherModule(AssetHandler.grabAsset('$event', MODULE, 'data/events')));
+				loadedEvents.set(event, new FeatherModule(AssetHelper.grabAsset('$event', MODULE, 'data/events')));
 				// trace('new event module loaded: ' + event);
 				myEvents.push(event);
 			}
