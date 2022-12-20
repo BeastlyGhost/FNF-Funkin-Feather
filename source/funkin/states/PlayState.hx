@@ -656,10 +656,18 @@ class PlayState extends MusicBeatState
 		{
 			note.noteData.wasGoodHit = true;
 
+			var babyArrow:BabyArrow = babyStrum.babyArrows.members[note.index];
+
 			callFunc('goodNoteHit', [note, babyStrum]);
 
-			if (babyStrum.babyArrows.members[note.index] != null)
-				babyStrum.babyArrows.members[note.index].playAnim('confirm', true);
+			if (babyArrow != null)
+			{
+				if (OptionsAPI.getPref("User Interface Style") == "Vanilla")
+					babyArrow.glowsOnHit = note.noteData.mustPress;
+
+				if (babyArrow.glowsOnHit)
+					babyArrow.playAnim('confirm', true);
+			}
 
 			for (char in babyStrum.characters)
 			{

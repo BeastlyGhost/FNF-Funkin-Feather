@@ -150,8 +150,10 @@ class UI extends FlxSpriteGroup
 
 	public function updateHealthBar():Void
 	{
-		var colorA:Null<Int> = (PlayState.opponent.healthColor != null ? PlayState.opponent.healthColor : 0xFFFF0000);
-		var colorB:Null<Int> = (PlayState.player.healthColor != null ? PlayState.player.healthColor : 0xFF66FF33);
+		var isVanilla:Bool = (OptionsAPI.getPref("User Interface Style") == "Vanilla");
+
+		var colorA:Null<Int> = (!isVanilla && PlayState.opponent.healthColor != null ? PlayState.opponent.healthColor : 0xFFFF0000);
+		var colorB:Null<Int> = (!isVanilla && PlayState.player.healthColor != null ? PlayState.player.healthColor : 0xFF66FF33);
 
 		healthBar.createFilledBar(colorA, colorB);
 		healthBar.scrollFactor.set();

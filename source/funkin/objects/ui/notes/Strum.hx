@@ -30,6 +30,8 @@ class BabyArrow extends FeatherSprite
 
 	public var defaultAlpha:Float = 0.8;
 
+	public var glowsOnHit:Bool = true;
+
 	public function new(index:Int):Void
 	{
 		super(x, y);

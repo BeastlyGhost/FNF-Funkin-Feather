@@ -26,8 +26,6 @@ class NoteTools
 
 class NoteSplash extends FeatherSprite
 {
-	public var index:Int;
-
 	public var offsetX:Int = 0;
 	public var offsetY:Int = 0;
 
@@ -52,8 +50,9 @@ class NoteSplash extends FeatherSprite
 				colorByIndex = true;
 			default:
 				frames = AssetHelper.grabAsset("noteSplashes", SPARROW, "data/notes/default");
-				for (i in 0...2)
-					animation.addByPrefix('impact$i', 'note impact $i ${BabyArrow.colors[ID]}', 24, false);
+				for (i in 0...3)
+					animation.addByPrefix('impact$i', 'note impact $i ${BabyArrow.colors[index]}', 24, false);
+
 				offsetX = 60;
 				offsetY = 30;
 				colorByIndex = false;
