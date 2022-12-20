@@ -32,11 +32,22 @@ class AssetGroup
 
     public function storeGroups():Void
     {
+        var groupsTemp:Array<String> = [];
+
         for (dir in FileSystem.readDirectory("assets"))
+            if (dir != null && !dir.contains('.') && !groupExclusions.contains(dir) && !groupsTemp.contains(dir))
+                groupsTemp.push(dir);
+
+        groupsTemp.sort(function(group1, group2)
+            return Reflect.compare(group1.toLowerCase(), group2.toLowerCase()));
+        
+        for (group in groupsTemp)
         {
-            if (dir != null && !dir.contains('.') && !groupExclusions.contains(dir) && !allGroups.contains(dir))
-                  allGroups.push(dir);
+            if (!allGroups.contains(group))
+                allGroups.push(group);
         }
+
+        // return groupsTemp;
     }
 
     public function getFromDirs(dir:String, type:AssetType):String

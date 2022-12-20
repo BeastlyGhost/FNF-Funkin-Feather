@@ -62,6 +62,12 @@ class Main extends Sprite
 		// compiling via terminal will set this to true, else it's false
 		#end
 
+		// initialize the highscore containers
+		PlayerInfo.loadHighscores();
+
+		// initialize the options api
+		OptionsAPI.loadPrefs();
+
 		addEvents();
 	}
 
@@ -69,16 +75,6 @@ class Main extends Sprite
 	{
 		FlxG.signals.preStateCreate.add(function(state:flixel.FlxState)
 		{
-			// if the next state is the main menu
-			if (Std.isOfType(state, funkin.states.menus.MainMenu))
-			{
-				// initialize the highscore containers
-				PlayerInfo.loadHighscores();
-
-				// initialize the options api
-				OptionsAPI.loadPrefs();
-			}
-
 			// clear unused (and stored, if allowed) memory
 			AssetHelper.clear(true, (!Std.isOfType(state, funkin.states.PlayState)));
 		});
