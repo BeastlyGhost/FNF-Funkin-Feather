@@ -44,8 +44,6 @@ class FreeplayMenu extends BaseMenu
 	var diffTxt:FlxText;
 	var rateTxt:FlxText;
 
-	var tempColors = [0xFFFFB300, 0xFF56AEBD, 0xFF9F5788, 0xFFC35D5D];
-
 	override function create():Void
 	{
 		super.create();
@@ -130,7 +128,7 @@ class FreeplayMenu extends BaseMenu
 		#end
 
 		if (menuBG != null && menuBG.pixels != null)
-			menuBG.color = FlxColor.interpolate(menuBG.color, tempColors[selection]);
+			menuBG.color = FlxColor.interpolate(menuBG.color, songList[selection].color);
 
 		if (FlxG.sound.music.volume < 0.7)
 			FlxG.sound.music.volume += 0.5 * elapsed;

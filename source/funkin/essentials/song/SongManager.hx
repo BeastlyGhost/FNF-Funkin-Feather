@@ -1,5 +1,9 @@
 package funkin.essentials.song;
 
+import sys.FileSystem;
+import feather.assets.AssetGroup;
+import flixel.util.FlxColor;
+
 enum WeekAttribute
 {
 	LOCKED;
@@ -36,10 +40,11 @@ typedef WeekSongForm =
 typedef SongListForm =
 {
 	var name:String;
+	var ?group:String; // might use for separators later??
 	var week:Int;
 	var character:String;
 	var diffs:Array<String>;
-	var color:Int;
+	var color:FlxColor;
 }
 
 class SongManager
@@ -69,21 +74,45 @@ class SongManager
 		// clear the song list in case it's not empty already
 		songList = [];
 
-		var songs:Array<String> = [];
+		var songs:Map<String, Array<String>> = [];
 
-		for (folder in sys.FileSystem.readDirectory(AssetHelper.grabRoot('data/songs')))
-			if (!folder.contains('.') && !songs.contains(folder))
-				songs.push(folder);
-
-		for (i in 0...songs.length)
+		// loop through every asset group
+		for (i in 0...AssetGroup.allGroups.length)
 		{
-			songList.push({
-				name: songs[i],
-				week: 0, // change this to the ACTUAL week number later...
-				character: 'bf',
-				diffs: defaultDiffs,
-				color: -1
-			});
+			var group:String = AssetGroup.allGroups[i];
+			if (group == null)
+				break;
+
+			if (FileSystem.exists('assets/$group/data/songs'))
+			{
+				var song:Array<String> = FileSystem.readDirectory('assets/$group/data/songs');
+
+				// add it to our songs list
+				if (!song.contains('.'))
+					songs.set(group, song);
+				// trace('Group: $group - Songs: ${songs.get(group)}');
+			}
+		}
+
+		for (group => songs in songs)
+		{
+			if (group == null)
+				group = '';
+
+			if (songs != null && songs.length > 0)
+			{
+				for (i in songs)
+				{
+					songList.push({
+						name: i,
+						group: group,
+						week: 0, // change this to the ACTUAL week number later...
+						character: 'bf',
+						diffs: defaultDiffs,
+						color: 0xFFDCDCDC
+					});
+				}
+			}
 		}
 
 		return songList;

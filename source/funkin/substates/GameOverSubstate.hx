@@ -7,6 +7,7 @@ import funkin.essentials.song.Conductor;
 import funkin.essentials.song.MusicState;
 import funkin.objects.Character;
 import funkin.states.PlayState;
+import funkin.states.menus.*;
 
 class GameOverSubstate extends MusicBeatSubstate
 {
@@ -58,6 +59,16 @@ class GameOverSubstate extends MusicBeatSubstate
 	override function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
+
+		if (Controls.isJustPressed("back"))
+		{
+			FlxG.sound.music.stop();
+
+			if (PlayState.gameplayMode == STORY)
+				MusicState.switchState(new StoryMenu());
+			else
+				MusicState.switchState(new FreeplayMenu());
+		}
 
 		if (Controls.isJustPressed("accept"))
 			endScene();
