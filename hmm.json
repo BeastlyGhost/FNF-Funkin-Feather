@@ -8,6 +8,13 @@
       "url": "https://github.com/AltronMaxX/SScript"
     },
     {
+      "name": "haxe-files",
+      "type": "git",
+      "dir": null,
+      "ref": "main",
+      "url": "https://github.com/TheWorldMachinima/haxe-files"
+    },
+    {
       "name": "discord_rpc",
       "type": "git",
       "dir": null,
