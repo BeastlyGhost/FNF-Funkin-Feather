@@ -1,4 +1,4 @@
-package funkin.backend;
+package feather.assets;
 
 import flixel.FlxG;
 import flixel.graphics.FlxGraphic;

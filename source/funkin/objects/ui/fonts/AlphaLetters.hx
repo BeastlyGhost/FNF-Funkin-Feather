@@ -61,9 +61,6 @@ class AlphaLetters
 		"7" => null,
 		"8" => null,
 		"9" => null,
-	];
-
-	public static var symbolMap:Map<String, Null<Letter>> = [
 		// SYMBOLS
 		"(" => null,
 		")" => null,

@@ -1,4 +1,4 @@
-package feather;
+package feather.assets;
 
 import flixel.FlxG;
 import flixel.graphics.FlxGraphic;
@@ -71,26 +71,6 @@ class AssetHelper
 	public static var trackedAssets:Array<String> = [];
 
 	/**
-		Stores every single group, used to create a neat list of existing groups
-	**/
-	public static var allGroups:Array<String> = [];
-
-	/**
-		Stores groups that will be taken into account while searching for assets
-	**/
-	public static var activeGroups:Array<String> = [];
-
-	/**
-		Specifies the master, after the main one, it will be looked first when searching for assets
-	**/
-	public static var currentGroup:String = null;
-
-	/**
-		Stores folder names that should be excluded when searching for groups
-	**/
-	public static var groupExclusions:Array<String> = ['data', 'images', 'music', 'scripts', 'sounds'];
-
-	/**
 		Returns a specified asset
 
 		example usage:
@@ -102,6 +82,15 @@ class AssetHelper
 		@param asset the asset name
 		@param type the asset type (like: IMAGE, SOUND, FONT for example)
 		@param directory the directory we should look for the specified asset name
+		@param group the group to search for the specified asset
+		
+		-- will be formatted as
+			-- group exists
+			"assets/group/directory/asset"
+			-- else
+			"assets/directory/asset"
+		--
+
 		@return your asset path along with the asset and its extensions (if null, then nothing)
 	**/
 	public static function grabAsset(asset:String, type:AssetType, directory:String, ?group:String):Dynamic
@@ -195,19 +184,17 @@ class AssetHelper
 	{
 		//
 		var assetExtend:String = '';
+		var assetGroup:AssetGroup = new AssetGroup();
 
 		if (type == null)
 			type = DIRECTORY;
 
-		for (folderGroup in sys.FileSystem.readDirectory('assets'))
+		if (group == null)
 		{
-			if (folderGroup != null && !groupExclusions.contains(folderGroup) && !allGroups.contains(folderGroup))
-				allGroups.push(folderGroup);
-
-			if (group == null)
-				group = (currentGroup != null ? currentGroup : null);
-
-			// trace("Asset Groups: " + allGroups);
+			// search for every group
+			var groupTemp:String = assetGroup.getFromDirs(directory, type);
+			if (groupTemp != null)
+				group = groupTemp;
 		}
 
 		if (group != null)
@@ -215,6 +202,7 @@ class AssetHelper
 
 		if (directory != null)
 			assetExtend += '/$directory';
+
 		return getExtensions('assets$assetExtend', type);
 	}
 

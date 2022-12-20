@@ -8,10 +8,10 @@ import feather.tools.FeatherSpriteManager;
 import yaml.Yaml;
 
 using StringTools;
-using feather.AssetHelper;
 using feather.OptionsAPI;
+using feather.assets.AssetHelper;
+using feather.assets.Paths;
 using feather.tools.FeatherTools;
 using funkin.backend.Controls;
-using funkin.essentials.FunkinAssets;
-using funkin.backend.Paths;
 using funkin.essentials.DiscordRPC;
+using funkin.essentials.FunkinAssets;

@@ -55,7 +55,7 @@ class FeatherModule extends SScript
 		set('game', funkin.states.PlayState.main);
 		set('PlayState', funkin.states.PlayState);
 		if (scriptLibrary == null)
-			set('Paths', funkin.backend.Paths);
+			set('Paths', feather.assets.Paths);
 
 		// CLASSES (FEATHER);
 		set('Stage', funkin.objects.Stage);

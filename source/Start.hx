@@ -30,7 +30,7 @@ class Start extends FlxState
 
 		FlxG.autoPause = false;
 
-		var bianca:FlxSprite = new FlxSprite().loadGraphic(AssetHelper.grabAsset("splashScreen/biancaSplash", IMAGE, "images/menus"));
+		var bianca:FlxSprite = new FlxSprite().loadGraphic(AssetHelper.grabAsset("splashScreen/biancaSplash", IMAGE, "images"));
 		bianca.setGraphicSize(Std.int(bianca.width * 0.6));
 		bianca.screenCenter(XY);
 		bianca.x -= 1000;

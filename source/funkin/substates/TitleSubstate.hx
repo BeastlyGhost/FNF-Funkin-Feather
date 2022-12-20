@@ -76,8 +76,6 @@ class TitleSubstate extends MusicBeatSubstate
 
 			started = true;
 		}
-
-		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
 	}
 
 	function addObjects():Void
@@ -136,6 +134,8 @@ class TitleSubstate extends MusicBeatSubstate
 		logoBump = new FlxSprite(-10, 10);
 		logoBump.loadGraphic(AssetHelper.grabAsset('logo', IMAGE, "images/menus/titleScreen"));
 		add(logoBump);
+
+		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
 	}
 
 	function beginTitle():Void

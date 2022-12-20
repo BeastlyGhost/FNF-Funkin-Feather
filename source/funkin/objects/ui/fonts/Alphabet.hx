@@ -140,7 +140,7 @@ class Alphabet extends FlxTypedSpriteGroup<LetterSprite>
 **/
 class LetterSprite extends FlxSprite
 {
-	public var offsetIncrement:FlxPoint;
+	public var offsetIncrement:FlxPoint = new FlxPoint(0, 0);
 	public var texture(default, set):String = 'default/alphabet';
 	public var defaultFramerate:Int = 24;
 
@@ -177,18 +177,16 @@ class LetterSprite extends FlxSprite
 
 	public function new(x:Float, y:Float):Void
 	{
-		super(x, y);
+		super(x + offsetIncrement.x, y + offsetIncrement.y);
 
 		texture = 'default/alphabet';
-
-		offsetIncrement = new FlxPoint(0, 0);
-
-		x += offsetIncrement.x;
-		y += offsetIncrement.y;
 	}
 
 	public function changeColor(c:FlxColor, bold:Bool):Void
 	{
+		if (texture == null)
+			return;
+
 		if (bold)
 		{
 			colorTransform.redMultiplier = c.redFloat;
@@ -208,6 +206,9 @@ class LetterSprite extends FlxSprite
 	**/
 	public function createChar(letter:String, type:LetterType, isBold:Bool = false):Void
 	{
+		if (texture == null)
+			return;
+
 		var letterCase:String = null;
 
 		if (letterCase == null)
@@ -237,7 +238,7 @@ class LetterSprite extends FlxSprite
 			https://cdn.discordapp.com/attachments/1000603105265733749/1051670973029564426/FjsH6O6WIAEPclK.jpg
 		**/
 
-		for (lettah => thingies in AlphaLetters.symbolMap)
+		for (lettah => thingies in AlphaLetters.letterMap)
 		{
 			if (lettah != null && thingies != null)
 			{
