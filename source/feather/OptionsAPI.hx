@@ -195,8 +195,7 @@ class OptionsAPI
 	**/
 	public static function loadPrefs():Void
 	{
-		if (FlxG.save.name != "Feather-Settings")
-			bindSave("Feather-Settings");
+		bindSave("Feather-Settings");
 
 		// reset your preferences to the defaults
 		for (key => keys in preferencesList)
@@ -237,8 +236,7 @@ class OptionsAPI
 	**/
 	public static function getPref(name:String, getValue:Bool = true):Dynamic
 	{
-		if (FlxG.save.name != "Feather-Settings")
-			bindSave("Feather-Settings");
+		bindSave("Feather-Settings");
 
 		for (category => contents in preferencesList)
 		{
@@ -268,8 +266,7 @@ class OptionsAPI
 	**/
 	public static function setPref(name:String, newValue:Dynamic):Void
 	{
-		if (FlxG.save.name != "Feather-Settings")
-			bindSave("Feather-Settings");
+		bindSave("Feather-Settings");
 
 		for (category => contents in preferencesList)
 		{
@@ -310,7 +307,8 @@ class OptionsAPI
 		// FeatherSave.bind(name);
 		try
 		{
-			FlxG.save.bind(name #if (flixel < "5.0.0"), "BeastlyGhost" #end);
+			if (FlxG.save.name != name)
+				FlxG.save.bind(name #if (flixel < "5.0.0"), "BeastlyGhost" #end);
 		}
 		catch (e)
 		{
