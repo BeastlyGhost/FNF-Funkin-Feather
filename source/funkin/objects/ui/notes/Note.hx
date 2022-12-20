@@ -35,7 +35,6 @@ class NoteSplash extends FeatherSprite
 	{
 		super(x, y);
 
-		this.index = index;
 		ID = index;
 
 		switch (OptionsAPI.getPref("User Interface Style"))
@@ -63,7 +62,6 @@ class NoteSplash extends FeatherSprite
 
 	public function setupNoteSplash(x:Float, y:Float, index:Int = 0):Void
 	{
-		this.index = index;
 		ID = index;
 
 		if (colorByIndex)
