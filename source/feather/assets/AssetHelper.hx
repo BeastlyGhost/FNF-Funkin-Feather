@@ -83,7 +83,7 @@ class AssetHelper
 		@param type the asset type (like: IMAGE, SOUND, FONT for example)
 		@param directory the directory we should look for the specified asset name
 		@param group the group to search for the specified asset
-		
+
 		-- will be formatted as
 			-- group exists
 			"assets/group/directory/asset"
