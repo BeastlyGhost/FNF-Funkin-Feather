@@ -143,7 +143,7 @@ class Strum extends FlxGroup
 		super.update(elapsed);
 		splashes.forEachAlive(function(splash:NoteSplash)
 		{
-			var babyArrow:BabyArrow = babyArrows.members[splash.index];
+			var babyArrow:BabyArrow = babyArrows.members[splash.ID];
 			splash.setPosition(babyArrow.x, babyArrow.y);
 			splash.scrollFactor.set(babyArrow.scrollFactor.x, babyArrow.scrollFactor.y);
 			splash.angle = babyArrow.angle;
