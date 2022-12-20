@@ -10,9 +10,9 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
-import funkin.objects.ui.fonts.Alphabet;
 import funkin.essentials.song.Conductor;
 import funkin.essentials.song.MusicState;
+import funkin.objects.ui.fonts.Alphabet;
 import funkin.states.menus.MainMenu;
 
 typedef TitleData =

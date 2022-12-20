@@ -22,7 +22,7 @@ enum TransType
 **/
 class Transition
 {
-	public static function start(speed:Null<Float>, transIn:Null<Bool>, ?type:TransType, ?fadeEase:Null<EaseFunction>, ?onEnd:Void->Void):Void
+	public static function start(speed:Null<Float>, transIn:Null<Bool>, ?type:TransType, ?fadeEase:Null<EaseFunction>, ?endFunc:Void->Void):Void
 	{
 		if (speed == null)
 			speed = 0.3;
@@ -49,8 +49,8 @@ class Transition
 				FlxTween.tween(bgSpr, {alpha: (transIn ? 1 : 0)}, speed, {
 					onComplete: function(t:FlxTween)
 					{
-						if (onEnd != null)
-							onEnd();
+						if (endFunc != null)
+							endFunc();
 					},
 					ease: fadeEase
 				});
@@ -63,8 +63,8 @@ class Transition
 				FlxTween.tween(bgSpr, {alpha: (transIn ? 1 : 0)}, speed, {
 					onComplete: function(t:FlxTween)
 					{
-						if (onEnd != null)
-							onEnd();
+						if (endFunc != null)
+							endFunc();
 					},
 					ease: fadeEase
 				});

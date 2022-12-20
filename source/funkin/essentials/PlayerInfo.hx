@@ -136,13 +136,14 @@ class PlayerInfo
 	public static function returnGradePercent():String
 	{
 		var floor = Math.floor(accuracy * 100) / 100;
-		var sep = funkin.objects.ui.UI.separatorFC;
+		var sep = funkin.objects.ui.UI.separator;
 
 		var finalPercent:String = '$floor%';
 		if (curComboGrade != null && curComboGrade != '')
-			finalPercent = '$floor%' + sep + curComboGrade;
+			finalPercent = '$floor% [$curComboGrade]';
+		// finalPercent = '$floor%' + sep + curComboGrade;
 
-		return ' [$finalPercent]';
+		return ' $finalPercent';
 	}
 
 	public static function updateGradePercent(id:Int):Void

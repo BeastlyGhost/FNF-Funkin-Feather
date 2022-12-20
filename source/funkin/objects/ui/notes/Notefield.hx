@@ -2,8 +2,8 @@ package funkin.objects.ui.notes;
 
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxRect;
-import funkin.objects.ui.notes.Strum.BabyArrow;
 import funkin.essentials.song.Conductor;
+import funkin.objects.ui.notes.Strum.BabyArrow;
 
 /**
 	Notefield class, initializes *scrolling* note handling,

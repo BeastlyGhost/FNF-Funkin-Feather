@@ -2,8 +2,8 @@ package funkin.states.menus;
 
 import feather.BaseMenu;
 import flixel.group.FlxGroup.FlxTypedGroup;
-import funkin.objects.ui.fonts.Alphabet;
 import funkin.essentials.song.MusicState;
+import funkin.objects.ui.fonts.Alphabet;
 
 typedef CreditsData =
 {

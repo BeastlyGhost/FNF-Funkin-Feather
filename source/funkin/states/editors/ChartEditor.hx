@@ -9,12 +9,12 @@ import flixel.addons.ui.FlxUITabMenu;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxMath;
 import flixel.text.FlxText;
-import funkin.objects.ui.Icon;
-import funkin.objects.ui.notes.Note;
 import funkin.essentials.song.ChartParser;
 import funkin.essentials.song.Conductor;
 import funkin.essentials.song.MusicState;
 import funkin.essentials.song.SongFormat.FeatherSong;
+import funkin.objects.ui.Icon;
+import funkin.objects.ui.notes.Note;
 import haxe.Json;
 import openfl.net.FileReference;
 

@@ -28,7 +28,8 @@ class FPS extends TextField
 		autoSize = LEFT;
 		selectable = false;
 
-		defaultTextFormat = new TextFormat(AssetHelper.grabAsset("vcr", FONT, "data/fonts"), 14, -1);
+		var font:String = AssetHelper.grabAsset("vcr", FONT, "data/fonts");
+		defaultTextFormat = new TextFormat(font, 14, -1);
 		text = "";
 
 		width = 150;
@@ -74,13 +75,13 @@ class FPS extends TextField
 
 			// ESSENTIALS
 			text += (OptionsAPI.getPref("Show FPS Info") ? 'FPS: $fpsDisplay\n' : '');
-			text += (OptionsAPI.getPref("Show RAM Info") ? 'RAM: ${getInterval(memory)} / ${getInterval(memoryTotal)}\n' : '');
+			text += (OptionsAPI.getPref("Show RAM Info") ? 'Memory: ${getInterval(memory)} / ${getInterval(memoryTotal)}\n' : '');
 
 			// DEBUG
 			if (OptionsAPI.getPref("Show Debug Info"))
 			{
 				text += 'State: ${Type.getClassName(Type.getClass(FlxG.state))}\n';
-				text += 'Objects: ${FlxG.state.members.length}\n';
+				text += 'Object Count: ${FlxG.state.members.length}\n';
 			}
 		}
 	}

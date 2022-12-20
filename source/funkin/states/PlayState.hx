@@ -260,7 +260,7 @@ class PlayState extends MusicBeatState
 			Conductor.songPosition = -(Conductor.crochet * 16);
 		}
 
-		callFunc('songCutscene' + (isEndingSong ? 'End' : ''), []);
+		gameStage.callFunc('songCutscene' + (isEndingSong ? 'End' : ''), []);
 
 		isStartingSong = true;
 		startCountdown();
@@ -460,6 +460,7 @@ class PlayState extends MusicBeatState
 
 					if (babyStrum.autoplay)
 					{
+						// todo: accurate autoplay?
 						if (note.step <= Conductor.songPosition)
 							noteHit(note, babyStrum);
 					}
@@ -582,9 +583,6 @@ class PlayState extends MusicBeatState
 				var noteList:Array<Note> = [];
 				var notePresses:Array<Note> = [];
 
-				var prevTime:Float = Conductor.songPosition;
-				Conductor.songPosition = Conductor.songMusic.time;
-
 				notesGroup.forEachAlive(function(note:Note)
 				{
 					if (note.index == idx && note.noteData.mustPress && note.noteData.canBeHit && !note.isSustain && !note.noteData.tooLate
@@ -610,13 +608,13 @@ class PlayState extends MusicBeatState
 						}
 					}
 				}
-				else if (!OptionsAPI.getPref("Ghost Tapping"))
+				else
 				{
-					noteMiss(idx, playerStrum);
-					PlayerInfo.stats.ghostMisses++;
+					if (!OptionsAPI.getPref("Ghost Tapping"))
+						noteMiss(idx, playerStrum);
+					else
+						PlayerInfo.stats.ghostMisses++;
 				}
-
-				Conductor.songPosition = prevTime;
 			}
 
 			if (babyArrow != null && babyArrow.animation.curAnim.name != 'confirm')
@@ -627,17 +625,12 @@ class PlayState extends MusicBeatState
 			if (idx >= 0 && babyArrow != null)
 				babyArrow.playAnim('static');
 
-			resetPlayer();
-		}
-	}
-
-	function resetPlayer():Void
-	{
-		for (player in playerStrum.characters)
-		{
-			if (player.holdTimer > Conductor.stepCrochet * 4 * 0.001 && !keysHeld.contains(true))
-				if (player.animation.curAnim.name.startsWith('sing') && !player.animation.curAnim.name.endsWith('miss'))
-					player.dance();
+			for (player in playerStrum.characters)
+			{
+				if (player.timers.hold > Conductor.stepCrochet * (0.001 / Conductor.songRate) * player.timers.sing && !keysHeld.contains(true))
+					if (player.animation.curAnim.name.startsWith('sing') && !player.animation.curAnim.name.endsWith('miss'))
+						player.dance();
+			}
 		}
 	}
 
@@ -666,17 +659,9 @@ class PlayState extends MusicBeatState
 			if (babyStrum.babyArrows.members[note.index] != null)
 				babyStrum.babyArrows.members[note.index].playAnim('confirm', true);
 
-			var stringAnim:String = '';
-			var section = song.sectionNotes[curSection];
-
-			// painful if statement
-			if (section != null)
-				if (section.animation != null && section.animation != '')
-					stringAnim = section.animation;
-
 			for (char in babyStrum.characters)
 			{
-				charPlayAnim(char, 'sing' + BabyArrow.actions[note.index].toUpperCase() + stringAnim);
+				charPlayAnim(char, 'sing' + BabyArrow.actions[note.index].toUpperCase());
 				Conductor.songVocals.volume = 1;
 			}
 
@@ -707,7 +692,7 @@ class PlayState extends MusicBeatState
 					PlayerInfo.increaseScore(ratingInteger);
 
 					// update scoretext
-					ui.updateScoreText();
+					ui.updateScoreText(OptionsAPI.getPref("Score Bopping"));
 				}
 			}
 
@@ -738,7 +723,7 @@ class PlayState extends MusicBeatState
 		Conductor.songVocals.volume = 0;
 
 		PlayerInfo.decreaseScore();
-		ui.updateScoreText();
+		ui.updateScoreText(false);
 	}
 
 	public function popUpScore(myRating:String = 'sick', combo:Bool = true, preload:Bool = false):Void
@@ -803,10 +788,18 @@ class PlayState extends MusicBeatState
 
 	public function charPlayAnim(char:Character, stringSect:String = 'singDOWN'):Void
 	{
+		var sectSection:String = null;
+		var section = song.sectionNotes[curSection];
+
+		// painful if statement
+		if (section != null)
+			if (section.animation != null && section.animation != '')
+				sectSection = section.animation;
+
 		if (char != null)
 		{
-			char.playAnim(stringSect, true);
-			char.holdTimer = 0;
+			var animToPlay:String = stringSect + (sectSection != null ? sectSection : '');
+			char.playAnim(animToPlay, true);
 		}
 	}
 
@@ -818,7 +811,8 @@ class PlayState extends MusicBeatState
 			{
 				if (i != null)
 				{
-					var boppingBeat = (i.isQuickDancer ? beat % i.bopTimer == 0 : beat % i.bopTimer == 0);
+					var timerBop:Float = (i.timers.headBop != null ? i.timers.headBop : 2);
+					var boppingBeat = (i.isQuickDancer ? beat % timerBop == 0 : beat % timerBop == 0);
 					if (!i.animation.curAnim.name.startsWith("sing") && boppingBeat)
 						i.dance();
 				}

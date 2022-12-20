@@ -3,9 +3,9 @@ package funkin.states;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
+import funkin.essentials.song.MusicState;
 import funkin.objects.ui.fonts.Alphabet;
 import funkin.objects.ui.menus.OptionThingie.SelectorThingie;
-import funkin.essentials.song.MusicState;
 import funkin.states.menus.MainMenu;
 
 class TestState extends FlxState

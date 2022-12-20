@@ -99,13 +99,11 @@ class UI extends FlxSpriteGroup
 		super.update(elapsed);
 	}
 
-	// for reference: https://en.wikipedia.org/wiki/Template:%E2%80%A2
-	public static var separator:String = " • ";
+	private var hudBopping:FlxTween;
 
-	// so you can change it separately
-	public static var separatorFC:String = " • ";
+	public static var separator:String = " - ";
 
-	public function updateScoreText():Void
+	public function updateScoreText(goodHit:Bool = false):Void
 	{
 		var tempScore:String = '';
 		var centerText:Bool = false;
@@ -114,9 +112,17 @@ class UI extends FlxSpriteGroup
 		{
 			case "Feather":
 				tempScore = "Score: " + PlayerInfo.stats.score;
-				tempScore += separator + "Misses: " + PlayerInfo.stats.misses;
-				tempScore += separator + "Grade: " + PlayerInfo.curGrade + PlayerInfo.returnGradePercent();
+
+				/**
+					TODO: visual miss counter on rating assets
+					or maybe in a judgement counter thing
+				**/
+				// tempScore += separator + "Misses: " + PlayerInfo.stats.misses;
+				tempScore += separator + "Accuracy: " + PlayerInfo.returnGradePercent();
+
+				tempScore += separator + "Grade: " + PlayerInfo.curGrade;
 				centerText = true;
+
 			default:
 				tempScore = "Score: " + PlayerInfo.stats.score;
 		}
@@ -125,6 +131,18 @@ class UI extends FlxSpriteGroup
 
 		if (centerText)
 			scoreText.screenCenter(X);
+
+		// PSYCH BOUNCING LOL
+		if (goodHit)
+		{
+			if (hudBopping != null)
+				hudBopping.cancel();
+
+			// gotta change this later so it's a bit more unique haha
+			scoreText.scale.set(1.15, 1.10);
+
+			hudBopping = FlxTween.tween(scoreText, {"scale.x": 1, "scale.y": 1}, 0.6, {ease: FlxEase.bounceOut});
+		}
 
 		PlayState.lineRPC1 = scoreText.text;
 		PlayState.changePresence();
@@ -142,7 +160,6 @@ class UI extends FlxSpriteGroup
 
 	public function beatHit(curBeat:Int):Void
 	{
-		//
 		if (!OptionsAPI.getPref("Reduce Motion"))
 		{
 			iconP1.doBops(60 / Conductor.bpm);

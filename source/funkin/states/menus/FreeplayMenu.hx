@@ -9,10 +9,10 @@ import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import funkin.essentials.PlayerInfo;
+import funkin.essentials.song.MusicState;
 import funkin.essentials.song.SongManager;
 import funkin.objects.ui.Icon;
 import funkin.objects.ui.fonts.Alphabet;
-import funkin.essentials.song.MusicState;
 import openfl.media.Sound;
 
 /**

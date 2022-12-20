@@ -4,10 +4,10 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
+import funkin.essentials.song.MusicState;
 import funkin.essentials.song.SongManager.WeekForm;
 import funkin.objects.ui.menus.WeekCharacter;
 import funkin.objects.ui.menus.WeekItem;
-import funkin.essentials.song.MusicState;
 
 class StoryMenu extends MusicBeatState
 {

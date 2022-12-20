@@ -5,9 +5,9 @@ import feather.OptionsAPI;
 import flixel.FlxBasic;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxMath;
+import funkin.essentials.song.MusicState;
 import funkin.objects.ui.fonts.Alphabet;
 import funkin.objects.ui.menus.OptionThingie;
-import funkin.essentials.song.MusicState;
 
 /**
 	the Options Menu, used for managing game options

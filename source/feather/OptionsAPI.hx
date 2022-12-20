@@ -1,7 +1,6 @@
 package feather;
 
 import flixel.FlxG;
-import funkin.essentials.song.MusicState.MusicBeatState;
 
 enum OptionType
 {
@@ -135,6 +134,12 @@ class OptionsAPI
 				description: "If moving fields like icons and/or Camera Zooms should be reduced/stopped completely.",
 				type: CHECKMARK,
 				value: false
+			},
+			{
+				name: "Score Bopping",
+				description: "If the Score Text on the UI should bounce when you hit notes.",
+				type: CHECKMARK,
+				value: true,
 			}
 		],
 		"debugging" => [
@@ -190,7 +195,8 @@ class OptionsAPI
 	**/
 	public static function loadPrefs():Void
 	{
-		bindSave("Feather-Settings");
+		if (FlxG.save.name != "Feather-Settings")
+			bindSave("Feather-Settings");
 
 		// reset your preferences to the defaults
 		for (key => keys in preferencesList)
@@ -231,7 +237,8 @@ class OptionsAPI
 	**/
 	public static function getPref(name:String, getValue:Bool = true):Dynamic
 	{
-		bindSave("Feather-Settings");
+		if (FlxG.save.name != "Feather-Settings")
+			bindSave("Feather-Settings");
 
 		for (category => contents in preferencesList)
 		{
@@ -261,7 +268,8 @@ class OptionsAPI
 	**/
 	public static function setPref(name:String, newValue:Dynamic):Void
 	{
-		bindSave("Feather-Settings");
+		if (FlxG.save.name != "Feather-Settings")
+			bindSave("Feather-Settings");
 
 		for (category => contents in preferencesList)
 		{

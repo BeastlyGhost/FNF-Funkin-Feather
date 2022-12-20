@@ -3,9 +3,9 @@ package funkin.substates;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.util.FlxTimer;
-import funkin.objects.Character;
 import funkin.essentials.song.Conductor;
 import funkin.essentials.song.MusicState;
+import funkin.objects.Character;
 import funkin.states.PlayState;
 
 class GameOverSubstate extends MusicBeatSubstate

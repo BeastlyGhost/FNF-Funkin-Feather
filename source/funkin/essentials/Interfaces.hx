@@ -23,12 +23,3 @@ interface IMusicBeat
 	public function stepHit():Void; // Decides what to do when a Step is hit, also updates beats
 	public function endSong():Void; // a Function to decide what to do when a song ends
 }
-
-/**
-	Handles variables used on the `Alphabet` Class
-**/
-interface ILetters
-{
-	// TODO: everything, literally
-	public function getLetter(letter:String):Void;
-}

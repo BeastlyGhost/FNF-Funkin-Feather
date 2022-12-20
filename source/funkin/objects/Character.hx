@@ -2,6 +2,7 @@ package funkin.objects;
 
 import feather.tools.FeatherModule;
 import feather.tools.FeatherSpriteManager.FeatherSprite;
+import flixel.FlxG;
 import flixel.math.FlxPoint;
 import flixel.util.FlxColor;
 import funkin.essentials.song.Conductor;
@@ -57,10 +58,18 @@ class Character extends FeatherSprite
 
 	public var player:Bool = false;
 
-	public var bopTimer:Float = 2;
-	public var holdTimer:Float = 0;
-	public var animTimer:Float = 0;
-	public var dadVar:Float = 4; // this is the ONLY variable on this section that doesn't end with "Timer", oh lord
+	public var timers:
+		{
+			headBop:Null<Float>,
+			hold:Null<Float>,
+			animation:Null<Float>,
+			sing:Null<Float>
+		} = {
+			headBop: 2,
+			hold: 0,
+			animation: 0,
+			sing: 4
+		};
 
 	public var hasMissAnims:Bool = false;
 	public var isQuickDancer:Bool = false;
@@ -162,6 +171,14 @@ class Character extends FeatherSprite
 
 		dance();
 
+		// Plays all animations prior to starting
+		var allAnims:Array<String> = animation.getNameList();
+		for (anim in allAnims)
+		{
+			playAnim(anim);
+			animation.curAnim.finish();
+		}
+
 		// x += charOffset.x;
 		// y += (charOffset.y - (frameHeight * scale.y));
 
@@ -180,9 +197,6 @@ class Character extends FeatherSprite
 		// set the right to the left
 		animation.getByName('singRIGHT').frames = animation.getByName('singLEFT').frames;
 
-		addOffset('singLEFT', oldRightOff[0], oldRightOff[1]);
-		addOffset('singRIGHT', animOffsets.get('singLEFT')[0], animOffsets.get('singLEFT')[1]);
-
 		// set the left to the old right
 		animation.getByName('singLEFT').frames = oldRight;
 
@@ -193,9 +207,6 @@ class Character extends FeatherSprite
 
 			animation.getByName('singRIGHTmiss').frames = animation.getByName('singLEFTmiss').frames;
 			animation.getByName('singLEFTmiss').frames = oldMiss;
-
-			addOffset('singLEFT', oldMissOff[0], oldMissOff[1]);
-			addOffset('singRIGHT', animOffsets.get('singLEFTmiss')[0], animOffsets.get('singLEFTmiss')[1]);
 		}
 	}
 
@@ -203,17 +214,27 @@ class Character extends FeatherSprite
 	{
 		if (animation.curAnim != null)
 		{
-			animTimer -= elapsed;
-			if (animTimer <= 0)
-				animation.finish();
+			if (timers.animation > 0)
+			{
+				timers.animation -= elapsed;
+
+				if (timers.animation <= 0)
+				{
+					dance();
+					timers.animation = 0;
+				}
+			}
 
 			if (animation.curAnim.name.startsWith('sing'))
-				holdTimer += elapsed;
+				timers.hold += elapsed;
 
-			if (holdTimer >= Conductor.stepCrochet * dadVar * 0.001)
+			if (animation.curAnim.name.endsWith('miss') && animation.curAnim.finished)
+				playAnim('idle', true, false, 10);
+
+			if (timers.hold >= Conductor.stepCrochet * (0.001 / Conductor.songRate) * timers.sing)
 			{
 				dance();
-				holdTimer = 0;
+				timers.hold = 0;
 			}
 
 			if (isQuickDancer)
@@ -232,7 +253,7 @@ class Character extends FeatherSprite
 
 	public function dance():Void
 	{
-		if (animation.curAnim != null || animTimer <= 0)
+		if (animation.curAnim != null)
 		{
 			if (isQuickDancer)
 			{
@@ -328,7 +349,7 @@ class Character extends FeatherSprite
 
 		setVar('setSingDuration', function(amount:Int)
 		{
-			dadVar = amount;
+			timers.sing = amount;
 		});
 
 		setVar('setOffsets', function(x:Float = 0, y:Float = 0)
@@ -353,16 +374,14 @@ class Character extends FeatherSprite
 			isQuickDancer = quick;
 		});
 
-		/**
-			setVar('setBarColor', function(rgb:Array<Float>)
-			{
-				if (healthColor != null)
-					healthColor = rgb;
-				else
-					healthColor = [161, 161, 161];
-				return true;
-			});
-		**/
+		setVar('setBarColor', function(rgb:Array<Float>)
+		{
+			if (rgb != null)
+				healthColor = FlxColor.fromRGB(Std.int(rgb[0]), Std.int(rgb[1]), Std.int(rgb[2]));
+			else
+				healthColor = FlxColor.fromRGB(161, 161, 161);
+			return true;
+		});
 
 		setVar('setDeathChar',
 			function(char:String = 'bf-dead', lossSfx:String = 'fnf_loss_sfx', song:String = 'gameOver', confirmSound:String = 'gameOverEnd', bpm:Int)
@@ -478,7 +497,7 @@ class Character extends FeatherSprite
 		antialiasing = !json.no_antialiasing;
 		healthColor = FlxColor.fromRGB(json.healthbar_colors[0], json.healthbar_colors[1], json.healthbar_colors[2]);
 		// healthIcon = json.healthicon;
-		dadVar = json.sing_duration;
+		timers.sing = json.sing_duration;
 
 		if (json.scale != 1)
 		{

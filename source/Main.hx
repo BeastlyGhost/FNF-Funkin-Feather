@@ -1,6 +1,5 @@
 package;
 
-import flixel.FlxSprite;
 import flixel.FlxG;
 import flixel.FlxGame;
 import funkin.backend.FPS;
