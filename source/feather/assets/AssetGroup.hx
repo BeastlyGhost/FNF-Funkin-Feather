@@ -4,8 +4,9 @@ import sys.FileSystem;
 
 typedef GroupForm =
 {
+	var desc:String;
+	var authors:Array<String>;
 	var index:Int; // for sorting
-	var exclusions:Array<String>;
 	var color:Int;
 }
 

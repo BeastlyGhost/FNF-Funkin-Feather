@@ -1,0 +1,11 @@
+Characters consist of folders with images, sparrow atlases and a script, json, or yaml file
+
+Structure:
+assets
+ | packName
+  | data
+   | characters
+    | yourCharacter
+      - yourCharacter.png
+      - yourCharacter.xml
+      - yourCharacter.yaml

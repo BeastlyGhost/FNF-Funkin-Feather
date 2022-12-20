@@ -1,0 +1,11 @@
+Story Characters consist of a simple YAML file with data of your character on it
+structure is something like this
+
+image: "imagePath"
+position: [X, Y]
+animations: {
+  idle: ["name on xml", fps, loops],
+  hey: ["name on xml", fps, loops]
+}
+scale: scale (as a float, e.g: 0.8)
+flipX: false

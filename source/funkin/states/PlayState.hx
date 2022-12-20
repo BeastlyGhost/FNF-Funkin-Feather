@@ -162,7 +162,9 @@ class PlayState extends MusicBeatState
 		// generate the song
 		song = ChartParser.loadChartData(songName, difficulty);
 
-		FeatherModule.createInstance(localScripts);
+		// broken for now.
+		// FeatherModule.createInstance(localScripts);
+		// trace(localScripts);
 
 		gameStage = new Stage().setStage("stage");
 		add(gameStage);

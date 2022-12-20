@@ -1,0 +1,5 @@
+creating a folder here will create a "Asset Skin" in-game
+said folder can contain a handful of assets for customizing the look and feel of a song
+
+for example: combo_numbers.png, healthBar.png, ratings.png
+etc

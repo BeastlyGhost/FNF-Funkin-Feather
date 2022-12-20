@@ -1,5 +1,8 @@
 package feather.tools;
 
+import sys.FileSystem;
+import feather.assets.AssetHelper;
+
 class FeatherModule extends SScript
 {
 	public var scriptLibrary:AssetLibrary;
@@ -82,45 +85,39 @@ class FeatherModule extends SScript
 		#end
 	}
 
-	public static function createInstance(moduleArray:Array<FeatherModule>):Array<FeatherModule>
+	public static function createInstance(scriptModules:Array<FeatherModule>):Array<FeatherModule>
 	{
 		// set up the modules folder
 		var dirs:Array<Array<String>> = [
-			FeatherTools.absoluteDirectory('scripts'),
-			FeatherTools.absoluteDirectory('data/songs/${funkin.states.PlayState.song.name.toLowerCase()}')
+			FeatherTools.readDirectory('scripts', MODULE),
+			FeatherTools.readDirectory('data/songs/${funkin.states.PlayState.song.name.toLowerCase()}', MODULE)
 		];
 
 		var pushedModules:Array<String> = [];
 
 		for (directory in dirs)
 		{
-			// it's 2am rn i'm dying give me a break
-			var tempExts = ['.hx', '.hxs', '.hxc', '.hscript'];
-
 			for (script in directory)
 			{
-				for (ext in tempExts)
+				if (directory != null && directory.length > 0)
 				{
-					if (directory != null && directory.length > 0)
+					if (!pushedModules.contains(script))
 					{
-						if (!pushedModules.contains(script) && script != null && script.endsWith(ext))
-						{
-							moduleArray.push(new FeatherModule(script));
-							// trace('new script module loaded: ' + script);
-							pushedModules.push(script);
-						}
+						scriptModules.push(new FeatherModule(script));
+						// trace('new script module loaded: ' + script);
+						pushedModules.push(script);
 					}
 				}
 			}
 		}
 
-		if (moduleArray != null)
+		if (scriptModules != null)
 		{
-			for (i in moduleArray)
+			for (i in scriptModules)
 				i.call('onCreate', []);
 		}
 
-		return moduleArray;
+		return scriptModules;
 	}
 }
 
@@ -140,7 +137,7 @@ class EventModule
 
 		var myEvents:Array<String> = [];
 
-		for (event in sys.FileSystem.readDirectory('assets/data/events'))
+		for (event in FeatherTools.readDirectory('data/events', MODULE))
 		{
 			if (event.contains('.'))
 			{

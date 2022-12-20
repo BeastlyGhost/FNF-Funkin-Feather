@@ -72,7 +72,7 @@ class SongManager
 		var songs:Array<String> = [];
 
 		for (folder in sys.FileSystem.readDirectory(AssetHelper.grabRoot('data/songs')))
-			if (!folder.contains('.'))
+			if (!folder.contains('.') && !songs.contains(folder))
 				songs.push(folder);
 
 		for (i in 0...songs.length)

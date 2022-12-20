@@ -1,0 +1,8 @@
+index: 0
+color: 0xFFFFFFFF
+desc: "a Example Mod / Asset Group."
+authors: ["You", "Yourself", "and You"]
+
+comments: >
+  Index is ID on the List, it will be sorted according to that id.
+  Color is for the Background Color on the Group Manager Menu.

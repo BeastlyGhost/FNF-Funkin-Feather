@@ -1,0 +1,43 @@
+Menu Data Files or Scripts go here, the structure usually follows the same pattern for each
+
+---- TITLE SCREEN ----
+bg: "imageName" if null, then it won't e there
+gf: "gfSparrowPath"
+ng: "newgroundsLogoImagePath"
+bgFolder: "imageFolder"
+gfFolder: "imageFolder"
+ngFolder: "imageFolder"
+bgAntialias: true
+gfAntialias: true
+ngAntialias: true
+
+randomText:
+  - ["this is a text list", "that shows random things"]
+  - ["on the titlescreen", "it does not have a limit"]
+
+---- MAIN MENU ----
+bg: "imageName"
+flash: "imageName"
+
+bgFolder: "imageFolder"
+flashFolder: "imageFolder"
+flashColor: 0xFFfd719b
+
+list: ["add your", "item list", "here"]
+listSpacing: 160
+listY: 55
+
+---- CREDITS MENU ----
+userList:
+  - name: "This is a Separator"
+    type: "separator"
+
+  - name: "This is a User"
+    icon: "userIcon"
+    profession: "User Profession"
+    description: "User Description."
+    socials: [
+        ["Social Media Name 1"], ["Social Media Link 1"]
+        ["Social Media Name 2"], ["Social Media Link 2"]
+        ["Social Media Name 3"], ["Social Media Link 3"]
+    ]

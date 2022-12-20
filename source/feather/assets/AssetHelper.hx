@@ -98,7 +98,7 @@ class AssetHelper
 		//
 		var pathExtend:String = (directory != null ? '$directory/' : '');
 
-		var path = grabRoot('$pathExtend$asset', group, type);
+		var path = grabRoot('$pathExtend$asset', type, group);
 		if (FileSystem.exists(path))
 		{
 			switch (type)
@@ -180,7 +180,7 @@ class AssetHelper
 		@param type the type of asset you need, leave it as blank for returning a directory instead
 		@return the main assets directory with a specified subdirectory (and extension, if type is given)
 	**/
-	public static function grabRoot(directory:String, ?group:String, ?type:AssetType):String
+	public static function grabRoot(directory:String, ?type:AssetType, ?group:String):String
 	{
 		//
 		var assetExtend:String = '';

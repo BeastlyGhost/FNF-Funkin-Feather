@@ -1,5 +1,6 @@
 package feather.tools;
 
+import feather.assets.AssetGroup;
 import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.math.FlxMath;
@@ -79,37 +80,21 @@ class FeatherTools
 	}
 
 	/**
-		Returns an array with the files of the specified directory.
-		Example usage:
-		var fileArray:Array<String> = CoolUtil.absoluteDirectory('scripts');
-		trace(fileArray); -> ['mods/scripts/modchart.hx', 'assets/scripts/script.hx']
+		Returns an array of libraries from your specified destination
+		@dest the directory that should be read
 	**/
-	inline public static function absoluteDirectory(file:String):Array<String>
+	inline public static function readDirectory(dest:String, ?type:AssetType):Array<String>
 	{
-		if (!file.endsWith('/'))
-			file = '$file/';
+		var libraryArray:Array<String> = [];
 
-		var path:String = AssetHelper.grabRoot(file, DIRECTORY);
-
-		var absolutePath:String = FileSystem.absolutePath(path);
-		var directory:Array<String> = FileSystem.readDirectory(absolutePath);
-
-		if (directory != null)
+		for (dir in FileSystem.readDirectory(AssetHelper.grabRoot(dest, type)))
 		{
-			var dirCopy:Array<String> = directory.copy();
-
-			for (i in dirCopy)
-			{
-				var index:Int = dirCopy.indexOf(i);
-				var file:String = '$path$i';
-				dirCopy.remove(i);
-				dirCopy.insert(index, file);
-			}
-
-			directory = dirCopy;
+			if (!libraryArray.contains(dir))
+				libraryArray.push(dir);
+			trace(libraryArray);
 		}
 
-		return if (directory != null) directory else [];
+		return if (libraryArray != null) libraryArray else [];
 	}
 
 	inline public static function getDifficulty(diff:Int = 0):String
