@@ -1,6 +1,7 @@
 package funkin.essentials;
 
 import flixel.FlxG;
+import funkin.states.PlayState;
 
 typedef Judgement =
 {
@@ -12,6 +13,15 @@ typedef Judgement =
 	var noteSplash:Bool;
 	var causesBreak:Bool;
 	var comboReturn:String;
+}
+
+typedef SaveScoreData =
+{
+	var score:Int;
+	var misses:Int;
+	var accuracy:Float;
+	var ?gameplayMode:GameModes;
+	var ?difficulty:String;
 }
 
 /**
@@ -46,8 +56,7 @@ class PlayerInfo
 
 	public static var greatestJudgement:Int = 0;
 
-	public static var scoreMap:Map<String, Int> = [];
-	public static var weekScoreMap:Map<String, Int> = [];
+	public static var saveMap:Map<String, SaveScoreData> = [];
 
 	public static var judgeTable:Array<Judgement> = [
 		{
@@ -224,47 +233,64 @@ class PlayerInfo
 		Functions for saving scores
 	**/
 	//
-	public static function saveScore(song:String, score:Int, diff:Int = 0, isStory:Bool):Void
+	public static function saveInfo(song:String, diff:Int = 0, data:SaveScoreData, mode:GameModes):Void
 	{
 		OptionsAPI.bindSave("Feather-Scores");
 
-		var chosenMap = (isStory ? weekScoreMap : scoreMap);
-		var chosenSave = (isStory ? FlxG.save.data.weekScores : FlxG.save.data.songScores);
-
-		var songFinal = song + FeatherTools.getDifficulty(diff);
-
-		if (chosenMap.exists(songFinal))
+		if (saveMap.exists(song))
 		{
-			if (chosenMap.get(songFinal) < score)
-				chosenMap.set(songFinal, score);
+			var lowerScore:Bool = (saveMap.get(song).score < data.score);
+			var lowerMisses:Bool = (saveMap.get(song).misses < data.misses);
+			var lowerAccuracy:Bool = (saveMap.get(song).accuracy < data.accuracy);
+
+			saveMap.set(song, {
+				score: (lowerScore ? data.score : saveMap.get(song).score),
+				misses: (lowerMisses ? data.misses : saveMap.get(song).misses),
+				accuracy: (lowerAccuracy ? data.accuracy : saveMap.get(song).accuracy),
+				difficulty: FeatherTools.getDifficulty(diff),
+				gameplayMode: mode,
+			});
 		}
 		else
-			chosenMap.set(songFinal, score);
+		{
+			saveMap.set(song, {
+				score: data.score,
+				misses: data.misses,
+				gameplayMode: mode,
+				difficulty: FeatherTools.getDifficulty(diff),
+				accuracy: data.accuracy
+			});
+		}
 
-		chosenSave = chosenMap;
+		FlxG.save.data.highscores = saveMap;
 	}
 
-	public static function getScore(song:String, diff:Int, isStory:Bool = false):Int
+	public static function getScore(song:String, diff:Int = 0, mode:GameModes):Int
 	{
 		OptionsAPI.bindSave("Feather-Scores");
 
-		var chosenMap = (isStory ? weekScoreMap : scoreMap);
+		if (!saveMap.exists(song))
+		{
+			saveMap.set(song, {
+				score: 0,
+				misses: 0,
+				gameplayMode: mode,
+				difficulty: FeatherTools.getDifficulty(diff),
+				accuracy: 0.00
+			});
+		}
 
-		var songFinal = song + FeatherTools.getDifficulty(diff);
-
-		if (!chosenMap.exists(songFinal))
-			chosenMap.set(songFinal, 0);
-
-		return chosenMap.get(songFinal);
+		if (saveMap.get(song).difficulty == FeatherTools.getDifficulty(diff))
+			return saveMap.get(song).score;
+		
+		return 0;
 	}
 
 	public static function loadHighscores():Void
 	{
 		OptionsAPI.bindSave("Feather-Scores");
 
-		if (FlxG.save.data.songScores != null)
-			scoreMap = FlxG.save.data.songScores;
-		if (FlxG.save.data.weekScores != null)
-			weekScoreMap = FlxG.save.data.weekScores;
+		if (FlxG.save.data.highscores != null)
+			saveMap = FlxG.save.data.highscores;
 	}
 }

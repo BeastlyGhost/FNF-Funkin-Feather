@@ -1,8 +1,8 @@
 bg: "menuBG"
 flash: "menuDesat"
 
-bgFolder: "images/menus"
-flashFolder: "images/menus"
+bgFolder: "images/menus/default"
+flashFolder: "images/menus/default"
 flashColor: 0xFFfd719b
 
 list: ["story mode", "freeplay", "credits", "options"]

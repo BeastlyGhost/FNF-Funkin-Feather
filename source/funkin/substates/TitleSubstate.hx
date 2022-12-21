@@ -101,7 +101,7 @@ class TitleSubstate extends MusicBeatSubstate
 		add(gfDance);
 
 		titleEnter = new FlxSprite(100, FlxG.height * 0.8);
-		titleEnter.frames = AssetHelper.grabAsset('titleScreen/titleEnter', SPARROW, "images/menus");
+		titleEnter.frames = AssetHelper.grabAsset('title/titleEnter', SPARROW, "images/menus");
 		var animFrames:Array<FlxFrame> = [];
 		@:privateAccess {
 			titleEnter.animation.findByPrefix(animFrames, "ENTER IDLE");
@@ -132,7 +132,7 @@ class TitleSubstate extends MusicBeatSubstate
 		ngSpr.screenCenter(X);
 
 		logoBump = new FlxSprite(-10, 10);
-		logoBump.loadGraphic(AssetHelper.grabAsset('logo', IMAGE, "images/menus/titleScreen"));
+		logoBump.loadGraphic(AssetHelper.grabAsset('title/logo', IMAGE, "images/menus"));
 		add(logoBump);
 
 		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];

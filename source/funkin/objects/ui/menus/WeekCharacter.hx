@@ -35,7 +35,7 @@ class WeekCharacter extends FlxSprite
 
 	public function createCharacter(char:String = 'bf'):Void
 	{
-		var pathRaw = AssetHelper.grabAsset(char, YAML, "images/menus/storyMenu/characters");
+		var pathRaw = AssetHelper.grabAsset(char, YAML, "images/menus/story/characters");
 
 		var yamlRaw = null;
 		if (FileSystem.exists(pathRaw))
@@ -48,7 +48,7 @@ class WeekCharacter extends FlxSprite
 
 		try
 		{
-			frames = AssetHelper.grabAsset(charData.image, SPARROW, "images/menus/storyMenu/characters");
+			frames = AssetHelper.grabAsset(charData.image, SPARROW, "images/menus/story/characters");
 		}
 		catch (e)
 		{

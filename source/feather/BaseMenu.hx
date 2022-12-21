@@ -1,9 +1,10 @@
 package feather;
 
+import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
-import funkin.objects.ui.fonts.Alphabet;
 import funkin.essentials.song.MusicState;
+import funkin.objects.ui.fonts.Alphabet;
 
 class BaseMenu extends MusicBeatState
 {
@@ -11,13 +12,18 @@ class BaseMenu extends MusicBeatState
 	var bgImage(default, set):String;
 	var itemContainer:FlxTypedGroup<Alphabet>;
 
+	var camFollow:FlxObject;
+
 	function set_bgImage(newImage:String):String
 	{
 		bgImage = newImage;
 
+		if (menuBG != null)
+			remove(menuBG);
+
 		if (bgImage != null)
 		{
-			menuBG = new FlxSprite(-80).loadGraphic(AssetHelper.grabAsset(bgImage, IMAGE, 'images/menus'));
+			menuBG = new FlxSprite(-80).loadGraphic(AssetHelper.grabAsset(bgImage, IMAGE, 'images/menus/default'));
 			menuBG.scrollFactor.set();
 			menuBG.screenCenter(X);
 			add(menuBG);
@@ -59,9 +65,12 @@ class BaseSubMenu extends MusicBeatSubstate
 	{
 		bgImage = newImage;
 
+		if (menuBG != null)
+			remove(menuBG);
+
 		if (bgImage != null)
 		{
-			menuBG = new FlxSprite(-80).loadGraphic(AssetHelper.grabAsset(bgImage, IMAGE, 'images/menus'));
+			menuBG = new FlxSprite(-80).loadGraphic(AssetHelper.grabAsset(bgImage, IMAGE, 'images/menus/default'));
 			menuBG.scrollFactor.set();
 			menuBG.screenCenter(X);
 			add(menuBG);

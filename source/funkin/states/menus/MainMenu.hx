@@ -101,7 +101,7 @@ class MainMenu extends MusicBeatState
 		for (i in 0...wrappableGroup.length)
 		{
 			var item:FlxSprite = new FlxSprite(0, menuData.listY + (i * menuData.listSpacing));
-			item.frames = AssetHelper.grabAsset(wrappableGroup[i], SPARROW, "images/menus/attachements");
+			item.frames = AssetHelper.grabAsset(wrappableGroup[i], SPARROW, "images/menus/default/items");
 
 			item.animation.addByPrefix('idle', wrappableGroup[i] + " basic", 24);
 			item.animation.addByPrefix('selected', wrappableGroup[i] + " white", 24);
@@ -201,7 +201,7 @@ class MainMenu extends MusicBeatState
 					{
 						FlxFlicker.flicker(spr, 1, 0.1, false, false, function(flick:FlxFlicker)
 						{
-							switch (wrappableGroup[selection].toLowerCase())
+							switch (wrappableGroup[Math.floor(selection)].toLowerCase())
 							{
 								case "story mode":
 									MusicState.switchState(new StoryMenu());

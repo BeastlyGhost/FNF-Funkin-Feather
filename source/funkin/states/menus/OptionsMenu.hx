@@ -1,8 +1,12 @@
 package funkin.states.menus;
 
+import flixel.util.FlxColor;
+import flixel.FlxG;
+import flixel.FlxCamera;
 import feather.BaseMenu;
 import feather.OptionsAPI;
 import flixel.FlxBasic;
+import flixel.FlxObject;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxMath;
 import funkin.essentials.song.MusicState;
@@ -21,6 +25,8 @@ class OptionsMenu extends BaseMenu
 
 	var fromPlayState:Bool = false;
 
+	var menuCamera:FlxCamera;
+
 	public function new(fromPlayState:Bool = false):Void
 	{
 		super();
@@ -32,11 +38,20 @@ class OptionsMenu extends BaseMenu
 	{
 		super.create();
 
-		bgImage = 'menuBGBlue';
-
 		DiscordRPC.update("OPTIONS MENU", "Setting things up");
 
 		FeatherTools.menuMusicCheck(false);
+
+		camFollow = new FlxObject(FlxG.width / 2, 0, 140, 70);
+
+		menuCamera = new FlxCamera();
+		FlxG.cameras.add(menuCamera, false);
+		menuCamera.bgColor = FlxColor.TRANSPARENT;
+		camera = menuCamera;
+
+		menuCamera.follow(camFollow, null, 0.06);
+		menuCamera.deadzone.set(0, 160, menuCamera.width, 40);
+		menuCamera.minScrollY = 0;
 
 		switchCategory("master");
 	}
@@ -44,6 +59,16 @@ class OptionsMenu extends BaseMenu
 	override function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
+
+		if (activeCategory != 'master')
+		{
+			menuCamera.followLerp = FeatherTools.cameraLerping(0.05);
+			itemContainer.forEach(function(item:Alphabet)
+			{
+				var selected:Bool = (item == itemContainer.members[Math.floor(selection)]);
+				item.x = (selected ? 150 : 120);
+			});
+		}
 
 		if (attachedSprites != null)
 			moveAttachedSprites();
@@ -72,20 +97,20 @@ class OptionsMenu extends BaseMenu
 
 		if (accept || (left || right))
 		{
-			var isDynamic:Bool = (wrappableGroup[selection].type == DYNAMIC);
-			var isOption:Bool = (wrappableGroup[selection].attributes != null && wrappableGroup[selection].attributes.contains(DEFAULT));
+			var isDynamic:Bool = (wrappableGroup[Math.floor(selection)].type == DYNAMIC);
+			var isOption:Bool = (wrappableGroup[Math.floor(selection)].attributes != null && wrappableGroup[Math.floor(selection)].attributes.contains(DEFAULT));
 
 			if (!isDynamic && isOption)
-				updateOption(wrappableGroup[selection].type);
+				updateOption(wrappableGroup[Math.floor(selection)].type);
 
 			if (accept)
 			{
 				if (isDynamic)
 				{
-					if (wrappableGroup[selection].name == "keybinds")
+					if (wrappableGroup[Math.floor(selection)].name == "keybinds")
 						openSubState(new funkin.substates.KeybindsSubstate(true));
 					else
-						switchCategory(wrappableGroup[selection].name);
+						switchCategory(wrappableGroup[Math.floor(selection)].name);
 				}
 			}
 		}
@@ -110,14 +135,16 @@ class OptionsMenu extends BaseMenu
 	{
 		super.updateSelection(newSelection);
 
-		var selectionJumper:Int = ((newSelection > selection) ? 1 : -1);
+		var selectionJumper:Int = (newSelection > selection ? 1 : (newSelection < selection) ? -1 : 0);
 
 		if (newSelection != 0)
 			FSound.playSound("scrollMenu", 'sounds/menus');
 
-		// doesn't quite work yet, eeeh
-		// if (wrappableGroup[selection].attributes != null && wrappableGroup[selection].attributes.contains(UNSELECTABLE))
-		// 	updateSelection(selection + selectionJumper);
+		if (itemContainer.members.length > 5)
+			camFollow.y = (activeCategory == 'master' ? 0 : itemContainer.members[Math.floor(selection)].y);
+
+		if (wrappableGroup[Math.floor(selection)].attributes != null && wrappableGroup[Math.floor(selection)].attributes.contains(UNSELECTABLE))
+			updateSelection(Math.floor(selection) + selectionJumper);
 	}
 
 	public function callAttachments():Void
@@ -162,11 +189,15 @@ class OptionsMenu extends BaseMenu
 		generateOptions(OptionsAPI.preferencesList.get(newCategory));
 
 		selection = 0;
-		updateSelection(selection);
+		updateSelection(Math.floor(selection));
 	}
 
 	public function generateOptions(optionsArray:Array<OptionData>):Void
 	{
+		bgImage = (activeCategory == 'master' ? 'menuBGBlue' : 'menuDesat');
+		if (bgImage == 'menuDesat')
+			menuBG.color = 0xFFEA71FD;
+
 		if (itemContainer != null)
 		{
 			itemContainer.clear();
@@ -198,7 +229,6 @@ class OptionsMenu extends BaseMenu
 					optionTxt.screenCenter(X);
 					optionTxt.forceX = optionTxt.x;
 					optionTxt.displacement.y = -55;
-					optionTxt.scrollFactor.set();
 				}
 				else
 				{
@@ -208,10 +238,8 @@ class OptionsMenu extends BaseMenu
 
 				optionTxt.targetY = i;
 				optionTxt.disableX = true;
-
-				if (activeCategory != 'master')
-					optionTxt.isMenuItem = true;
 				optionTxt.alpha = 0.6;
+
 				itemContainer.add(optionTxt);
 			}
 		}
@@ -252,7 +280,6 @@ class OptionsMenu extends BaseMenu
 							var values:Array<String> = OptionsAPI.getPref(option.text, false).values;
 
 							var arrow:SelectorThingie = new SelectorThingie(10, option.y, option.text, values);
-							arrow.scrollFactor.set();
 							mapFinal.set(option, arrow);
 						default:
 							//
@@ -266,7 +293,7 @@ class OptionsMenu extends BaseMenu
 
 	public function updateOption(type:OptionType):Void
 	{
-		var item:Alphabet = itemContainer.members[selection];
+		var item:Alphabet = itemContainer.members[Math.floor(selection)];
 
 		if (item == null)
 			return;

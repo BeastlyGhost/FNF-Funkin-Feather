@@ -1,5 +1,6 @@
 index: 0
 color: 0xFFFFFFFF
+enabled: true
 desc: "a Example Mod / Asset Group."
 authors: ["You", "Yourself", "and You"]
 

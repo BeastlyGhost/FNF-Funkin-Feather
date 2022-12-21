@@ -14,7 +14,7 @@ class CheckboxThingie extends FeatherSprite
 	{
 		super(x, y);
 
-		frames = AssetHelper.grabAsset('checkboxThingie', SPARROW, 'images/menus/optionsMenu');
+		frames = AssetHelper.grabAsset('checkboxThingie', SPARROW, 'images/menus/default/options');
 		animation.addByPrefix('true', 'Check Box unselected', 24, false);
 		animation.addByPrefix('false', 'Check Box selecting animation', 24, false);
 

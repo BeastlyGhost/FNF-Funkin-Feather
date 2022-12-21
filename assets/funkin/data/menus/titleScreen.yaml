@@ -1,6 +1,6 @@
 bg: null
-gf: "titleScreen/gfDanceTitle"
-ng: "titleScreen/newgrounds_logo"
+gf: "title/gfDanceTitle"
+ng: "title/newgrounds_logo"
 bgFolder: null
 gfFolder: "images/menus"
 ngFolder: "images/menus"

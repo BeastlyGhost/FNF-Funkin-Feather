@@ -5,6 +5,7 @@ import sys.FileSystem;
 typedef GroupForm =
 {
 	var desc:String;
+	var enabled:Bool;
 	var authors:Array<String>;
 	var index:Int; // for sorting
 	var color:Int;
@@ -21,6 +22,11 @@ class AssetGroup
 		Stores groups that will be taken into account while searching for assets
 	**/
 	public static var allGroups:Array<String> = [];
+
+	/**
+		Active groups that are enabled by the user
+	**/
+	public static var activeGroups:Array<String> = [];
 
 	/**
 		Stores folder names that should be excluded when searching for groups
@@ -54,13 +60,15 @@ class AssetGroup
 
 	public function getFromDirs(dir:String, type:AssetType):String
 	{
-		// return if there's no groups at all
-		if (allGroups.length < 0)
+		var chosenGroup:Array<String> = (activeGroups.length > 0 ? activeGroups : allGroups);
+
+		// return null if there's no groups at all
+		if (chosenGroup.length < 0)
 			return null;
 
-		for (e in 0...allGroups.length)
+		for (e in 0...chosenGroup.length)
 		{
-			var newGroup:String = allGroups[e];
+			var newGroup:String = chosenGroup[e];
 			var assetLib:String = AssetHelper.getExtensions('assets/$newGroup/$dir', type);
 
 			// check if the file exists on the group we want

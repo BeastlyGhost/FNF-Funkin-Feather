@@ -108,7 +108,7 @@ class PauseSubstate extends BaseSubMenu
 
 		if (Controls.isJustPressed("accept"))
 		{
-			var mySelection = wrappableGroup[selection].toLowerCase();
+			var mySelection = wrappableGroup[Math.floor(selection)].toLowerCase();
 
 			switch (mySelection)
 			{

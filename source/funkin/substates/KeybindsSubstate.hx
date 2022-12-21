@@ -31,7 +31,10 @@ class KeybindsSubstate extends BaseSubMenu
 			add(menuBG);
 		}
 		else
-			bgImage = 'menuBGMagenta';
+		{
+			bgImage = 'menuDesat';
+			menuBG.color = 0xFFEA71FD;
+		}
 
 		itemContainer = generateKeys();
 
@@ -102,8 +105,8 @@ class KeybindsSubstate extends BaseSubMenu
 		if (newSelection != 0)
 			FSound.playSound("scrollMenu", 'sounds/menus');
 
-		// if (itemContainer.members[selection].text == null || itemContainer.members[selection].text == '')
-		// 	updateSelection(selection + selectionJumper);
+		if (itemContainer.members[Math.floor(selection)].text == null || itemContainer.members[Math.floor(selection)].text == '')
+			updateSelection(Math.floor(selection) + selectionJumper);
 	}
 
 	public function updateHorizontal(newSelection:Int = 0):Void {}

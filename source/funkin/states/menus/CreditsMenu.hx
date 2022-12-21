@@ -72,7 +72,7 @@ class CreditsMenu extends BaseMenu
 
 			if (userCredits.icon != null || userCredits.icon.length > 1)
 			{
-				var personIcon:ChildSprite = new ChildSprite(userCredits.icon, 'images/menus/creditsMenu');
+				var personIcon:ChildSprite = new ChildSprite(userCredits.icon, 'images/menus/credits');
 				personIcon.parentSprite = personText;
 				personIcon.addX = -50;
 				personIcon.addY = -30;
@@ -114,10 +114,10 @@ class CreditsMenu extends BaseMenu
 			if (iconContainer[i] != null)
 				iconContainer[i].alpha = 0.6;
 
-		if (iconContainer[selection] != null)
-			iconContainer[selection].alpha = 1;
+		if (iconContainer[Math.floor(selection)] != null)
+			iconContainer[Math.floor(selection)].alpha = 1;
 
-		// if (wrappableGroup[selection].type != null && wrappableGroup[selection].type == "divider")
-		// 	updateSelection(selection + selectionJumper);
+		if (wrappableGroup[Math.floor(selection)].type != null && wrappableGroup[Math.floor(selection)].type == "divider")
+			updateSelection(Math.floor(selection) + selectionJumper);
 	}
 }

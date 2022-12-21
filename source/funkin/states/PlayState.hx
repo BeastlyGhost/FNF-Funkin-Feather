@@ -117,6 +117,7 @@ class PlayState extends MusicBeatState
 	public var camOther:FlxCamera;
 
 	private var camFollow:FlxObject;
+	private static var prevFollow:FlxObject;
 
 	public static var cameraSpeed:Float = 1;
 	public static var cameraZoom:Float = 1.05;
@@ -205,6 +206,12 @@ class PlayState extends MusicBeatState
 		add(ui);
 
 		camFollow = new FlxObject(0, 0, 1, 1);
+		if (prevFollow != null)
+		{
+			camFollow = prevFollow;
+			prevFollow = null;
+		}
+
 		add(camFollow);
 
 		FlxG.camera.zoom = cameraZoom;
@@ -471,7 +478,7 @@ class PlayState extends MusicBeatState
 					if (babyStrum.autoplay)
 					{
 						// todo: accurate autoplay?
-						if (note.step <= Conductor.songPosition)
+						if (note.step < Conductor.songPosition)
 							noteHit(note, babyStrum);
 					}
 
@@ -919,16 +926,22 @@ class PlayState extends MusicBeatState
 		Conductor.songPosition = Conductor.songMusic.length;
 		Conductor.pauseSong();
 
+		var dataSave:SaveScoreData = {
+			score: PlayerInfo.stats.score,
+			misses: PlayerInfo.stats.misses,
+			accuracy: PlayerInfo.stats.accuracy
+		};
+
 		switch (gameplayMode)
 		{
 			case STORY:
 				// playlist conditions go here
 				if (PlayerInfo.validScore)
-					PlayerInfo.saveScore(song.name, PlayerInfo.stats.score, difficulty, true);
+					PlayerInfo.saveInfo(song.name, difficulty, dataSave, gameplayMode);
 				MusicState.switchState(new funkin.states.menus.StoryMenu());
 			case FREEPLAY:
 				if (PlayerInfo.validScore)
-					PlayerInfo.saveScore(song.name, PlayerInfo.stats.score, difficulty, false);
+					PlayerInfo.saveInfo(song.name, difficulty, dataSave, gameplayMode);
 				MusicState.switchState(new funkin.states.menus.FreeplayMenu());
 			case CHARTING:
 				pauseGame();

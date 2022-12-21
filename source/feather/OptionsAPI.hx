@@ -43,6 +43,7 @@ class OptionsAPI
 		**/
 		"master" => [
 			{name: "preferences", type: DYNAMIC},
+			{name: "appearance", type: DYNAMIC},
 			{name: "accessibility", type: DYNAMIC},
 			{name: "debugging", type: DYNAMIC},
 			// {name: "custom settings", type: DYNAMIC},
@@ -82,6 +83,8 @@ class OptionsAPI
 				type: SELECTOR,
 				value: 10
 			},
+		],
+		"appearance" => [
 			{
 				name: "Note Splash Opacity",
 				description: "Set the opacity for your Note Splashes, shown when hitting \"Sick!\" Ratings on Notes.",
@@ -249,16 +252,22 @@ class OptionsAPI
 
 			for (i in 0...contents.length)
 			{
-				if (chosenMap.get(category)[i].name == name)
+				var endOption:OptionData = chosenMap.get(category)[i];
+				if (endOption.name == name && endOption.type != DYNAMIC)
 				{
-					var retVal = chosenMap.get(category);
-					return (getValue ? retVal[i].value : retVal[i]);
+					try
+					{
+						return (getValue ? endOption.value : endOption);
+					}
+					catch (e)
+					{
+						throw ('Something went wrong while trying to catch this Preference: "$name"');
+					}
 				}
 			}
 		}
 
-		trace('Preference "$name" does not exist in the preferences map.');
-		return null;
+		throw ('Preference "$name" does not exist in the preferences map.');
 	}
 
 	/**
@@ -278,8 +287,9 @@ class OptionsAPI
 
 			for (i in 0...contents.length)
 			{
-				if (chosenMap.get(category)[i].name == name)
-					chosenMap.get(category)[i].value = newValue;
+				var endOption:OptionData = chosenMap.get(category)[i];
+				if (endOption.name == name)
+					endOption.value = newValue;
 			}
 		}
 	}

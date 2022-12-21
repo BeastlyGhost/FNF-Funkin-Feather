@@ -50,6 +50,11 @@ class FeatherTools
 			leCam.zoom += resetVal;
 	}
 
+	public static function cameraLerping(ratio:Float):Float
+	{
+		return FlxG.elapsed / (1 / 60) * ratio;
+	}
+
 	/**
 		Formats the song. Example: ``'world_machine' -> 'World Machine'``.
 	**/

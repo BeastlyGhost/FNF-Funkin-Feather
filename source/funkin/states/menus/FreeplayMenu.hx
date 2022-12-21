@@ -128,7 +128,7 @@ class FreeplayMenu extends BaseMenu
 		#end
 
 		if (menuBG != null && menuBG.pixels != null)
-			menuBG.color = FlxColor.interpolate(menuBG.color, songList[selection].color);
+			menuBG.color = FlxColor.interpolate(menuBG.color, songList[Math.floor(selection)].color);
 
 		if (FlxG.sound.music.volume < 0.7)
 			FlxG.sound.music.volume += 0.5 * elapsed;
@@ -165,8 +165,8 @@ class FreeplayMenu extends BaseMenu
 			if (FlxG.sound.music != null)
 				FlxG.sound.music.stop();
 
-			PlayState.songName = songList[selection].name;
-			PlayState.currentWeek = songList[selection].week;
+			PlayState.songName = songList[Math.floor(selection)].name;
+			PlayState.currentWeek = songList[Math.floor(selection)].week;
 			PlayState.difficulty = selDifficulty;
 			PlayState.gameplayMode = FREEPLAY;
 
@@ -197,20 +197,20 @@ class FreeplayMenu extends BaseMenu
 
 		for (i in 0...iconContainer.length)
 			iconContainer[i].alpha = 0.6;
-		iconContainer[selection].alpha = 1;
+		iconContainer[Math.floor(selection)].alpha = 1;
 
-		intendedScore = PlayerInfo.getScore(songList[selection].name, selDifficulty, false);
+		intendedScore = PlayerInfo.getScore(songList[Math.floor(selection)].name, selDifficulty, FREEPLAY);
 
 		updateDifficulty();
 	}
 
 	function updateDifficulty(newDifficulty:Int = 0):Void
 	{
-		selDifficulty = FlxMath.wrap(selDifficulty + newDifficulty, 0, songList[selection].diffs.length - 1);
+		selDifficulty = FlxMath.wrap(selDifficulty + newDifficulty, 0, songList[Math.floor(selection)].diffs.length - 1);
 
 		var stringDiff = FeatherTools.getDifficulty(selDifficulty);
 		diffTxt.text = '< ${stringDiff.replace('-', '').toUpperCase()} >';
 
-		intendedScore = PlayerInfo.getScore(songList[selection].name, selDifficulty, false);
+		intendedScore = PlayerInfo.getScore(songList[Math.floor(selection)].name, selDifficulty, FREEPLAY);
 	}
 }

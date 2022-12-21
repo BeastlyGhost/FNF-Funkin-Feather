@@ -11,7 +11,7 @@ import flixel.math.FlxMath;
 **/
 class ScriptableState extends FlxUIState
 {
-	public var selection:Int = 0; // Defines the Current Selected Item on a State
+	public var selection:Float = 0; // Defines the Current Selected Item on a State
 
 	public var wrappableGroup:Array<Dynamic> = []; // Defines the `selection` limits
 
@@ -23,12 +23,12 @@ class ScriptableState extends FlxUIState
 	}
 
 	public function updateSelection(newSelection:Int = 0):Void
-		selection = FlxMath.wrap(selection + newSelection, 0, wrappableGroup.length - 1);
+		selection = FlxMath.wrap(Math.floor(selection) + newSelection, 0, wrappableGroup.length - 1);
 }
 
 class ScriptableSubstate extends FlxSubState
 {
-	public var selection:Int = 0;
+	public var selection:Float = 0;
 
 	public var wrappableGroup:Array<Dynamic> = [];
 
@@ -40,5 +40,5 @@ class ScriptableSubstate extends FlxSubState
 	}
 
 	public function updateSelection(newSelection:Int = 0):Void
-		selection = FlxMath.wrap(selection + newSelection, 0, wrappableGroup.length - 1);
+		selection = FlxMath.wrap(Math.floor(selection) + newSelection, 0, wrappableGroup.length - 1);
 }
