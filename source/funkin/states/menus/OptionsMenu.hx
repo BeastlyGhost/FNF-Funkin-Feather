@@ -131,7 +131,7 @@ class OptionsMenu extends BaseMenu
 		}
 	}
 
-	override public function updateSelection(newSelection:Int = 0):Void
+	public override function updateSelection(newSelection:Int = 0):Void
 	{
 		super.updateSelection(newSelection);
 
@@ -154,6 +154,9 @@ class OptionsMenu extends BaseMenu
 
 		if (attachedSpriteMap != null)
 			attachedSpriteMap = [];
+
+		if (itemContainer == null || itemContainer.members == null || activeCategory == 'master')
+			return;
 
 		attachedSpriteMap = generateAttachments(itemContainer);
 		attachedSprites = new FlxTypedGroup<FlxBasic>();
@@ -186,13 +189,16 @@ class OptionsMenu extends BaseMenu
 
 		activeCategory = newCategory;
 
-		generateOptions(OptionsAPI.preferencesList.get(newCategory));
+		itemContainer = generateOptions(OptionsAPI.preferencesList.get(newCategory));
+		add(itemContainer);
+
+		callAttachments();
 
 		selection = 0;
 		updateSelection(Math.floor(selection));
 	}
 
-	public function generateOptions(optionsArray:Array<OptionData>):Void
+	public function generateOptions(optionsArray:Array<OptionForm>):FlxTypedGroup<Alphabet>
 	{
 		bgImage = (activeCategory == 'master' ? 'menuBGBlue' : 'menuDesat');
 		if (bgImage == 'menuDesat')
@@ -205,11 +211,11 @@ class OptionsMenu extends BaseMenu
 			remove(itemContainer);
 		}
 
-		itemContainer = new FlxTypedGroup<Alphabet>();
+		var tempContainer:FlxTypedGroup<Alphabet> = new FlxTypedGroup<Alphabet>();
 
 		for (i in 0...optionsArray.length)
 		{
-			var option:OptionData = optionsArray[i];
+			var option:OptionForm = optionsArray[i];
 
 			// set to default value
 			if (option.type == null)
@@ -240,15 +246,12 @@ class OptionsMenu extends BaseMenu
 				optionTxt.disableX = true;
 				optionTxt.alpha = 0.6;
 
-				itemContainer.add(optionTxt);
+				tempContainer.add(optionTxt);
 			}
 		}
 
-		add(itemContainer);
-
-		callAttachments();
-
 		wrappableGroup = optionsArray;
+		return tempContainer;
 	}
 
 	public function generateAttachments(parent:FlxTypedGroup<Alphabet>):Map<Alphabet, Dynamic>

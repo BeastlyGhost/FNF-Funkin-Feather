@@ -29,7 +29,7 @@ class OffsetEditor extends MusicBeatState
 	var camGame:FlxCamera;
 	var camHUD:FlxCamera;
 
-	override public function new(?charName:String, ?player:Bool = false):Void
+	public override function new(?charName:String, ?player:Bool = false):Void
 	{
 		super();
 
@@ -37,7 +37,7 @@ class OffsetEditor extends MusicBeatState
 		this.player = player;
 	}
 
-	override public function create():Void
+	public override function create():Void
 	{
 		super.create();
 
@@ -80,7 +80,7 @@ class OffsetEditor extends MusicBeatState
 		reloadText();
 	}
 
-	override public function update(elapsed:Float):Void
+	public override function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
 

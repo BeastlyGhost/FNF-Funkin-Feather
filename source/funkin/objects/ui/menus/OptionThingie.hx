@@ -10,7 +10,7 @@ class CheckboxThingie extends FeatherSprite
 {
 	public var parentSprite:FlxSprite;
 
-	override public function new(x:Float, y:Float):Void
+	public override function new(x:Float, y:Float):Void
 	{
 		super(x, y);
 
@@ -70,7 +70,7 @@ class SelectorThingie extends FlxTypedSpriteGroup<FlxSprite>
 
 	public var ops:Array<String> = [];
 
-	override public function new(x:Float, y:Float, name:String, ops:Array<String>):Void
+	public override function new(x:Float, y:Float, name:String, ops:Array<String>):Void
 	{
 		super(x, y);
 

@@ -67,16 +67,7 @@ class MusicBeatState extends ScriptableState implements IMusicBeat
 	public var lastStep:Int = 0;
 	public var lastSection:Int = 0;
 
-	override public function create():Void
-	{
-		// play the transition if we are allowed to
-		if (!FlxTransitionableState.skipNextTransOut)
-			Transition.start(0.3, false, Slide_UpDown, FlxEase.linear);
-
-		super.create();
-	}
-
-	override public function update(elapsed:Float):Void
+	public override function update(elapsed:Float):Void
 	{
 		if (Conductor.songMusic != null)
 			Conductor.songMusic.onComplete = endSong;
@@ -179,7 +170,7 @@ class MusicBeatSubstate extends ScriptableSubstate implements IMusicBeat
 	public var lastStep:Int = 0;
 	public var lastSection:Int = 0;
 
-	override public function update(elapsed:Float):Void
+	public override function update(elapsed:Float):Void
 	{
 		updateTime();
 

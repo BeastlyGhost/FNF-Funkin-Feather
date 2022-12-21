@@ -12,7 +12,7 @@ class KeybindsSubstate extends BaseSubMenu
 
 	var generateBG:Bool = false;
 
-	override public function new(generateBG:Bool = false):Void
+	public override function new(generateBG:Bool = false):Void
 	{
 		super();
 
@@ -96,7 +96,7 @@ class KeybindsSubstate extends BaseSubMenu
 			close();
 	}
 
-	override public function updateSelection(newSelection:Int = 0):Void
+	public override function updateSelection(newSelection:Int = 0):Void
 	{
 		super.updateSelection(newSelection);
 

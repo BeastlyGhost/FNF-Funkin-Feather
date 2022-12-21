@@ -191,7 +191,7 @@ class FreeplayMenu extends BaseMenu
 		#end
 	}
 
-	override public function updateSelection(newSelection:Int = 0):Void
+	public override function updateSelection(newSelection:Int = 0):Void
 	{
 		super.updateSelection(newSelection);
 

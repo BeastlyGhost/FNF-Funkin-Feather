@@ -27,7 +27,7 @@ class FeatherModule extends SScript
 		return newLibrary;
 	}
 
-	override public function preset():Void
+	public override function preset():Void
 	{
 		super.preset();
 

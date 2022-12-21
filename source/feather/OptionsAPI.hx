@@ -16,7 +16,7 @@ enum OptionAttribute
 	UNSELECTABLE;
 }
 
-typedef OptionData =
+typedef OptionForm =
 {
 	var name:String;
 	var ?value:Dynamic;
@@ -37,7 +37,7 @@ class OptionsAPI
 		for information on how you can create options and customize their behavior
 		go to this link => https://github.com/BeastlyGhost/FNF-Funkin-Feather/wiki/Source-Code-Guide#options-documentation
 	**/
-	public static var preferencesList:Map<String, Array<OptionData>> = [
+	public static var preferencesList:Map<String, Array<OptionForm>> = [
 		/**
 			Main Categories
 		**/
@@ -180,7 +180,7 @@ class OptionsAPI
 		"custom settings" => [{name: "NOTHING", type: DYNAMIC}],
 	];
 
-	public static var myPreferences:Map<String, Array<OptionData>> = [];
+	public static var myPreferences:Map<String, Array<OptionForm>> = [];
 
 	/**
 		[Saves your game preferences]
@@ -210,7 +210,7 @@ class OptionsAPI
 		if (FlxG.save.data.globalSettings != null)
 		{
 			// grab from your save file
-			var savedPreferences:Map<String, Array<OptionData>> = FlxG.save.data.globalSettings;
+			var savedPreferences:Map<String, Array<OptionForm>> = FlxG.save.data.globalSettings;
 			for (saveKey in savedPreferences.keys())
 			{
 				// this checks if the key exists on the DEFAULT preferences list
@@ -221,7 +221,7 @@ class OptionsAPI
 			}
 		}
 		else
-			FlxG.save.data.globalSettings = new Map<String, Array<OptionData>>();
+			FlxG.save.data.globalSettings = new Map<String, Array<OptionForm>>();
 
 		if (FlxG.save.data.volume != null)
 			FlxG.sound.volume = FlxG.save.data.volume;
@@ -245,14 +245,14 @@ class OptionsAPI
 
 		for (category => contents in preferencesList)
 		{
-			var chosenMap:Map<String, Array<OptionData>> = [];
+			var chosenMap:Map<String, Array<OptionForm>> = [];
 			var hasCategory:Bool = (myPreferences != null && myPreferences.exists(category) && myPreferences.get(category) != null);
 
 			chosenMap = (hasCategory ? myPreferences : preferencesList);
 
 			for (i in 0...contents.length)
 			{
-				var endOption:OptionData = chosenMap.get(category)[i];
+				var endOption:OptionForm = chosenMap.get(category)[i];
 				if (endOption.name == name && endOption.type != DYNAMIC)
 				{
 					try
@@ -282,12 +282,12 @@ class OptionsAPI
 		for (category => contents in preferencesList)
 		{
 			var hasCategory:Bool = (myPreferences.exists(category) && myPreferences.get(category) != null);
-			var chosenMap:Map<String, Array<OptionData>> = [];
+			var chosenMap:Map<String, Array<OptionForm>> = [];
 			chosenMap = (hasCategory ? myPreferences : preferencesList);
 
 			for (i in 0...contents.length)
 			{
-				var endOption:OptionData = chosenMap.get(category)[i];
+				var endOption:OptionForm = chosenMap.get(category)[i];
 				if (endOption.name == name)
 					endOption.value = newValue;
 			}

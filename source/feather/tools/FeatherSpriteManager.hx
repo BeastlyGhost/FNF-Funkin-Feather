@@ -31,7 +31,7 @@ class FeatherSprite extends FlxSprite
 	public function addOffset(name:String, x:Float = 0, y:Float = 0):Void
 		animOffsets[name] = [x, y];
 
-	override public function destroy():Void
+	public override function destroy():Void
 	{
 		if (graphic != null)
 			graphic.dump();

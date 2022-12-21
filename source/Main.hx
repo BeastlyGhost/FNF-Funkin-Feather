@@ -8,7 +8,7 @@ import openfl.Lib;
 import openfl.display.Sprite;
 
 /**
-	the `Main` class actually initializes our game,
+	the `Main` class initializes our game along with a few useful tools for it,
 	you may not find use for it unless you wanna change existing variales on it
 **/
 class Main extends Sprite

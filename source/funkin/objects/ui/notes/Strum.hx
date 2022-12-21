@@ -44,7 +44,7 @@ class BabyArrow extends FeatherSprite
 		scrollFactor.set();
 	}
 
-	override public function playAnim(AnimName:String, Force:Bool = false, Reversed:Bool = false, Frame:Int = 0):Void
+	public override function playAnim(AnimName:String, Force:Bool = false, Reversed:Bool = false, Frame:Int = 0):Void
 	{
 		super.playAnim(AnimName);
 

@@ -11,6 +11,10 @@ typedef GroupForm =
 	var color:Int;
 }
 
+/**
+	Helper Class for Asset Groups
+	@since INFDEV
+**/
 class AssetGroup
 {
 	/**
@@ -32,6 +36,8 @@ class AssetGroup
 		Stores folder names that should be excluded when searching for groups
 	**/
 	public static var groupExclusions:Array<String> = ['data', 'images', 'music', 'scripts', 'sounds'];
+
+	public var groupData:Map<String, GroupForm>;
 
 	public function new():Void
 	{
@@ -60,6 +66,8 @@ class AssetGroup
 
 	public function getFromDirs(dir:String, type:AssetType):String
 	{
+		// loadGroupData();
+
 		var chosenGroup:Array<String> = (activeGroups.length > 0 ? activeGroups : allGroups);
 
 		// return null if there's no groups at all
@@ -91,5 +99,68 @@ class AssetGroup
 
 		// else just return nothing
 		return null;
+	}
+
+	public function loadGroupData():Void
+	{
+		for (i in 0...allGroups.length)
+		{
+			if (FileSystem.exists(AssetHelper.grabAsset("group", YAML)))
+			{
+				try
+				{
+					var filePath:String = AssetHelper.grabAsset("group", YAML);
+					var fileData:GroupForm = Yaml.read(filePath, yaml.Parser.options().useObjects());
+
+					// conversion
+					var finalData:GroupForm = {
+						desc: fileData.desc,
+						enabled: fileData.enabled,
+						authors: fileData.authors,
+						index: fileData.index,
+						color: fileData.color
+					};
+
+					groupData.set(allGroups[i], finalData);
+				}
+				catch (e)
+				{
+					throw('Group Data for ${allGroups[i]} could not be set.');
+				}
+			}
+			else
+			{
+				groupData.set(allGroups[i], {
+					desc: null,
+					enabled: true,
+					authors: null,
+					index: -1,
+					color: 0xFFFFFFFF
+				});
+			}
+
+			trace(groupData);
+
+			setActiveGroups();
+		}
+	}
+
+	/**
+		Picks up all the Stored Data on `groupData`
+		and sets the groups to the active groups array accordingly
+	**/
+	public function setActiveGroups():Void
+	{
+		for (group => data in groupData)
+		{
+			if (data == null)
+				return;
+
+			if (group != null && data != null)
+			{
+				if (data.enabled && !activeGroups.contains(group))
+					activeGroups.push(group);
+			}
+		}
 	}
 }

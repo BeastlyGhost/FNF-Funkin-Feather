@@ -130,7 +130,7 @@ class PlayState extends MusicBeatState
 	public static var lineRPC1:String = '';
 	public static var lineRPC2:String = '';
 
-	override public function create():Void
+	public override function create():Void
 	{
 		super.create();
 
@@ -365,7 +365,7 @@ class PlayState extends MusicBeatState
 		isStartingSong = false;
 	}
 
-	override public function update(elapsed:Float):Void
+	public override function update(elapsed:Float):Void
 	{
 		callFunc('update', [elapsed]);
 
@@ -950,7 +950,7 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	override public function destroy():Void
+	public override function destroy():Void
 	{
 		Controls.onKeyPressed.remove(onKeyPressed);
 		Controls.onKeyReleased.remove(onKeyReleased);

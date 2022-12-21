@@ -15,7 +15,7 @@ import funkin.essentials.song.MusicState;
 import funkin.objects.ui.fonts.Alphabet;
 import funkin.states.menus.MainMenu;
 
-typedef TitleData =
+typedef TitleForm =
 {
 	var bg:String;
 	var gf:String;
@@ -35,7 +35,7 @@ typedef TitleData =
 **/
 class TitleSubstate extends MusicBeatSubstate
 {
-	var introLines:TitleData;
+	var introLines:TitleForm;
 
 	var txtContainer:FlxTypedGroup<Alphabet>;
 	var textFinal:Array<String> = [];

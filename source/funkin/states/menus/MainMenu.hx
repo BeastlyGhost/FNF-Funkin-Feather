@@ -12,7 +12,7 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import funkin.essentials.song.MusicState;
 
-typedef MainMenuData =
+typedef MainMenuForm =
 {
 	var bg:String;
 	var flash:String;
@@ -30,7 +30,7 @@ typedef MainMenuData =
 **/
 class MainMenu extends MusicBeatState
 {
-	var menuData:MainMenuData;
+	var menuData:MainMenuForm;
 	var camFollow:FlxObject;
 
 	public static var instance:MainMenu;
@@ -162,7 +162,7 @@ class MainMenu extends MusicBeatState
 			updateSelection(Controls.isJustPressed("up") ? -1 : Controls.isJustPressed("down") ? 1 : 0);
 
 			if (FlxG.keys.justPressed.SEVEN)
-				MusicState.switchState(new TestState());
+				MusicState.switchState(new ModsMenu());
 
 			if (Controls.isJustPressed("back"))
 			{
@@ -207,11 +207,13 @@ class MainMenu extends MusicBeatState
 									MusicState.switchState(new StoryMenu());
 								case "freeplay":
 									MusicState.switchState(new FreeplayMenu());
-								// case "mods":
-								// MusicState.switchState(new ModsMenu());
+								case "mods":
+									MusicState.switchState(new ModsMenu());
 								case "credits":
 									MusicState.switchState(new CreditsMenu());
 								case "options":
+									transIn = FlxTransitionableState.defaultTransIn;
+									transOut = FlxTransitionableState.defaultTransOut;
 									MusicState.switchState(new OptionsMenu());
 								default:
 									MusicState.resetState();

@@ -12,7 +12,7 @@ import flixel.tweens.FlxTween;
 **/
 class Start extends FlxState
 {
-	override public function create():Void
+	public override function create():Void
 	{
 		super.create();
 

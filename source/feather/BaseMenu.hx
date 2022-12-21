@@ -32,7 +32,7 @@ class BaseMenu extends MusicBeatState
 		return newImage;
 	}
 
-	override public function updateSelection(newSelection:Int = 0):Void
+	public override function updateSelection(newSelection:Int = 0):Void
 	{
 		super.updateSelection(newSelection);
 
@@ -79,7 +79,7 @@ class BaseSubMenu extends MusicBeatSubstate
 		return newImage;
 	}
 
-	override public function updateSelection(newSelection:Int = 0):Void
+	public override function updateSelection(newSelection:Int = 0):Void
 	{
 		super.updateSelection(newSelection);
 

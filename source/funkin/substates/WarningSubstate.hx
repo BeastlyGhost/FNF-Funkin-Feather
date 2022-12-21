@@ -19,7 +19,7 @@ class WarningSubstate extends BaseSubMenu
 	private var fire:Void->Void;
 	private var unfire:Void->Void;
 
-	override public function new(warningText:String, yesText:String, noText:String, ?fire:Void->Void, ?unfire:Void->Void):Void
+	public override function new(warningText:String, yesText:String, noText:String, ?fire:Void->Void, ?unfire:Void->Void):Void
 	{
 		super();
 
@@ -81,7 +81,7 @@ class WarningSubstate extends BaseSubMenu
 		}
 	}
 
-	override public function updateSelection(newSelection:Int = 0):Void
+	public override function updateSelection(newSelection:Int = 0):Void
 	{
 		super.updateSelection(newSelection);
 

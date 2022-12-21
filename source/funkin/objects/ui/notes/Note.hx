@@ -73,7 +73,7 @@ class NoteSplash extends FeatherSprite
 		offset.set(offsetX, offsetY);
 	}
 
-	override public function update(elapsed:Float):Void
+	public override function update(elapsed:Float):Void
 	{
 		if (animation.curAnim != null && animation.curAnim.finished)
 			kill();

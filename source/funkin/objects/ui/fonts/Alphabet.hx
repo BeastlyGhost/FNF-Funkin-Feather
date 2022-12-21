@@ -38,7 +38,7 @@ class Alphabet extends FlxTypedSpriteGroup<LetterSprite>
 	var xPosResetted:Bool = false;
 	var sectionSpaces:Int = 0;
 
-	override public function set_color(color:Int):Int
+	public override function set_color(color:Int):Int
 	{
 		for (char in group.members)
 		{

@@ -93,7 +93,7 @@ class AssetHelper
 
 		@return your asset path along with the asset and its extensions (if null, then nothing)
 	**/
-	public static function grabAsset(asset:String, type:AssetType, directory:String, ?group:String):Dynamic
+	public static function grabAsset(asset:String, type:AssetType, ?directory:String, ?group:String):Dynamic
 	{
 		//
 		var pathExtend:String = (directory != null ? '$directory/' : '');

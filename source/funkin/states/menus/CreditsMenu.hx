@@ -5,15 +5,15 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import funkin.essentials.song.MusicState;
 import funkin.objects.ui.fonts.Alphabet;
 
-typedef CreditsData =
+typedef CreditsForm =
 {
 	var mainBG:String;
 	var mainBGColor:String;
 	var shouldChangeColor:Bool;
-	var userList:Array<CreditsUserData>;
+	var userList:Array<CreditsUserForm>;
 }
 
-typedef CreditsUserData =
+typedef CreditsUserForm =
 {
 	var name:String;
 	var type:String;
@@ -26,7 +26,7 @@ typedef CreditsUserData =
 class CreditsMenu extends BaseMenu
 {
 	var iconContainer:Array<ChildSprite> = [];
-	var creditsData:CreditsData;
+	var creditsData:CreditsForm;
 
 	override function create()
 	{
@@ -101,7 +101,7 @@ class CreditsMenu extends BaseMenu
 		}
 	}
 
-	override public function updateSelection(newSelection:Int = 0):Void
+	public override function updateSelection(newSelection:Int = 0):Void
 	{
 		super.updateSelection(newSelection);
 

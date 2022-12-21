@@ -9,7 +9,7 @@ import flixel.group.FlxSpriteGroup;
 	var PIXEL = 'pixel';
 }
 
-typedef BoxDataForm =
+typedef BoxForm =
 {
 	var texture:String;
 	var texturePath:String;
@@ -20,14 +20,14 @@ typedef BoxDataForm =
 	var ?size:Float;
 }
 
-typedef CharDataForm =
+typedef CharForm =
 {
 	var texture:String;
 	var texturePath:String;
-	var animations:Array<CharAnimForm>;
+	var animations:Array<AnimForm>;
 }
 
-typedef CharAnimForm =
+typedef AnimForm =
 {
 	var anim:Null<String>;
 	var animOffset:Array<Float>;
@@ -36,12 +36,12 @@ typedef CharAnimForm =
 
 class DialogueBox extends FlxSpriteGroup
 {
-	public var boxData:BoxDataForm;
-	public var charData:CharDataForm;
+	public var boxData:BoxForm;
+	public var charData:CharForm;
 
 	public var textList:Array<String> = [];
 
-	override public function new(file:String):Void
+	public override function new(file:String):Void
 	{
 		// dialogue box defaults
 		boxData = {
