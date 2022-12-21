@@ -226,6 +226,8 @@ class OptionsAPI
 			FlxG.sound.muted = FlxG.save.data.mute;
 		if (FlxG.save.data.seenSplash != null)
 			Main.game.skipSplash = FlxG.save.data.seenSplash;
+
+		updatePrefs();
 	}
 
 	/**

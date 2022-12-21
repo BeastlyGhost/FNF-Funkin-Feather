@@ -12,10 +12,9 @@ import sys.FileSystem;
 
 enum CharacterOrigin
 {
-	FUNKIN_FEATHER;
-	FOREVER_FEATHER;
-	FUNKIN_COCOA;
-	PSYCH_ENGINE;
+	FEATHER;
+	COCOA;
+	PSYCH;
 }
 
 typedef PsychCharFile =
@@ -53,7 +52,7 @@ class Character extends FeatherSprite
 	public var charOffset:FlxPoint;
 	public var camOffset:FlxPoint;
 
-	public var character:String;
+	public var name:String;
 	public var icon:String;
 
 	public var player:Bool = false;
@@ -71,13 +70,14 @@ class Character extends FeatherSprite
 			sing: 4
 		};
 
+	public var isDebug:Bool = false;
 	public var hasMissAnims:Bool = false;
 	public var isQuickDancer:Bool = false;
 	public var danceIdle:Bool = false;
 
 	public var idleSuffix:String = '';
 
-	public var charType:CharacterOrigin = FUNKIN_FEATHER;
+	public var charType:CharacterOrigin = FEATHER;
 
 	public function new(player:Bool = false):Void
 	{
@@ -90,7 +90,7 @@ class Character extends FeatherSprite
 	{
 		antialiasing = true;
 
-		character = char;
+		name = char;
 		if (icon == null)
 			icon = char;
 
@@ -100,15 +100,10 @@ class Character extends FeatherSprite
 		if (isQuickDancer)
 			danceIdle = true;
 
-		/**
-			if (FileSystem.exists(AssetHelper.grabAsset(character, MODULE, "data/characters/" + character)))
-				charType = FOREVER_FEATHER;
+		if (FileSystem.exists(AssetHelper.grabAsset(name, JSON, "data/characters/" + name)))
+			charType = PSYCH;
 
-			if (FileSystem.exists(AssetHelper.grabAsset(character, JSON, "data/characters/" + character)))
-				charType = PSYCH_ENGINE;
-		**/
-
-		switch (character)
+		switch (name)
 		{
 			case 'placeholder':
 				frames = AssetHelper.grabAsset("placeholder", SPARROW, "data/characters/placeholder");
@@ -142,16 +137,34 @@ class Character extends FeatherSprite
 				healthColor = 0xFFA1A1A1;
 
 			default:
-				switch (charType)
+				try
 				{
-					case PSYCH_ENGINE:
-						generatePsych(character);
-					case FOREVER_FEATHER:
-						generateFEFeather(character);
-					default:
-						return setCharacter(x, y, 'placeholder');
+					switch (charType)
+					{
+						case PSYCH:
+							generatePsych(name);
+						default:
+							generateFeather(name);
+					}
+				}
+				catch (e)
+				{
+					return setCharacter(x, y, 'placeholder');
 				}
 		}
+
+		this.x = x;
+		this.y = y;
+
+		postGenChecks();
+
+		return this;
+	}
+
+	function postGenChecks():Void
+	{
+		if (graphic == null)
+			return;
 
 		var noteActions:Array<String> = funkin.objects.ui.notes.Strum.BabyArrow.actions;
 		for (i in 0...noteActions.length)
@@ -163,29 +176,24 @@ class Character extends FeatherSprite
 		if (player)
 		{
 			flipX = !flipX;
-			if (!character.startsWith('bf'))
+			if (!name.startsWith('bf'))
 				flipLeftRight();
 		}
-		else if (character.startsWith('bf'))
+		else if (name.startsWith('bf'))
 			flipLeftRight();
-
-		dance();
 
 		// Plays all animations prior to starting
 		var allAnims:Array<String> = animation.getNameList();
 		for (anim in allAnims)
 		{
 			playAnim(anim);
-			animation.curAnim.finish();
+			dance();
 		}
+
+		dance();
 
 		// x += charOffset.x;
 		// y += (charOffset.y - (frameHeight * scale.y));
-
-		this.x = x;
-		this.y = y;
-
-		return this;
 	}
 
 	function flipLeftRight():Void
@@ -212,7 +220,7 @@ class Character extends FeatherSprite
 
 	override function update(elapsed:Float):Void
 	{
-		if (animation.curAnim != null)
+		if (animation.curAnim != null && !isDebug)
 		{
 			if (timers.animation > 0)
 			{
@@ -253,7 +261,7 @@ class Character extends FeatherSprite
 
 	public function dance():Void
 	{
-		if (animation.curAnim != null)
+		if (animation.curAnim != null && !isDebug)
 		{
 			if (isQuickDancer)
 			{
@@ -269,16 +277,9 @@ class Character extends FeatherSprite
 		}
 	}
 
-	function generateFeather(char:String = 'bf'):Character
-	{
-		// yaml format.
-
-		return this;
-	}
-
 	public var characterScripts:Array<FeatherModule> = [];
 
-	function generateFEFeather(char:String = 'bf'):Character
+	function generateFeather(char:String = 'bf'):Character
 	{
 		var pushedChars:Array<String> = [];
 
@@ -288,13 +289,14 @@ class Character extends FeatherSprite
 
 		if (!pushedChars.contains(char))
 		{
-			var script:FeatherModule = new FeatherModule(AssetHelper.grabAsset('config', MODULE, charPath), charPath);
-
-			if (script.interp == null)
-				trace("Something terrible occured! Skipping.");
-
-			characterScripts.push(script);
-			pushedChars.push(char);
+			if (FileSystem.exists(AssetHelper.grabAsset('config', MODULE, charPath)))
+			{
+				var script:FeatherModule = new FeatherModule(AssetHelper.grabAsset('config', MODULE, charPath), charPath);
+				characterScripts.push(script);
+				pushedChars.push(char);
+			}
+			else
+				return null;
 		}
 
 		var spriteType:AssetType = SPARROW;
@@ -309,7 +311,7 @@ class Character extends FeatherSprite
 		}
 		catch (e)
 		{
-			trace('Could not define Sprite Type, Uncaught Error: ' + e);
+			trace('Could not define Sprite Type, Error: ' + e);
 			spriteType = SPARROW;
 		}
 

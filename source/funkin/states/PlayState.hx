@@ -53,6 +53,7 @@ class PlayState extends MusicBeatState
 			if (notesGroup != null)
 				notesGroup.destroy();
 
+			Conductor.stopSong();
 			if (FlxG.sound.music != null && FlxG.sound.music.playing)
 				FlxG.sound.music.stop();
 
@@ -382,8 +383,15 @@ class PlayState extends MusicBeatState
 					PlayerInfo.validScore = false;
 					gameplayMode = CHARTING;
 					Conductor.pauseSong();
-					Conductor.stopSong();
 					MusicState.switchState(new funkin.states.editors.ChartEditor());
+				}
+
+				if (FlxG.keys.justPressed.EIGHT)
+				{
+					var char:Character = (FlxG.keys.pressed.SHIFT ? player : opponent);
+
+					Conductor.pauseSong();
+					MusicState.switchState(new funkin.states.editors.OffsetEditor(char.name, char.player));
 				}
 			}
 
@@ -519,8 +527,7 @@ class PlayState extends MusicBeatState
 		if (PlayerInfo.stats.health <= 0 && !hasDied)
 		{
 			pauseGame();
-			Conductor.pauseSong();
-			Conductor.stopSong(); // *beep boops stop*
+			Conductor.pauseSong(); // *beep boops stop*
 			PlayerInfo.stats.deaths += 1;
 			hasDied = true;
 
@@ -819,7 +826,7 @@ class PlayState extends MusicBeatState
 		{
 			for (i in babyStrum.characters)
 			{
-				if (i != null)
+				if (i != null && (i.animation.getByName('idle') != null || i.animation.getByName('danceRight') != null))
 				{
 					var timerBop:Float = (i.timers.headBop != null ? i.timers.headBop : 2);
 					var boppingBeat = (i.isQuickDancer ? beat % timerBop == 0 : beat % timerBop == 0);
@@ -911,7 +918,6 @@ class PlayState extends MusicBeatState
 
 		Conductor.songPosition = Conductor.songMusic.length;
 		Conductor.pauseSong();
-		Conductor.stopSong();
 
 		switch (gameplayMode)
 		{

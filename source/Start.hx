@@ -44,7 +44,6 @@ class Start extends FlxState
 			{
 				FlxG.save.data.seenSplash = true;
 				FlxG.switchState(cast Type.createInstance(Main.game.initialState, []));
-				OptionsAPI.updatePrefs();
 			},
 			ease: FlxEase.sineOut
 		});

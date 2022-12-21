@@ -173,9 +173,9 @@ class Stage extends FlxTypedGroup<FlxBasic>
 			setVar('boyfriend', PlayState.player);
 			setVar('player', PlayState.player);
 
-			setVar('bfName', PlayState.player.character);
-			setVar('boyfriendName', PlayState.player.character);
-			setVar('playerName', PlayState.player.character);
+			setVar('bfName', PlayState.player.name);
+			setVar('boyfriendName', PlayState.player.name);
+			setVar('playerName', PlayState.player.name);
 		}
 
 		if (PlayState.opponent != null)
@@ -184,9 +184,9 @@ class Stage extends FlxTypedGroup<FlxBasic>
 			setVar('dadOpponent', PlayState.opponent);
 			setVar('opponent', PlayState.opponent);
 
-			setVar('dadName', PlayState.opponent.character);
-			setVar('dadOpponentName', PlayState.opponent.character);
-			setVar('opponentName', PlayState.opponent.character);
+			setVar('dadName', PlayState.opponent.name);
+			setVar('dadOpponentName', PlayState.opponent.name);
+			setVar('opponentName', PlayState.opponent.name);
 		}
 
 		callFunc('onCreate', []);
