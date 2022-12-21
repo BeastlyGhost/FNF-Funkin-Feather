@@ -10,42 +10,42 @@ import funkin.essentials.song.MusicState;
 import funkin.objects.ui.fonts.Alphabet;
 
 /**
-    Mods Menu, contains functions for sorting and enabling/disabling current Mods
-    Mods are, simply put, Asset Groups, and they can have special properties from
-    within their data file, `group.yaml`
+	Mods Menu, contains functions for sorting and enabling/disabling current Mods
+	Mods are, simply put, Asset Groups, and they can have special properties from
+	within their data file, `group.yaml`
 
-    this menu was made as a way to interact with `group.yaml` in order to make
-    sorting through mods and such much easier
+	this menu was made as a way to interact with `group.yaml` in order to make
+	sorting through mods and such much easier
 
-    @since INFDEV
+	@since INFDEV
 **/
 class ModsMenu extends BaseMenu
 {
-    override function create():Void
-    {
-        super.create();
+	override function create():Void
+	{
+		super.create();
 
-        DiscordRPC.update("MODS MENU", "Navigating through the Main Menus");
+		DiscordRPC.update("MODS MENU", "Navigating through the Main Menus");
 
-        bgImage = 'menuDesat';
+		bgImage = 'menuDesat';
 		menuBG.color = 0xFFEA71FD;
 
-        itemContainer = generateOptions();
-        add(itemContainer);
+		itemContainer = generateOptions();
+		add(itemContainer);
 
-        selection = 0;
-        updateSelection();
-    }
+		selection = 0;
+		updateSelection();
+	}
 
-    override function update(elapsed:Float):Void
-    {
-        updateSelection(Controls.isJustPressed("up") ? -1 : Controls.isJustPressed("down") ? 1 : 0);
+	override function update(elapsed:Float):Void
+	{
+		updateSelection(Controls.isJustPressed("up") ? -1 : Controls.isJustPressed("down") ? 1 : 0);
 
-        if (Controls.isJustPressed("back"))
-            MusicState.switchState(new MainMenu());
-    }
+		if (Controls.isJustPressed("back"))
+			MusicState.switchState(new MainMenu());
+	}
 
-    override function updateSelection(newSelection:Int = 0):Void
+	override function updateSelection(newSelection:Int = 0):Void
 	{
 		super.updateSelection(newSelection);
 
@@ -53,29 +53,29 @@ class ModsMenu extends BaseMenu
 			FSound.playSound("scrollMenu", "sounds/menus");
 	}
 
-    function generateOptions():FlxTypedGroup<Alphabet>
-    {
-        var tempContainer:FlxTypedGroup<Alphabet> = new FlxTypedGroup<Alphabet>();
+	function generateOptions():FlxTypedGroup<Alphabet>
+	{
+		var tempContainer:FlxTypedGroup<Alphabet> = new FlxTypedGroup<Alphabet>();
 
-        for (i in 0...AssetGroup.allGroups.length)
+		for (i in 0...AssetGroup.allGroups.length)
 		{
-            var optionTxt:Alphabet = new Alphabet(0, 0, AssetGroup.allGroups[i], false);
-            optionTxt.screenCenter();
-            optionTxt.y += (125 * (i - Math.floor(AssetGroup.allGroups.length / 2)));
-            optionTxt.disableX = true;
-            optionTxt.targetY = i;
-            optionTxt.alpha = 0.6;
+			var optionTxt:Alphabet = new Alphabet(0, 0, AssetGroup.allGroups[i], false);
+			optionTxt.screenCenter();
+			optionTxt.y += (125 * (i - Math.floor(AssetGroup.allGroups.length / 2)));
+			optionTxt.disableX = true;
+			optionTxt.targetY = i;
+			optionTxt.alpha = 0.6;
 
-            tempContainer.add(optionTxt);
+			tempContainer.add(optionTxt);
 		}
 
-        wrappableGroup = AssetGroup.allGroups;
+		wrappableGroup = AssetGroup.allGroups;
 
-        return tempContainer;
-    }
+		return tempContainer;
+	}
 
-    function openManagerSubmenu():Void
-    {
-        //
-    }
+	function openManagerSubmenu():Void
+	{
+		//
+	}
 }

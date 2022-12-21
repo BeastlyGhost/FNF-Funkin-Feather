@@ -98,7 +98,8 @@ class OptionsMenu extends BaseMenu
 		if (accept || (left || right))
 		{
 			var isDynamic:Bool = (wrappableGroup[Math.floor(selection)].type == DYNAMIC);
-			var isOption:Bool = (wrappableGroup[Math.floor(selection)].attributes != null && wrappableGroup[Math.floor(selection)].attributes.contains(DEFAULT));
+			var isOption:Bool = (wrappableGroup[Math.floor(selection)].attributes != null
+				&& wrappableGroup[Math.floor(selection)].attributes.contains(DEFAULT));
 
 			if (!isDynamic && isOption)
 				updateOption(wrappableGroup[Math.floor(selection)].type);
@@ -143,7 +144,8 @@ class OptionsMenu extends BaseMenu
 		if (itemContainer.members.length > 5)
 			camFollow.y = (activeCategory == 'master' ? 0 : itemContainer.members[Math.floor(selection)].y);
 
-		if (wrappableGroup[Math.floor(selection)].attributes != null && wrappableGroup[Math.floor(selection)].attributes.contains(UNSELECTABLE))
+		if (wrappableGroup[Math.floor(selection)].attributes != null
+			&& wrappableGroup[Math.floor(selection)].attributes.contains(UNSELECTABLE))
 			updateSelection(Math.floor(selection) + selectionJumper);
 	}
 

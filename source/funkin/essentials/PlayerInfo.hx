@@ -282,7 +282,7 @@ class PlayerInfo
 
 		if (saveMap.get(song).difficulty == FeatherTools.getDifficulty(diff))
 			return saveMap.get(song).score;
-		
+
 		return 0;
 	}
 

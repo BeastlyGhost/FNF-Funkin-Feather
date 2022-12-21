@@ -261,13 +261,13 @@ class OptionsAPI
 					}
 					catch (e)
 					{
-						throw ('Something went wrong while trying to catch this Preference: "$name"');
+						throw('Something went wrong while trying to catch this Preference: "$name"');
 					}
 				}
 			}
 		}
 
-		throw ('Preference "$name" does not exist in the preferences map.');
+		throw('Preference "$name" does not exist in the preferences map.');
 	}
 
 	/**

@@ -117,6 +117,7 @@ class PlayState extends MusicBeatState
 	public var camOther:FlxCamera;
 
 	private var camFollow:FlxObject;
+
 	private static var prevFollow:FlxObject;
 
 	public static var cameraSpeed:Float = 1;
