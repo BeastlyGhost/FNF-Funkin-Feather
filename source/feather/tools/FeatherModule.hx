@@ -1,13 +1,13 @@
 package feather.tools;
 
-import sys.FileSystem;
 import feather.assets.AssetHelper;
+import sys.FileSystem;
 
 class FeatherModule extends SScript
 {
 	public var scriptLibrary:AssetLibrary;
 
-	public function new(file:String, ?directory:String = null, ?preset:Bool = true):Void
+	public function new(file:String, ?directory:String, ?preset:Bool = true):Void
 	{
 		super(file, preset);
 		traces = false;

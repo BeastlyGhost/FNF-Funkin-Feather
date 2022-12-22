@@ -1,5 +1,7 @@
 package feather;
 
+import flixel.FlxG;
+import flixel.util.FlxSave;
 import sys.FileSystem;
 
 typedef SaveFile =
@@ -55,5 +57,13 @@ class FeatherSave
 	{
 		if (!FileSystem.exists(AssetHelper.grabAsset(name, JSON, 'data/save')))
 			return;
+	}
+
+	public static function getSavePath():String
+	{
+		@:privateAccess
+		return #if (flixel < "5.0.0") 'BeastlyGhost' #else FlxG.stage.application.meta.get('company')
+			+ '/'
+			+ FlxSave.validate(FlxG.stage.application.meta.get('file')) #end;
 	}
 }

@@ -81,6 +81,9 @@ class Stage extends FlxTypedGroup<FlxBasic>
 			default:
 				cameraZoom = 0.9;
 
+				if (newStage == "unknown")
+					return this;
+
 				try
 				{
 					//

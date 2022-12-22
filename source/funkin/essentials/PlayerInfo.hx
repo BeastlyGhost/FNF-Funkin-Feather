@@ -263,6 +263,7 @@ class PlayerInfo
 		}
 
 		FlxG.save.data.highscores = saveMap;
+		// FlxG.save.data.flush();
 	}
 
 	public static function getScore(song:String, diff:Int = 0, mode:GameModes):Int

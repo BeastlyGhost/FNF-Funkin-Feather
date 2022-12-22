@@ -1,8 +1,8 @@
 package funkin.essentials.song;
 
-import sys.FileSystem;
 import feather.assets.AssetGroup;
 import flixel.util.FlxColor;
+import sys.FileSystem;
 
 enum WeekAttribute
 {

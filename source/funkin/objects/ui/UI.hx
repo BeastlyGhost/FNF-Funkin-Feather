@@ -1,5 +1,6 @@
 package funkin.objects.ui;
 
+import flixel.util.FlxStringUtil;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
@@ -20,6 +21,7 @@ import funkin.states.PlayState;
 class UI extends FlxSpriteGroup
 {
 	public var scoreText:FlxText;
+
 	public var autoPlayText:FlxText;
 	public var autoPlaySine:Float = 0;
 
@@ -53,22 +55,20 @@ class UI extends FlxSpriteGroup
 		iconP2.y = healthBar.y - (iconP2.height / 2);
 		add(iconP2);
 
-		scoreText = new UIText(healthBG.x + healthBG.width - 190, healthBG.y + 30, 0);
+		scoreText = new UIText(healthBG.x + healthBG.width - 190, healthBG.y + 30, 0, SCORETEXT);
 		add(scoreText);
 
-		autoPlayText = new UIText(0, PlayState.playerStrum.downscroll ? FlxG.height - 80 : 80, FlxG.width - 800, '[AUTOPLAY]\n');
+		autoPlayText = new UIText(0, PlayState.playerStrum.downscroll ? FlxG.height - 80 : 80, FlxG.width - 800, AUTOPLAY);
 		autoPlayText.visible = PlayState.playerStrum.autoplay;
-		autoPlayText.alignment = CENTER;
+		autoPlayText.text = "AUTOPLAY\n";
 		autoPlayText.screenCenter(X);
-		autoPlayText.size = 32;
+		autoPlayText.x -= 15;
 
 		// repositioning for it to not be covered by the receptors
 		if (OptionsAPI.getPref('Center Notes'))
 		{
-			if (PlayState.playerStrum.downscroll)
-				autoPlayText.y = autoPlayText.y - 125;
-			else
-				autoPlayText.y = autoPlayText.y + 125;
+			var yInc:Int = (PlayState.playerStrum.downscroll ? -125 : 125);
+			autoPlayText.y = autoPlayText.y + yInc;
 		}
 
 		add(autoPlayText);
@@ -111,13 +111,13 @@ class UI extends FlxSpriteGroup
 		switch (uiStyle)
 		{
 			case "Feather":
-				tempScore = "Score: " + PlayerInfo.stats.score;
+				tempScore = "Score: " + FlxStringUtil.formatMoney(PlayerInfo.stats.score);
 
 				/**
 					TODO: visual miss counter on rating assets
 					or maybe in a judgement counter thing
 				**/
-				// tempScore += separator + "Misses: " + PlayerInfo.stats.misses;
+				// tempScore += separator + "Misses: " + FlxStringUtil.formatMoney(PlayerInfo.stats.misses);
 				tempScore += separator + "Accuracy: " + PlayerInfo.returnGradePercent();
 
 				tempScore += separator + "Grade: " + PlayerInfo.curGrade;
@@ -186,7 +186,7 @@ class UI extends FlxSpriteGroup
 		byText.screenCenter();
 		byText.x -= FlxG.width;
 		byText.y = FlxG.height - 80.5;
-		byText.text = FeatherTools.formatSong(PlayState.song.name);
+		byText.text = FeatherStrings.toTitle(PlayState.song.name);
 		byText.text += '\n By: ${PlayState.song.author}';
 
 		blackBy.setGraphicSize(Std.int(byText.width - 20), Std.int(byText.height + 105));
@@ -197,24 +197,18 @@ class UI extends FlxSpriteGroup
 		FlxTween.tween(byText, {x: -40}, 3, {ease: FlxEase.expoInOut});
 		new FlxTimer().start(4.75, function(tmr:FlxTimer)
 		{
-			FlxTween.tween(blackBy, {x: -700}, 1.6, {
-				ease: FlxEase.expoInOut,
-				onComplete: function(twn:FlxTween)
-				{
-					remove(blackBy);
-					blackBy.kill();
-					blackBy.destroy();
-				}
-			});
-			FlxTween.tween(byText, {x: -650}, 1.6, {
-				ease: FlxEase.expoInOut,
-				onComplete: function(twn:FlxTween)
-				{
-					remove(byText);
-					byText.kill();
-					byText.destroy();
-				}
-			});
+			for (obj in [blackBy, byText])
+			{
+				FlxTween.tween(obj, {x: -700}, 1.6, {
+					ease: FlxEase.expoInOut,
+					onComplete: function(twn:FlxTween)
+					{
+						remove(obj);
+						obj.kill();
+						obj.destroy();
+					}
+				});
+			}
 		});
 	}
 }

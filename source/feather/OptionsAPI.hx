@@ -43,11 +43,9 @@ class OptionsAPI
 		**/
 		"master" => [
 			{name: "preferences", type: DYNAMIC},
-			{name: "appearance", type: DYNAMIC},
-			{name: "accessibility", type: DYNAMIC},
 			{name: "debugging", type: DYNAMIC},
-			// {name: "custom settings", type: DYNAMIC},
-			{name: "keybinds", type: DYNAMIC}
+			{name: "keybinds", type: DYNAMIC},
+			{name: "notes", type: DYNAMIC},
 		],
 		/**
 			Category Contents
@@ -58,12 +56,6 @@ class OptionsAPI
 				description: "If the notes should come from top to bottom.",
 				type: CHECKMARK,
 				value: false
-			},
-			{
-				name: "Ghost Tapping",
-				description: "If you should be able to spam when there's no notes to hit during gameplay.",
-				type: CHECKMARK,
-				value: true
 			},
 			{
 				name: "Center Notes",
@@ -78,18 +70,28 @@ class OptionsAPI
 				value: false
 			},
 			{
-				name: "Safe Frames",
-				description: "Specify the amount of frames you have for hitting notes early / late.",
-				type: SELECTOR,
-				value: 10
+				name: "Ghost Tapping",
+				description: "If you should be able to spam when there's no notes to hit during gameplay.",
+				type: CHECKMARK,
+				value: true
 			},
-		],
-		"appearance" => [
 			{
-				name: "Note Splash Opacity",
-				description: "Set the opacity for your Note Splashes, shown when hitting \"Sick!\" Ratings on Notes.",
-				type: SELECTOR,
-				value: 60
+				name: "Auto Pause",
+				description: "If the game should pause itself when the window is unfocused.",
+				type: CHECKMARK,
+				value: true
+			},
+			{
+				name: "Skip Splash Screen",
+				description: "If the splash screen at the beginning of the game should be skipped.",
+				type: CHECKMARK,
+				value: false
+			},
+			{
+				name: "Show Info Card",
+				description: "If the card with the Song Name and author should be shown when the song begins.",
+				type: CHECKMARK,
+				value: true
 			},
 			{
 				name: "User Interface Style",
@@ -98,28 +100,20 @@ class OptionsAPI
 				value: "Feather",
 				values: ["Vanilla", "Feather"]
 			},
-			/*
-				{
-					name: "Note Quantization",
-					description: "If notes should change colors depending on the song beat.",
-					type: CHECKMARK,
-					value: false
-				},
-			 */
 			{
-				name: "Show Info Card",
-				description: "If the card with the Song Name and author should be shown when the song begins.",
-				type: CHECKMARK,
-				value: true
-			}
+				name: "Note Splash Opacity",
+				description: "Set the opacity for your Note Splashes, shown when hitting \"Sick!\" Ratings on Notes.",
+				type: SELECTOR,
+				value: 60
+			},
+			{
+				name: "Safe Frames",
+				description: "Specify the amount of frames you have for hitting notes early / late.",
+				type: SELECTOR,
+				value: 10
+			},
 		],
 		"accessibility" => [
-			{
-				name: "Auto Pause",
-				description: "If the game should pause itself when the window is unfocused.",
-				type: CHECKMARK,
-				value: true
-			},
 			{
 				name: "Anti Aliasing",
 				description: "If sprite antialiasing should be disabled, may improve performance.",
@@ -177,7 +171,6 @@ class OptionsAPI
 				value: false
 			}
 		],
-		"custom settings" => [{name: "NOTHING", type: DYNAMIC}],
 	];
 
 	public static var myPreferences:Map<String, Array<OptionForm>> = [];
@@ -210,14 +203,21 @@ class OptionsAPI
 		if (FlxG.save.data.globalSettings != null)
 		{
 			// grab from your save file
-			var savedPreferences:Map<String, Array<OptionForm>> = FlxG.save.data.globalSettings;
-			for (saveKey in savedPreferences.keys())
+			try
 			{
-				// this checks if the key exists on the DEFAULT preferences list
-				// if it does, then it sets your preferences to the save keys
-				// that way saves won't have to be deleted if preferences change overtime
-				if (preferencesList.get(saveKey) != null)
-					myPreferences.set(saveKey, savedPreferences.get(saveKey));
+				var savedPreferences:Map<String, Array<OptionForm>> = FlxG.save.data.globalSettings;
+				for (key => keys in savedPreferences)
+				{
+					// this checks if the key exists on the DEFAULT preferences list
+					// if it does, then it sets your preferences to the save keys
+					// that way saves won't have to be deleted if preferences change overtime
+					if (preferencesList.get(key) != null)
+						myPreferences.set(key, keys);
+				}
+			}
+			catch (e:Dynamic)
+			{
+				throw('Something went wrong while loading your saved preferences');
 			}
 		}
 		else
@@ -227,10 +227,6 @@ class OptionsAPI
 			FlxG.sound.volume = FlxG.save.data.volume;
 		if (FlxG.save.data.mute != null)
 			FlxG.sound.muted = FlxG.save.data.mute;
-		if (FlxG.save.data.seenSplash != null)
-			Main.game.skipSplash = FlxG.save.data.seenSplash;
-
-		updatePrefs();
 	}
 
 	/**
@@ -245,29 +241,29 @@ class OptionsAPI
 
 		for (category => contents in preferencesList)
 		{
-			var chosenMap:Map<String, Array<OptionForm>> = [];
-			var hasCategory:Bool = (myPreferences != null && myPreferences.exists(category) && myPreferences.get(category) != null);
-
-			chosenMap = (hasCategory ? myPreferences : preferencesList);
-
-			for (i in 0...contents.length)
+			try
 			{
-				var endOption:OptionForm = chosenMap.get(category)[i];
-				if (endOption.name == name && endOption.type != DYNAMIC)
+				var chosenMap:Map<String, Array<OptionForm>> = [];
+				var hasCategory:Bool = (myPreferences != null && myPreferences.exists(category) && myPreferences.get(category) != null);
+
+				chosenMap = (hasCategory ? myPreferences : preferencesList);
+
+				for (i in 0...contents.length)
 				{
-					try
-					{
-						return (getValue ? endOption.value : endOption);
-					}
-					catch (e)
-					{
-						throw('Something went wrong while trying to catch this Preference: "$name"');
-					}
+					var myOption:OptionForm = chosenMap.get(category)[i];
+					if (myOption.name == name && myOption.type != DYNAMIC)
+						return (getValue ? myOption.value : myOption);
 				}
+			}
+			catch (e:Dynamic)
+			{
+				throw('Something went wrong while trying to catch this Preference: "$name"');
+				return null;
 			}
 		}
 
 		throw('Preference "$name" does not exist in the preferences map.');
+		return null;
 	}
 
 	/**
@@ -287,9 +283,16 @@ class OptionsAPI
 
 			for (i in 0...contents.length)
 			{
-				var endOption:OptionForm = chosenMap.get(category)[i];
-				if (endOption.name == name)
-					endOption.value = newValue;
+				var myOption:OptionForm = chosenMap.get(category)[i];
+				try
+				{
+					if (myOption.name == name)
+						myOption.value = newValue;
+				}
+				catch (e:Dynamic)
+				{
+					throw('Something went wrong while trying to catch this Preference: "$name"');
+				}
 			}
 		}
 	}
@@ -301,8 +304,15 @@ class OptionsAPI
 	{
 		bindSave("Feather-Settings");
 
+		if (getPref("Skip Splash Screen") != null)
+			Main.game.skipSplash = !getPref("Skip Splash Screen");
+
 		#if (flixel >= "5.0.0")
-		flixel.FlxSprite.defaultAntialiasing = getPref('Anti Aliasing');
+		var alias:Bool = true;
+		if (getPref('Anti Aliasing') != null)
+			alias = getPref('Anti Aliasing');
+
+		flixel.FlxSprite.defaultAntialiasing = alias;
 		#end
 
 		// to avoid a crash
@@ -311,7 +321,13 @@ class OptionsAPI
 			fpsPref = getPref("Framerate Cap");
 
 		FlxG.drawFramerate = FlxG.updateFramerate = fpsPref;
-		FlxG.autoPause = getPref('Auto Pause');
+
+		var autoPause:Bool = true;
+
+		if (getPref('Auto Pause', false) != null)
+			autoPause = getPref('Auto Pause');
+
+		FlxG.autoPause = autoPause;
 	}
 
 	public static function bindSave(name:String):Void
@@ -320,9 +336,9 @@ class OptionsAPI
 		try
 		{
 			if (FlxG.save.name != name)
-				FlxG.save.bind(name #if (flixel < "5.0.0"), "BeastlyGhost" #end);
+				FlxG.save.bind(name, FeatherSave.getSavePath());
 		}
-		catch (e)
+		catch (e:Dynamic)
 		{
 			trace('Unexpected Error when binding save, file name was "$name"');
 		}

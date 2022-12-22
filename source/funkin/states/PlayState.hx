@@ -169,7 +169,7 @@ class PlayState extends MusicBeatState
 		// FeatherModule.createInstance(localScripts);
 		// trace(localScripts);
 
-		gameStage = new Stage().setStage("stage");
+		gameStage = new Stage().setStage((song.stage == null ? "unknown" : song.stage));
 		add(gameStage);
 
 		opponent = new Character(false).setCharacter(gameStage.opponentPos.x, gameStage.opponentPos.y, song.opponent);
@@ -245,7 +245,7 @@ class PlayState extends MusicBeatState
 
 		var stringDiff = FeatherTools.getDifficulty(difficulty);
 
-		lineRPC2 = '${FeatherTools.formatSong(song.name)} [${stringDiff.replace('-', '').toUpperCase()}]';
+		lineRPC2 = '${FeatherStrings.toTitle(song.name)} [${stringDiff.replace('-', '').toUpperCase()}]';
 
 		DiscordRPC.update(addString + lineRPC1, mode + ' - ' + lineRPC2);
 	}
@@ -949,6 +949,8 @@ class PlayState extends MusicBeatState
 				changePresence("Finished playing a song - ");
 				openSubState(new funkin.substates.PauseSubstate(player.getScreenPosition().x, player.getScreenPosition().y, "charting"));
 		}
+
+		AssetGroup.activeGroup = null;
 	}
 
 	public override function destroy():Void

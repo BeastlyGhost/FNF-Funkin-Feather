@@ -56,20 +56,6 @@ class FeatherTools
 	}
 
 	/**
-		Formats the song. Example: ``'world_machine' -> 'World Machine'``.
-	**/
-	inline public static function formatSong(song:String):String
-	{
-		var song = song.split('_').join(' ');
-		var words:Array<String> = song.toLowerCase().split(" ");
-
-		for (i in 0...words.length)
-			words[i] = words[i].charAt(0).toUpperCase() + words[i].substr(1);
-
-		return words.join(" ");
-	}
-
-	/**
 		Checks if the Main Menu Song is playing, if it isn't, then play it!
 		@param volumeReset if the song should fade in on a successful song reset
 	**/

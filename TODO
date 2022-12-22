@@ -1,4 +1,5 @@
 [PRIORITY: HIGH]
+- Rewrite Options.
 - Rewrite the input system.
 - (Properly) implement characters.
 - Implement game weeks and finish the Story Mode menu.

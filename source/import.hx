@@ -3,11 +3,13 @@
 	THESE *WILL* BE USED IN EVERY CLASS
 **/
 
+import feather.assets.AssetGroup;
 import feather.tools.FeatherSoundManager as FSound;
 import feather.tools.FeatherSpriteManager;
 import yaml.Yaml;
 
 using StringTools;
+using feather.FeatherStrings;
 using feather.OptionsAPI;
 using feather.assets.AssetHelper;
 using feather.assets.Paths;

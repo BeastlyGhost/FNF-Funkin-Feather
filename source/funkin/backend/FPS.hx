@@ -1,9 +1,9 @@
 package funkin.backend;
 
-import haxe.macro.Type;
 import flixel.FlxG;
 import flixel.math.FlxMath;
 import haxe.Timer;
+import haxe.macro.Type;
 import openfl.events.Event;
 import openfl.system.System;
 import openfl.text.TextField;

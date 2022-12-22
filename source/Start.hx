@@ -20,6 +20,9 @@ class Start extends FlxState
 		FlxG.mouse.useSystemCursor = true;
 		FlxG.mouse.visible = false;
 
+		if (FlxG.save != null)
+			OptionsAPI.updatePrefs();
+
 		triggerSplash(Main.game.skipSplash);
 	}
 

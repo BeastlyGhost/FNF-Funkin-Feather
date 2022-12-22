@@ -165,6 +165,10 @@ class FreeplayMenu extends BaseMenu
 			if (FlxG.sound.music != null)
 				FlxG.sound.music.stop();
 
+			if (songList[Math.floor(selection)].group != null)
+				AssetGroup.activeGroup = songList[Math.floor(selection)].group;
+			trace(AssetGroup.activeGroup);
+
 			PlayState.songName = songList[Math.floor(selection)].name;
 			PlayState.currentWeek = songList[Math.floor(selection)].week;
 			PlayState.difficulty = selDifficulty;

@@ -60,9 +60,9 @@ class OptionsMenu extends BaseMenu
 	{
 		super.update(elapsed);
 
+		menuCamera.followLerp = FeatherTools.cameraLerping(0.05);
 		if (activeCategory != 'master')
 		{
-			menuCamera.followLerp = FeatherTools.cameraLerping(0.05);
 			itemContainer.forEach(function(item:Alphabet)
 			{
 				var selected:Bool = (item == itemContainer.members[Math.floor(selection)]);
@@ -142,7 +142,10 @@ class OptionsMenu extends BaseMenu
 			FSound.playSound("scrollMenu", 'sounds/menus');
 
 		if (itemContainer.members.length > 5)
-			camFollow.y = (activeCategory == 'master' ? 0 : itemContainer.members[Math.floor(selection)].y);
+		{
+			var item:Alphabet = itemContainer.members[Math.floor(selection)];
+			camFollow.y = (activeCategory == 'master' ? 0 : item.y);
+		}
 
 		if (wrappableGroup[Math.floor(selection)].attributes != null
 			&& wrappableGroup[Math.floor(selection)].attributes.contains(UNSELECTABLE))

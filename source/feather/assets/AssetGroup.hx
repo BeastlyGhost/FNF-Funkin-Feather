@@ -20,7 +20,7 @@ class AssetGroup
 	/**
 		Specifies the DEFAULT Asset Group
 	**/
-	public static var defaultGroup:String = 'funkin';
+	public static var defaultGroup:String = 'feather';
 
 	/**
 		Stores groups that will be taken into account while searching for assets
@@ -31,6 +31,11 @@ class AssetGroup
 		Active groups that are enabled by the user
 	**/
 	public static var activeGroups:Array<String> = [];
+
+	/**
+		Current Active Group
+	**/
+	public static var activeGroup:String = null;
 
 	/**
 		Stores folder names that should be excluded when searching for groups
@@ -64,7 +69,13 @@ class AssetGroup
 		// return groupsTemp;
 	}
 
-	public function getFromDirs(dir:String, type:AssetType):String
+	/**
+		Returns all the groups from within the assets folder
+		@param file the file that we should look for
+		@param type the file type, for getting the extension
+		@param force whether to skip the system checks and force a group to be returned
+	**/
+	public function getFromDirs(file:String, type:AssetType, ?force:Bool):String
 	{
 		// loadGroupData();
 
@@ -76,29 +87,54 @@ class AssetGroup
 
 		for (e in 0...chosenGroup.length)
 		{
-			var newGroup:String = chosenGroup[e];
-			var assetLib:String = AssetHelper.getExtensions('assets/$newGroup/$dir', type);
+			var groupReturn:String = null;
 
-			// check if the file exists on the group we want
-			if (FileSystem.exists(assetLib))
-			{
-				// trace('Group is "$newGroup" for "$dir"');
-				return newGroup;
-			}
-			else
-			{
-				// if it doesn't, check if it exists on the default one
-				if (defaultGroup != null)
-				{
-					var originLib:String = AssetHelper.getExtensions('assets/$defaultGroup/$dir', type);
-					if (FileSystem.exists(originLib))
-						return defaultGroup;
-				}
-			}
+			/**
+				System Checks, Check if the Specified File exists
+				within the asset folders for every group
+
+				WHAT THIS DOES:
+				|	first, it checks on your active group,
+				|	your active group should be the one set by you
+				|	using the group manager menu or the freeplay menu
+
+				|	if it fails, it checks for the default group
+				|	the default group is a hardcoded value
+				|	used to specify a master group of sorts
+
+				|	if the default group check fails
+				|	then, it checks on every group
+				|	this check should never fail in most cases
+				|	it almost always ends up returning a file at the end
+				--------------------------------------------------------
+
+				if each of these return null, the group folder shouldn't be used
+				instead, use the main assets folder
+
+				TODO: remake this system probably, it's pretty flawled as it is currently
+			**/
+
+			if (force)
+				return chosenGroup[e];
+
+			if (checkExists(activeGroup, file, type))
+				groupReturn = activeGroup;
+			else if (checkExists(defaultGroup, file, type))
+				groupReturn = defaultGroup;
+			else if (checkExists(chosenGroup[e], file, type))
+				groupReturn = chosenGroup[e];
+
+			if (groupReturn != null)
+				return groupReturn;
 		}
 
 		// else just return nothing
 		return null;
+	}
+
+	public function checkExists(group:String, file:String, type:AssetType):Bool
+	{
+		return FileSystem.exists(AssetHelper.getExtensions('assets/$group/$file', type));
 	}
 
 	public function loadGroupData():Void

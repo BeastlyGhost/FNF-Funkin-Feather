@@ -85,20 +85,20 @@ class AssetHelper
 		@param group the group to search for the specified asset
 
 		-- will be formatted as
-			-- group exists
+			| group exists
 			"assets/group/directory/asset"
-			-- else
+			| else
 			"assets/directory/asset"
 		--
 
-		@return your asset path along with the asset and its extensions (if null, then nothing)
+		@return your asset path along with the asset the extension(s) for said if existing
 	**/
 	public static function grabAsset(asset:String, type:AssetType, ?directory:String, ?group:String):Dynamic
 	{
 		//
 		var pathExtend:String = (directory != null ? '$directory/' : '');
+		var path:String = grabRoot('$pathExtend$asset', type, group);
 
-		var path = grabRoot('$pathExtend$asset', type, group);
 		if (FileSystem.exists(path))
 		{
 			switch (type)

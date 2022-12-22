@@ -2,26 +2,45 @@ package funkin.objects.ui;
 
 import flixel.text.FlxText;
 
+enum TextType
+{
+	SCORETEXT;
+	AUTOPLAY;
+}
+
 /**
 	FlxText Extension used for the user interface texts
 **/
 class UIText extends FlxText
 {
-	public override function new(X:Float = 0, Y:Float = 0, FieldWidth:Float = 0, ?Text:String, Size:Int = 8, EmbeddedFont:Bool = true):Void
+	var ui:String = OptionsAPI.getPref("User Interface Style");
+	var align:FlxTextAlign = LEFT;
+	var fontName:String = "vcr";
+	var textSize:Int = 20;
+
+	public override function new(X:Float = 0, Y:Float = 0, FieldWidth:Float = 0, TextType:TextType):Void
 	{
-		super(X, Y, FieldWidth, Text, Size, EmbeddedFont);
+		super(X, Y, FieldWidth, '', 8, true);
 
-		var fontName:String = "vcr";
+		switch (TextType)
+		{
+			case SCORETEXT:
+				textSize = (ui == "Feather" ? 20 : 16);
+				align = (ui == "Feather" ? CENTER : LEFT);
+			default:
+				textSize = 32;
+				align = CENTER;
+		}
 
-		switch (OptionsAPI.getPref("User Interface Style"))
+		switch (ui)
 		{
 			case "Feather":
 				fontName = "muff-bold";
-				setFormat(AssetHelper.grabAsset(fontName, FONT, "data/fonts"), 20, 0xFFFFFFFF, CENTER, SHADOW, 0xFF000000);
+				setFormat(AssetHelper.grabAsset(fontName, FONT, "data/fonts"), textSize, 0xFFFFFFFF, CENTER, SHADOW, 0xFF000000);
 				shadowOffset.set(2, 2);
 			default:
 				fontName = "vcr";
-				setFormat(AssetHelper.grabAsset(fontName, FONT, "data/fonts"), 16, 0xFFFFFFFF, RIGHT, OUTLINE, 0xFF000000);
+				setFormat(AssetHelper.grabAsset(fontName, FONT, "data/fonts"), textSize, 0xFFFFFFFF, align, OUTLINE, 0xFF000000);
 		}
 
 		scrollFactor.set();
