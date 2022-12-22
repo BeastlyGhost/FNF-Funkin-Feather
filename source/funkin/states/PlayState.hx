@@ -362,8 +362,11 @@ class PlayState extends MusicBeatState
 	{
 		callFunc('startSong', []);
 
-		Conductor.playSong(song.name, Conductor.songMusic.playing);
-		isStartingSong = false;
+		if (isStartingSong && !isEndingSong)
+		{
+			Conductor.playSong(song.name, Conductor.songMusic.playing);
+			isStartingSong = false;
+		}
 	}
 
 	public override function update(elapsed:Float):Void
@@ -881,8 +884,7 @@ class PlayState extends MusicBeatState
 
 	override function openSubState(SubState:flixel.FlxSubState):Void
 	{
-		if (FlxG.sound.music != null)
-			Conductor.pauseSong();
+		Conductor.pauseSong();
 
 		callFunc('openSubState', []);
 		super.openSubState(SubState);
