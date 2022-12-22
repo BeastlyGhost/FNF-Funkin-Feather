@@ -360,13 +360,13 @@ class PlayState extends MusicBeatState
 
 	function startSong():Void
 	{
+		if (!isStartingSong || isEndingSong)
+			return;
+
 		callFunc('startSong', []);
 
-		if (isStartingSong && !isEndingSong)
-		{
-			Conductor.playSong(song.name, Conductor.songMusic.playing);
-			isStartingSong = false;
-		}
+		Conductor.playSong(song.name, Conductor.songMusic.playing);
+		isStartingSong = false;
 	}
 
 	public override function update(elapsed:Float):Void
