@@ -15,7 +15,7 @@ import sys.FileSystem;
 	this is basically my own custom made `CoolUtil` class from the base game
 	it serves the exact same purpose, giving useful tools to work with
 **/
-class FeatherTools
+class FeatherUtils
 {
 	/**
 		@author Shadow_Mario_

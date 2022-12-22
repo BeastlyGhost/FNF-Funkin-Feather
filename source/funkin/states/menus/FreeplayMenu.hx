@@ -52,7 +52,7 @@ class FreeplayMenu extends BaseMenu
 
 		DiscordRPC.update("FREEPLAY MENU", "Choosing a Song");
 
-		FeatherTools.menuMusicCheck(false);
+		FeatherUtils.menuMusicCheck(false);
 
 		// get the song list
 		songList = SongManager.get_songList();
@@ -212,7 +212,7 @@ class FreeplayMenu extends BaseMenu
 	{
 		selDifficulty = FlxMath.wrap(selDifficulty + newDifficulty, 0, songList[Math.floor(selection)].diffs.length - 1);
 
-		var stringDiff = FeatherTools.getDifficulty(selDifficulty);
+		var stringDiff = FeatherUtils.getDifficulty(selDifficulty);
 		diffTxt.text = '< ${stringDiff.replace('-', '').toUpperCase()} >';
 
 		intendedScore = PlayerInfo.getScore(songList[Math.floor(selection)].name, selDifficulty, FREEPLAY);

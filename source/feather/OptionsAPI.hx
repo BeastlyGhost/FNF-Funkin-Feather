@@ -332,11 +332,11 @@ class OptionsAPI
 
 	public static function bindSave(name:String):Void
 	{
-		// FeatherSave.bind(name);
+		// PlumaSave.bind(name);
 		try
 		{
 			if (FlxG.save.name != name)
-				FlxG.save.bind(name, FeatherSave.getSavePath());
+				FlxG.save.bind(name, PlumaSave.getSavePath());
 		}
 		catch (e:Dynamic)
 		{

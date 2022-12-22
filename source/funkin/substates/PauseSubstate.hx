@@ -59,10 +59,10 @@ class PauseSubstate extends BaseSubMenu
 		bg.scrollFactor.set();
 		add(bg);
 
-		var stringDiff = FeatherTools.getDifficulty(PlayState.difficulty);
+		var stringDiff = FeatherUtils.getDifficulty(PlayState.difficulty);
 
 		var levelInfo:FlxText = new FlxText(20, 15, 0, "", 32);
-		levelInfo.text = FeatherStrings.toTitle(PlayState.song.name) + ' [${stringDiff.replace('-', '').toUpperCase()}]';
+		levelInfo.text = PlumaStrings.toTitle(PlayState.song.name) + ' [${stringDiff.replace('-', '').toUpperCase()}]';
 		levelInfo.scrollFactor.set();
 		levelInfo.setFormat(AssetHelper.grabAsset("vcr", FONT, "data/fonts"), 32);
 		levelInfo.updateHitbox();

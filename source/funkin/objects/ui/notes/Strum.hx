@@ -10,7 +10,7 @@ import funkin.objects.ui.notes.Note.NoteSplash;
 	`BabyArrow`s are sprites that are attached to your `Strum`line,
 	this class simply initializes said `BabyArrow`s
 **/
-class BabyArrow extends FeatherSprite
+class BabyArrow extends PlumaSprite
 {
 	public var swagWidth:Float = 160 * 0.7;
 

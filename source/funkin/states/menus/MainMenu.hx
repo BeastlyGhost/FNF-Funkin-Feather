@@ -58,7 +58,7 @@ class MainMenu extends MusicBeatState
 
 		DiscordRPC.update("MAIN MENU", "Navigating through the Main Menus");
 
-		FeatherTools.menuMusicCheck(firstStart);
+		FeatherUtils.menuMusicCheck(firstStart);
 
 		if (firstStart)
 			openSubState(new funkin.substates.TitleSubstate());

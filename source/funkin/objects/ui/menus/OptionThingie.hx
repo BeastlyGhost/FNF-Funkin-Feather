@@ -6,7 +6,7 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import funkin.objects.ui.fonts.Alphabet;
 
-class CheckboxThingie extends FeatherSprite
+class CheckboxThingie extends PlumaSprite
 {
 	public var parentSprite:FlxSprite;
 

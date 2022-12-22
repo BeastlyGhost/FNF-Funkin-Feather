@@ -13,12 +13,12 @@ class FunkinAssets
 	/**
 		Pop Ups, like Ratings and Combo
 	**/
-	public static function generateRating(skin:String = 'default'):FeatherSprite
+	public static function generateRating(skin:String = 'default'):PlumaSprite
 	{
 		var width:Int = (skin == "pixel" ? 60 : 352);
 		var height:Int = (skin == "pixel" ? 21 : 155);
 
-		var rating:FeatherSprite = new FeatherSprite();
+		var rating:PlumaSprite = new PlumaSprite();
 		rating.loadGraphic(AssetHelper.grabAsset("ratings", IMAGE, "images/ui/" + skin), true, width, height);
 
 		for (i in 0...PlayerInfo.judgeTable.length)
@@ -32,12 +32,12 @@ class FunkinAssets
 		return rating;
 	}
 
-	public static function generateCombo(skin:String = 'default'):FeatherSprite
+	public static function generateCombo(skin:String = 'default'):PlumaSprite
 	{
 		var width:Int = (skin == "pixel" ? 12 : 108);
 		var height:Int = (skin == "pixel" ? 12 : 142);
 
-		var combo:FeatherSprite = new FeatherSprite();
+		var combo:PlumaSprite = new PlumaSprite();
 		combo.loadGraphic(AssetHelper.grabAsset("combo_numbers", IMAGE, "images/ui/" + skin), true, width, height);
 
 		for (i in 0...10)

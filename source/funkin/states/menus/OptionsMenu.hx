@@ -1,14 +1,14 @@
 package funkin.states.menus;
 
-import flixel.util.FlxColor;
-import flixel.FlxG;
-import flixel.FlxCamera;
 import feather.BaseMenu;
 import feather.OptionsAPI;
 import flixel.FlxBasic;
+import flixel.FlxCamera;
+import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxMath;
+import flixel.util.FlxColor;
 import funkin.essentials.song.MusicState;
 import funkin.objects.ui.fonts.Alphabet;
 import funkin.objects.ui.menus.OptionThingie;
@@ -40,7 +40,7 @@ class OptionsMenu extends BaseMenu
 
 		DiscordRPC.update("OPTIONS MENU", "Setting things up");
 
-		FeatherTools.menuMusicCheck(false);
+		FeatherUtils.menuMusicCheck(false);
 
 		camFollow = new FlxObject(FlxG.width / 2, 0, 140, 70);
 
@@ -60,7 +60,7 @@ class OptionsMenu extends BaseMenu
 	{
 		super.update(elapsed);
 
-		menuCamera.followLerp = FeatherTools.cameraLerping(0.05);
+		menuCamera.followLerp = FeatherUtils.cameraLerping(0.05);
 		if (activeCategory != 'master')
 		{
 			itemContainer.forEach(function(item:Alphabet)

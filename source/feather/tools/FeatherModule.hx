@@ -1,7 +1,6 @@
 package feather.tools;
 
 import feather.assets.AssetHelper;
-import sys.FileSystem;
 
 class FeatherModule extends SScript
 {
@@ -63,9 +62,9 @@ class FeatherModule extends SScript
 		// CLASSES (FEATHER);
 		set('Stage', funkin.objects.Stage);
 		set('OptionsAPI', feather.OptionsAPI);
-		set('FeatherTools', feather.tools.FeatherTools);
-		set('FeatherSprite', feather.tools.FeatherSpriteManager.FeatherSprite);
-		set('ChildSprite', feather.tools.FeatherSpriteManager.ChildSprite);
+		set('FeatherUtils', feather.tools.FeatherUtils);
+		set('PlumaSprite', feather.tools.FeatherToolkit.PlumaSprite);
+		set('ChildSprite', feather.tools.FeatherToolkit.ChildSprite);
 		set('Controls', funkin.backend.Controls);
 
 		#if windows
@@ -89,8 +88,8 @@ class FeatherModule extends SScript
 	{
 		// set up the modules folder
 		var dirs:Array<Array<String>> = [
-			FeatherTools.readDirectory('scripts', MODULE),
-			FeatherTools.readDirectory('data/songs/${funkin.states.PlayState.song.name.toLowerCase()}', MODULE)
+			FeatherUtils.readDirectory('scripts', MODULE),
+			FeatherUtils.readDirectory('data/songs/${funkin.states.PlayState.song.name.toLowerCase()}', MODULE)
 		];
 
 		var pushedModules:Array<String> = [];
@@ -137,7 +136,7 @@ class EventModule
 
 		var myEvents:Array<String> = [];
 
-		for (event in FeatherTools.readDirectory('data/events', MODULE))
+		for (event in FeatherUtils.readDirectory('data/events', MODULE))
 		{
 			if (event.contains('.'))
 			{

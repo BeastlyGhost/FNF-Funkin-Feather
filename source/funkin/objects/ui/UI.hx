@@ -1,6 +1,5 @@
 package funkin.objects.ui;
 
-import flixel.util.FlxStringUtil;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
@@ -9,6 +8,7 @@ import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.ui.FlxBar;
+import flixel.util.FlxStringUtil;
 import flixel.util.FlxTimer;
 import funkin.essentials.PlayerInfo;
 import funkin.essentials.song.Conductor;
@@ -186,7 +186,7 @@ class UI extends FlxSpriteGroup
 		byText.screenCenter();
 		byText.x -= FlxG.width;
 		byText.y = FlxG.height - 80.5;
-		byText.text = FeatherStrings.toTitle(PlayState.song.name);
+		byText.text = PlumaStrings.toTitle(PlayState.song.name);
 		byText.text += '\n By: ${PlayState.song.author}';
 
 		blackBy.setGraphicSize(Std.int(byText.width - 20), Std.int(byText.height + 105));

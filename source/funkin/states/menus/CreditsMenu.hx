@@ -37,7 +37,7 @@ class CreditsMenu extends BaseMenu
 		creditsData = Yaml.read(AssetHelper.grabAsset("credits", YAML, "data/menus"), yaml.Parser.options().useObjects());
 
 		DiscordRPC.update("CREDITS MENU", "Reading through Descriptions.");
-		FeatherTools.menuMusicCheck(false);
+		FeatherUtils.menuMusicCheck(false);
 
 		itemContainer = new FlxTypedGroup<Alphabet>();
 		add(itemContainer);

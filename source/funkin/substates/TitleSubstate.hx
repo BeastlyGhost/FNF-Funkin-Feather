@@ -165,7 +165,7 @@ class TitleSubstate extends MusicBeatSubstate
 		{
 			if (newTitle)
 			{
-				titleTimer += FeatherTools.boundTo(elapsed, 0, 1);
+				titleTimer += FeatherUtils.boundTo(elapsed, 0, 1);
 				if (titleTimer > 2)
 					titleTimer -= 2;
 

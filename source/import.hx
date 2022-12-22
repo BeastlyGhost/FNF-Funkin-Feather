@@ -3,17 +3,16 @@
 	THESE *WILL* BE USED IN EVERY CLASS
 **/
 
+import feather.OptionsAPI;
 import feather.assets.AssetGroup;
-import feather.tools.FeatherSoundManager as FSound;
-import feather.tools.FeatherSpriteManager;
+import feather.assets.AssetHelper;
+import feather.assets.Paths;
+import feather.tools.FeatherToolkit.PlumaSound as FSound;
+import feather.tools.FeatherToolkit;
+import feather.tools.FeatherUtils;
+import funkin.backend.Controls;
+import funkin.essentials.DiscordRPC;
+import funkin.essentials.FunkinAssets;
 import yaml.Yaml;
 
 using StringTools;
-using feather.FeatherStrings;
-using feather.OptionsAPI;
-using feather.assets.AssetHelper;
-using feather.assets.Paths;
-using feather.tools.FeatherTools;
-using funkin.backend.Controls;
-using funkin.essentials.DiscordRPC;
-using funkin.essentials.FunkinAssets;

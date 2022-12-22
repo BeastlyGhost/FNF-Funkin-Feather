@@ -1,6 +1,6 @@
 package funkin.objects.ui.notes;
 
-import feather.tools.FeatherSpriteManager.FeatherSprite;
+import feather.tools.FeatherToolkit.PlumaSprite;
 import flixel.FlxG;
 import funkin.essentials.song.Conductor;
 import funkin.objects.ui.notes.Strum.BabyArrow;
@@ -24,7 +24,7 @@ class NoteTools
 	}
 }
 
-class NoteSplash extends FeatherSprite
+class NoteSplash extends PlumaSprite
 {
 	public var offsetX:Int = 0;
 	public var offsetY:Int = 0;
@@ -111,7 +111,7 @@ typedef NoteJudge =
 /**
 	Note class, initializes *scrolling* notes for the main game
 **/
-class Note extends FeatherSprite
+class Note extends PlumaSprite
 {
 	public var noteData:DefaultNote = {
 		canBeHit: false,

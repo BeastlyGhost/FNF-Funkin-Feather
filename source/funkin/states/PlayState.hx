@@ -243,9 +243,9 @@ class PlayState extends MusicBeatState
 				mode = "Freeplay";
 		}
 
-		var stringDiff = FeatherTools.getDifficulty(difficulty);
+		var stringDiff = FeatherUtils.getDifficulty(difficulty);
 
-		lineRPC2 = '${FeatherStrings.toTitle(song.name)} [${stringDiff.replace('-', '').toUpperCase()}]';
+		lineRPC2 = '${PlumaStrings.toTitle(song.name)} [${stringDiff.replace('-', '').toUpperCase()}]';
 
 		DiscordRPC.update(addString + lineRPC1, mode + ' - ' + lineRPC2);
 	}
@@ -417,8 +417,8 @@ class PlayState extends MusicBeatState
 			}
 		}
 
-		FeatherTools.cameraBumpingZooms(camGame, cameraZoom, cameraSpeed);
-		FeatherTools.cameraBumpingZooms(camHUD, 1);
+		FeatherUtils.cameraBumpingZooms(camGame, cameraZoom, cameraSpeed);
+		FeatherUtils.cameraBumpingZooms(camHUD, 1);
 
 		playerDeathCheck();
 
@@ -853,8 +853,8 @@ class PlayState extends MusicBeatState
 
 		if (!OptionsAPI.getPref("Reduce Motion"))
 		{
-			FeatherTools.cameraBumpReset(curBeat, camGame, bumpSpeed, 0.015);
-			FeatherTools.cameraBumpReset(curBeat, camHUD, bumpSpeed, 0.03);
+			FeatherUtils.cameraBumpReset(curBeat, camGame, bumpSpeed, 0.015);
+			FeatherUtils.cameraBumpReset(curBeat, camHUD, bumpSpeed, 0.03);
 		}
 
 		ui.beatHit(curBeat);

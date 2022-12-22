@@ -1,7 +1,7 @@
 package funkin.states;
 
-import feather.extensions.FeatherUIState;
 import feather.tools.FeatherModule;
+import feather.tools.FeatherToolkit.PlumaUIState;
 import flixel.FlxSubState;
 import flixel.math.FlxMath;
 
@@ -9,7 +9,7 @@ import flixel.math.FlxMath;
 	Parent State that handles the entire state structure from the project
 	it can also be extended by a script itself
 **/
-class ScriptableState extends FeatherUIState
+class ScriptableState extends PlumaUIState
 {
 	public var selection:Float = 0; // Defines the Current Selected Item on a State
 

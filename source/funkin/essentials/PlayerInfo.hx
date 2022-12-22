@@ -247,7 +247,7 @@ class PlayerInfo
 				score: (lowerScore ? data.score : saveMap.get(song).score),
 				misses: (lowerMisses ? data.misses : saveMap.get(song).misses),
 				accuracy: (lowerAccuracy ? data.accuracy : saveMap.get(song).accuracy),
-				difficulty: FeatherTools.getDifficulty(diff),
+				difficulty: FeatherUtils.getDifficulty(diff),
 				gameplayMode: mode,
 			});
 		}
@@ -257,7 +257,7 @@ class PlayerInfo
 				score: data.score,
 				misses: data.misses,
 				gameplayMode: mode,
-				difficulty: FeatherTools.getDifficulty(diff),
+				difficulty: FeatherUtils.getDifficulty(diff),
 				accuracy: data.accuracy
 			});
 		}
@@ -276,12 +276,12 @@ class PlayerInfo
 				score: 0,
 				misses: 0,
 				gameplayMode: mode,
-				difficulty: FeatherTools.getDifficulty(diff),
+				difficulty: FeatherUtils.getDifficulty(diff),
 				accuracy: 0.00
 			});
 		}
 
-		if (saveMap.get(song).difficulty == FeatherTools.getDifficulty(diff))
+		if (saveMap.get(song).difficulty == FeatherUtils.getDifficulty(diff))
 			return saveMap.get(song).score;
 
 		return 0;

@@ -1,8 +1,7 @@
 package funkin.objects;
 
 import feather.tools.FeatherModule;
-import feather.tools.FeatherSpriteManager.FeatherSprite;
-import flixel.FlxG;
+import feather.tools.FeatherToolkit.PlumaSprite;
 import flixel.math.FlxPoint;
 import flixel.util.FlxColor;
 import funkin.essentials.song.Conductor;
@@ -46,7 +45,7 @@ typedef PsychAnimsArray =
 	Character class, initializes all characters that are present during gameplay
 	and handles their animations
 **/
-class Character extends FeatherSprite
+class Character extends PlumaSprite
 {
 	public var healthColor:Null<FlxColor>;
 	public var charOffset:FlxPoint;

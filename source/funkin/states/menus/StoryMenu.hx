@@ -29,7 +29,7 @@ class StoryMenu extends MusicBeatState
 
 		DiscordRPC.update("STORY MENU", "Choosing a Week");
 
-		FeatherTools.menuMusicCheck(false);
+		FeatherUtils.menuMusicCheck(false);
 
 		// oop
 		persistentUpdate = persistentDraw = true;
