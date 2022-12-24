@@ -4,8 +4,7 @@ import flixel.FlxG;
 import flixel.system.FlxSound;
 import funkin.essentials.song.SongFormat.FeatherSong;
 
-typedef BPMChangeEvent =
-{
+typedef BPMChangeEvent = {
 	var stepTime:Int;
 	var songTime:Float;
 	var bpm:Float;
@@ -19,8 +18,7 @@ typedef BPMChangeEvent =
 
 	currently similar to the base game structure with only song playing changes
 **/
-class Conductor
-{
+class Conductor {
 	public static var bpm:Float = 100.0; // Defines the Song BPM
 	public static var crochet:Float = ((60 / bpm) * 1000); // Defines the Song Beats in Milliseconds
 	public static var stepCrochet:Float = crochet / 4; // Defines the Song Steps in Milliseconds
@@ -35,17 +33,14 @@ class Conductor
 
 	public static var safeZoneOffset:Float = (OptionsAPI.getPref("Safe Frames") / 60) * 1000; // is calculated in create(), is safeFrames in milliseconds
 
-	public static function mapBPMChanges(song:FeatherSong):Void
-	{
+	public static function mapBPMChanges(song:FeatherSong):Void {
 		bpmChangeMap = [];
 
 		var curBPM:Float = song.bpm;
 		var totalSteps:Int = 0;
 		var totalPos:Float = 0;
-		for (i in 0...song.sectionNotes.length)
-		{
-			if (song.sectionNotes[i].bpm != curBPM)
-			{
+		for (i in 0...song.sectionNotes.length) {
+			if (song.sectionNotes[i].bpm != curBPM) {
 				curBPM = song.sectionNotes[i].bpm;
 				var event:BPMChangeEvent = {
 					stepTime: totalSteps,
@@ -60,16 +55,14 @@ class Conductor
 		// trace("new BPM map BUDDY " + bpmChangeMap);
 	}
 
-	public static function changeBPM(newBpm:Float):Void
-	{
+	public static function changeBPM(newBpm:Float):Void {
 		bpm = newBpm;
 
 		crochet = ((60 / bpm) * 1000);
 		stepCrochet = crochet / 4;
 	}
 
-	public static function callVocals(name:String):Void
-	{
+	public static function callVocals(name:String):Void {
 		songMusic = new FlxSound().loadEmbedded(AssetHelper.grabAsset("Inst", SOUND, "data/songs/" + name));
 		songVocals = new FlxSound().loadEmbedded(AssetHelper.grabAsset("Voices", SOUND, "data/songs/" + name));
 
@@ -79,8 +72,7 @@ class Conductor
 
 		FlxG.sound.list.add(songMusic);
 
-		if (songVocals != null)
-		{
+		if (songVocals != null) {
 			#if (flixel >= "5.0.0")
 			songVocals.pitch = songRate;
 			#end
@@ -88,17 +80,14 @@ class Conductor
 		}
 	}
 
-	public static function playSong(name:String, ?resume:Bool = true):Void
-	{
-		if (songMusic != null)
-		{
+	public static function playSong(name:String, ?resume:Bool = true):Void {
+		if (songMusic != null) {
 			if (resume)
 				songMusic.resume();
 			else
 				songMusic.play();
 		}
-		if (songVocals != null)
-		{
+		if (songVocals != null) {
 			if (resume)
 				songVocals.resume();
 			else
@@ -106,27 +95,23 @@ class Conductor
 		}
 	}
 
-	public static function pauseSong():Void
-	{
+	public static function pauseSong():Void {
 		if (songMusic != null)
 			songMusic.pause();
 		if (songVocals != null)
 			songVocals.pause();
 	}
 
-	public static function resyncVocals():Void
-	{
+	public static function resyncVocals():Void {
 		if (songVocals != null)
 			songVocals.pause();
 
-		if (songMusic != null)
-		{
+		if (songMusic != null) {
 			songMusic.play();
 			songPosition = songMusic.time;
 		}
 
-		if (songVocals != null)
-		{
+		if (songVocals != null) {
 			songVocals.time = Conductor.songPosition;
 			#if (flixel >= "5.0.0")
 			songVocals.pitch = songRate;
@@ -135,17 +120,14 @@ class Conductor
 		}
 	}
 
-	public static function stepResync():Void
-	{
+	public static function stepResync():Void {
 		if ((songMusic != null && Math.abs(songMusic.time - (songPosition)) > 20)
-			|| (songVocals != null && Math.abs(songVocals.time - (songPosition)) > 20))
-		{
+			|| (songVocals != null && Math.abs(songVocals.time - (songPosition)) > 20)) {
 			resyncVocals();
 		}
 	}
 
-	public static function stopSong():Void
-	{
+	public static function stopSong():Void {
 		if (songMusic != null)
 			songMusic.stop();
 		if (songVocals != null)

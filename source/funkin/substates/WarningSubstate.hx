@@ -8,8 +8,7 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import funkin.objects.ui.fonts.Alphabet;
 
-class WarningSubstate extends BaseSubMenu
-{
+class WarningSubstate extends BaseSubMenu {
 	private var centerWarn:Alphabet;
 
 	private var warningText:String;
@@ -19,8 +18,7 @@ class WarningSubstate extends BaseSubMenu
 	private var fire:Void->Void;
 	private var unfire:Void->Void;
 
-	public override function new(warningText:String, yesText:String, noText:String, ?fire:Void->Void, ?unfire:Void->Void):Void
-	{
+	public override function new(warningText:String, yesText:String, noText:String, ?fire:Void->Void, ?unfire:Void->Void):Void {
 		super();
 
 		this.warningText = warningText;
@@ -31,8 +29,7 @@ class WarningSubstate extends BaseSubMenu
 		this.unfire = unfire;
 	}
 
-	override function create():Void
-	{
+	override function create():Void {
 		super.create();
 
 		centerWarn = generateWarning(warningText);
@@ -55,24 +52,20 @@ class WarningSubstate extends BaseSubMenu
 		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
 	}
 
-	override function update(elapsed:Float):Void
-	{
+	override function update(elapsed:Float):Void {
 		super.update(elapsed);
 
 		updateSelection(Controls.isJustPressed("up") ? -1 : Controls.isJustPressed("down") ? 1 : 0);
 
-		if (Controls.isJustPressed("accept"))
-		{
-			if (selection == 0)
-			{
+		if (Controls.isJustPressed("accept")) {
+			if (selection == 0) {
 				if (fire != null)
 					fire();
 				else
 					close();
 			}
 
-			if (selection == 1)
-			{
+			if (selection == 1) {
 				if (unfire != null)
 					unfire();
 				else
@@ -81,24 +74,21 @@ class WarningSubstate extends BaseSubMenu
 		}
 	}
 
-	public override function updateSelection(newSelection:Int = 0):Void
-	{
+	public override function updateSelection(newSelection:Int = 0):Void {
 		super.updateSelection(newSelection);
 
 		if (newSelection != 0)
 			FSound.playSound("scrollMenu", 'sounds/menus');
 	}
 
-	private function generateWarning(text:String = "TEST"):Alphabet
-	{
+	private function generateWarning(text:String = "TEST"):Alphabet {
 		var warning:Alphabet = new Alphabet(0, 100, text, false);
 		warning.scrollFactor.set();
 		warning.screenCenter(X);
 		return warning;
 	}
 
-	private function generateOptions(yesTxt:String = "YES", noTxt:String = "NO"):FlxTypedGroup<Alphabet>
-	{
+	private function generateOptions(yesTxt:String = "YES", noTxt:String = "NO"):FlxTypedGroup<Alphabet> {
 		var retgroup:FlxTypedGroup<Alphabet> = new FlxTypedGroup<Alphabet>();
 
 		var yesBttn:Alphabet = new Alphabet(0, 320, yesTxt, false);

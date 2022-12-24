@@ -12,8 +12,7 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import funkin.essentials.song.MusicState;
 
-typedef MainMenuForm =
-{
+typedef MainMenuForm = {
 	var bg:String;
 	var flash:String;
 	var bgFolder:String;
@@ -28,8 +27,7 @@ typedef MainMenuForm =
 	the Main Menu, for now it will remain the same as the base game's,
 	do as you wish and customize this to your liking!
 **/
-class MainMenu extends MusicBeatState
-{
+class MainMenu extends MusicBeatState {
 	var menuData:MainMenuForm;
 	var camFollow:FlxObject;
 
@@ -47,8 +45,7 @@ class MainMenu extends MusicBeatState
 	public var versionText:FlxText;
 	public var menuFlash:FlxSprite;
 
-	function resetMenu():Void
-	{
+	function resetMenu():Void {
 		transIn = FlxTransitionableState.defaultTransIn;
 		transOut = FlxTransitionableState.defaultTransOut;
 
@@ -64,8 +61,7 @@ class MainMenu extends MusicBeatState
 			openSubState(new funkin.substates.TitleSubstate());
 	}
 
-	override function create():Void
-	{
+	override function create():Void {
 		super.create();
 
 		instance = this;
@@ -86,8 +82,7 @@ class MainMenu extends MusicBeatState
 		menuFlash.color = menuData.flashColor;
 		add(menuFlash);
 
-		for (bg in [menuBG, menuFlash])
-		{
+		for (bg in [menuBG, menuFlash]) {
 			bg.scrollFactor.set(0, 0.18);
 			bg.setGraphicSize(Std.int(bg.width * 1.25));
 			bg.updateHitbox();
@@ -98,8 +93,7 @@ class MainMenu extends MusicBeatState
 		itemContainer = new FlxTypedGroup<FlxSprite>();
 		add(itemContainer);
 
-		for (i in 0...wrappableGroup.length)
-		{
+		for (i in 0...wrappableGroup.length) {
 			var item:FlxSprite = new FlxSprite(0, menuData.listY + (i * menuData.listSpacing));
 			item.frames = AssetHelper.grabAsset(wrappableGroup[i], SPARROW, "images/menus/default/items");
 
@@ -128,21 +122,15 @@ class MainMenu extends MusicBeatState
 		updateObjectAlpha(firstStart ? 0 : 1);
 	}
 
-	public function updateObjectAlpha(alphaNew:Float, tweened:Bool = false):Void
-	{
-		if (!tweened)
-		{
-			itemContainer.forEach(function(spr:FlxSprite)
-			{
+	public function updateObjectAlpha(alphaNew:Float, tweened:Bool = false):Void {
+		if (!tweened) {
+			itemContainer.forEach(function(spr:FlxSprite) {
 				spr.alpha = alphaNew;
 			});
 			menuBG.alpha = alphaNew;
 			versionText.alpha = alphaNew;
-		}
-		else
-		{
-			itemContainer.forEach(function(spr:FlxSprite)
-			{
+		} else {
+			itemContainer.forEach(function(spr:FlxSprite) {
 				FlxTween.tween(spr, {alpha: alphaNew}, 0.6);
 			});
 			FlxTween.tween(menuBG, {alpha: alphaNew}, 0.6);
@@ -150,59 +138,46 @@ class MainMenu extends MusicBeatState
 		}
 	}
 
-	override function update(elapsed:Float):Void
-	{
+	override function update(elapsed:Float):Void {
 		super.update(elapsed);
 
 		if (FlxG.sound.music.volume < 0.8)
 			FlxG.sound.music.volume += 0.5 * elapsed;
 
-		if (!lockedMovement)
-		{
+		if (!lockedMovement) {
 			updateSelection(Controls.isJustPressed("up") ? -1 : Controls.isJustPressed("down") ? 1 : 0);
 
 			if (FlxG.keys.justPressed.SEVEN)
 				MusicState.switchState(new ModsMenu());
 
-			if (Controls.isJustPressed("back"))
-			{
+			if (Controls.isJustPressed("back")) {
 				persistentUpdate = false;
-				openSubState(new funkin.substates.WarningSubstate("Are you sure?", "Yes, close the game", "No, not now", function()
-				{
+				openSubState(new funkin.substates.WarningSubstate("Are you sure?", "Yes, close the game", "No, not now", function() {
 					FlxG.sound.music.fadeOut(0.3);
-					FlxG.camera.fade(0xFF000000, 0.5, false, function()
-					{
+					FlxG.camera.fade(0xFF000000, 0.5, false, function() {
 						Sys.exit(0);
 					}, false);
 				}));
 			}
 
-			if (Controls.isJustPressed("accept"))
-			{
+			if (Controls.isJustPressed("accept")) {
 				FSound.playSound("confirmMenu", "sounds/menus");
 				lockedMovement = true;
 
 				if (OptionsAPI.getPref("Flashing Lights"))
 					FlxFlicker.flicker(menuFlash, 1.1, 0.15, false);
 
-				itemContainer.forEach(function(spr:FlxSprite)
-				{
-					if (selection != spr.ID)
-					{
+				itemContainer.forEach(function(spr:FlxSprite) {
+					if (selection != spr.ID) {
 						FlxTween.tween(spr, {alpha: 0}, 0.4, {
 							ease: FlxEase.quadOut,
-							onComplete: function(twn:FlxTween)
-							{
+							onComplete: function(twn:FlxTween) {
 								spr.kill();
 							}
 						});
-					}
-					else
-					{
-						FlxFlicker.flicker(spr, 1, 0.1, false, false, function(flick:FlxFlicker)
-						{
-							switch (wrappableGroup[Math.floor(selection)].toLowerCase())
-							{
+					} else {
+						FlxFlicker.flicker(spr, 1, 0.1, false, false, function(flick:FlxFlicker) {
+							switch (wrappableGroup[Math.floor(selection)].toLowerCase()) {
 								case "story mode":
 									MusicState.switchState(new StoryMenu());
 								case "freeplay":
@@ -224,25 +199,21 @@ class MainMenu extends MusicBeatState
 			}
 		}
 
-		itemContainer.forEach(function(spr:FlxSprite)
-		{
+		itemContainer.forEach(function(spr:FlxSprite) {
 			spr.screenCenter(X);
 		});
 	}
 
-	override function updateSelection(newSelection:Int = 0):Void
-	{
+	override function updateSelection(newSelection:Int = 0):Void {
 		super.updateSelection(newSelection);
 
 		if (newSelection != 0)
 			FSound.playSound("scrollMenu", 'sounds/menus');
 
-		itemContainer.forEach(function(spr:FlxSprite)
-		{
+		itemContainer.forEach(function(spr:FlxSprite) {
 			spr.animation.play('idle');
 
-			if (spr.ID == selection)
-			{
+			if (spr.ID == selection) {
 				spr.animation.play('selected');
 				camFollow.setPosition(spr.getGraphicMidpoint().x, spr.getGraphicMidpoint().y);
 			}

@@ -5,16 +5,14 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import funkin.essentials.song.MusicState;
 import funkin.objects.ui.fonts.Alphabet;
 
-typedef CreditsForm =
-{
+typedef CreditsForm = {
 	var mainBG:String;
 	var mainBGColor:String;
 	var shouldChangeColor:Bool;
 	var userList:Array<CreditsUserForm>;
 }
 
-typedef CreditsUserForm =
-{
+typedef CreditsUserForm = {
 	var name:String;
 	var type:String;
 	var icon:String;
@@ -23,13 +21,11 @@ typedef CreditsUserForm =
 	var socials:Array<Array<String>>;
 }
 
-class CreditsMenu extends BaseMenu
-{
+class CreditsMenu extends BaseMenu {
 	var iconContainer:Array<ChildSprite> = [];
 	var creditsData:CreditsForm;
 
-	override function create()
-	{
+	override function create() {
 		super.create();
 
 		bgImage = 'menuDesat';
@@ -42,8 +38,7 @@ class CreditsMenu extends BaseMenu
 		itemContainer = new FlxTypedGroup<Alphabet>();
 		add(itemContainer);
 
-		for (i in 0...creditsData.userList.length)
-		{
+		for (i in 0...creditsData.userList.length) {
 			var userCredits = creditsData.userList[i];
 
 			var personText:Alphabet = new Alphabet(0, 0, userCredits.name, false);
@@ -51,27 +46,24 @@ class CreditsMenu extends BaseMenu
 			if (userCredits.type == null)
 				userCredits.type = "person";
 
-			if (userCredits.type == "separator" || userCredits.type == "divider")
-			{
+			if (userCredits.type == "separator" || userCredits.type == "divider") {
 				personText.screenCenter(X);
 				personText.forceX = personText.x;
+				personText.displacement.x = 100;
 				personText.displacement.y = -55;
 				personText.scrollFactor.set();
-			}
-			else
-			{
+			} else {
 				personText.screenCenter();
 				personText.y = (125 * (i - Math.floor(creditsData.userList.length / 2)));
 			}
 
 			personText.targetY = i;
-			personText.isMenuItem = true;
+			personText.displayStyle = LIST;
 			personText.alpha = 0.6;
 
 			itemContainer.add(personText);
 
-			if (userCredits.icon != null || userCredits.icon.length > 1)
-			{
+			if (userCredits.icon != null || userCredits.icon.length > 1) {
 				var personIcon:ChildSprite = new ChildSprite(userCredits.icon, 'images/menus/credits');
 				personIcon.parentSprite = personText;
 				personIcon.addX = -50;
@@ -86,23 +78,20 @@ class CreditsMenu extends BaseMenu
 		updateSelection();
 	}
 
-	override function update(elapsed:Float)
-	{
+	override function update(elapsed:Float) {
 		super.update(elapsed);
 
 		updateSelection(Controls.isJustPressed("up") ? -1 : Controls.isJustPressed("down") ? 1 : 0);
 
 		if (Controls.isJustPressed("accept")) {}
 
-		if (Controls.isJustPressed("back"))
-		{
+		if (Controls.isJustPressed("back")) {
 			MusicState.switchState(new MainMenu());
 			FSound.playSound("cancelMenu", "sounds/menus");
 		}
 	}
 
-	public override function updateSelection(newSelection:Int = 0):Void
-	{
+	public override function updateSelection(newSelection:Int = 0):Void {
 		super.updateSelection(newSelection);
 
 		var selectionJumper:Int = ((newSelection > selection) ? 1 : -1);

@@ -10,10 +10,8 @@ import flixel.tweens.FlxTween;
 	Starting Class for the game
 	used to set up useful functions and variables for the main game!
 **/
-class Start extends FlxState
-{
-	public override function create():Void
-	{
+class Start extends FlxState {
+	public override function create():Void {
 		super.create();
 
 		FlxG.fixedTimestep = true;
@@ -26,8 +24,7 @@ class Start extends FlxState
 		triggerSplash(Main.game.skipSplash);
 	}
 
-	function triggerSplash(skip:Bool):Void
-	{
+	function triggerSplash(skip:Bool):Void {
 		if (skip)
 			return FlxG.switchState(cast Type.createInstance(Main.game.initialState, []));
 
@@ -43,8 +40,7 @@ class Start extends FlxState
 		FSound.playSound("splashRingSound");
 
 		FlxTween.tween(bianca, {alpha: 0}, 2, {
-			onComplete: function(t:FlxTween)
-			{
+			onComplete: function(t:FlxTween) {
 				FlxG.save.data.seenSplash = true;
 				FlxG.switchState(cast Type.createInstance(Main.game.initialState, []));
 			},

@@ -16,8 +16,7 @@ import funkin.objects.ui.menus.OptionThingie;
 /**
 	the Options Menu, used for managing game options
 **/
-class OptionsMenu extends BaseMenu
-{
+class OptionsMenu extends BaseMenu {
 	var attachedSprites:FlxTypedGroup<FlxBasic>;
 	var attachedSpriteMap:Map<Alphabet, Dynamic>;
 
@@ -27,15 +26,13 @@ class OptionsMenu extends BaseMenu
 
 	var menuCamera:FlxCamera;
 
-	public function new(fromPlayState:Bool = false):Void
-	{
+	public function new(fromPlayState:Bool = false):Void {
 		super();
 
 		this.fromPlayState = fromPlayState;
 	}
 
-	override function create():Void
-	{
+	override function create():Void {
 		super.create();
 
 		DiscordRPC.update("OPTIONS MENU", "Setting things up");
@@ -56,15 +53,12 @@ class OptionsMenu extends BaseMenu
 		switchCategory("master");
 	}
 
-	override function update(elapsed:Float):Void
-	{
+	override function update(elapsed:Float):Void {
 		super.update(elapsed);
 
 		menuCamera.followLerp = FeatherUtils.cameraLerping(0.05);
-		if (activeCategory != 'master')
-		{
-			itemContainer.forEach(function(item:Alphabet)
-			{
+		if (activeCategory != 'master') {
+			itemContainer.forEach(function(item:Alphabet) {
 				var selected:Bool = (item == itemContainer.members[Math.floor(selection)]);
 				item.x = (selected ? 150 : 120);
 			});
@@ -73,10 +67,8 @@ class OptionsMenu extends BaseMenu
 		if (attachedSprites != null)
 			moveAttachedSprites();
 
-		if (wrappableGroup != null)
-		{
-			for (i in 0...wrappableGroup.length)
-			{
+		if (wrappableGroup != null) {
+			for (i in 0...wrappableGroup.length) {
 				if (wrappableGroup[i].attributes != null && wrappableGroup[i].attributes.contains(UNSELECTABLE))
 					itemContainer.members[i].alpha = 0.6;
 			}
@@ -95,8 +87,7 @@ class OptionsMenu extends BaseMenu
 		var left:Bool = Controls.isJustPressed("left");
 		var right:Bool = Controls.isJustPressed("right");
 
-		if (accept || (left || right))
-		{
+		if (accept || (left || right)) {
 			var isDynamic:Bool = (wrappableGroup[Math.floor(selection)].type == DYNAMIC);
 			var isOption:Bool = (wrappableGroup[Math.floor(selection)].attributes != null
 				&& wrappableGroup[Math.floor(selection)].attributes.contains(DEFAULT));
@@ -104,10 +95,8 @@ class OptionsMenu extends BaseMenu
 			if (!isDynamic && isOption)
 				updateOption(wrappableGroup[Math.floor(selection)].type);
 
-			if (accept)
-			{
-				if (isDynamic)
-				{
+			if (accept) {
+				if (isDynamic) {
 					if (wrappableGroup[Math.floor(selection)].name == "keybinds")
 						openSubState(new funkin.substates.KeybindsSubstate(true));
 					else
@@ -116,12 +105,10 @@ class OptionsMenu extends BaseMenu
 			}
 		}
 
-		if (Controls.isJustPressed("back"))
-		{
+		if (Controls.isJustPressed("back")) {
 			if (activeCategory != 'master')
 				switchCategory('master');
-			else
-			{
+			else {
 				if (fromPlayState)
 					MusicState.switchState(new funkin.states.PlayState());
 				else
@@ -132,8 +119,7 @@ class OptionsMenu extends BaseMenu
 		}
 	}
 
-	public override function updateSelection(newSelection:Int = 0):Void
-	{
+	public override function updateSelection(newSelection:Int = 0):Void {
 		super.updateSelection(newSelection);
 
 		var selectionJumper:Int = (newSelection > selection ? 1 : (newSelection < selection) ? -1 : 0);
@@ -141,8 +127,7 @@ class OptionsMenu extends BaseMenu
 		if (newSelection != 0)
 			FSound.playSound("scrollMenu", 'sounds/menus');
 
-		if (itemContainer.members.length > 5)
-		{
+		if (itemContainer.members.length > 5) {
 			var item:Alphabet = itemContainer.members[Math.floor(selection)];
 			camFollow.y = (activeCategory == 'master' ? 0 : item.y);
 		}
@@ -152,8 +137,7 @@ class OptionsMenu extends BaseMenu
 			updateSelection(Math.floor(selection) + selectionJumper);
 	}
 
-	public function callAttachments():Void
-	{
+	public function callAttachments():Void {
 		if (attachedSprites != null)
 			remove(attachedSprites);
 
@@ -173,13 +157,10 @@ class OptionsMenu extends BaseMenu
 		moveAttachedSprites();
 	}
 
-	function moveAttachedSprites():Void
-	{
+	function moveAttachedSprites():Void {
 		// move the attachments if there are any
-		for (setting in attachedSpriteMap.keys())
-		{
-			if ((setting != null) && (attachedSpriteMap.get(setting) != null))
-			{
+		for (setting in attachedSpriteMap.keys()) {
+			if ((setting != null) && (attachedSpriteMap.get(setting) != null)) {
 				var thisAttachment = attachedSpriteMap.get(setting);
 				thisAttachment.x = setting.x - 100;
 				thisAttachment.y = setting.y - 50;
@@ -187,8 +168,7 @@ class OptionsMenu extends BaseMenu
 		}
 	}
 
-	public function switchCategory(newCategory:String):Void
-	{
+	public function switchCategory(newCategory:String):Void {
 		if (!OptionsAPI.preferencesList.exists(newCategory))
 			return;
 
@@ -203,14 +183,12 @@ class OptionsMenu extends BaseMenu
 		updateSelection(Math.floor(selection));
 	}
 
-	public function generateOptions(optionsArray:Array<OptionForm>):FlxTypedGroup<Alphabet>
-	{
+	public function generateOptions(optionsArray:Array<OptionForm>):FlxTypedGroup<Alphabet> {
 		bgImage = (activeCategory == 'master' ? 'menuBGBlue' : 'menuDesat');
 		if (bgImage == 'menuDesat')
 			menuBG.color = 0xFFEA71FD;
 
-		if (itemContainer != null)
-		{
+		if (itemContainer != null) {
 			itemContainer.clear();
 			itemContainer.kill();
 			remove(itemContainer);
@@ -218,8 +196,7 @@ class OptionsMenu extends BaseMenu
 
 		var tempContainer:FlxTypedGroup<Alphabet> = new FlxTypedGroup<Alphabet>();
 
-		for (i in 0...optionsArray.length)
-		{
+		for (i in 0...optionsArray.length) {
 			var option:OptionForm = optionsArray[i];
 
 			// set to default value
@@ -230,19 +207,16 @@ class OptionsMenu extends BaseMenu
 				option.attributes = [DEFAULT];
 			// we do this to avoid crashes with options that have no attributes @BeastlyGhost
 
-			if (!option.attributes.contains(UNCHANGEABLE))
-			{
+			if (!option.attributes.contains(UNCHANGEABLE)) {
 				var optionTxt:Alphabet = new Alphabet(0, 0, option.name, false);
 
 				// find unselectable options for automatically centering them
-				if (option.attributes.contains(UNSELECTABLE))
-				{
+				if (option.attributes.contains(UNSELECTABLE)) {
 					optionTxt.screenCenter(X);
 					optionTxt.forceX = optionTxt.x;
+					optionTxt.displacement.x = 100;
 					optionTxt.displacement.y = -55;
-				}
-				else
-				{
+				} else {
 					optionTxt.screenCenter();
 					optionTxt.y += (125 * (i - Math.floor(optionsArray.length / 2)));
 				}
@@ -259,23 +233,18 @@ class OptionsMenu extends BaseMenu
 		return tempContainer;
 	}
 
-	public function generateAttachments(parent:FlxTypedGroup<Alphabet>):Map<Alphabet, Dynamic>
-	{
+	public function generateAttachments(parent:FlxTypedGroup<Alphabet>):Map<Alphabet, Dynamic> {
 		var mapFinal:Map<Alphabet, Dynamic> = new Map<Alphabet, Dynamic>();
 
 		if (activeCategory == 'master')
 			return mapFinal;
 
-		for (option in parent)
-		{
-			if (option != null && OptionsAPI.getPref(option.text, false) != null)
-			{
+		for (option in parent) {
+			if (option != null && OptionsAPI.getPref(option.text, false) != null) {
 				// trace("OPTION IS NOT NULL, CONTINUING....");
 
-				if (OptionsAPI.getPref(option.text, false).type != null)
-				{
-					switch (OptionsAPI.getPref(option.text, false).type)
-					{
+				if (OptionsAPI.getPref(option.text, false).type != null) {
+					switch (OptionsAPI.getPref(option.text, false).type) {
 						case CHECKMARK:
 							var box:CheckboxThingie = new CheckboxThingie(10, option.y);
 							box.parentSprite = option;
@@ -299,26 +268,22 @@ class OptionsMenu extends BaseMenu
 		return mapFinal;
 	}
 
-	public function updateOption(type:OptionType):Void
-	{
+	public function updateOption(type:OptionType):Void {
 		var item:Alphabet = itemContainer.members[Math.floor(selection)];
 
 		if (item == null)
 			return;
 
-		switch (type)
-		{
+		switch (type) {
 			case CHECKMARK:
-				if (Controls.isJustPressed("accept"))
-				{
+				if (Controls.isJustPressed("accept")) {
 					var value = OptionsAPI.getPref(item.text);
 					OptionsAPI.setPref(item.text, !value);
 					attachedSpriteMap.get(item).playAnim(Std.string(value));
 					OptionsAPI.savePrefs();
 				}
 			case SELECTOR:
-				if (Controls.isJustPressed("left") || Controls.isJustPressed("right"))
-				{
+				if (Controls.isJustPressed("left") || Controls.isJustPressed("right")) {
 					var selector:SelectorThingie = attachedSpriteMap.get(item);
 					var amount:Int = (Controls.isJustPressed("left") ? -1 : Controls.isJustPressed("right") ? 1 : 0);
 
@@ -331,23 +296,17 @@ class OptionsMenu extends BaseMenu
 		OptionsAPI.updatePrefs();
 	}
 
-	private function updateHorizontal(selector:SelectorThingie, amount:Int):Void
-	{
-		if (selector.number)
-		{
-			switch (selector.name)
-			{
+	private function updateHorizontal(selector:SelectorThingie, amount:Int):Void {
+		if (selector.number) {
+			switch (selector.name) {
 				case "Framerate Cap":
 					createNumberSelector(amount, selector, 30, 360, 15);
 				default:
 					createNumberSelector(amount, selector);
 			}
-		}
-		else
-		{
+		} else {
 			var choiceSel:Int = 0, selLimiter:Int = 0;
-			if (selector.ops != null)
-			{
+			if (selector.ops != null) {
 				for (i in 0...selector.ops.length)
 					if (selector.ops[i] == selector.choice)
 						choiceSel = i;
@@ -358,8 +317,7 @@ class OptionsMenu extends BaseMenu
 		}
 	}
 
-	private function createNumberSelector(steps:Int, object:SelectorThingie, min:Float = 0, max:Float = 100, inc:Float = 5):Void
-	{
+	private function createNumberSelector(steps:Int, object:SelectorThingie, min:Float = 0, max:Float = 100, inc:Float = 5):Void {
 		// lazily hardcoded selector generator.
 		var originalValue = OptionsAPI.getPref(object.name);
 		var increase = 15 * steps;
@@ -370,8 +328,7 @@ class OptionsMenu extends BaseMenu
 		manageSelector(object, originalValue, steps);
 	}
 
-	function manageSelector(object:SelectorThingie, value:Any, steps:Int):Void
-	{
+	function manageSelector(object:SelectorThingie, value:Any, steps:Int):Void {
 		object.choice = Std.string(value);
 		object.changeArrow(steps == -1 ? false : true);
 
@@ -379,8 +336,7 @@ class OptionsMenu extends BaseMenu
 
 		trace("Value is: " + object.choice);
 
-		if (object.choice != null)
-		{
+		if (object.choice != null) {
 			OptionsAPI.setPref(object.name, value);
 			OptionsAPI.savePrefs();
 		}

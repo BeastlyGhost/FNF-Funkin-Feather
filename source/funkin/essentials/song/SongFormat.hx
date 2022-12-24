@@ -6,8 +6,7 @@ package funkin.essentials.song;
 	this section body is used as a replacement for "SwagSection",
 	I tried to make it as readable as possible when exporting to JSONs
 **/
-typedef SectionBody =
-{
+typedef SectionBody = {
 	var time:Float; // note time
 	var index:Int; // note index
 	var ?type:String; // note type ("default" by default)
@@ -24,8 +23,7 @@ typedef SectionBody =
 	I made it mainly because I was having issues parsing the base one,
 	but also just because I thought i could make something cleaner and more readable
 **/
-typedef FeatherSong =
-{
+typedef FeatherSong = {
 	var name:String;
 	var internalName:String;
 	var author:String;
@@ -47,8 +45,7 @@ typedef FeatherSong =
 	quick and dirty Song Event format,
 	those events trigger every time the `step` that the event needs is reached on a song
 **/
-typedef TimedEvent =
-{
+typedef TimedEvent = {
 	var name:String;
 	var step:Float;
 	var values:Array<String>;
@@ -57,8 +54,7 @@ typedef TimedEvent =
 /**
 	Friday Night Funkin' 0.2.7.1/0.2.8 Song Format
 **/
-typedef SwagSong =
-{
+typedef SwagSong = {
 	var song:String;
 	var notes:Array<SwagSection>;
 	var bpm:Int;
@@ -77,8 +73,7 @@ typedef SwagSong =
 /**
 	Friday Night Funkin' 0.2.7.1/0.2.8 Section Format
 **/
-typedef SwagSection =
-{
+typedef SwagSection = {
 	var sectionNotes:Array<Dynamic>;
 	var lengthInSteps:Int;
 	var typeOfSection:Int;

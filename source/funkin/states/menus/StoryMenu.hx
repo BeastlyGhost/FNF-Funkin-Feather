@@ -9,8 +9,7 @@ import funkin.essentials.song.SongManager.WeekForm;
 import funkin.objects.ui.menus.WeekCharacter;
 import funkin.objects.ui.menus.WeekItem;
 
-class StoryMenu extends MusicBeatState
-{
+class StoryMenu extends MusicBeatState {
 	var weekContainer:FlxTypedGroup<WeekItem>;
 	var characterContainer:FlxTypedGroup<WeekCharacter>;
 	var attachmentsContainer:FlxTypedGroup<FlxSprite>;
@@ -23,8 +22,7 @@ class StoryMenu extends MusicBeatState
 	var scoreTxt:FlxText;
 	var nameTxt:FlxText;
 
-	override function create():Void
-	{
+	override function create():Void {
 		super.create();
 
 		DiscordRPC.update("STORY MENU", "Choosing a Week");
@@ -78,8 +76,7 @@ class StoryMenu extends MusicBeatState
 		add(nameTxt);
 	}
 
-	function generateArrow(x:Float, y:Float, dir:String):FlxSprite
-	{
+	function generateArrow(x:Float, y:Float, dir:String):FlxSprite {
 		var arrow:FlxSprite = new FlxSprite(x, y);
 		arrow.frames = AssetHelper.grabAsset('campaign_menu_UI_assets', SPARROW, 'images/menus/story');
 		arrow.animation.addByPrefix('idle', 'arrow $dir');
@@ -88,10 +85,8 @@ class StoryMenu extends MusicBeatState
 		return arrow;
 	}
 
-	override function update(elapsed:Float):Void
-	{
-		if (Controls.isJustPressed("back"))
-		{
+	override function update(elapsed:Float):Void {
+		if (Controls.isJustPressed("back")) {
 			MusicState.switchState(new MainMenu());
 			FSound.playSound("cancelMenu", 'sounds/menus');
 		}

@@ -9,20 +9,16 @@ import funkin.states.PlayState;
 /**
 	a Stage Class, used *specifically* for stage spawning during gameplay
 **/
-class Stage extends FlxTypedGroup<FlxBasic>
-{
+class Stage extends FlxTypedGroup<FlxBasic> {
 	public var stageName(never, set):String;
 	public var cameraZoom(never, set):Float;
 
-	public function set_stageName(dummyStage:String = "unknown"):String
-	{
+	public function set_stageName(dummyStage:String = "unknown"):String {
 		if (PlayState.song != null && PlayState.song.stage != null)
 			dummyStage = PlayState.song.stage;
-		else
-		{
+		else {
 			// ninjamuffin bullshit go!
-			switch (PlayState.song.internalName.toLowerCase().replace(' ', '-'))
-			{
+			switch (PlayState.song.internalName.toLowerCase().replace(' ', '-')) {
 				case "bopeebo" | "fresh" | "dadbattle" | "dad-battle":
 					dummyStage = "stage";
 				case "spookeez" | "south" | "monster":
@@ -51,8 +47,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 		return dummyStage;
 	}
 
-	function set_cameraZoom(zoom:Float):Float
-	{
+	function set_cameraZoom(zoom:Float):Float {
 		PlayState.cameraZoom = zoom;
 		return zoom;
 	}
@@ -63,8 +58,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 	public var opponentPos:FlxPoint;
 	public var crowdPos:FlxPoint;
 
-	public function new():Void
-	{
+	public function new():Void {
 		super();
 
 		playerPos = new FlxPoint(770, 450);
@@ -72,12 +66,10 @@ class Stage extends FlxTypedGroup<FlxBasic>
 		crowdPos = new FlxPoint(400, 130);
 	}
 
-	public function setStage(newStage:String = "unknown"):Stage
-	{
+	public function setStage(newStage:String = "unknown"):Stage {
 		this.stageName = newStage;
 
-		switch (newStage)
-		{
+		switch (newStage) {
 			default:
 				cameraZoom = 0.9;
 
@@ -85,29 +77,21 @@ class Stage extends FlxTypedGroup<FlxBasic>
 					return this;
 
 				try
-				{
-					//
-					callStageModule(newStage);
-				}
+					callStageModule(newStage)
 				catch (e)
-				{
 					trace('Module "$newStage" not found.');
-				}
 		}
 
 		return this;
 	}
 
-	public function getStageCrowd(stageName:String):String
-	{
+	public function getStageCrowd(stageName:String):String {
 		var dummyCrowd:String = 'gf';
 
 		if (PlayState.song != null && PlayState.song.crowd != null)
 			dummyCrowd = PlayState.song.crowd;
-		else
-		{
-			switch (stageName.toLowerCase().replace(' ', '-'))
-			{
+		else {
+			switch (stageName.toLowerCase().replace(' ', '-')) {
 				case "highway":
 					dummyCrowd = "gf-car";
 				case "mall" | "mall-illusion":
@@ -127,33 +111,27 @@ class Stage extends FlxTypedGroup<FlxBasic>
 		return dummyCrowd;
 	}
 
-	public function stageCountdownTick(count:Int):Void
-	{
+	public function stageCountdownTick(count:Int):Void {
 		callFunc('onTick', [count]);
 	}
 
-	public function stageUpdate(elapsed:Float):Void
-	{
+	public function stageUpdate(elapsed:Float):Void {
 		callFunc('onUpdate', [elapsed]);
 	}
 
-	public function stageStepHit(curStep:Int):Void
-	{
+	public function stageStepHit(curStep:Int):Void {
 		callFunc('onStep', [curStep]);
 	}
 
-	public function stageBeatHit(curBeat:Int):Void
-	{
+	public function stageBeatHit(curBeat:Int):Void {
 		callFunc('onBeat', [curBeat]);
 	}
 
-	public function stageSectionHit(curSec:Int):Void
-	{
+	public function stageSectionHit(curSec:Int):Void {
 		callFunc('onSection', [curSec]);
 	}
 
-	public function callStageModule(stageName:String):Void
-	{
+	public function callStageModule(stageName:String):Void {
 		var modulePath = AssetHelper.grabAsset('$stageName', MODULE, 'data/stages/$stageName');
 
 		if (!sys.FileSystem.exists(modulePath))
@@ -170,8 +148,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 		if (PlayState.song != null)
 			setVar('songName', PlayState.song.name.toLowerCase());
 
-		if (PlayState.player != null)
-		{
+		if (PlayState.player != null) {
 			setVar('bf', PlayState.player);
 			setVar('boyfriend', PlayState.player);
 			setVar('player', PlayState.player);
@@ -181,8 +158,7 @@ class Stage extends FlxTypedGroup<FlxBasic>
 			setVar('playerName', PlayState.player.name);
 		}
 
-		if (PlayState.opponent != null)
-		{
+		if (PlayState.opponent != null) {
 			setVar('dad', PlayState.opponent);
 			setVar('dadOpponent', PlayState.opponent);
 			setVar('opponent', PlayState.opponent);
@@ -195,16 +171,14 @@ class Stage extends FlxTypedGroup<FlxBasic>
 		callFunc('onCreate', []);
 	}
 
-	public function callFunc(key:String, args:Array<Dynamic>)
-	{
+	public function callFunc(key:String, args:Array<Dynamic>) {
 		if (stageModule == null)
 			return null;
 		else
 			return stageModule.call(key, args);
 	}
 
-	public function setVar(key:String, value:Dynamic)
-	{
+	public function setVar(key:String, value:Dynamic) {
 		if (stageModule == null)
 			return null;
 		else

@@ -9,8 +9,7 @@ import funkin.objects.Character;
 import funkin.states.PlayState;
 import funkin.states.menus.*;
 
-class GameOverSubstate extends MusicBeatSubstate
-{
+class GameOverSubstate extends MusicBeatSubstate {
 	var char:Character;
 	var camFollow:FlxObject;
 
@@ -22,8 +21,7 @@ class GameOverSubstate extends MusicBeatSubstate
 		bpm: 100
 	};
 
-	public static function reset():Void
-	{
+	public static function reset():Void {
 		preferences = {
 			character: "bf-dead",
 			sound: "fnf_loss_sfx",
@@ -33,8 +31,7 @@ class GameOverSubstate extends MusicBeatSubstate
 		};
 	}
 
-	public function new(x:Float = 0, y:Float = 0):Void
-	{
+	public function new(x:Float = 0, y:Float = 0):Void {
 		super();
 
 		Conductor.songPosition = 0;
@@ -56,12 +53,10 @@ class GameOverSubstate extends MusicBeatSubstate
 		char.playAnim('firstDeath');
 	}
 
-	override function update(elapsed:Float):Void
-	{
+	override function update(elapsed:Float):Void {
 		super.update(elapsed);
 
-		if (Controls.isJustPressed("back"))
-		{
+		if (Controls.isJustPressed("back")) {
 			FlxG.sound.music.stop();
 
 			if (PlayState.gameplayMode == STORY)
@@ -82,18 +77,14 @@ class GameOverSubstate extends MusicBeatSubstate
 
 	var isEnding:Bool = false;
 
-	function endScene():Void
-	{
-		if (!isEnding)
-		{
+	function endScene():Void {
+		if (!isEnding) {
 			isEnding = true;
 			char.playAnim('deathConfirm', true);
 			FlxG.sound.music.stop();
 			FSound.playSound(preferences.confirm, "music", true);
-			new FlxTimer().start(0.7, function(tmr:FlxTimer)
-			{
-				FlxG.camera.fade(0xFF000000, 1, false, function()
-				{
+			new FlxTimer().start(0.7, function(tmr:FlxTimer) {
+				FlxG.camera.fade(0xFF000000, 1, false, function() {
 					MusicState.switchState(new PlayState());
 				});
 			});

@@ -6,12 +6,10 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import funkin.objects.ui.fonts.Alphabet;
 
-class CheckboxThingie extends PlumaSprite
-{
+class CheckboxThingie extends PlumaSprite {
 	public var parentSprite:FlxSprite;
 
-	public override function new(x:Float, y:Float):Void
-	{
+	public override function new(x:Float, y:Float):Void {
 		super(x, y);
 
 		frames = AssetHelper.grabAsset('checkboxThingie', SPARROW, 'images/menus/default/options');
@@ -25,20 +23,17 @@ class CheckboxThingie extends PlumaSprite
 		updateHitbox();
 	}
 
-	override function update(elapsed:Float):Void
-	{
+	override function update(elapsed:Float):Void {
 		super.update(elapsed);
 
-		if (frames != null && parentSprite != null)
-		{
+		if (frames != null && parentSprite != null) {
 			setPosition(parentSprite.x + parentSprite.width + 10, parentSprite.y - 30);
 			scrollFactor.set(parentSprite.scrollFactor.x, parentSprite.scrollFactor.y);
 		}
 	}
 }
 
-class SelectorThingie extends FlxTypedSpriteGroup<FlxSprite>
-{
+class SelectorThingie extends FlxTypedSpriteGroup<FlxSprite> {
 	/**
 		in case contributors wanna do it for me because I'm probably not finishing it now
 		the idea is to have a alphabet text with the name of your choice, it is always a bold one
@@ -59,8 +54,7 @@ class SelectorThingie extends FlxTypedSpriteGroup<FlxSprite>
 	public var number(default, null):Bool;
 	public var choice(default, set):String;
 
-	public inline function set_choice(myChoice:String):String
-	{
+	public inline function set_choice(myChoice:String):String {
 		choice = myChoice;
 		number = (Std.parseInt(myChoice) != null ? true : false);
 		if (choice != null)
@@ -70,8 +64,7 @@ class SelectorThingie extends FlxTypedSpriteGroup<FlxSprite>
 
 	public var ops:Array<String> = [];
 
-	public override function new(x:Float, y:Float, name:String, ops:Array<String>):Void
-	{
+	public override function new(x:Float, y:Float, name:String, ops:Array<String>):Void {
 		super(x, y);
 
 		this.name = name;
@@ -88,22 +81,19 @@ class SelectorThingie extends FlxTypedSpriteGroup<FlxSprite>
 		choice = Std.string(OptionsAPI.getPref(name, false));
 	}
 
-	public function changeArrow(rightPress:Bool = false):Void
-	{
+	public function changeArrow(rightPress:Bool = false):Void {
 		var myArrow:Alphabet = (rightPress ? arrowRight : arrowLeft);
 		var originalColor:Int = myArrow.color;
 
 		FlxTween.tween(myArrow, {color: 0xFFFFF700}, 0.8, {
 			ease: FlxEase.sineOut,
-			onComplete: function(tween:FlxTween)
-			{
+			onComplete: function(tween:FlxTween) {
 				FlxTween.tween(myArrow, {color: originalColor}, 0.3);
 			}
 		});
 	}
 
-	override function update(elapsed:Float):Void
-	{
+	override function update(elapsed:Float):Void {
 		super.update(elapsed);
 	}
 }

@@ -7,10 +7,8 @@ import discord_rpc.DiscordRpc as RPCWrapper;
 	Discord Client Wrapper class for the linc_discord-rpc library
 	https://github.com/Aidan63/linc_discord-rpc
 **/
-class DiscordRPC
-{
-	public static function init():Void
-	{
+class DiscordRPC {
+	public static function init():Void {
 		RPCWrapper.start({
 			clientID: "1039276324029743234",
 			onReady: ready,
@@ -20,8 +18,7 @@ class DiscordRPC
 
 		ready();
 
-		lime.app.Application.current.onExit.add(function(e:Dynamic)
-		{
+		lime.app.Application.current.onExit.add(function(e:Dynamic) {
 			destroy();
 		});
 	}
@@ -29,8 +26,7 @@ class DiscordRPC
 	public static function destroy():Void
 		RPCWrapper.shutdown();
 
-	static function ready():Void
-	{
+	static function ready():Void {
 		RPCWrapper.presence({
 			details: "",
 			state: null,
@@ -47,8 +43,7 @@ class DiscordRPC
 		trace('Disconnected! $_code : $_message');
 
 	public static function update(detailsMain:String = '', detailsSub:String = '', ?keyBig:String = 'fef-logo', ?keySmall:String, ?detailsBig:String,
-			?detailsSmall:String, ?timeEnd:Float, ?startTime:Bool):Void
-	{
+			?detailsSmall:String, ?timeEnd:Float, ?startTime:Bool):Void {
 		var timeNow:Float = (startTime ? Date.now().getTime() : 0);
 
 		if (timeEnd > 0)
@@ -74,21 +69,17 @@ class DiscordRPC
 
 	this class won't work on your platform as it's unsupported
 **/
-class DiscordRPC
-{
-	public static function init():Void
-	{
+class DiscordRPC {
+	public static function init():Void {
 		return trace("Discord Client is not supported on this platform");
 	}
 
 	public static function update(detailsMain:String = '', detailsSub:String = '', ?keyBig:String, ?keySmall:String, ?detailsBig:String, ?detailsSmall:String,
-			?timeEnd:Float, ?startTime:Bool):Void
-	{
+			?timeEnd:Float, ?startTime:Bool):Void {
 		return;
 	}
 
-	public static function destroy():Void
-	{
+	public static function destroy():Void {
 		return;
 	}
 }

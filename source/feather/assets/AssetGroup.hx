@@ -2,8 +2,7 @@ package feather.assets;
 
 import sys.FileSystem;
 
-typedef GroupForm =
-{
+typedef GroupForm = {
 	var desc:String;
 	var enabled:Bool;
 	var authors:Array<String>;
@@ -15,8 +14,7 @@ typedef GroupForm =
 	Helper Class for Asset Groups
 	@since INFDEV
 **/
-class AssetGroup
-{
+class AssetGroup {
 	/**
 		Specifies the DEFAULT Asset Group
 	**/
@@ -44,14 +42,12 @@ class AssetGroup
 
 	public var groupData:Map<String, GroupForm>;
 
-	public function new():Void
-	{
+	public function new():Void {
 		// first grab the groups for the assets folder
 		storeGroups();
 	}
 
-	public function storeGroups():Void
-	{
+	public function storeGroups():Void {
 		var groupsTemp:Array<String> = [];
 
 		for (dir in FileSystem.readDirectory("assets"))
@@ -60,8 +56,7 @@ class AssetGroup
 
 		groupsTemp.sort(function(group1, group2) return Reflect.compare(group1.toLowerCase(), group2.toLowerCase()));
 
-		for (group in groupsTemp)
-		{
+		for (group in groupsTemp) {
 			if (!allGroups.contains(group))
 				allGroups.push(group);
 		}
@@ -75,8 +70,7 @@ class AssetGroup
 		@param type the file type, for getting the extension
 		@param force whether to skip the system checks and force a group to be returned
 	**/
-	public function getFromDirs(file:String, type:AssetType, ?force:Bool):String
-	{
+	public function getFromDirs(file:String, type:AssetType, ?force:Bool):String {
 		// loadGroupData();
 
 		var chosenGroup:Array<String> = (activeGroups.length > 0 ? activeGroups : allGroups);
@@ -85,8 +79,7 @@ class AssetGroup
 		if (chosenGroup.length < 0)
 			return null;
 
-		for (e in 0...chosenGroup.length)
-		{
+		for (e in 0...chosenGroup.length) {
 			var groupReturn:String = null;
 
 			/**
@@ -133,18 +126,12 @@ class AssetGroup
 	}
 
 	public function checkExists(group:String, file:String, type:AssetType):Bool
-	{
 		return FileSystem.exists(AssetHelper.getExtensions('assets/$group/$file', type));
-	}
 
-	public function loadGroupData():Void
-	{
-		for (i in 0...allGroups.length)
-		{
-			if (FileSystem.exists(AssetHelper.grabAsset("group", YAML)))
-			{
-				try
-				{
+	public function loadGroupData():Void {
+		for (i in 0...allGroups.length) {
+			if (FileSystem.exists(AssetHelper.grabAsset("group", YAML))) {
+				try {
 					var filePath:String = AssetHelper.grabAsset("group", YAML);
 					var fileData:GroupForm = Yaml.read(filePath, yaml.Parser.options().useObjects());
 
@@ -160,12 +147,8 @@ class AssetGroup
 					groupData.set(allGroups[i], finalData);
 				}
 				catch (e)
-				{
 					throw('Group Data for ${allGroups[i]} could not be set.');
-				}
-			}
-			else
-			{
+			} else {
 				groupData.set(allGroups[i], {
 					desc: null,
 					enabled: true,
@@ -185,15 +168,12 @@ class AssetGroup
 		Picks up all the Stored Data on `groupData`
 		and sets the groups to the active groups array accordingly
 	**/
-	public function setActiveGroups():Void
-	{
-		for (group => data in groupData)
-		{
+	public function setActiveGroups():Void {
+		for (group => data in groupData) {
 			if (data == null)
 				return;
 
-			if (group != null && data != null)
-			{
+			if (group != null && data != null) {
 				if (data.enabled && !activeGroups.contains(group))
 					activeGroups.push(group);
 			}

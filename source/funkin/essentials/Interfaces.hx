@@ -13,8 +13,7 @@ class Interfaces {} // nothing, I just wanna leave the comment haha
 /**
 	Handles variables used on the `MusicState` class
 **/
-interface IMusicBeat
-{
+interface IMusicBeat {
 	public var curBeat:Int; // Defines the Current Beat on the Current Song
 	public var curStep:Int; // Defines the Current Step on the Current Song
 	public var curSection:Int; // Defines the Current Section on the Current Song

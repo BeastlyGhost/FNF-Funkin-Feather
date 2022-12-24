@@ -1,20 +1,19 @@
 package funkin.essentials;
 
+import flixel.util.FlxColor;
+import feather.tools.shaders.AUColorSwap;
 import funkin.essentials.PlayerInfo;
 import funkin.objects.ui.notes.Note;
-import funkin.objects.ui.notes.Strum.BabyArrow;
 import funkin.states.PlayState;
 
 /**
 	FunkinAssets matches together a lot of functions for creating assets
 **/
-class FunkinAssets
-{
+class FunkinAssets {
 	/**
 		Pop Ups, like Ratings and Combo
 	**/
-	public static function generateRating(skin:String = 'default'):PlumaSprite
-	{
+	public static function generateRating(skin:String = 'default'):PlumaSprite {
 		var width:Int = (skin == "pixel" ? 60 : 352);
 		var height:Int = (skin == "pixel" ? 21 : 155);
 
@@ -32,8 +31,7 @@ class FunkinAssets
 		return rating;
 	}
 
-	public static function generateCombo(skin:String = 'default'):PlumaSprite
-	{
+	public static function generateCombo(skin:String = 'default'):PlumaSprite {
 		var width:Int = (skin == "pixel" ? 12 : 108);
 		var height:Int = (skin == "pixel" ? 12 : 142);
 
@@ -54,85 +52,68 @@ class FunkinAssets
 	/**
 		Notes
 	**/
-	public static function generateStrums(babyArrow:BabyArrow, index:Int, ?texture:String = 'NOTE_assets'):BabyArrow
-	{
-		switch (PlayState.assetSkin)
-		{
-			case "pixel":
-				babyArrow.loadGraphic(AssetHelper.grabAsset(texture, IMAGE, 'data/notes/default'), true, 17, 17);
-
-				babyArrow.animation.add('static', [index]);
-				babyArrow.animation.add('pressed', [4 + index, 8 + index], 12, false);
-				babyArrow.animation.add('confirm', [12 + index, 16 + index], 12, false);
-
-				babyArrow.setGraphicSize(Std.int(babyArrow.width * PlayState.pixelAssetSize));
-				babyArrow.updateHitbox();
-				babyArrow.antialiasing = false;
-
-				babyArrow.addOffset('static', -67, -50);
-				babyArrow.addOffset('pressed', -67, -50);
-				babyArrow.addOffset('confirm', -67, -50);
-
-				babyArrow.x += 5;
-				babyArrow.y += 25;
-
+	public static function generateStrums(babyArrow:BabyArrow, index:Int, ?texture:String = 'NOTE_assets'):BabyArrow {
+		switch (PlayState.assetSkin) {
 			default:
-				babyArrow.frames = AssetHelper.grabAsset(texture, SPARROW, 'data/notes/default');
+				babyArrow.frames = AssetHelper.grabAsset('notes', SPARROW, 'images/notes');
 
-				babyArrow.animation.addByPrefix(BabyArrow.colors[index], 'arrow' + BabyArrow.actions[index].toUpperCase());
-				babyArrow.animation.addByPrefix('static', 'arrow${BabyArrow.actions[index].toUpperCase()}');
-				babyArrow.animation.addByPrefix('pressed', '${BabyArrow.actions[index]} press', 24, false);
-				babyArrow.animation.addByPrefix('confirm', '${BabyArrow.actions[index]} confirm', 24, false);
+				babyArrow.animation.addByPrefix('static', 'strum0');
+				babyArrow.animation.addByPrefix('pressed', 'strum press', 24, false);
+				babyArrow.animation.addByPrefix('confirm', 'strum confirm', 24, false);
 
 				babyArrow.setGraphicSize(Std.int(babyArrow.width * 0.7));
 				babyArrow.antialiasing = true;
 		}
 
+		if (babyArrow.colorSwap != null)
+			babyArrow.shader = babyArrow.colorSwap;
+
 		return babyArrow;
 	}
 
-	public static function generateNotes(note:Note, index:Int, isSustain:Bool = false):Note
-	{
-		switch (PlayState.assetSkin)
-		{
-			case "pixel":
-				var indexPixel:Array<Int> = [4, 5, 6, 7];
-
-				if (isSustain)
-				{
-					note.loadGraphic(AssetHelper.grabAsset('pixel_holds', IMAGE, 'data/notes/default'), true, 7, 6);
-					note.animation.add(BabyArrow.colors[index] + 'holdend', [indexPixel[index]]);
-					note.animation.add(BabyArrow.colors[index] + 'hold', [indexPixel[index] - 4]);
-				}
-				else
-				{
-					note.loadGraphic(AssetHelper.grabAsset('pixel_notes', IMAGE, 'data/notes/default'), true, 17, 17);
-					note.animation.add(BabyArrow.colors[index] + 'Scroll', [indexPixel[index]], 12);
-				}
-
-				note.setGraphicSize(Std.int(note.width * PlayState.pixelAssetSize));
-				note.updateHitbox();
-				note.antialiasing = false;
-
+	public static function generateNotes(note:Note, index:Int, isSustain:Bool = false):Note {
+		switch (PlayState.assetSkin) {
 			default:
-				note.frames = AssetHelper.grabAsset('NOTE_assets', SPARROW, 'data/notes/default');
+				note.frames = AssetHelper.grabAsset('notes', SPARROW, 'images/notes');
 
-				if (!isSustain)
-					note.animation.addByPrefix(BabyArrow.colors[index] + 'Scroll', BabyArrow.colors[index] + '0');
-				else
-				{
-					note.animation.addByPrefix(BabyArrow.colors[index] + 'hold', BabyArrow.colors[index] + ' hold piece');
-					note.animation.addByPrefix(BabyArrow.colors[index] + 'holdend', BabyArrow.colors[index] + ' hold end');
+				note.animation.addByPrefix('scroll', 'note0');
+				note.animation.addByPrefix('hold', 'note hold');
+				note.animation.addByPrefix('end', 'note end');
 
-					// i'm going after phantomarcade @BeastlyGhost
-					note.animation.addByPrefix('purpleholdend', 'pruple end hold');
+				if (!isSustain) {
+					note.angle = (index == 0 ? -90 : index == 3 ? 90 : 0);
+					if (index == 1) {
+						// note.flipX = true;
+						note.flipY = true;
+					}
 				}
 
 				note.setGraphicSize(Std.int(note.width * 0.7));
-				note.updateHitbox();
 				note.antialiasing = true;
+				note.updateHitbox();
 		}
 
+		if (note.colorSwap != null)
+			note.shader = note.colorSwap;
+
 		return note;
+	}
+
+	private static var isQuant:Bool = OptionsAPI.getPref("Note Quant Style").toLowerCase() != 'none';
+	private static var quant:Quant;
+
+	public static function setColorSwap(idx:Int, colorSwap:AUColorSwap):Void {
+		var colorF:FlxColor;
+
+		if (isQuant) {
+			if (quant.index > -1)
+				idx = quant.index;
+			colorF = BabyArrow.colorPresets.get('quants-${OptionsAPI.getPref("Note Quant Style").toLowerCase()}')[idx];
+		} else
+			colorF = BabyArrow.colorPresets.get(PlayState.assetSkin)[idx];
+
+		colorSwap.red = colorF;
+		colorSwap.green = 0xFFFFFFFF;
+		colorSwap.blue = colorF;
 	}
 }

@@ -15,8 +15,7 @@ import sys.FileSystem;
 	this is basically my own custom made `CoolUtil` class from the base game
 	it serves the exact same purpose, giving useful tools to work with
 **/
-class FeatherUtils
-{
+class FeatherUtils {
 	/**
 		@author Shadow_Mario_
 	**/
@@ -31,11 +30,9 @@ class FeatherUtils
 	 * @param daZaza - Default Camera Zoom
 	 * @param zazaSpeed - Default Camera Speed
 	 */
-	inline public static function cameraBumpingZooms(leCam:FlxCamera, daZaza:Float = 1.05, zazaSpeed:Float = 1):Void
-	{
+	inline public static function cameraBumpingZooms(leCam:FlxCamera, daZaza:Float = 1.05, zazaSpeed:Float = 1):Void {
 		var easeLerp = 1 - MusicState.boundFramerate(0.1) * zazaSpeed;
-		if (leCam != null)
-		{
+		if (leCam != null) {
 			// camera stuffs
 			leCam.zoom = FlxMath.lerp(daZaza, leCam.zoom, easeLerp);
 
@@ -44,14 +41,12 @@ class FeatherUtils
 		}
 	}
 
-	inline public static function cameraBumpReset(curBeat:Int, leCam:FlxCamera, speedVal:Float = 4, resetVal:Float = 0.015):Void
-	{
+	inline public static function cameraBumpReset(curBeat:Int, leCam:FlxCamera, speedVal:Float = 4, resetVal:Float = 0.015):Void {
 		if ((leCam.zoom < 1.35 && curBeat % speedVal == 0))
 			leCam.zoom += resetVal;
 	}
 
-	public static function cameraLerping(ratio:Float):Float
-	{
+	public static function cameraLerping(ratio:Float):Float {
 		return FlxG.elapsed / (1 / 60) * ratio;
 	}
 
@@ -59,10 +54,8 @@ class FeatherUtils
 		Checks if the Main Menu Song is playing, if it isn't, then play it!
 		@param volumeReset if the song should fade in on a successful song reset
 	**/
-	inline public static function menuMusicCheck(volumeReset:Bool = false):Void
-	{
-		if ((FlxG.sound.music == null || (FlxG.sound.music != null && !FlxG.sound.music.playing)))
-		{
+	inline public static function menuMusicCheck(volumeReset:Bool = false):Void {
+		if ((FlxG.sound.music == null || (FlxG.sound.music != null && !FlxG.sound.music.playing))) {
 			FlxG.sound.playMusic(AssetHelper.grabAsset("freakyMenu", SOUND, "music"), (volumeReset) ? 0 : 0.7);
 			if (volumeReset)
 				FlxG.sound.music.fadeIn(4, 0, 0.7);
@@ -74,12 +67,10 @@ class FeatherUtils
 		Returns an array of libraries from your specified destination
 		@dest the directory that should be read
 	**/
-	inline public static function readDirectory(dest:String, ?type:AssetType):Array<String>
-	{
+	inline public static function readDirectory(dest:String, ?type:AssetType):Array<String> {
 		var libraryArray:Array<String> = [];
 
-		for (dir in FileSystem.readDirectory(AssetHelper.grabRoot(dest, type)))
-		{
+		for (dir in FileSystem.readDirectory(AssetHelper.grabRoot(dest, type))) {
 			if (!libraryArray.contains(dir))
 				libraryArray.push(dir);
 			trace(libraryArray);
@@ -88,15 +79,12 @@ class FeatherUtils
 		return if (libraryArray != null) libraryArray else [];
 	}
 
-	inline public static function getDifficulty(diff:Int = 0):String
-	{
+	inline public static function getDifficulty(diff:Int = 0):String {
 		return funkin.essentials.song.SongManager.defaultDiffs[diff];
 	}
 
-	inline public static function getAxes(axe:String = 'xy'):FlxAxes
-	{
-		switch (axe)
-		{
+	inline public static function getAxes(axe:String = 'xy'):FlxAxes {
+		switch (axe) {
 			case "x":
 				return FlxAxes.X;
 			case "y":
@@ -107,8 +95,7 @@ class FeatherUtils
 		return FlxAxes.XY;
 	}
 
-	inline public static function openURL(link:String):Void
-	{
+	inline public static function openURL(link:String):Void {
 		#if linux
 		Sys.command('/usr/bin/xdg-open', [link]);
 		#else

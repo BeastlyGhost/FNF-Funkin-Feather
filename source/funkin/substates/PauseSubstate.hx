@@ -20,8 +20,7 @@ import sys.thread.Thread;
 	a Subclass for when you pause on `PlayState`
 	initializes simple options with simple functions
 **/
-class PauseSubstate extends BaseSubMenu
-{
+class PauseSubstate extends BaseSubMenu {
 	var listMap:Map<String, Array<String>> = [
 		"default" => [
 			"Resume Song",
@@ -37,15 +36,13 @@ class PauseSubstate extends BaseSubMenu
 	var pauseMusic:FlxSound;
 	var mutex:Mutex;
 
-	public function new(x:Float, y:Float, listName:String = "default"):Void
-	{
+	public function new(x:Float, y:Float, listName:String = "default"):Void {
 		super();
 
 		wrappableGroup = listMap.get(listName);
 
 		mutex = new Mutex();
-		Thread.create(function()
-		{
+		Thread.create(function() {
 			mutex.acquire();
 			pauseMusic = new FlxSound().loadEmbedded(AssetHelper.grabAsset('breakfast', SOUND, "music"), true, true);
 			pauseMusic.play(false, FlxG.random.int(0, Std.int(pauseMusic.length / 2)));
@@ -87,10 +84,9 @@ class PauseSubstate extends BaseSubMenu
 		itemContainer = new FlxTypedGroup<Alphabet>();
 		add(itemContainer);
 
-		for (i in 0...wrappableGroup.length)
-		{
+		for (i in 0...wrappableGroup.length) {
 			var base:Alphabet = new Alphabet(0, (70 * i) + 30, wrappableGroup[i], false);
-			base.isMenuItem = true;
+			base.displayStyle = LIST;
 			base.targetY = i;
 			itemContainer.add(base);
 		}
@@ -100,18 +96,15 @@ class PauseSubstate extends BaseSubMenu
 		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
 	}
 
-	override function update(elapsed:Float):Void
-	{
+	override function update(elapsed:Float):Void {
 		super.update(elapsed);
 
 		updateSelection(Controls.isJustPressed("up") ? -1 : Controls.isJustPressed("down") ? 1 : 0);
 
-		if (Controls.isJustPressed("accept"))
-		{
+		if (Controls.isJustPressed("accept")) {
 			var mySelection = wrappableGroup[Math.floor(selection)].toLowerCase();
 
-			switch (mySelection)
-			{
+			switch (mySelection) {
 				case "resume song":
 					close();
 				case "restart song":
@@ -139,23 +132,20 @@ class PauseSubstate extends BaseSubMenu
 			}
 		}
 
-		if (pauseMusic != null && pauseMusic.playing)
-		{
+		if (pauseMusic != null && pauseMusic.playing) {
 			if (pauseMusic.volume < 0.5)
 				pauseMusic.volume += 0.01 * elapsed;
 		}
 	}
 
-	public override function updateSelection(newSelection:Int = 0):Void
-	{
+	public override function updateSelection(newSelection:Int = 0):Void {
 		super.updateSelection(newSelection);
 
 		if (newSelection != 0)
 			FSound.playSound("scrollMenu", 'sounds/menus');
 	}
 
-	override function destroy():Void
-	{
+	override function destroy():Void {
 		if (pauseMusic != null)
 			pauseMusic.destroy();
 		super.destroy();

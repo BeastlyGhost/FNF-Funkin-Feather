@@ -11,8 +11,7 @@ import funkin.objects.Character;
 import funkin.objects.Stage;
 import funkin.states.menus.MainMenu;
 
-class OffsetEditor extends MusicBeatState
-{
+class OffsetEditor extends MusicBeatState {
 	var debugChar:Character;
 	var charName:String = 'bf';
 	var player:Bool = false;
@@ -29,16 +28,14 @@ class OffsetEditor extends MusicBeatState
 	var camGame:FlxCamera;
 	var camHUD:FlxCamera;
 
-	public override function new(?charName:String, ?player:Bool = false):Void
-	{
+	public override function new(?charName:String, ?player:Bool = false):Void {
 		super();
 
 		this.charName = charName;
 		this.player = player;
 	}
 
-	public override function create():Void
-	{
+	public override function create():Void {
 		super.create();
 
 		DiscordRPC.update("OFFSET EDITOR", "Character: " + charName);
@@ -80,8 +77,7 @@ class OffsetEditor extends MusicBeatState
 		reloadText();
 	}
 
-	public override function update(elapsed:Float):Void
-	{
+	public override function update(elapsed:Float):Void {
 		super.update(elapsed);
 
 		offsetText.text = (debugChar.animation.curAnim.name != null ? debugChar.animation.curAnim.name : '');
@@ -93,12 +89,9 @@ class OffsetEditor extends MusicBeatState
 			MusicState.switchState(new MainMenu());
 	}
 
-	public function reloadText():Void
-	{
-		textGroup.forEach(function(text:FlxText)
-		{
-			if (text != null)
-			{
+	public function reloadText():Void {
+		textGroup.forEach(function(text:FlxText) {
+			if (text != null) {
 				text.kill();
 				textGroup.remove(text, true);
 			}
@@ -107,11 +100,9 @@ class OffsetEditor extends MusicBeatState
 		var loopInt:Int = 0;
 
 		var len:Int = textGroup.members.length - 1;
-		while (len >= 0)
-		{
+		while (len >= 0) {
 			var memb:FlxText = textGroup.members[len];
-			if (memb != null)
-			{
+			if (memb != null) {
 				memb.kill();
 				textGroup.remove(memb);
 				memb.destroy();
@@ -120,8 +111,7 @@ class OffsetEditor extends MusicBeatState
 		}
 		textGroup.clear();
 
-		for (name => offsets in debugChar.animOffsets)
-		{
+		for (name => offsets in debugChar.animOffsets) {
 			var text:FlxText = new FlxText(10, 20 + (18 * loopInt), 0, name + ": " + offsets, 15);
 			text.scrollFactor.set();
 			text.cameras = [camHUD];
@@ -134,8 +124,7 @@ class OffsetEditor extends MusicBeatState
 		}
 	}
 
-	public function mainControls(elapsed:Float):Void
-	{
+	public function mainControls(elapsed:Float):Void {
 		if (FlxG.keys.pressed.E)
 			FlxG.camera.zoom += elapsed * FlxG.camera.zoom;
 		if (FlxG.keys.pressed.Q)
@@ -150,8 +139,7 @@ class OffsetEditor extends MusicBeatState
 			FlxG.camera.zoom = 0.1;
 	}
 
-	public function editorInput(elapsed:Float):Void
-	{
+	public function editorInput(elapsed:Float):Void {
 		var holdingCtrl = FlxG.keys.pressed.CONTROL;
 
 		var charControls:Array<Bool> = [FlxG.keys.justPressed.W, FlxG.keys.justPressed.S, FlxG.keys.justPressed.SPACE];
@@ -168,10 +156,8 @@ class OffsetEditor extends MusicBeatState
 			(holdingCtrl ? FlxG.keys.pressed.RIGHT : FlxG.keys.justPressed.RIGHT)
 		];
 
-		if (moveControls.contains(true))
-		{
-			for (i in 0...moveControls.length)
-			{
+		if (moveControls.contains(true)) {
+			for (i in 0...moveControls.length) {
 				var speedMult = 1;
 				var negValue:Int = 1;
 				var posValue = 0;
@@ -191,12 +177,9 @@ class OffsetEditor extends MusicBeatState
 			}
 		}
 
-		if (charControls.contains(true))
-		{
-			for (i in 0...charControls.length)
-			{
-				if (charControls[i] == true)
-				{
+		if (charControls.contains(true)) {
+			for (i in 0...charControls.length) {
+				if (charControls[i] == true) {
 					if (i == 0)
 						animSelection--;
 					else if (i == 1)
@@ -210,12 +193,9 @@ class OffsetEditor extends MusicBeatState
 			}
 		}
 
-		if (camControls.contains(true))
-		{
-			for (i in 0...camControls.length)
-			{
-				if (camControls[i] == true)
-				{
+		if (camControls.contains(true)) {
+			for (i in 0...camControls.length) {
+				if (camControls[i] == true) {
 					var speed:Float = 500 * elapsed;
 					if (FlxG.keys.pressed.SHIFT)
 						speed *= 4;

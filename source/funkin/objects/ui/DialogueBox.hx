@@ -3,14 +3,12 @@ package funkin.objects.ui;
 import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
 
-@:enum abstract BoxTextForm(String) to String
-{
+@:enum abstract BoxTextForm(String) to String {
 	var BASE = 'default';
 	var PIXEL = 'pixel';
 }
 
-typedef BoxForm =
-{
+typedef BoxForm = {
 	var texture:String;
 	var texturePath:String;
 	var ?textForm:String;
@@ -20,29 +18,25 @@ typedef BoxForm =
 	var ?size:Float;
 }
 
-typedef CharForm =
-{
+typedef CharForm = {
 	var texture:String;
 	var texturePath:String;
 	var animations:Array<AnimForm>;
 }
 
-typedef AnimForm =
-{
+typedef AnimForm = {
 	var anim:Null<String>;
 	var animOffset:Array<Float>;
 	var animDefault:Null<String>;
 }
 
-class DialogueBox extends FlxSpriteGroup
-{
+class DialogueBox extends FlxSpriteGroup {
 	public var boxData:BoxForm;
 	public var charData:CharForm;
 
 	public var textList:Array<String> = [];
 
-	public override function new(file:String):Void
-	{
+	public override function new(file:String):Void {
 		// dialogue box defaults
 		boxData = {
 			texture: "speech_bubble_talking",
@@ -59,8 +53,7 @@ class DialogueBox extends FlxSpriteGroup
 		super();
 	}
 
-	public function initBox(tex:String, file:String):FlxSprite
-	{
+	public function initBox(tex:String, file:String):FlxSprite {
 		var texType:AssetType = (boxData.animated ? SPARROW : IMAGE);
 
 		var diagBox:FlxSprite = new FlxSprite();

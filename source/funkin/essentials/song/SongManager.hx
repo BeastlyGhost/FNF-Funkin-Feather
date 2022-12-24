@@ -4,8 +4,7 @@ import feather.assets.AssetGroup;
 import flixel.util.FlxColor;
 import sys.FileSystem;
 
-enum WeekAttribute
-{
+enum WeekAttribute {
 	LOCKED;
 	HIDE_STORY;
 	HIDE_FREEPLAY;
@@ -14,8 +13,7 @@ enum WeekAttribute
 /**
 	Main Week Format
 **/
-typedef WeekForm =
-{
+typedef WeekForm = {
 	var weekImage:String;
 	var storyName:String;
 	var songs:Array<WeekSongForm>;
@@ -27,8 +25,7 @@ typedef WeekForm =
 /**
 	Week Song Format
 **/
-typedef WeekSongForm =
-{
+typedef WeekSongForm = {
 	var name:String;
 	var character:String;
 	var colors:Array<Int>; // for freeplay
@@ -37,8 +34,7 @@ typedef WeekSongForm =
 /**
 	Freeplay Song Format
 **/
-typedef SongListForm =
-{
+typedef SongListForm = {
 	var name:String;
 	var ?group:String; // might use for separators later??
 	var week:Int;
@@ -47,8 +43,7 @@ typedef SongListForm =
 	var color:FlxColor;
 }
 
-class SongManager
-{
+class SongManager {
 	public static var defaultDiffs:Array<String> = ['EASY', 'NORMAL', 'HARD'];
 
 	/**
@@ -56,8 +51,7 @@ class SongManager
 	**/
 	@:isVar public static var weekList(get, default):Array<WeekForm> = [];
 
-	public static function get_weekList():Array<WeekForm>
-	{
+	public static function get_weekList():Array<WeekForm> {
 		// clear the week list in case it's not empty already
 		weekList = [];
 
@@ -69,22 +63,19 @@ class SongManager
 	**/
 	@:isVar public static var songList(get, default):Array<SongListForm> = [];
 
-	public static function get_songList():Array<SongListForm>
-	{
+	public static function get_songList():Array<SongListForm> {
 		// clear the song list in case it's not empty already
 		songList = [];
 
 		var songs:Map<String, Array<String>> = [];
 
 		// loop through every asset group
-		for (i in 0...AssetGroup.allGroups.length)
-		{
+		for (i in 0...AssetGroup.allGroups.length) {
 			var group:String = AssetGroup.allGroups[i];
 			if (group == null)
 				break;
 
-			if (FileSystem.exists('assets/$group/data/songs'))
-			{
+			if (FileSystem.exists('assets/$group/data/songs')) {
 				var song:Array<String> = FileSystem.readDirectory('assets/$group/data/songs');
 
 				// add it to our songs list
@@ -94,15 +85,12 @@ class SongManager
 			}
 		}
 
-		for (group => songs in songs)
-		{
+		for (group => songs in songs) {
 			if (group == null)
 				group = '';
 
-			if (songs != null && songs.length > 0)
-			{
-				for (i in songs)
-				{
+			if (songs != null && songs.length > 0) {
+				for (i in songs) {
 					songList.push({
 						name: i,
 						group: group,

@@ -5,8 +5,7 @@ import funkin.essentials.song.SongFormat;
 import funkin.objects.ui.notes.Note;
 import haxe.Json;
 
-enum DataFormat
-{
+enum DataFormat {
 	VANILLA; // Base Game
 	FEATHER; // Custom Format
 }
@@ -14,15 +13,13 @@ enum DataFormat
 /**
 	Chart Parser class for initializing song charts and notes
 **/
-class ChartParser
-{
+class ChartParser {
 	public static var chartDataType:DataFormat = FEATHER;
 
 	public static var noteList:Array<Note> = [];
 	public static var eventList:Array<TimedEvent> = [];
 
-	public static function loadChartData(songName:String, songDiff:Int):FeatherSong
-	{
+	public static function loadChartData(songName:String, songDiff:Int):FeatherSong {
 		var timeBegin:Float = Sys.time();
 
 		var songDiff:String = SongManager.defaultDiffs[songDiff];
@@ -43,10 +40,8 @@ class ChartParser
 		if (featherSong.author == null || featherSong.author.length < 1)
 			featherSong.author = '???';
 
-		if (chartDataType != null && chartDataType == VANILLA)
-		{
-			if (funkinSong.gfVersion == null)
-			{
+		if (chartDataType != null && chartDataType == VANILLA) {
+			if (funkinSong.gfVersion == null) {
 				if (funkinSong.player3 != null)
 					funkinSong.gfVersion = funkinSong.player3;
 				else
@@ -72,20 +67,16 @@ class ChartParser
 			};
 
 			// with that out of the way, let's convert the notes!
-			for (section in funkinSong.notes)
-			{
-				for (songNotes in section.sectionNotes)
-				{
+			for (section in funkinSong.notes) {
+				for (songNotes in section.sectionNotes) {
 					var daStrumTime:Float = songNotes[0];
 					var daNoteData:Int = Std.int(songNotes[1] % 4);
 					var daHoldLength:Float = songNotes[2];
 					var daNoteType:String = 'default';
 
-					if (Std.isOfType(songNotes[3], String))
-					{
+					if (Std.isOfType(songNotes[3], String)) {
 						// psych conversion
-						switch (songNotes[3])
-						{
+						switch (songNotes[3]) {
 							case "Hurt Note":
 								songNotes[3] = 'mine';
 							case "Hey!":
@@ -139,13 +130,11 @@ class ChartParser
 		return featherSong;
 	}
 
-	public static function loadChartNotes(song:FeatherSong):FeatherSong
-	{
+	public static function loadChartNotes(song:FeatherSong):FeatherSong {
 		noteList = [];
 		eventList = [];
 
-		for (note in song.sectionNotes)
-		{
+		for (note in song.sectionNotes) {
 			var oldNote:Note;
 			if (noteList.length > 0)
 				oldNote = noteList[Std.int(noteList.length - 1)];
@@ -153,18 +142,17 @@ class ChartParser
 				oldNote = null;
 
 			var swagNote:Note = new Note(note.time, note.index, note.type, false, oldNote);
+
 			swagNote.speed = song.speed;
 			swagNote.sustainLength = note.holdLength;
 			swagNote.typeData.type = note.type;
 			swagNote.scrollFactor.set(0, 0);
 			noteList.push(swagNote);
 
-			if (note.holdLength > 0)
-			{
+			if (note.holdLength > 0) {
 				var holdLength:Int = Math.floor(swagNote.sustainLength / Conductor.stepCrochet);
 
-				for (holdNote in 0...holdLength)
-				{
+				for (holdNote in 0...holdLength) {
 					oldNote = noteList[Std.int(noteList.length - 1)];
 
 					var sustainNote:Note = new Note(note.time + (Conductor.stepCrochet * holdNote) + Conductor.stepCrochet, note.index, note.type, true,
@@ -182,10 +170,8 @@ class ChartParser
 		noteList.sort(function(a:Note, b:Note):Int return FlxSort.byValues(FlxSort.ASCENDING, a.step, b.step));
 
 		// events
-		if (song.sectionEvents.length > 0)
-		{
-			for (i in 0...song.sectionEvents.length)
-			{
+		if (song.sectionEvents.length > 0) {
+			for (i in 0...song.sectionEvents.length) {
 				var newEvent:TimedEvent = cast {
 					name: song.sectionEvents[i].name,
 					step: song.sectionEvents[i].step,
@@ -200,14 +186,11 @@ class ChartParser
 		return song;
 	}
 
-	public static function parseChartLegacy(dataSent:SwagSong):Array<Note>
-	{
+	public static function parseChartLegacy(dataSent:SwagSong):Array<Note> {
 		var arrayNotes:Array<Note> = [];
 
-		for (section in dataSent.notes)
-		{
-			for (songNotes in section.sectionNotes)
-			{
+		for (section in dataSent.notes) {
+			for (songNotes in section.sectionNotes) {
 				var daStrumTime:Float = songNotes[0];
 				var daNoteData:Int = Std.int(songNotes[1] % 4);
 
@@ -233,8 +216,7 @@ class ChartParser
 				susLength = susLength / Conductor.stepCrochet;
 				arrayNotes.push(swagNote);
 
-				for (susNote in 0...Math.floor(susLength))
-				{
+				for (susNote in 0...Math.floor(susLength)) {
 					oldNote = arrayNotes[Std.int(arrayNotes.length - 1)];
 
 					var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet, daNoteData, 'default', true,

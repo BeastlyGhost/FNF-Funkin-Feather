@@ -11,8 +11,7 @@ import openfl.display.Sprite;
 	the `Main` class initializes our game along with a few useful tools for it,
 	you may not find use for it unless you wanna change existing variales on it
 **/
-class Main extends Sprite
-{
+class Main extends Sprite {
 	public static var game = {
 		width: 1280, // the game window width
 		height: 720, // the game window height
@@ -29,8 +28,7 @@ class Main extends Sprite
 	public static function main():Void
 		Lib.current.addChild(new Main());
 
-	public function new():Void
-	{
+	public function new():Void {
 		super();
 
 		// initialize the game controls for later use
@@ -43,8 +41,7 @@ class Main extends Sprite
 		var stageWidth:Int = Lib.current.stage.stageWidth;
 		var stageHeight:Int = Lib.current.stage.stageHeight;
 
-		if (game.zoom == -1.0)
-		{
+		if (game.zoom == -1.0) {
 			var ratioX:Float = stageWidth / game.width;
 			var ratioY:Float = stageHeight / game.height;
 			game.zoom = Math.min(ratioX, ratioY);
@@ -70,31 +67,25 @@ class Main extends Sprite
 		addEvents();
 	}
 
-	private function addEvents():Void
-	{
-		FlxG.signals.preStateCreate.add(function(state:flixel.FlxState)
-		{
+	private function addEvents():Void {
+		FlxG.signals.preStateCreate.add(function(state:flixel.FlxState) {
 			// clear unused (and stored, if allowed) memory
 			AssetHelper.clear(true, (!Std.isOfType(state, funkin.states.PlayState)));
 		});
 
-		FlxG.stage.application.onUpdate.add(function(elapsed:Float):Void
-		{
+		FlxG.stage.application.onUpdate.add(function(elapsed:Float):Void {
 			FSound.update();
 		});
 
-		FlxG.signals.focusGained.add(function()
-		{
+		FlxG.signals.focusGained.add(function() {
 			FSound.gainFocus();
 		});
 
-		FlxG.signals.focusLost.add(function()
-		{
+		FlxG.signals.focusLost.add(function() {
 			FSound.loseFocus();
 		});
 
-		FlxG.stage.application.window.onClose.add(function()
-		{
+		FlxG.stage.application.window.onClose.add(function() {
 			Controls.destroy();
 			DiscordRPC.destroy();
 			FSound.destroy();

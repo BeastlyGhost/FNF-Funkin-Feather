@@ -7,8 +7,7 @@ import flixel.util.FlxSignal.FlxTypedSignal;
 import openfl.events.KeyboardEvent;
 import openfl.ui.Keyboard;
 
-typedef Action =
-{
+typedef Action = {
 	var keyboard:Array<Int>;
 	var gamepad:Array<FlxGamepadInputID>;
 	var id:Int;
@@ -20,8 +19,7 @@ typedef KeyCall = (Int, String, Bool) -> Void; // for convenience
 	the Controls Class manages the main inputs for the game,
 	it can be used by every other class for any type of event
 **/
-class Controls
-{
+class Controls {
 	public static final defaultActions:Map<String, Action> = [
 		"left" => {keyboard: [Keyboard.LEFT, Keyboard.D], gamepad: [DPAD_LEFT, LEFT_STICK_DIGITAL_LEFT], id: 1},
 		"down" => {keyboard: [Keyboard.DOWN, Keyboard.F], gamepad: [DPAD_DOWN, LEFT_STICK_DIGITAL_DOWN], id: 2},
@@ -38,8 +36,7 @@ class Controls
 
 	static var keysHeld:Array<Int> = []; // for keyboard keys
 
-	public static function init():Void
-	{
+	public static function init():Void {
 		actions = defaultActions.copy();
 
 		FlxG.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
@@ -48,8 +45,7 @@ class Controls
 		FlxG.signals.preUpdate.add(update);
 	}
 
-	public static function destroy():Void
-	{
+	public static function destroy():Void {
 		actions = null;
 
 		FlxG.stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
@@ -58,31 +54,25 @@ class Controls
 		FlxG.signals.preUpdate.remove(update);
 	}
 
-	public static function getActionFromKey(key:Int, isGamepad:Bool = false):String
-	{
-		for (id => action in actions)
-		{
+	public static function getActionFromKey(key:Int, isGamepad:Bool = false):String {
+		for (id => action in actions) {
 			if ((!isGamepad && action.keyboard.contains(key)) || (isGamepad && action.gamepad.contains(key)))
 				return id;
 		}
 		return null;
 	}
 
-	public static function isJustPressed(action:String):Bool
-	{
+	public static function isJustPressed(action:String):Bool {
 		var action:Action = actions.get(action);
 
-		for (key in action.keyboard)
-		{
+		for (key in action.keyboard) {
 			if (keysHeld.contains(key) && FlxG.keys.checkStatus(key, JUST_PRESSED))
 				return true;
 		}
 
 		var gamepad:FlxGamepad = FlxG.gamepads.lastActive;
-		if (gamepad != null)
-		{
-			for (key in action.gamepad)
-			{
+		if (gamepad != null) {
+			for (key in action.gamepad) {
 				if (gamepad.checkStatus(key, JUST_PRESSED))
 					return true;
 			}
@@ -91,21 +81,17 @@ class Controls
 		return false;
 	}
 
-	public static function isPressed(action:String):Bool
-	{
+	public static function isPressed(action:String):Bool {
 		var action:Action = actions.get(action);
 
-		for (key in action.keyboard)
-		{
+		for (key in action.keyboard) {
 			if (keysHeld.contains(key))
 				return true;
 		}
 
 		var gamepad:FlxGamepad = FlxG.gamepads.lastActive;
-		if (gamepad != null)
-		{
-			for (key in action.gamepad)
-			{
+		if (gamepad != null) {
+			for (key in action.gamepad) {
 				if (gamepad.checkStatus(key, PRESSED))
 					return true;
 			}
@@ -114,33 +100,25 @@ class Controls
 		return false;
 	}
 
-	static function onKeyDown(evt:KeyboardEvent):Void
-	{
-		if (FlxG.keys.enabled && (FlxG.state.active || FlxG.state.persistentUpdate) && !keysHeld.contains(evt.keyCode))
-		{
+	static function onKeyDown(evt:KeyboardEvent):Void {
+		if (FlxG.keys.enabled && (FlxG.state.active || FlxG.state.persistentUpdate) && !keysHeld.contains(evt.keyCode)) {
 			keysHeld.push(evt.keyCode);
 			onKeyPressed.dispatch(evt.keyCode, getActionFromKey(evt.keyCode), false);
 		}
 	}
 
-	static function onKeyUp(evt:KeyboardEvent):Void
-	{
-		if (FlxG.keys.enabled && (FlxG.state.active || FlxG.state.persistentUpdate) && keysHeld.contains(evt.keyCode))
-		{
+	static function onKeyUp(evt:KeyboardEvent):Void {
+		if (FlxG.keys.enabled && (FlxG.state.active || FlxG.state.persistentUpdate) && keysHeld.contains(evt.keyCode)) {
 			keysHeld.remove(evt.keyCode);
 			onKeyReleased.dispatch(evt.keyCode, getActionFromKey(evt.keyCode), false);
 		}
 	}
 
-	static function update():Void
-	{
+	static function update():Void {
 		var gamepad:FlxGamepad = FlxG.gamepads.lastActive;
-		if (gamepad != null)
-		{
-			for (id => action in actions)
-			{
-				for (key in action.gamepad)
-				{
+		if (gamepad != null) {
+			for (id => action in actions) {
+				for (key in action.gamepad) {
 					if (gamepad.checkStatus(key, JUST_PRESSED))
 						onKeyPressed.dispatch(key, id, true);
 					if (gamepad.checkStatus(key, JUST_RELEASED))

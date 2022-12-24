@@ -13,8 +13,7 @@ import sys.io.File;
 	Enumerator for Asset Types, right now, there isn't much going on with this
 	it just defines what Asset Type we are dealing with, and gives extensions to said asset type
 **/
-enum AssetType
-{
+enum AssetType {
 	DIRECTORY;
 	SPARROW;
 	PACKER;
@@ -32,8 +31,7 @@ enum AssetType
 	Typedefine for Cached Assets, simply put, it defines what `type` an asset is, and what data it comes with
 	data can be anything, as we are going to use it to later `grab` it in order to manage said data
 **/
-typedef CacheableAsset =
-{
+typedef CacheableAsset = {
 	var type:AssetType;
 	var data:Dynamic;
 }
@@ -41,8 +39,7 @@ typedef CacheableAsset =
 /**
 	This is the Assets Class, meant to allow access to assets, and manage used ones
 **/
-class AssetHelper
-{
+class AssetHelper {
 	/**
 		Stores only user-preferred assets that should not be cleared when `clear` is called
 	**/
@@ -93,16 +90,13 @@ class AssetHelper
 
 		@return your asset path along with the asset the extension(s) for said if existing
 	**/
-	public static function grabAsset(asset:String, type:AssetType, ?directory:String, ?group:String):Dynamic
-	{
+	public static function grabAsset(asset:String, type:AssetType, ?directory:String, ?group:String):Dynamic {
 		//
 		var pathExtend:String = (directory != null ? '$directory/' : '');
 		var path:String = grabRoot('$pathExtend$asset', type, group);
 
-		if (FileSystem.exists(path))
-		{
-			switch (type)
-			{
+		if (FileSystem.exists(path)) {
+			switch (type) {
 				case JSON:
 					var json:String = File.getContent(path);
 					while (!json.endsWith("}"))
@@ -133,10 +127,8 @@ class AssetHelper
 		@param outputDir the directory we should look for
 		@return uses `FlxGraphic`'s `fromBitmapData` function to return your graphic asset
 	**/
-	public static function grabGraphic(outputDir:String):FlxGraphic
-	{
-		if (!mappedAssets[IMAGE].exists(outputDir))
-		{
+	public static function grabGraphic(outputDir:String):FlxGraphic {
+		if (!mappedAssets[IMAGE].exists(outputDir)) {
 			var myGraphic:FlxGraphic = FlxGraphic.fromAssetKey(outputDir, false, null, false);
 			myGraphic.persist = true;
 			mappedAssets[IMAGE].set(outputDir, {type: IMAGE, data: myGraphic});
@@ -150,8 +142,7 @@ class AssetHelper
 		@param outputDir the directory we should look for
 		@return the output graphic from within the mapped assets map
 	**/
-	public static function returnGraphic(outputDir:String):FlxGraphic
-	{
+	public static function returnGraphic(outputDir:String):FlxGraphic {
 		if (FlxG.bitmap.checkCache(outputDir))
 			return FlxG.bitmap.get(outputDir);
 		else if (mappedAssets[IMAGE].exists(outputDir))
@@ -166,8 +157,7 @@ class AssetHelper
 		@param outputDir the directory we should look for
 		@return uses OpenFL's sound feature to return a sound from the specified directory
 	**/
-	public static function grabSound(outputDir:String):Sound
-	{
+	public static function grabSound(outputDir:String):Sound {
 		if (!mappedAssets[SOUND].exists(outputDir))
 			mappedAssets[SOUND].set(outputDir, {type: SOUND, data: Sound.fromFile(outputDir)});
 		trackedAssets.push(outputDir);
@@ -180,8 +170,7 @@ class AssetHelper
 		@param type the type of asset you need, leave it as blank for returning a directory instead
 		@return the main assets directory with a specified subdirectory (and extension, if type is given)
 	**/
-	public static function grabRoot(directory:String, ?type:AssetType, ?group:String):String
-	{
+	public static function grabRoot(directory:String, ?type:AssetType, ?group:String):String {
 		//
 		var assetExtend:String = '';
 		var assetGroup:AssetGroup = new AssetGroup();
@@ -189,8 +178,7 @@ class AssetHelper
 		if (type == null)
 			type = DIRECTORY;
 
-		if (group == null)
-		{
+		if (group == null) {
 			// search for every group
 			var groupTemp:String = assetGroup.getFromDirs(directory, type);
 			if (groupTemp != null)
@@ -212,11 +200,9 @@ class AssetHelper
 		@param type the asset type (like: image, font, sound)
 		 @return if extension is valid, returns your path with the extension, else only the path
 	**/
-	public static function getExtensions(dir:String, type:AssetType):String
-	{
+	public static function getExtensions(dir:String, type:AssetType):String {
 		var extensions:Array<String> = null;
-		switch (type)
-		{
+		switch (type) {
 			case IMAGE:
 				extensions = ['.png', '.jpg'];
 			case VIDEO:
@@ -239,10 +225,8 @@ class AssetHelper
 				extensions = null;
 		}
 
-		if (extensions != null)
-		{
-			for (i in extensions)
-			{
+		if (extensions != null) {
+			for (i in extensions) {
 				var assetPath:String = '$dir$i';
 				if (FileSystem.exists(assetPath))
 					return assetPath;
@@ -256,16 +240,12 @@ class AssetHelper
 		Simply put, this clears all tracked assets that exist on the `trackedAssets` array
 		@param clearMappedImages whether images should also be cleared along with sounds
 	**/
-	public static function clear(clearUnusedImages:Bool, ?clearMappedImages:Bool):Void
-	{
-		if (clearMappedImages)
-		{
+	public static function clear(clearUnusedImages:Bool, ?clearMappedImages:Bool):Void {
+		if (clearMappedImages) {
 			@:privateAccess
-			for (asset in FlxG.bitmap._cache.keys())
-			{
+			for (asset in FlxG.bitmap._cache.keys()) {
 				var bitmap = FlxG.bitmap._cache.get(asset);
-				if (bitmap != null && !mappedAssets[IMAGE].exists(asset))
-				{
+				if (bitmap != null && !mappedAssets[IMAGE].exists(asset)) {
 					Assets.cache.removeBitmapData(asset);
 					FlxG.bitmap._cache.remove(asset);
 					bitmap.destroy();
@@ -273,19 +253,14 @@ class AssetHelper
 			}
 		}
 
-		if (clearUnusedImages)
-		{
-			for (asset in mappedAssets[IMAGE].keys())
-			{
-				if (!persistentAssets.contains(asset) && !trackedAssets.contains(asset))
-				{
+		if (clearUnusedImages) {
+			for (asset in mappedAssets[IMAGE].keys()) {
+				if (!persistentAssets.contains(asset) && !trackedAssets.contains(asset)) {
 					// grab the image asset
 					var bitmap = mappedAssets[IMAGE].get(asset);
-					if (bitmap != null)
-					{
+					if (bitmap != null) {
 						@:privateAccess
-						if (Assets.cache.hasBitmapData(bitmap.data))
-						{
+						if (Assets.cache.hasBitmapData(bitmap.data)) {
 							// remove it from the assets cache if it exists, then destroy it
 							Assets.cache.removeBitmapData(bitmap.data);
 							FlxG.bitmap._cache.remove(bitmap.data);
@@ -299,10 +274,8 @@ class AssetHelper
 			}
 		}
 
-		for (asset in mappedAssets[SOUND].keys())
-		{
-			if (asset != null && !persistentAssets.contains(asset) && !trackedAssets.contains(asset))
-			{
+		for (asset in mappedAssets[SOUND].keys()) {
+			if (asset != null && !persistentAssets.contains(asset) && !trackedAssets.contains(asset)) {
 				Assets.cache.clear(asset);
 				mappedAssets[SOUND].remove(asset);
 			}

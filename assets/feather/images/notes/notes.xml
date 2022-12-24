@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<TextureAtlas imagePath="notes.png">
+	<!-- Created with Adobe Flash CS6 version 12.0.0.481 -->
+	<!-- http://www.adobe.com/products/flash.html -->
+	<SubTexture name="note0000" x="2" y="263" width="158" height="158"/>
+	<SubTexture name="note end0000" x="654" y="263" width="50" height="64"/>
+	<SubTexture name="note hold0000" x="654" y="332" width="50" height="44"/>
+	<SubTexture name="strum0000" x="165" y="263" width="158" height="158"/>
+	<SubTexture name="strum confirm0000" x="2" y="2" width="256" height="256"/>
+	<SubTexture name="strum confirm0001" x="263" y="2" width="256" height="256"/>
+	<SubTexture name="strum confirm0002" x="524" y="2" width="256" height="256"/>
+	<SubTexture name="strum confirm0003" x="524" y="2" width="256" height="256"/>
+	<SubTexture name="strum press0000" x="328" y="263" width="158" height="158"/>
+	<SubTexture name="strum press0001" x="328" y="263" width="158" height="158"/>
+	<SubTexture name="strum press0002" x="491" y="263" width="158" height="158"/>
+	<SubTexture name="strum press0003" x="491" y="263" width="158" height="158"/>
+</TextureAtlas>

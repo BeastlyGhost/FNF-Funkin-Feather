@@ -11,8 +11,7 @@ import sys.FileSystem;
 	the Icon class handles the little icons that appear bouncing on the User Interface,
 	they often show up following the Health Bar
 **/
-class Icon extends FlxSprite
-{
+class Icon extends FlxSprite {
 	public var parentSprite:FlxSprite;
 	public var initialWidth:Float = 0;
 	public var initialHeight:Float = 0;
@@ -22,8 +21,7 @@ class Icon extends FlxSprite
 	public var character:String = 'bf';
 	public var suffix:String = '';
 
-	public function new(character:String = 'bf', flip:Bool = false):Void
-	{
+	public function new(character:String = 'bf', flip:Bool = false):Void {
 		super();
 
 		setIcon(character, flip);
@@ -31,8 +29,7 @@ class Icon extends FlxSprite
 
 	var bopTween:FlxTween;
 
-	public function doBops(time:Float):Void
-	{
+	public function doBops(time:Float):Void {
 		if (!shouldBop)
 			return;
 
@@ -42,28 +39,23 @@ class Icon extends FlxSprite
 		bopTween = FlxTween.tween(this.scale, {x: 1, y: 1}, time / Conductor.songRate, {ease: FlxEase.expoOut});
 	}
 
-	public dynamic function updateFrame(health:Float):Void
-	{
-		if (graphic != null)
-		{
+	public dynamic function updateFrame(health:Float):Void {
+		if (graphic != null) {
 			animation.curAnim.curFrame = 0;
 
-			if (frames != null)
-			{
+			if (frames != null) {
 				if (health < 20)
 					animation.curAnim.curFrame = 1;
 			}
 		}
 	}
 
-	public function setIcon(char:String, beFlipped:Bool):Void
-	{
+	public function setIcon(char:String, beFlipped:Bool):Void {
 		var stringTrim:String = char;
 		if (stringTrim.contains('-'))
 			stringTrim = stringTrim.substring(0, stringTrim.indexOf('-'));
 
-		if (!FileSystem.exists(AssetHelper.grabAsset('$char/icon$suffix', IMAGE, 'data/characters')))
-		{
+		if (!FileSystem.exists(AssetHelper.grabAsset('$char/icon$suffix', IMAGE, 'data/characters'))) {
 			if (char != stringTrim)
 				char = stringTrim;
 			else
@@ -89,12 +81,10 @@ class Icon extends FlxSprite
 		scrollFactor.set();
 	}
 
-	override function update(elapsed:Float):Void
-	{
+	override function update(elapsed:Float):Void {
 		super.update(elapsed);
 
-		if (frames != null && parentSprite != null)
-		{
+		if (frames != null && parentSprite != null) {
 			setPosition(parentSprite.x + parentSprite.width + 10, parentSprite.y - 30);
 			scrollFactor.set(parentSprite.scrollFactor.x, parentSprite.scrollFactor.y);
 		}

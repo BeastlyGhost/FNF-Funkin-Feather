@@ -2,22 +2,19 @@ package feather;
 
 import flixel.FlxG;
 
-enum OptionType
-{
+enum OptionType {
 	CHECKMARK;
 	SELECTOR;
 	DYNAMIC;
 }
 
-enum OptionAttribute
-{
+enum OptionAttribute {
 	DEFAULT;
 	UNCHANGEABLE; // always force an option on it's default value
 	UNSELECTABLE;
 }
 
-typedef OptionForm =
-{
+typedef OptionForm = {
 	var name:String;
 	var ?value:Dynamic;
 	var ?values:Array<Dynamic>;
@@ -29,8 +26,7 @@ typedef OptionForm =
 /**
  * a Class that stores every game setting, along with functions to control game settings
 **/
-class OptionsAPI
-{
+class OptionsAPI {
 	/**
 		this is our preferences list, it stores `category` names along with their contents
 
@@ -100,6 +96,15 @@ class OptionsAPI
 				value: "Feather",
 				values: ["Vanilla", "Feather"]
 			},
+			/**
+				{
+					name: "Note Quant Style",
+					description: "Choose your Note Quants Style.",
+					type: SELECTOR,
+					value: "none",
+					values: ["none", "stepmania", "forever"]
+				},
+			**/
 			{
 				name: "Note Splash Opacity",
 				description: "Set the opacity for your Note Splashes, shown when hitting \"Sick!\" Ratings on Notes.",
@@ -178,8 +183,7 @@ class OptionsAPI
 	/**
 		[Saves your game preferences]
 	**/
-	public static function savePrefs():Void
-	{
+	public static function savePrefs():Void {
 		bindSave("Feather-Settings");
 		if (myPreferences != null)
 			FlxG.save.data.globalSettings = myPreferences;
@@ -189,25 +193,20 @@ class OptionsAPI
 	/**
 		[Loads your game preferences]
 	**/
-	public static function loadPrefs():Void
-	{
+	public static function loadPrefs():Void {
 		bindSave("Feather-Settings");
 
 		// reset your preferences to the defaults
-		for (key => keys in preferencesList)
-		{
-			if (key != "master" && key != "custom settings")
+		for (key => keys in preferencesList) {
+			if (key != "master")
 				myPreferences.set(key, keys);
 		}
 
-		if (FlxG.save.data.globalSettings != null)
-		{
+		if (FlxG.save.data.globalSettings != null) {
 			// grab from your save file
-			try
-			{
+			try {
 				var savedPreferences:Map<String, Array<OptionForm>> = FlxG.save.data.globalSettings;
-				for (key => keys in savedPreferences)
-				{
+				for (key => keys in savedPreferences) {
 					// this checks if the key exists on the DEFAULT preferences list
 					// if it does, then it sets your preferences to the save keys
 					// that way saves won't have to be deleted if preferences change overtime
@@ -216,12 +215,9 @@ class OptionsAPI
 				}
 			}
 			catch (e:Dynamic)
-			{
 				throw('Something went wrong while loading your saved preferences');
-			}
-		}
-		else
-			FlxG.save.data.globalSettings = new Map<String, Array<OptionForm>>();
+		} else
+			FlxG.save.data.globalSettings = [];
 
 		if (FlxG.save.data.volume != null)
 			FlxG.sound.volume = FlxG.save.data.volume;
@@ -235,29 +231,24 @@ class OptionsAPI
 		@param getValue if the option `value` should be returned instead of the option itself
 		@return your preference, or the default value for it
 	**/
-	public static function getPref(name:String, getValue:Bool = true):Dynamic
-	{
+	public static function getPref(name:String, getValue:Bool = true):Dynamic {
 		bindSave("Feather-Settings");
 
-		for (category => contents in preferencesList)
-		{
-			try
-			{
-				var chosenMap:Map<String, Array<OptionForm>> = [];
+		for (category => contents in preferencesList) {
+			try {
+				var chosenMap:Map<String, Array<OptionForm>> = preferencesList;
 				var hasCategory:Bool = (myPreferences != null && myPreferences.exists(category) && myPreferences.get(category) != null);
 
-				chosenMap = (hasCategory ? myPreferences : preferencesList);
+				// chosenMap = (hasCategory ? myPreferences : preferencesList);
 
-				for (i in 0...contents.length)
-				{
+				for (i in 0...contents.length) {
 					var myOption:OptionForm = chosenMap.get(category)[i];
 					if (myOption.name == name && myOption.type != DYNAMIC)
 						return (getValue ? myOption.value : myOption);
 				}
 			}
-			catch (e:Dynamic)
-			{
-				throw('Something went wrong while trying to catch this Preference: "$name"');
+			catch (e:Dynamic) {
+				throw('Something went wrong while trying to catch this Preference: "$name", Error: $e');
 				return null;
 			}
 		}
@@ -271,28 +262,23 @@ class OptionsAPI
 		@param name the `name` of your desired preference
 		@param newValue the new value for your option
 	**/
-	public static function setPref(name:String, newValue:Dynamic):Void
-	{
+	public static function setPref(name:String, newValue:Dynamic):Void {
 		bindSave("Feather-Settings");
 
-		for (category => contents in preferencesList)
-		{
+		for (category => contents in preferencesList) {
+			var chosenMap:Map<String, Array<OptionForm>> = preferencesList;
 			var hasCategory:Bool = (myPreferences.exists(category) && myPreferences.get(category) != null);
-			var chosenMap:Map<String, Array<OptionForm>> = [];
-			chosenMap = (hasCategory ? myPreferences : preferencesList);
 
-			for (i in 0...contents.length)
-			{
+			// chosenMap = (hasCategory ? myPreferences : preferencesList);
+
+			for (i in 0...contents.length) {
 				var myOption:OptionForm = chosenMap.get(category)[i];
-				try
-				{
+				try {
 					if (myOption.name == name)
 						myOption.value = newValue;
 				}
 				catch (e:Dynamic)
-				{
-					throw('Something went wrong while trying to catch this Preference: "$name"');
-				}
+					throw('Something went wrong while trying to catch this Preference: "$name", Error: $e');
 			}
 		}
 	}
@@ -300,8 +286,7 @@ class OptionsAPI
 	/**
 		[Updates default game preferences data if needed]
 	**/
-	public static function updatePrefs():Void
-	{
+	public static function updatePrefs():Void {
 		bindSave("Feather-Settings");
 
 		if (getPref("Skip Splash Screen") != null)
@@ -330,17 +315,13 @@ class OptionsAPI
 		FlxG.autoPause = autoPause;
 	}
 
-	public static function bindSave(name:String):Void
-	{
+	public static function bindSave(name:String):Void {
 		// PlumaSave.bind(name);
-		try
-		{
+		try {
 			if (FlxG.save.name != name)
 				FlxG.save.bind(name, PlumaSave.getSavePath());
 		}
 		catch (e:Dynamic)
-		{
-			trace('Unexpected Error when binding save, file name was "$name"');
-		}
+			trace('Unexpected Error when binding save, file name was "$name", Error: $e');
 	}
 }

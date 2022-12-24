@@ -19,10 +19,8 @@ import funkin.objects.ui.fonts.Alphabet;
 
 	@since INFDEV
 **/
-class ModsMenu extends BaseMenu
-{
-	override function create():Void
-	{
+class ModsMenu extends BaseMenu {
+	override function create():Void {
 		super.create();
 
 		DiscordRPC.update("MODS MENU", "Navigating through the Main Menus");
@@ -37,28 +35,24 @@ class ModsMenu extends BaseMenu
 		updateSelection();
 	}
 
-	override function update(elapsed:Float):Void
-	{
+	override function update(elapsed:Float):Void {
 		updateSelection(Controls.isJustPressed("up") ? -1 : Controls.isJustPressed("down") ? 1 : 0);
 
 		if (Controls.isJustPressed("back"))
 			MusicState.switchState(new MainMenu());
 	}
 
-	override function updateSelection(newSelection:Int = 0):Void
-	{
+	override function updateSelection(newSelection:Int = 0):Void {
 		super.updateSelection(newSelection);
 
 		if (newSelection != 0)
 			FSound.playSound("scrollMenu", "sounds/menus");
 	}
 
-	function generateOptions():FlxTypedGroup<Alphabet>
-	{
+	function generateOptions():FlxTypedGroup<Alphabet> {
 		var tempContainer:FlxTypedGroup<Alphabet> = new FlxTypedGroup<Alphabet>();
 
-		for (i in 0...AssetGroup.allGroups.length)
-		{
+		for (i in 0...AssetGroup.allGroups.length) {
 			var optionTxt:Alphabet = new Alphabet(0, 0, AssetGroup.allGroups[i], false);
 			optionTxt.screenCenter();
 			optionTxt.y += (125 * (i - Math.floor(AssetGroup.allGroups.length / 2)));
@@ -74,8 +68,7 @@ class ModsMenu extends BaseMenu
 		return tempContainer;
 	}
 
-	function openManagerSubmenu():Void
-	{
+	function openManagerSubmenu():Void {
 		//
 	}
 }

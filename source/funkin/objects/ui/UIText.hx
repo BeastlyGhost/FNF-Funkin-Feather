@@ -2,8 +2,7 @@ package funkin.objects.ui;
 
 import flixel.text.FlxText;
 
-enum TextType
-{
+enum TextType {
 	SCORETEXT;
 	AUTOPLAY;
 }
@@ -11,19 +10,16 @@ enum TextType
 /**
 	FlxText Extension used for the user interface texts
 **/
-class UIText extends FlxText
-{
+class UIText extends FlxText {
 	var ui:String = OptionsAPI.getPref("User Interface Style");
 	var align:FlxTextAlign = LEFT;
 	var fontName:String = "vcr";
 	var textSize:Int = 20;
 
-	public override function new(X:Float = 0, Y:Float = 0, FieldWidth:Float = 0, TextType:TextType):Void
-	{
+	public override function new(X:Float = 0, Y:Float = 0, FieldWidth:Float = 0, TextType:TextType):Void {
 		super(X, Y, FieldWidth, '', 8, true);
 
-		switch (TextType)
-		{
+		switch (TextType) {
 			case SCORETEXT:
 				textSize = (ui == "Feather" ? 20 : 16);
 				align = (ui == "Feather" ? CENTER : LEFT);
@@ -32,8 +28,7 @@ class UIText extends FlxText
 				align = CENTER;
 		}
 
-		switch (ui)
-		{
+		switch (ui) {
 			case "Feather":
 				fontName = "muff-bold";
 				setFormat(AssetHelper.grabAsset(fontName, FONT, "data/fonts"), textSize, 0xFFFFFFFF, CENTER, SHADOW, 0xFF000000);

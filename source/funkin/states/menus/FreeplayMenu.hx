@@ -20,8 +20,7 @@ import openfl.media.Sound;
 
 	when selecting songs here, things like the Chart Editor will be allowed during gameplay
 **/
-class FreeplayMenu extends BaseMenu
-{
+class FreeplayMenu extends BaseMenu {
 	var songList:Array<SongListForm> = [];
 
 	var iconContainer:Array<Icon> = [];
@@ -44,8 +43,7 @@ class FreeplayMenu extends BaseMenu
 	var diffTxt:FlxText;
 	var rateTxt:FlxText;
 
-	override function create():Void
-	{
+	override function create():Void {
 		super.create();
 
 		bgImage = 'menuDesat';
@@ -62,15 +60,13 @@ class FreeplayMenu extends BaseMenu
 		generateUI();
 	}
 
-	function generateUI():Void
-	{
+	function generateUI():Void {
 		itemContainer = new FlxTypedGroup<Alphabet>();
 		add(itemContainer);
 
-		for (i in 0...songList.length)
-		{
+		for (i in 0...songList.length) {
 			var songText:Alphabet = new Alphabet(0, (70 * i) + 30, songList[i].name, false);
-			songText.isMenuItem = true;
+			songText.displayStyle = LIST;
 			songText.targetY = i;
 			itemContainer.add(songText);
 
@@ -110,8 +106,7 @@ class FreeplayMenu extends BaseMenu
 		updateSelection();
 	}
 
-	override function update(elapsed:Float):Void
-	{
+	override function update(elapsed:Float):Void {
 		super.update(elapsed);
 
 		lerpScore = Math.floor(FlxMath.lerp(lerpScore, intendedScore, 0.4));
@@ -154,14 +149,12 @@ class FreeplayMenu extends BaseMenu
 		if (FlxG.keys.pressed.SHIFT && FlxG.keys.justPressed.R)
 			songRating = 1;
 
-		if (Controls.isJustPressed("back"))
-		{
+		if (Controls.isJustPressed("back")) {
 			MusicState.switchState(new MainMenu());
 			FSound.playSound("cancelMenu", "sounds/menus");
 		}
 
-		if (Controls.isJustPressed("accept"))
-		{
+		if (Controls.isJustPressed("accept")) {
 			if (FlxG.sound.music != null)
 				FlxG.sound.music.stop();
 
@@ -182,8 +175,7 @@ class FreeplayMenu extends BaseMenu
 		}
 	}
 
-	function repositionScore():Void
-	{
+	function repositionScore():Void {
 		// from the base game
 		scoreTxt.x = FlxG.width - scoreTxt.width - 6;
 		scoreBG.scale.x = FlxG.width - scoreTxt.x + 6;
@@ -195,8 +187,7 @@ class FreeplayMenu extends BaseMenu
 		#end
 	}
 
-	public override function updateSelection(newSelection:Int = 0):Void
-	{
+	public override function updateSelection(newSelection:Int = 0):Void {
 		super.updateSelection(newSelection);
 
 		for (i in 0...iconContainer.length)
@@ -208,8 +199,7 @@ class FreeplayMenu extends BaseMenu
 		updateDifficulty();
 	}
 
-	function updateDifficulty(newDifficulty:Int = 0):Void
-	{
+	function updateDifficulty(newDifficulty:Int = 0):Void {
 		selDifficulty = FlxMath.wrap(selDifficulty + newDifficulty, 0, songList[Math.floor(selection)].diffs.length - 1);
 
 		var stringDiff = FeatherUtils.getDifficulty(selDifficulty);

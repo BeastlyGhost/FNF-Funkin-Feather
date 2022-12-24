@@ -15,8 +15,7 @@ import funkin.essentials.song.MusicState;
 import funkin.objects.ui.fonts.Alphabet;
 import funkin.states.menus.MainMenu;
 
-typedef TitleForm =
-{
+typedef TitleForm = {
 	var bg:String;
 	var gf:String;
 	var ng:String;
@@ -33,8 +32,7 @@ typedef TitleForm =
 /**
 	the game's titlescreen, not much is going on about it aside from some wacky letter stuffs!
 **/
-class TitleSubstate extends MusicBeatSubstate
-{
+class TitleSubstate extends MusicBeatSubstate {
 	var introLines:TitleForm;
 
 	var txtContainer:FlxTypedGroup<Alphabet>;
@@ -59,8 +57,7 @@ class TitleSubstate extends MusicBeatSubstate
 	var newTitle:Bool = false;
 	var titleTimer:Float = 0;
 
-	override function create():Void
-	{
+	override function create():Void {
 		super.create();
 
 		introLines = Yaml.read(AssetHelper.grabAsset("titleScreen", YAML, "data/menus"), yaml.Parser.options().useObjects());
@@ -68,8 +65,7 @@ class TitleSubstate extends MusicBeatSubstate
 
 		addObjects();
 
-		if (!started)
-		{
+		if (!started) {
 			DiscordRPC.update("TITLE SCREEN", "Navigating through the Main Menus");
 
 			beginTitle();
@@ -78,17 +74,14 @@ class TitleSubstate extends MusicBeatSubstate
 		}
 	}
 
-	function addObjects():Void
-	{
+	function addObjects():Void {
 		var bg:FlxSprite = new FlxSprite();
-		if (introLines.bg != null && introLines.bg.length > 1)
-		{
+		if (introLines.bg != null && introLines.bg.length > 1) {
 			bg.loadGraphic(AssetHelper.grabAsset(introLines.bg, IMAGE, introLines.bgFolder));
 			bg.setGraphicSize(Std.int(bg.width * introLines.bgSize));
 			bg.antialiasing = introLines.bgAntialias;
 			bg.updateHitbox();
-		}
-		else
+		} else
 			bg.makeGraphic(FlxG.width, FlxG.height, 0xFF000000);
 		add(bg);
 
@@ -108,14 +101,11 @@ class TitleSubstate extends MusicBeatSubstate
 			titleEnter.animation.findByPrefix(animFrames, "ENTER FREEZE");
 		}
 
-		if (animFrames.length > 0)
-		{
+		if (animFrames.length > 0) {
 			newTitle = true;
 			titleEnter.animation.addByPrefix('static', "ENTER IDLE", 24);
 			titleEnter.animation.addByPrefix('confirm', OptionsAPI.getPref("Flashing Lights") ? "ENTER PRESSED" : "ENTER FREEZE", 24);
-		}
-		else
-		{
+		} else {
 			newTitle = false;
 			titleEnter.animation.addByPrefix('static', "Press Enter to Begin", 24);
 			titleEnter.animation.addByPrefix('confirm', "ENTER PRESSED", 24);
@@ -138,11 +128,9 @@ class TitleSubstate extends MusicBeatSubstate
 		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
 	}
 
-	function beginTitle():Void
-	{
+	function beginTitle():Void {
 		//
-		if (!skipped)
-		{
+		if (!skipped) {
 			bgBlack = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, 0xFF000000);
 			add(bgBlack);
 
@@ -154,17 +142,14 @@ class TitleSubstate extends MusicBeatSubstate
 		}
 	}
 
-	override function update(elapsed:Float):Void
-	{
+	override function update(elapsed:Float):Void {
 		if (FlxG.sound.music != null && FlxG.sound.music.playing)
 			Conductor.songPosition = FlxG.sound.music.time;
 
 		super.update(elapsed);
 
-		if (!skipped)
-		{
-			if (newTitle)
-			{
+		if (!skipped) {
+			if (newTitle) {
 				titleTimer += FeatherUtils.boundTo(elapsed, 0, 1);
 				if (titleTimer > 2)
 					titleTimer -= 2;
@@ -175,21 +160,17 @@ class TitleSubstate extends MusicBeatSubstate
 
 				timer = FlxEase.quadInOut(timer);
 
-				if (titleEnter != null)
-				{
+				if (titleEnter != null) {
 					titleEnter.color = FlxColor.interpolate(titleEnterColors[0], titleEnterColors[1], timer);
 					titleEnter.alpha = FlxMath.lerp(titleEnterSines[0], titleEnterSines[1], timer);
 				}
 			}
 
-			if (Controls.isJustPressed("accept"))
-			{
-				if (!onIntro)
-				{
+			if (Controls.isJustPressed("accept")) {
+				if (!onIntro) {
 					skipped = true;
 
-					if (titleEnter != null)
-					{
+					if (titleEnter != null) {
 						titleEnter.color = FlxColor.WHITE;
 						titleEnter.alpha = 1;
 						titleEnter.animation.play('confirm');
@@ -203,11 +184,9 @@ class TitleSubstate extends MusicBeatSubstate
 					// give the main menu the heads up that this is done
 					MainMenu.firstStart = false;
 
-					for (i in 0...cameras.length)
-					{
+					for (i in 0...cameras.length) {
 						FlxTween.tween(cameras[i], {zoom: 1.45, y: 2000}, 2, {
-							onComplete: function(t:FlxTween)
-							{
+							onComplete: function(t:FlxTween) {
 								// send it back to the original position
 								cameras[i].zoom = 1;
 								cameras[i].y = 0;
@@ -216,8 +195,7 @@ class TitleSubstate extends MusicBeatSubstate
 						});
 					}
 
-					new FlxTimer().start(1.25, function(t:FlxTimer)
-					{
+					new FlxTimer().start(1.25, function(t:FlxTimer) {
 						MainMenu.lockedMovement = false;
 
 						MainMenu.instance.updateObjectAlpha(1, true);
@@ -226,8 +204,7 @@ class TitleSubstate extends MusicBeatSubstate
 						close();
 						// MusicState.switchState(new funkin.states.menus.MainMenu());
 					});
-				}
-				else
+				} else
 					endIntro();
 			}
 		}
@@ -236,18 +213,15 @@ class TitleSubstate extends MusicBeatSubstate
 	var isRight:Bool = false;
 	var logoTween:FlxTween;
 
-	override function beatHit():Void
-	{
+	override function beatHit():Void {
 		super.beatHit();
 
-		if (gfDance != null)
-		{
+		if (gfDance != null) {
 			isRight = !isRight;
 			gfDance.animation.play('dance' + (isRight ? 'Right' : 'Left'));
 		}
 
-		if (logoBump != null)
-		{
+		if (logoBump != null) {
 			if (logoTween != null)
 				logoTween.cancel();
 			logoBump.scale.set(1, 1);
@@ -255,14 +229,11 @@ class TitleSubstate extends MusicBeatSubstate
 		}
 	}
 
-	override function stepHit():Void
-	{
+	override function stepHit():Void {
 		super.stepHit();
 
-		if (onIntro)
-		{
-			switch (curStep)
-			{
+		if (onIntro) {
+			switch (curStep) {
 				case 4:
 					createText(['ninjamuffin99', 'phantomArcade', 'kawaisprite', 'evilsk8er']);
 				case 12:
@@ -295,12 +266,10 @@ class TitleSubstate extends MusicBeatSubstate
 		}
 	}
 
-	function getText():Array<Array<String>>
-	{
+	function getText():Array<Array<String>> {
 		var returnArray:Array<Array<String>> = [];
 
-		for (i in 0...introLines.randomText.length)
-		{
+		for (i in 0...introLines.randomText.length) {
 			var text:Array<String> = introLines.randomText[i];
 			returnArray.push(text);
 		}
@@ -308,10 +277,8 @@ class TitleSubstate extends MusicBeatSubstate
 		return returnArray;
 	}
 
-	function createText(textArray:Array<String>):Void
-	{
-		for (i in 0...textArray.length)
-		{
+	function createText(textArray:Array<String>):Void {
+		for (i in 0...textArray.length) {
 			var initialText:Alphabet = new Alphabet(0, 0, textArray[i], false);
 			initialText.screenCenter(X);
 			initialText.y += (i * 60) + 200;
@@ -319,22 +286,19 @@ class TitleSubstate extends MusicBeatSubstate
 		}
 	}
 
-	function addText(text:String):Void
-	{
+	function addText(text:String):Void {
 		var textIntro:Alphabet = new Alphabet(0, 0, text, false);
 		textIntro.screenCenter(X);
 		textIntro.y += (txtContainer.length * 60) + 200;
 		txtContainer.add(textIntro);
 	}
 
-	function deleteText():Void
-	{
+	function deleteText():Void {
 		while (txtContainer.members.length > 0)
 			txtContainer.remove(txtContainer.members[0], true);
 	}
 
-	function endIntro():Void
-	{
+	function endIntro():Void {
 		remove(bgBlack);
 		remove(txtContainer);
 		remove(ngSpr);

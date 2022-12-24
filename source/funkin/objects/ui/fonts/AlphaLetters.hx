@@ -1,21 +1,18 @@
 package funkin.objects.ui.fonts;
 
-typedef Letter =
-{
+typedef Letter = {
 	var ?anim:Null<String>;
 	var ?offset:Array<Float>;
 	var ?boldOffset:Array<Float>;
 }
 
-enum LetterType
-{
+enum LetterType {
 	LETTER;
 	NUMBER;
 	SYMBOL;
 }
 
-class AlphaLetters
-{
+class AlphaLetters {
 	public static var letterList:Map<LetterType, String> = [
 		LETTER => "abcdefghijklmnopqrstuvwxyz",
 		NUMBER => "\\/|~#$%()*+-:;<=>@[]^_.,'\"´!?",

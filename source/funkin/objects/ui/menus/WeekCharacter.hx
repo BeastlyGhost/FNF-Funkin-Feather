@@ -3,28 +3,24 @@ package funkin.objects.ui.menus;
 import flixel.FlxSprite;
 import sys.FileSystem;
 
-typedef WeekCharacterData =
-{
+typedef WeekCharacterData = {
 	var image:String;
 	var scale:Float;
 	var position:Array<Int>;
-	var animations:
-		{
-			var idle:Array<Dynamic>;
-			var confirm:Array<Dynamic>;
-		};
+	var animations:{
+		var idle:Array<Dynamic>;
+		var confirm:Array<Dynamic>;
+	};
 	var flipX:Bool;
 }
 
-class WeekCharacter extends FlxSprite
-{
+class WeekCharacter extends FlxSprite {
 	var charData:WeekCharacterData;
 
 	var baseX:Float = 0;
 	var baseY:Float = 0;
 
-	public function new(x:Float, char:String = 'bf'):Void
-	{
+	public function new(x:Float, char:String = 'bf'):Void {
 		super(x);
 
 		baseX = x;
@@ -33,8 +29,7 @@ class WeekCharacter extends FlxSprite
 		createCharacter(char);
 	}
 
-	public function createCharacter(char:String = 'bf'):Void
-	{
+	public function createCharacter(char:String = 'bf'):Void {
 		var pathRaw = AssetHelper.grabAsset(char, YAML, "images/menus/story/characters");
 
 		var yamlRaw = null;
@@ -47,21 +42,15 @@ class WeekCharacter extends FlxSprite
 		charData = Yaml.read(yamlRaw, yaml.Parser.options().useObjects());
 
 		try
-		{
-			frames = AssetHelper.grabAsset(charData.image, SPARROW, "images/menus/story/characters");
-		}
+			frames = AssetHelper.grabAsset(charData.image, SPARROW, "images/menus/story/characters")
 		catch (e)
-		{
 			frames = null;
-		}
 
-		if (char != null || char != '')
-		{
+		if (char != null || char != '') {
 			if (!visible)
 				visible = true;
 
-			if (frames != null)
-			{
+			if (frames != null) {
 				animation.addByPrefix('idle', charData.animations.idle[0], charData.animations.confirm[1], charData.animations.confirm[2]);
 
 				if (charData.animations.confirm != null)
@@ -75,8 +64,7 @@ class WeekCharacter extends FlxSprite
 			}
 
 			flipX = charData.flipX;
-		}
-		else
+		} else
 			visible = false;
 	}
 }

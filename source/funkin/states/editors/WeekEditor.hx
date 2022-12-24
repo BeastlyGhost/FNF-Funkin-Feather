@@ -5,8 +5,7 @@ import funkin.essentials.song.MusicState;
 import funkin.objects.ui.menus.WeekCharacter;
 import funkin.objects.ui.menus.WeekItem;
 
-class WeekEditor extends MusicBeatState
-{
+class WeekEditor extends MusicBeatState {
 	var weekContainer:FlxTypedGroup<WeekItem>;
 	var characterContainer:FlxTypedGroup<WeekCharacter>;
 }

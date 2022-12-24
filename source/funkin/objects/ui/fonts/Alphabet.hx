@@ -8,16 +8,19 @@ import flixel.math.FlxPoint;
 import flixel.util.FlxColor;
 import funkin.objects.ui.fonts.AlphaLetters;
 
+enum AlphaDisplay {
+	BASE;
+	LIST;
+}
+
 /**
 	Loosley based on FlxTypeText lolol
 **/
-class Alphabet extends FlxTypedSpriteGroup<LetterSprite>
-{
+class Alphabet extends FlxTypedSpriteGroup<LetterSprite> {
 	public var text(default, set):String;
 	public var words:Array<String> = [];
 
-	public function set_text(tempText:String):String
-	{
+	public function set_text(tempText:String):String {
 		tempText = tempText.replace('\\n', '\n');
 		this.text = tempText;
 		return tempText;
@@ -26,7 +29,7 @@ class Alphabet extends FlxTypedSpriteGroup<LetterSprite>
 	public var isBold:Bool = false;
 
 	// for menu shit
-	public var isMenuItem:Bool = false;
+	public var displayStyle:AlphaDisplay = BASE;
 	public var forceX:Float = Math.NEGATIVE_INFINITY;
 	public var disableX:Bool = false;
 	public var displacement:FlxPoint;
@@ -38,10 +41,8 @@ class Alphabet extends FlxTypedSpriteGroup<LetterSprite>
 	var xPosResetted:Bool = false;
 	var sectionSpaces:Int = 0;
 
-	public override function set_color(color:Int):Int
-	{
-		for (char in group.members)
-		{
+	public override function set_color(color:Int):Int {
+		for (char in group.members) {
 			if (char is LetterSprite) // this *should* address errors hopefully
 			{
 				//
@@ -53,8 +54,7 @@ class Alphabet extends FlxTypedSpriteGroup<LetterSprite>
 		return super.set_color(color);
 	}
 
-	public function new(x:Float = 0, y:Float = 0, text:String = "", isBold:Bool = false):Void
-	{
+	public function new(x:Float = 0, y:Float = 0, text:String = "", isBold:Bool = false):Void {
 		super(x, y);
 
 		displacement = new FlxPoint(0, 0);
@@ -68,13 +68,11 @@ class Alphabet extends FlxTypedSpriteGroup<LetterSprite>
 			addText();
 	}
 
-	public function addText():Void
-	{
+	public function addText():Void {
 		words = text.split("");
 
 		var xPos:Float = 0;
-		for (character in words)
-		{
+		for (character in words) {
 			var isSpace:Bool = (character == " " || character == "_");
 			if (isSpace)
 				sectionSpaces++;
@@ -83,8 +81,7 @@ class Alphabet extends FlxTypedSpriteGroup<LetterSprite>
 			var indexSymbol:Bool = LetterSprite.getIndex(character, SYMBOL) != -1;
 			var indexNumber:Bool = LetterSprite.getIndex(character, NUMBER) != -1;
 
-			if ((indexLetter || indexSymbol || indexNumber) && (!isBold || !isSpace))
-			{
+			if ((indexLetter || indexSymbol || indexNumber) && (!isBold || !isSpace)) {
 				if (lastSprite != null)
 					xPos = lastSprite.x + lastSprite.width;
 
@@ -110,23 +107,21 @@ class Alphabet extends FlxTypedSpriteGroup<LetterSprite>
 		}
 	}
 
-	override function update(elapsed:Float):Void
-	{
-		if (isMenuItem)
-		{
-			var scaledY = FlxMath.remapToRange(targetY, 0, 1, 0, 1.3);
+	override function update(elapsed:Float):Void {
+		switch (displayStyle) {
+			case LIST:
+				var scaledY:Float = FlxMath.remapToRange(targetY, 0, 1, 0, 1.3);
+				var toX:Float = (FlxMath.lerp(x, (targetY * 20) + 90, 0.16));
 
-			y = FlxMath.lerp(y, (scaledY * 120) + (FlxG.height * 0.48), 0.16);
+				y = FlxMath.lerp(y, (scaledY * 120) + (FlxG.height * 0.48), 0.16);
 
-			if (forceX != Math.NEGATIVE_INFINITY)
-				x = forceX;
-			else if (disableX)
-			{
-				displacement.x = 100;
-				x = FlxMath.lerp(x, displacement.x, elapsed * 6);
-			}
-			else
-				x = FlxMath.lerp(x, (targetY * 20) + 90, 0.16);
+				if (disableX)
+					toX = FlxMath.lerp(x, displacement.x, elapsed * 6);
+				else if (forceX != Math.NEGATIVE_INFINITY)
+					toX = forceX;
+
+				x = toX;
+			default:
 		}
 
 		super.update(elapsed);
@@ -138,20 +133,17 @@ class Alphabet extends FlxTypedSpriteGroup<LetterSprite>
 	Letter Offsets
 	Latin Support (maybe, just maybe)
 **/
-class LetterSprite extends FlxSprite
-{
+class LetterSprite extends FlxSprite {
 	public var offsetIncrement:FlxPoint = new FlxPoint(0, 0);
 	public var texture(default, set):String = 'default/alphabet';
 	public var defaultFramerate:Int = 24;
 
-	public static function getIndex(char:String, type:LetterType):Int
-	{
+	public static function getIndex(char:String, type:LetterType):Int {
 		var index:String = AlphaLetters.letterList.get(type);
 		return index.indexOf(char.toLowerCase());
 	}
 
-	public function set_texture(tex:String):String
-	{
+	public function set_texture(tex:String):String {
 		// safety check
 		var pastAnim:String = null;
 
@@ -164,8 +156,7 @@ class LetterSprite extends FlxSprite
 		// set the framerate
 		defaultFramerate = 24;
 
-		if (pastAnim != null)
-		{
+		if (pastAnim != null) {
 			animation.addByPrefix(pastAnim, pastAnim, defaultFramerate);
 			animation.play(pastAnim, true);
 			updateHitbox();
@@ -175,26 +166,21 @@ class LetterSprite extends FlxSprite
 
 	public var row:Int = 0;
 
-	public function new(x:Float, y:Float):Void
-	{
+	public function new(x:Float, y:Float):Void {
 		super(x + offsetIncrement.x, y + offsetIncrement.y);
 
 		texture = 'default/alphabet';
 	}
 
-	public function changeColor(c:FlxColor, bold:Bool):Void
-	{
+	public function changeColor(c:FlxColor, bold:Bool):Void {
 		if (texture == null)
 			return;
 
-		if (bold)
-		{
+		if (bold) {
 			colorTransform.redMultiplier = c.redFloat;
 			colorTransform.greenMultiplier = c.greenFloat;
 			colorTransform.blueMultiplier = c.blueFloat;
-		}
-		else
-		{
+		} else {
 			colorTransform.redOffset = c.red;
 			colorTransform.greenOffset = c.green;
 			colorTransform.blueOffset = c.blue;
@@ -204,26 +190,21 @@ class LetterSprite extends FlxSprite
 	/**
 		Combined all functions into one
 	**/
-	public function createChar(letter:String, type:LetterType, isBold:Bool = false):Void
-	{
+	public function createChar(letter:String, type:LetterType, isBold:Bool = false):Void {
 		if (texture == null)
 			return;
 
 		var letterCase:String = null;
 
-		if (letterCase == null)
-		{
-			switch (type)
-			{
+		if (letterCase == null) {
+			switch (type) {
 				case LETTER:
-					if (isBold)
-					{
+					if (isBold) {
 						if (letter.toUpperCase() != letter)
 							letterCase = " lower bold";
 						else
 							letterCase = " upper bold";
-					}
-					else
+					} else
 						letterCase = " normal";
 				default:
 					if (isBold)
@@ -238,10 +219,8 @@ class LetterSprite extends FlxSprite
 			https://cdn.discordapp.com/attachments/1000603105265733749/1051670973029564426/FjsH6O6WIAEPclK.jpg
 		**/
 
-		for (lettah => thingies in AlphaLetters.letterMap)
-		{
-			if (lettah != null && thingies != null)
-			{
+		for (lettah => thingies in AlphaLetters.letterMap) {
+			if (lettah != null && thingies != null) {
 				if (thingies.anim != null)
 					animation.addByPrefix(lettah, thingies.anim + letterCase, defaultFramerate);
 				// trace('added: ${thingies.anim} to Alphabet');
@@ -257,18 +236,18 @@ class LetterSprite extends FlxSprite
 		updateHitbox();
 
 		/**
-			// so uhh this is basically useless now and causes more problems than solves them??
-			// it's only really useful for old alphabet
-			// leaving it here just in case yk
-			// @BeastlyGhost
+				// so uhh this is basically useless now and causes more problems than solves them??
+				// it's only really useful for old alphabet
+				// leaving it here just in case yk
+				// @BeastlyGhost
 
-			if (type == LETTER)
+				if (type == LETTER)
 			{
-				// FlxG.log.add('the row' + row);
+					// FlxG.log.add('the row' + row);
 
-				y = (110 - height);
-				y += row * 60;
-			}
+					y = (110 - height);
+					y += row * 60;
+				}
 		**/
 	}
 }

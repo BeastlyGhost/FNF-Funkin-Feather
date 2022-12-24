@@ -18,8 +18,7 @@ import funkin.states.PlayState;
 	User Interface class so we don't have to create it on PlayState,
 	get as expressive as you can with this, create your own UI if you wish!
 **/
-class UI extends FlxSpriteGroup
-{
+class UI extends FlxSpriteGroup {
 	public var scoreText:FlxText;
 
 	public var autoPlayText:FlxText;
@@ -33,8 +32,7 @@ class UI extends FlxSpriteGroup
 
 	public var uiStyle:String = OptionsAPI.getPref("User Interface Style");
 
-	public function new():Void
-	{
+	public function new():Void {
 		super();
 
 		healthBG = new FlxSprite(0, PlayState.strumsP1.downscroll ? FlxG.height * 0.1 : FlxG.height * 0.89);
@@ -65,8 +63,7 @@ class UI extends FlxSpriteGroup
 		autoPlayText.x -= 15;
 
 		// repositioning for it to not be covered by the receptors
-		if (OptionsAPI.getPref('Center Notes'))
-		{
+		if (OptionsAPI.getPref('Center Notes')) {
 			var yInc:Int = (PlayState.playerStrum.downscroll ? -125 : 125);
 			autoPlayText.y = autoPlayText.y + yInc;
 		}
@@ -77,8 +74,7 @@ class UI extends FlxSpriteGroup
 		updateHealthBar();
 	}
 
-	override function update(elapsed:Float):Void
-	{
+	override function update(elapsed:Float):Void {
 		healthBar.percent = (PlayerInfo.stats.health * 50);
 
 		// attach to healthbar
@@ -90,8 +86,7 @@ class UI extends FlxSpriteGroup
 		iconP1.updateFrame(healthBar.percent);
 		iconP2.updateFrame(100 - healthBar.percent);
 
-		if (autoPlayText.visible)
-		{
+		if (autoPlayText.visible) {
 			autoPlaySine += 180 * (elapsed / 4);
 			autoPlayText.alpha = 1 - Math.sin((Math.PI * autoPlaySine) / 80);
 		}
@@ -103,13 +98,11 @@ class UI extends FlxSpriteGroup
 
 	public static var separator:String = " - ";
 
-	public function updateScoreText(goodHit:Bool = false):Void
-	{
+	public function updateScoreText(goodHit:Bool = false):Void {
 		var tempScore:String = '';
 		var centerText:Bool = false;
 
-		switch (uiStyle)
-		{
+		switch (uiStyle) {
 			case "Feather":
 				tempScore = "Score: " + FlxStringUtil.formatMoney(PlayerInfo.stats.score);
 
@@ -133,8 +126,7 @@ class UI extends FlxSpriteGroup
 			scoreText.screenCenter(X);
 
 		// PSYCH BOUNCING LOL
-		if (goodHit)
-		{
+		if (goodHit) {
 			if (hudBopping != null)
 				hudBopping.cancel();
 
@@ -148,8 +140,7 @@ class UI extends FlxSpriteGroup
 		PlayState.changePresence();
 	}
 
-	public function updateHealthBar():Void
-	{
+	public function updateHealthBar():Void {
 		var isVanilla:Bool = (OptionsAPI.getPref("User Interface Style") == "Vanilla");
 
 		var colorA:Null<Int> = (!isVanilla && PlayState.opponent.healthColor != null ? PlayState.opponent.healthColor : 0xFFFF0000);
@@ -160,17 +151,14 @@ class UI extends FlxSpriteGroup
 		healthBar.updateBar();
 	}
 
-	public function beatHit(curBeat:Int):Void
-	{
-		if (!OptionsAPI.getPref("Reduce Motion"))
-		{
+	public function beatHit(curBeat:Int):Void {
+		if (!OptionsAPI.getPref("Reduce Motion")) {
 			iconP1.doBops(60 / Conductor.bpm);
 			iconP2.doBops(60 / Conductor.bpm);
 		}
 	}
 
-	public function showInfoCard():Void
-	{
+	public function showInfoCard():Void {
 		if (!OptionsAPI.getPref("Show Info Card"))
 			return;
 
@@ -195,14 +183,11 @@ class UI extends FlxSpriteGroup
 		add(byText);
 		FlxTween.tween(blackBy, {x: 0}, 3, {ease: FlxEase.expoInOut});
 		FlxTween.tween(byText, {x: -40}, 3, {ease: FlxEase.expoInOut});
-		new FlxTimer().start(4.75, function(tmr:FlxTimer)
-		{
-			for (obj in [blackBy, byText])
-			{
+		new FlxTimer().start(4.75, function(tmr:FlxTimer) {
+			for (obj in [blackBy, byText]) {
 				FlxTween.tween(obj, {x: -700}, 1.6, {
 					ease: FlxEase.expoInOut,
-					onComplete: function(twn:FlxTween)
-					{
+					onComplete: function(twn:FlxTween) {
 						remove(obj);
 						obj.kill();
 						obj.destroy();

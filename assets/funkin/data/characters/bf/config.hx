@@ -1,5 +1,4 @@
-function loadAnimations()
-{
+function loadAnimations() {
 	addByPrefix('idle', 'BF idle dance', 24);
 	addByPrefix('hey', 'BF HEY!!', 24, false);
 	addByPrefix('shaking', 'BF idle shaking', 24);
@@ -40,18 +39,13 @@ function loadAnimations()
 
 var isOld:Bool = false;
 
-function update(elapsed:Float)
-{
-	if (FlxG.keys.justPressed.NINE)
-	{
+function update(elapsed:Float) {
+	if (FlxG.keys.justPressed.NINE) {
 		isOld = !isOld;
-		if (player)
-		{
+		if (player) {
 			PlayState.ui.iconP1.suffix = (isOld ? '-old' : '');
 			PlayState.ui.iconP1.updateIcon('bf', true);
-		}
-		else
-		{
+		} else {
 			PlayState.ui.iconP2.suffix = (isOld ? '-old' : '');
 			PlayState.ui.iconP2.updateIcon('bf', true);
 		}

@@ -1,5 +1,4 @@
-function onCreate():Void
-{
+function onCreate():Void {
 	var bg:PlumaSprite = new PlumaSprite(-600, -200);
 	bg.loadGraphic(Paths.image('stageback'));
 	bg.scrollFactor.set(0.9, 0.9);

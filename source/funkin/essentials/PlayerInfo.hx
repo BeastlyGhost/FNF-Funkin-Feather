@@ -3,8 +3,7 @@ package funkin.essentials;
 import flixel.FlxG;
 import funkin.states.PlayState;
 
-typedef Judgement =
-{
+typedef Judgement = {
 	var name:String;
 	var score:Int;
 	var health:Float;
@@ -15,8 +14,7 @@ typedef Judgement =
 	var comboReturn:String;
 }
 
-typedef SaveScoreData =
-{
+typedef SaveScoreData = {
 	var score:Int;
 	var misses:Int;
 	var accuracy:Float;
@@ -28,8 +26,7 @@ typedef SaveScoreData =
 	PlayerInfo handles the main "competitive" structure of the engine
 	it initializes things like score counters, handles accuracy, and handles judgements
  */
-class PlayerInfo
-{
+class PlayerInfo {
 	public static var stats:Dynamic = {
 		score: 0,
 		misses: 0,
@@ -115,8 +112,7 @@ class PlayerInfo
 	// stores how many judgements you did hit
 	public static var gottenJudges:Map<String, Int> = [];
 
-	public static function resetScore():Void
-	{
+	public static function resetScore():Void {
 		stats.score = 0;
 		stats.misses = 0;
 		stats.ghostMisses = 0;
@@ -132,8 +128,7 @@ class PlayerInfo
 		noteRatingMod = 0.0001;
 		accuracy = 0;
 
-		for (i in 0...judgeTable.length)
-		{
+		for (i in 0...judgeTable.length) {
 			if (!gottenJudges.exists(judgeTable[i].name))
 				gottenJudges.set(judgeTable[i].name, 0);
 		}
@@ -142,8 +137,7 @@ class PlayerInfo
 		curGrade = "N/A";
 	}
 
-	public static function returnGradePercent():String
-	{
+	public static function returnGradePercent():String {
 		var floor = Math.floor(accuracy * 100) / 100;
 		var sep = funkin.objects.ui.UI.separator;
 
@@ -155,8 +149,7 @@ class PlayerInfo
 		return ' $finalPercent';
 	}
 
-	public static function updateGradePercent(id:Int):Void
-	{
+	public static function updateGradePercent(id:Int):Void {
 		if (accuracy <= 0)
 			accuracy = 0;
 		if (accuracy >= 100)
@@ -167,13 +160,10 @@ class PlayerInfo
 		updateGrade();
 	}
 
-	public static function updateGrade():Void
-	{
+	public static function updateGrade():Void {
 		var biggestAccuracy:Float = 0;
-		for (grade in gradeLetters.keys())
-		{
-			if (gradeLetters.get(grade) <= accuracy && gradeLetters.get(grade) >= biggestAccuracy)
-			{
+		for (grade in gradeLetters.keys()) {
+			if (gradeLetters.get(grade) <= accuracy && gradeLetters.get(grade) >= biggestAccuracy) {
 				biggestAccuracy = gradeLetters.get(grade);
 				curGrade = grade;
 			}
@@ -189,8 +179,7 @@ class PlayerInfo
 			curComboGrade = (stats.misses < 10 ? 'SDCB' : '');
 	}
 
-	public static function increaseScore(rating:Int):Void
-	{
+	public static function increaseScore(rating:Int):Void {
 		stats.score += judgeTable[rating].score;
 		stats.health += 0.04 * (judgeTable[rating].health) / 100;
 
@@ -211,8 +200,7 @@ class PlayerInfo
 			stats.health = 2;
 	}
 
-	public static function decreaseScore():Void
-	{
+	public static function decreaseScore():Void {
 		stats.score += judgeTable[3].score;
 		stats.health += 0.04 * (judgeTable[3].health) / 100;
 		stats.misses += 1;
@@ -233,12 +221,10 @@ class PlayerInfo
 		Functions for saving scores
 	**/
 	//
-	public static function saveInfo(song:String, diff:Int = 0, data:SaveScoreData, mode:GameModes):Void
-	{
+	public static function saveInfo(song:String, diff:Int = 0, data:SaveScoreData, mode:GameModes):Void {
 		OptionsAPI.bindSave("Feather-Scores");
 
-		if (saveMap.exists(song))
-		{
+		if (saveMap.exists(song)) {
 			var lowerScore:Bool = (saveMap.get(song).score < data.score);
 			var lowerMisses:Bool = (saveMap.get(song).misses < data.misses);
 			var lowerAccuracy:Bool = (saveMap.get(song).accuracy < data.accuracy);
@@ -250,9 +236,7 @@ class PlayerInfo
 				difficulty: FeatherUtils.getDifficulty(diff),
 				gameplayMode: mode,
 			});
-		}
-		else
-		{
+		} else {
 			saveMap.set(song, {
 				score: data.score,
 				misses: data.misses,
@@ -266,12 +250,10 @@ class PlayerInfo
 		// FlxG.save.data.flush();
 	}
 
-	public static function getScore(song:String, diff:Int = 0, mode:GameModes):Int
-	{
+	public static function getScore(song:String, diff:Int = 0, mode:GameModes):Int {
 		OptionsAPI.bindSave("Feather-Scores");
 
-		if (!saveMap.exists(song))
-		{
+		if (!saveMap.exists(song)) {
 			saveMap.set(song, {
 				score: 0,
 				misses: 0,
@@ -287,8 +269,7 @@ class PlayerInfo
 		return 0;
 	}
 
-	public static function loadHighscores():Void
-	{
+	public static function loadHighscores():Void {
 		OptionsAPI.bindSave("Feather-Scores");
 
 		if (FlxG.save.data.highscores != null)

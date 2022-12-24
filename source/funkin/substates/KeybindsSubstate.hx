@@ -6,32 +6,26 @@ import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import funkin.objects.ui.fonts.Alphabet;
 
-class KeybindsSubstate extends BaseSubMenu
-{
+class KeybindsSubstate extends BaseSubMenu {
 	var horizontalContainer:FlxTypedGroup<Alphabet>;
 
 	var generateBG:Bool = false;
 
-	public override function new(generateBG:Bool = false):Void
-	{
+	public override function new(generateBG:Bool = false):Void {
 		super();
 
 		this.generateBG = generateBG;
 	}
 
-	override function create():Void
-	{
+	override function create():Void {
 		super.create();
 
-		if (!generateBG)
-		{
+		if (!generateBG) {
 			menuBG = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, 0xFF000000);
 			menuBG.scrollFactor.set();
 			menuBG.alpha = 0.6;
 			add(menuBG);
-		}
-		else
-		{
+		} else {
 			bgImage = 'menuDesat';
 			menuBG.color = 0xFFEA71FD;
 		}
@@ -43,8 +37,7 @@ class KeybindsSubstate extends BaseSubMenu
 		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
 	}
 
-	function generateKeys():FlxTypedGroup<Alphabet>
-	{
+	function generateKeys():FlxTypedGroup<Alphabet> {
 		itemContainer = new FlxTypedGroup<Alphabet>();
 
 		var myKeys:Array<String> = [];
@@ -54,8 +47,7 @@ class KeybindsSubstate extends BaseSubMenu
 
 		// trace(myKeys);
 
-		for (i in 0...myKeys.length)
-		{
+		for (i in 0...myKeys.length) {
 			if (myKeys[i] == null)
 				myKeys[i] = '';
 
@@ -67,7 +59,7 @@ class KeybindsSubstate extends BaseSubMenu
 
 			keyTxt.alpha = 0.6;
 			keyTxt.disableX = true;
-			keyTxt.isMenuItem = true;
+			keyTxt.displayStyle = LIST;
 
 			itemContainer.add(keyTxt);
 		}
@@ -79,15 +71,13 @@ class KeybindsSubstate extends BaseSubMenu
 		return itemContainer;
 	}
 
-	function generateBinds():FlxTypedGroup<Alphabet>
-	{
+	function generateBinds():FlxTypedGroup<Alphabet> {
 		horizontalContainer = new FlxTypedGroup<Alphabet>();
 
 		return horizontalContainer;
 	}
 
-	override function update(elapsed:Float):Void
-	{
+	override function update(elapsed:Float):Void {
 		super.update(elapsed);
 
 		updateSelection(Controls.isJustPressed("up") ? -1 : Controls.isJustPressed("down") ? 1 : 0);
@@ -96,8 +86,7 @@ class KeybindsSubstate extends BaseSubMenu
 			close();
 	}
 
-	public override function updateSelection(newSelection:Int = 0):Void
-	{
+	public override function updateSelection(newSelection:Int = 0):Void {
 		super.updateSelection(newSelection);
 
 		var selectionJumper:Int = ((newSelection > selection) ? 1 : -1);
