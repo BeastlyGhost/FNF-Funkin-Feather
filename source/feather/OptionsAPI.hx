@@ -96,15 +96,13 @@ class OptionsAPI {
 				value: "Feather",
 				values: ["Vanilla", "Feather"]
 			},
-			/**
-				{
-					name: "Note Quant Style",
-					description: "Choose your Note Quants Style.",
-					type: SELECTOR,
-					value: "none",
-					values: ["none", "stepmania", "forever"]
-				},
-			**/
+			{
+				name: "Note Quant Style",
+				description: "Choose your Note Quants Style.",
+				type: SELECTOR,
+				value: "none",
+				values: ["none", "stepmania", "forever"]
+			},
 			{
 				name: "Note Splash Opacity",
 				description: "Set the opacity for your Note Splashes, shown when hitting \"Sick!\" Ratings on Notes.",

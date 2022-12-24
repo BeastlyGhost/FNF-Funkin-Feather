@@ -97,10 +97,14 @@ class OptionsMenu extends BaseMenu {
 
 			if (accept) {
 				if (isDynamic) {
-					if (wrappableGroup[Math.floor(selection)].name == "keybinds")
-						openSubState(new funkin.substates.KeybindsSubstate(true));
-					else
-						switchCategory(wrappableGroup[Math.floor(selection)].name);
+					switch (wrappableGroup[Math.floor(selection)].name) {
+						case "keybinds":
+							openSubState(new funkin.substates.KeybindsSubstate(true));
+						case "notes":
+							openSubState(new funkin.states.editors.NoteEditor());
+						default:
+							switchCategory(wrappableGroup[Math.floor(selection)].name);
+					}
 				}
 			}
 		}
