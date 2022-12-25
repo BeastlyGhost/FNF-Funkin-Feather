@@ -71,9 +71,8 @@ class FeatherUtils {
 		var libraryArray:Array<String> = [];
 
 		for (dir in FileSystem.readDirectory(AssetHelper.grabRoot(dest, type))) {
-			if (!libraryArray.contains(dir))
+			if (!libraryArray.contains(dir) && dir.endsWith(AssetHelper.getExtensions(dest, type)))
 				libraryArray.push(dir);
-			trace(libraryArray);
 		}
 
 		return if (libraryArray != null) libraryArray else [];

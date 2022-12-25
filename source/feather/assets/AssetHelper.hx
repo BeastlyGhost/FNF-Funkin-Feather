@@ -36,6 +36,12 @@ typedef CacheableAsset = {
 	var data:Dynamic;
 }
 
+enum Implementation { // "engine" implementation, so to speak.
+	FEATHER;
+	COCOA;
+	PSYCH;
+}
+
 /**
 	This is the Assets Class, meant to allow access to assets, and manage used ones
 **/
@@ -131,7 +137,11 @@ class AssetHelper {
 		if (!mappedAssets[IMAGE].exists(outputDir)) {
 			var myGraphic:FlxGraphic = FlxGraphic.fromAssetKey(outputDir, false, null, false);
 			myGraphic.persist = true;
-			mappedAssets[IMAGE].set(outputDir, {type: IMAGE, data: myGraphic});
+
+			// safety check, to not set a null graphic to the map and return it
+			var dataGraphic:FlxGraphic = (myGraphic != null ? myGraphic : FlxGraphic.fromRectangle(100, 100, 0xFFAAAAAA));
+
+			mappedAssets[IMAGE].set(outputDir, {type: IMAGE, data: dataGraphic});
 			trackedAssets.push(outputDir);
 		}
 		return returnGraphic(outputDir);

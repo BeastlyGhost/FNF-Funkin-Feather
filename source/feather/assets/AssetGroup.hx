@@ -146,7 +146,7 @@ class AssetGroup {
 
 					groupData.set(allGroups[i], finalData);
 				}
-				catch (e)
+				catch (e:Dynamic)
 					throw('Group Data for ${allGroups[i]} could not be set.');
 			} else {
 				groupData.set(allGroups[i], {

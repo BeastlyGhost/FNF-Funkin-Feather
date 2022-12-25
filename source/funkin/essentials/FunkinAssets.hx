@@ -3,7 +3,7 @@ package funkin.essentials;
 import flixel.util.FlxColor;
 import feather.tools.shaders.AUColorSwap;
 import funkin.essentials.PlayerInfo;
-import funkin.objects.ui.notes.Note;
+import funkin.objects.ui.Note;
 import funkin.states.PlayState;
 
 /**
@@ -65,9 +65,6 @@ class FunkinAssets {
 				babyArrow.antialiasing = true;
 		}
 
-		if (babyArrow.colorSwap != null)
-			babyArrow.shader = babyArrow.colorSwap;
-
 		return babyArrow;
 	}
 
@@ -81,11 +78,7 @@ class FunkinAssets {
 				note.animation.addByPrefix('end', 'note end');
 
 				if (!isSustain) {
-					note.angle = (index == 0 ? -90 : index == 3 ? 90 : 0);
-					if (index == 1) {
-						// note.flipX = true;
-						note.flipY = true;
-					}
+					note.angle = (index == 0 ? -90 : index == 3 ? 90 : index == 1 ? 180 : 0);
 				}
 
 				note.setGraphicSize(Std.int(note.width * 0.7));
@@ -93,24 +86,20 @@ class FunkinAssets {
 				note.updateHitbox();
 		}
 
-		if (note.colorSwap != null)
-			note.shader = note.colorSwap;
-
 		return note;
 	}
 
-	private static var isQuant:Bool = OptionsAPI.getPref("Note Quant Style").toLowerCase() != 'none';
-	private static var quant:Quant;
-
 	public static function setColorSwap(idx:Int, colorSwap:AUColorSwap):Void {
+		if (colorSwap == null)
+			return;
+
 		var colorF:FlxColor;
 
-		if (isQuant) {
-			if (quant.index > -1)
-				idx = quant.index;
+		if (OptionsAPI.getPref("Note Quant Style").toLowerCase() != 'none') {
 			colorF = BabyArrow.colorPresets.get('quants-${OptionsAPI.getPref("Note Quant Style").toLowerCase()}')[idx];
-		} else
+		} else {
 			colorF = BabyArrow.colorPresets.get(PlayState.assetSkin)[idx];
+		}
 
 		colorSwap.red = colorF;
 		colorSwap.green = 0xFFFFFFFF;

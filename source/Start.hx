@@ -1,7 +1,6 @@
 package;
 
 import flixel.FlxG;
-import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
@@ -30,7 +29,8 @@ class Start extends FlxState {
 
 		FlxG.autoPause = false;
 
-		var bianca:FlxSprite = new FlxSprite().loadGraphic(AssetHelper.grabAsset("splashScreen/biancaSplash", IMAGE, "images"));
+		var bianca:PlumaSprite = new PlumaSprite();
+		bianca.loadGraphic(AssetHelper.grabAsset("splashScreen/biancaSplash", IMAGE, "images"));
 		bianca.setGraphicSize(Std.int(bianca.width * 0.6));
 		bianca.screenCenter(XY);
 		bianca.x -= 1000;

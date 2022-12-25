@@ -78,7 +78,7 @@ class Stage extends FlxTypedGroup<FlxBasic> {
 
 				try
 					callStageModule(newStage)
-				catch (e)
+				catch (e:Dynamic)
 					trace('Module "$newStage" not found.');
 		}
 

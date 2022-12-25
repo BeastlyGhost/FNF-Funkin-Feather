@@ -1,16 +1,15 @@
 function loadAnimations() {
-	addByPrefix('firstDeath', "BF dies", 24, false);
-	addByPrefix('deathLoop', "BF Dead Loop", 24, true);
-	addByPrefix('deathConfirm', "BF Dead confirm", 24, false);
+	character.animation.addByPrefix('firstDeath', "BF dies", 24, false);
+	character.animation.addByPrefix('deathLoop', "BF Dead Loop", 24, true);
+	character.animation.addByPrefix('deathConfirm', "BF Dead confirm", 24, false);
 
-	addOffset("firstDeath", -10, 0);
-	addOffset("deathConfirm", -10, 0);
-	addOffset("deathLoop", -10, 0);
+	character.addOffset("firstDeath", -10, 0);
+	character.addOffset("deathConfirm", -10, 0);
+	character.addOffset("deathLoop", -10, 0);
 
-	characterData.antialiasing = true;
-	characterData.flipX = true;
+	character.flipX = true;
 
-	if (isPlayer)
+	if (character.player)
 		set('flipX', true);
 	else
 		set('flipX', false);

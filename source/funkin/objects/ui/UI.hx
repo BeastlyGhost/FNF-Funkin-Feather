@@ -8,7 +8,6 @@ import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.ui.FlxBar;
-import flixel.util.FlxStringUtil;
 import flixel.util.FlxTimer;
 import funkin.essentials.PlayerInfo;
 import funkin.essentials.song.Conductor;
@@ -45,11 +44,11 @@ class UI extends FlxSpriteGroup {
 		healthBar.scrollFactor.set();
 		add(healthBar);
 
-		iconP1 = new Icon('placeholder', true);
+		iconP1 = new Icon('bf', true);
 		iconP1.y = healthBar.y - (iconP1.height / 2);
 		add(iconP1);
 
-		iconP2 = new Icon('placeholder', false);
+		iconP2 = new Icon('bf', false);
 		iconP2.y = healthBar.y - (iconP2.height / 2);
 		add(iconP2);
 
@@ -104,16 +103,11 @@ class UI extends FlxSpriteGroup {
 
 		switch (uiStyle) {
 			case "Feather":
-				tempScore = "Score: " + FlxStringUtil.formatMoney(PlayerInfo.stats.score);
-
-				/**
-					TODO: visual miss counter on rating assets
-					or maybe in a judgement counter thing
-				**/
-				// tempScore += separator + "Misses: " + FlxStringUtil.formatMoney(PlayerInfo.stats.misses);
+				tempScore = "Score: " + PlayerInfo.stats.score;
+				// tempScore += separator + "Misses: " + PlayerInfo.stats.misses;
 				tempScore += separator + "Accuracy: " + PlayerInfo.returnGradePercent();
-
 				tempScore += separator + "Grade: " + PlayerInfo.curGrade;
+
 				centerText = true;
 
 			default:

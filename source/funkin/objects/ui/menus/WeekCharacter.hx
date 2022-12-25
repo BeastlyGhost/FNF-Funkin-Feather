@@ -43,7 +43,7 @@ class WeekCharacter extends FlxSprite {
 
 		try
 			frames = AssetHelper.grabAsset(charData.image, SPARROW, "images/menus/story/characters")
-		catch (e)
+		catch (e:Dynamic)
 			frames = null;
 
 		if (char != null || char != '') {

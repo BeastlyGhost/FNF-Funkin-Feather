@@ -1,5 +1,7 @@
-package funkin.objects.ui.notes;
+package funkin.objects.ui;
 
+import flixel.util.FlxColor;
+import flixel.math.FlxPoint;
 import feather.tools.FeatherToolkit.PlumaSprite;
 import feather.tools.shaders.AUColorSwap;
 import feather.tools.shaders.ShaderTools;
@@ -56,6 +58,8 @@ class BabyArrow extends PlumaSprite {
 	];
 
 	public var index:Int = 0;
+	public var preset:String = 'default';
+
 	public var defaultAlpha:Float = 0.8;
 	public var glowsOnHit:Bool = true;
 	public var colorSwap:AUColorSwap;
@@ -63,11 +67,14 @@ class BabyArrow extends PlumaSprite {
 	public function new(index:Int, ?preset:String = 'default'):Void {
 		super(x, y);
 
-		colorSwap = ShaderTools.initAUCS();
-
 		alpha = defaultAlpha;
 
 		this.index = index;
+		this.preset = preset;
+
+		if (colorSwap == null)
+			colorSwap = ShaderTools.initAUCS();
+		shader = colorSwap;
 
 		updateHitbox();
 		scrollFactor.set();
@@ -76,8 +83,24 @@ class BabyArrow extends PlumaSprite {
 	public override function playAnim(AnimName:String, Force:Bool = false, Reversed:Bool = false, Frame:Int = 0):Void {
 		super.playAnim(AnimName);
 
-		if (AnimName != 'static')
-			FunkinAssets.setColorSwap(index, colorSwap);
+		if (AnimName != 'static') {
+			colorSwap.active = true;
+
+			var indexColor:FlxColor = 0xFFFFFFFF;
+			indexColor = colorPresets.get(preset)[index];
+
+			if (AnimName == 'pressed') { // presses need to be colored differently than usual
+				colorSwap.red = FlxColor.interpolate(indexColor, 0xFF9C9C9C, 0.6);
+				colorSwap.blue = 0xFF201E31;
+				colorSwap.green = 0xFFFFFFFF;
+			}
+			else {
+				FunkinAssets.setColorSwap(index, colorSwap);
+			}
+		} else {
+			// else just declare the shader as inactive
+			colorSwap.active = false;
+		}
 
 		centerOffsets();
 		centerOrigin();
@@ -120,16 +143,22 @@ class Note extends PlumaSprite {
 	public var parentNote:Note;
 	public var children:Array<Note> = [];
 
-	public var speed:Float = 1;
+	public var speed:Float;
 
 	public var step:Float = 0;
 	public var index:Int = 0;
 
-	public var sustainLength:Float = 0;
-	public var isSustain:Bool = false;
+	public var noteDisplace:FlxPoint = new FlxPoint(0, 0);
 
-	public var offsetX:Float = 0;
-	public var offsetY:Float = 0;
+	/**
+		Sustain Notes
+	**/
+	public var holdDisplace:FlxPoint = new FlxPoint(0, 0);
+
+	public var sustainLength:Float = 0;
+
+	public var isSustain:Bool = false;
+	public var isSustainEnd:Bool = false;
 
 	public function new(step:Float, index:Int, type:String, isSustain:Bool = false, ?prevNote:Note):Void {
 		// MAKE SURE ITS DEFINITELY OFF SCREEN?
@@ -146,10 +175,22 @@ class Note extends PlumaSprite {
 		this.isSustain = isSustain;
 
 		babyArrow = new BabyArrow(index);
-		colorSwap = ShaderTools.initAUCS();
 
-		FunkinAssets.generateNotes(this, index, isSustain);
-		FunkinAssets.setColorSwap(index, colorSwap);
+		switch (type) {
+			default:
+				try {
+					// may be the cause of a memory leak??
+					if (colorSwap == null)
+						colorSwap = ShaderTools.initAUCS();
+					FunkinAssets.generateNotes(this, index, isSustain);
+					shader = colorSwap;
+					FunkinAssets.setColorSwap(index, colorSwap);
+				}
+				catch (e:Dynamic) {
+					this.destroy();
+					return;
+				}
+		}
 
 		if (!isSustain)
 			playAnim('scroll');
@@ -162,7 +203,7 @@ class Note extends PlumaSprite {
 			parentNote.children.push(this);
 		}
 
-		offsetX += 15;
+		noteDisplace.x += 15;
 
 		if (isSustain && prevNote != null) {
 			playAnim('end');
@@ -171,11 +212,10 @@ class Note extends PlumaSprite {
 			speed = prevNote.speed;
 			alpha = 0.6;
 
-			offsetX = width / 2;
-			offsetX -= width / 2;
+			noteDisplace.x = width / 2 + holdDisplace.x;
 
 			if (PlayState.assetSkin == 'pixel')
-				offsetX += 30;
+				noteDisplace.x += 30;
 
 			if (prevNote.isSustain) {
 				prevNote.playAnim('hold');
@@ -203,9 +243,6 @@ class Note extends PlumaSprite {
 
 		if (lastStep < step) {
 			lastStep = step;
-
-			// if (OptionsAPI.getPref("Note Quant Style") != 'none')
-			//    flushIndex();
 		}
 	}
 }
@@ -221,7 +258,8 @@ class Splash extends PlumaSprite {
 
 		ID = index;
 
-		colorSwap = ShaderTools.initAUCS();
+		if (colorSwap == null)
+			colorSwap = ShaderTools.initAUCS();
 
 		try {
 			switch (OptionsAPI.getPref("User Interface Style")) {
@@ -246,27 +284,22 @@ class Splash extends PlumaSprite {
 			return;
 		}
 
-		if (colorSwap != null)
-			shader = colorSwap;
-
+		shader = colorSwap;
 		setupNoteSplash(x, y, index);
 	}
 
 	public function setupNoteSplash(x:Float, y:Float, index:Int = 0, step:Float = 0, preset:String = 'default'):Void {
 		ID = index;
 
-		if (graphic == null) {
-			this.destroy();
+		if (graphic == null)
 			return;
-		}
-
-		if (colorSwap != null)
-			FunkinAssets.setColorSwap(index, colorSwap);
 
 		setPosition(x, y);
 		animation.play('impact${FlxG.random.int(0, 1)}', true);
 		updateHitbox();
+
 		offset.set(offsetX, offsetY);
+		FunkinAssets.setColorSwap(index, colorSwap);
 	}
 
 	public override function update(elapsed:Float):Void {
@@ -274,42 +307,5 @@ class Splash extends PlumaSprite {
 			kill();
 
 		super.update(elapsed);
-	}
-}
-
-/**
-	Quant Note Helper
-
-	@since INFDEV
-**/
-class Quant {
-	// based on forever engine
-	private var quantIdx:Array<Int> = [4, 8, 12, 16, 20, 24, 32, 48, 64, 192];
-
-	public var index:Int = -1;
-	public var indexes:Array<Int> = [];
-
-	public function flushIndex(step:Float):Void {
-		// refresh quant index
-		var bpmConditional:Float = (60 / Conductor.bpm);
-		var bpmTime:Float = bpmConditional * 1000;
-
-		var measureTime:Float = (bpmTime) * 4;
-		var lowestDeviation:Float = measureTime / quantIdx[quantIdx.length - 1];
-
-		if (index == -1) {
-			try {
-				for (q in 0...quantIdx.length) {
-					final finalTime:Float = (measureTime / quantIdx[q]);
-					if ((step + lowestDeviation) % finalTime < lowestDeviation * 2) {
-						trace('index for quant note is $q');
-						index = q;
-						break;
-					}
-				}
-			}
-			catch (e:Dynamic)
-				throw("Quant Index was null??? - " + index);
-		}
 	}
 }

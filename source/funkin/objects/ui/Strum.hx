@@ -1,11 +1,11 @@
-package funkin.objects.ui.notes;
+package funkin.objects.ui;
 
 import flixel.group.FlxGroup;
+import flixel.math.FlxRect;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
-import flixel.util.FlxColor;
 import funkin.essentials.song.Conductor;
-import funkin.objects.ui.notes.Note;
+import funkin.objects.ui.Note;
 
 /**
 	Strumline class, initializes the gray notes at the top / bottom of the screen,
@@ -18,6 +18,7 @@ class Strum extends FlxGroup {
 
 	public var notes:FlxTypedGroup<Note>;
 	public var holds:FlxTypedGroup<Note>;
+	public var allNotes:FlxTypedGroup<Note>;
 	public var splashes:FlxTypedGroup<Splash>;
 
 	public var downscroll:Bool = false;
@@ -34,6 +35,7 @@ class Strum extends FlxGroup {
 
 		notes = new FlxTypedGroup<Note>();
 		holds = new FlxTypedGroup<Note>();
+		allNotes = new FlxTypedGroup<Note>();
 
 		if (OptionsAPI.getPref("Note Splash Opacity") > 0)
 			splashes = new FlxTypedGroup<Splash>();
@@ -49,9 +51,9 @@ class Strum extends FlxGroup {
 			babyArrow.x += (index - ((4 / 2))) * babyArrow.swagWidth;
 			babyArrow.y -= 10;
 
-			babyArrow.angle = (index == 0 ? -90 : index == 3 ? 90 : index == 1 ? babyArrow.angle = 180 : 0);
+			babyArrow.angle = (index == 0 ? -90 : index == 3 ? 90 : index == 1 ? 180 : 0);
 
-			babyArrow.animation.play('static');
+			babyArrow.playAnim('static');
 			babyArrows.add(babyArrow);
 
 			babyArrow.alpha = 0;
@@ -62,8 +64,8 @@ class Strum extends FlxGroup {
 		add(babyArrows);
 		if (splashes != null)
 			add(splashes);
-		add(notes);
 		add(holds);
+		add(notes);
 
 		// cache the splash stuff
 		popUpSplash(0, 0, type, true);
@@ -99,5 +101,71 @@ class Strum extends FlxGroup {
 			splash.scrollFactor.set(babyArrow.scrollFactor.x, babyArrow.scrollFactor.y);
 			splash.angle = babyArrow.angle;
 		});
+	}
+
+	public function updatePosition(note:Note, strum:Strum):Void {
+		var babyArrow:BabyArrow = strum.babyArrows.members[note.index];
+
+		note.x = babyArrow.x + note.noteDisplace.x;
+
+		var strumY:Float = babyArrow.y + note.noteDisplace.x;
+		var center:Float = strumY + babyArrow.swagWidth / 2;
+		note.y = strumY - (Conductor.songPosition - note.step) * (0.45 * note.speed) * (strum.downscroll ? -1 : 1);
+
+		if (note.isSustain) {
+			note.flipY = strum.downscroll;
+			note.holdDisplace.x = 50;
+
+			if (strum.downscroll) {
+				if (note.animation.curAnim.name.endsWith('end') && note.prevNote != null)
+					note.y += note.prevNote.height;
+				else
+					note.y += note.height;
+
+				if (note.y - note.offset.y * note.scale.y + note.height >= center
+					&& (!note.noteData.mustPress
+						|| (note.noteData.wasGoodHit || (note.prevNote.noteData.wasGoodHit && !note.noteData.canBeHit)))) {
+					var swagRect = new FlxRect(0, 0, note.frameWidth, note.frameHeight);
+					swagRect.height = (center - note.y) / note.scale.y;
+					swagRect.y = note.frameHeight - swagRect.height;
+
+					note.clipRect = swagRect;
+				}
+			} else if (note.y + note.offset.y * note.scale.y <= center
+				&& (!note.noteData.mustPress
+					|| (note.noteData.wasGoodHit || (note.prevNote.noteData.wasGoodHit && !note.noteData.canBeHit)))) {
+				var swagRect = new FlxRect(0, 0, note.width / note.scale.x, note.height / note.scale.y);
+				swagRect.y = (center - note.y) / note.scale.y;
+				swagRect.height -= swagRect.y;
+
+				note.clipRect = swagRect;
+			}
+		}
+	}
+
+	public function addNote(note:Note):Void {
+		if (note.isSustain)
+			holds.add(note);
+		else
+			notes.add(note);
+		allNotes.add(note);
+	}
+
+	public function removeNote(note:Note):Void {
+		if (!note.typeData.canDie)
+			return;
+
+		note.active = false;
+		note.exists = false;
+
+		var group:FlxTypedGroup<Note> = (note.isSustain ? holds : notes);
+
+		if (group.members.contains(note)) {
+			group.remove(note);
+			allNotes.remove(note);
+		}
+
+		note.kill();
+		note.destroy();
 	}
 }

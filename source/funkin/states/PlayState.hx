@@ -20,8 +20,8 @@ import funkin.essentials.song.SongFormat.FeatherSong;
 import funkin.objects.Character;
 import funkin.objects.Stage;
 import funkin.objects.ui.UI;
-import funkin.objects.ui.notes.*;
-import funkin.objects.ui.notes.Note.BabyArrow;
+import funkin.objects.ui.*;
+import funkin.objects.ui.Note.BabyArrow;
 import funkin.substates.GameOverSubstate;
 import openfl.media.Sound;
 
@@ -45,10 +45,6 @@ class PlayState extends MusicBeatState {
 
 	public static function set_song(newSong:FeatherSong):FeatherSong {
 		if (newSong != null && song != newSong) {
-			// clear notes prior to storing new ones
-			if (notesGroup != null)
-				notesGroup.destroy();
-
 			Conductor.stopSong();
 			if (FlxG.sound.music != null && FlxG.sound.music.playing)
 				FlxG.sound.music.stop();
@@ -61,12 +57,6 @@ class PlayState extends MusicBeatState {
 			// Conductor.mapBPMChanges(song);
 
 			song = ChartParser.loadChartNotes(song);
-
-			if (ChartParser.noteList.length > 0) {
-				noteContainer = [];
-				for (i in 0...ChartParser.noteList.length)
-					noteContainer.push(ChartParser.noteList[i]);
-			}
 		}
 
 		return song;
@@ -83,8 +73,6 @@ class PlayState extends MusicBeatState {
 
 	// User Interface
 	public static var strumsGroup:FlxTypedGroup<Strum>;
-	public static var notesGroup:Notefield;
-	public static var noteContainer:Array<Note>;
 
 	public static var ui:UI;
 
@@ -159,11 +147,9 @@ class PlayState extends MusicBeatState {
 		// generate the song
 		song = ChartParser.loadChartData(songName, difficulty);
 
-		// broken for now.
-		// FeatherModule.createInstance(localScripts);
-		// trace(localScripts);
+		FeatherModule.createInstance(localScripts);
 
-		gameStage = new Stage().setStage((song.stage == null ? "unknown" : song.stage));
+		gameStage = new Stage().setStage((song.stage == null ? "stage" : song.stage));
 		add(gameStage);
 
 		opponent = new Character(false).setCharacter(gameStage.opponentPos.x, gameStage.opponentPos.y, song.opponent);
@@ -173,10 +159,7 @@ class PlayState extends MusicBeatState {
 		add(player);
 
 		strumsGroup = new FlxTypedGroup<Strum>();
-		notesGroup = new Notefield();
-
 		strumsGroup.cameras = [camHUD];
-		notesGroup.cameras = [camHUD];
 
 		var strumX:Float = (FlxG.width / 2) - 30;
 		var strumWidthX:Float = (FlxG.width / 4);
@@ -193,9 +176,7 @@ class PlayState extends MusicBeatState {
 
 		if (OptionsAPI.getPref("Hide Opponent Notes") || OptionsAPI.getPref("Center Notes"))
 			strumsP2.visible = false;
-
 		add(strumsGroup);
-		add(notesGroup);
 
 		ui = new UI();
 		ui.cameras = [camHUD];
@@ -340,10 +321,12 @@ class PlayState extends MusicBeatState {
 	}
 
 	function startSong():Void {
-		if (!isStartingSong || isEndingSong)
+		if (Conductor.songMusic.playing || !isStartingSong || isEndingSong)
 			return;
 
 		callFunc('startSong', []);
+
+		AssetHelper.clear(true, false);
 
 		Conductor.playSong(song.name, Conductor.songMusic.playing);
 		isStartingSong = false;
@@ -356,45 +339,10 @@ class PlayState extends MusicBeatState {
 
 		gameStage.stageUpdate(elapsed);
 
-		if (!isPaused && !hasDied && !isEndingSong) {
-			if (gameplayMode != STORY) {
-				if (FlxG.keys.justPressed.SIX) {
-					PlayerInfo.validScore = false;
-					playerStrum.autoplay = !playerStrum.autoplay;
-					ui.autoPlayText.visible = playerStrum.autoplay;
-					ui.autoPlaySine = 1;
-				}
-
-				if (FlxG.keys.justPressed.SEVEN) {
-					PlayerInfo.validScore = false;
-					gameplayMode = CHARTING;
-					Conductor.pauseSong();
-					MusicState.switchState(new funkin.states.editors.ChartEditor());
-				}
-
-				if (FlxG.keys.justPressed.EIGHT) {
-					var char:Character = (FlxG.keys.pressed.SHIFT ? player : opponent);
-
-					Conductor.pauseSong();
-					MusicState.switchState(new funkin.states.editors.OffsetEditor(char.name, char.player));
-				}
-			}
-
-			Conductor.songPosition += elapsed * 1000;
-			if (Conductor.songPosition >= 0 && !Conductor.songMusic.playing && !isStartingSong)
-				startSong();
-
-			if (Conductor.songPosition > Conductor.lastSongPos)
-				Conductor.lastSongPos = Conductor.songPosition;
-
-			if (song != null) {
-				if (song.sectionNotes != null && song.sectionNotes[curSection] != null)
-					cameraPanChar();
-			}
+		if (!OptionsAPI.getPref("Reduce Motion")) {
+			FeatherUtils.cameraBumpingZooms(camGame, cameraZoom, cameraSpeed);
+			FeatherUtils.cameraBumpingZooms(camHUD, 1);
 		}
-
-		FeatherUtils.cameraBumpingZooms(camGame, cameraZoom, cameraSpeed);
-		FeatherUtils.cameraBumpingZooms(camHUD, 1);
 
 		playerDeathCheck();
 
@@ -404,26 +352,42 @@ class PlayState extends MusicBeatState {
 			openSubState(new funkin.substates.PauseSubstate(player.getScreenPosition().x, player.getScreenPosition().y, "default"));
 		}
 
-		while (noteContainer[0] != null) {
-			var spicyNote:Note = noteContainer[0];
+		if (song != null) {
+			if (song.sectionNotes != null && song.sectionNotes[curSection] != null)
+				cameraPanChar();
 
-			if (!spicyNote.noteData.mustPress) {
-				spicyNote.visible = !OptionsAPI.getPref("Hide Opponent Notes");
-				if (OptionsAPI.getPref("Center Notes")) {
-					spicyNote.alpha = 0.3;
-					for (i in 0...strumsP1.babyArrows.members.length)
-						spicyNote.x = strumsP1.babyArrows.members[i].x;
+			if (!isPaused && !hasDied && !isEndingSong) {
+				if (gameplayMode != STORY) {
+					if (FlxG.keys.justPressed.SIX) {
+						PlayerInfo.validScore = false;
+						playerStrum.autoplay = !playerStrum.autoplay;
+						ui.autoPlayText.visible = playerStrum.autoplay;
+						ui.autoPlaySine = 1;
+					}
+
+					if (FlxG.keys.justPressed.SEVEN) {
+						PlayerInfo.validScore = false;
+						gameplayMode = CHARTING;
+						Conductor.pauseSong();
+						MusicState.switchState(new funkin.states.editors.ChartEditor());
+					}
+
+					if (FlxG.keys.justPressed.EIGHT) {
+						var char:Character = (FlxG.keys.pressed.SHIFT ? player : opponent);
+
+						Conductor.pauseSong();
+						MusicState.switchState(new funkin.states.editors.OffsetEditor(char.name, char.player));
+					}
 				}
+
+				Conductor.songPosition += elapsed * 1000;
+				if (Conductor.songPosition >= 0)
+					startSong();
+
+				if (Conductor.songPosition > Conductor.lastSongPos)
+					Conductor.lastSongPos = Conductor.songPosition;
 			}
 
-			if (spicyNote.step - Conductor.songPosition > 2000)
-				break;
-
-			notesGroup.add(spicyNote);
-			noteContainer.shift();
-		}
-
-		if (song != null) {
 			if (countdownStarted) {
 				for (babyStrum in strumsGroup) {
 					babyStrum.babyArrows.forEachAlive(function(babyArrow:BabyArrow) {
@@ -432,56 +396,81 @@ class PlayState extends MusicBeatState {
 					});
 				}
 
-				notesGroup.forEachAlive(function(note:Note) {
-					var babyStrum:Strum = note.noteData.mustPress ? playerStrum : strumsP2;
+				while (ChartParser.noteList[0] != null) {
+					var spicyNote:Note = ChartParser.noteList[0];
 
-					if (!babyStrum.autoplay && keysHeld.contains(true) && keysHeld[note.index] && note.noteData.canBeHit && note.noteData.mustPress
-						&& note.isSustain && !note.noteData.tooLate)
-						noteHit(note, babyStrum);
-
-					note.speed = songSpeed;
-
-					notesGroup.updatePosition(note, babyStrum);
-
-					if (babyStrum.autoplay) {
-						// todo: accurate autoplay?
-						if (note.step < Conductor.songPosition)
-							noteHit(note, babyStrum);
-					}
-
-					var killRangeReached:Bool = babyStrum.downscroll ? note.y > FlxG.height : note.y < -note.height;
-
-					// kill offscreen notes and cause misses if needed
-					if (Conductor.songPosition > note.judgeData.missOffset + note.step) {
-						note.active = false;
-						note.visible = false;
-
-						if (killRangeReached)
-							notesGroup.removeNote(note, noteContainer);
-
-						if (note.noteData.mustPress && !note.noteData.tooLate && !note.noteData.wasGoodHit) {
-							if (!note.isSustain) {
-								note.noteData.tooLate = true;
-
-								// declare children as late
-								for (hold in note.children)
-									hold.noteData.tooLate = true;
-
-								// ignore misses if it's a mine or ignore note
-								if (note.typeData.ignoreNote || note.typeData.isMine)
-									return;
-
-								noteMiss(note.index, babyStrum);
-							}
+					if (!spicyNote.noteData.mustPress) {
+						spicyNote.visible = !OptionsAPI.getPref("Hide Opponent Notes");
+						if (OptionsAPI.getPref("Center Notes")) {
+							spicyNote.alpha = 0.3;
 						}
 					}
-				});
-			} else {
-				// prevent hits if the countdown was not active
-				notesGroup.forEachAlive(function(note:Note) {
-					note.noteData.canBeHit = false;
-					note.noteData.wasGoodHit = false;
-				});
+
+					if (spicyNote.step - Conductor.songPosition > 2000)
+						break;
+
+					strumsGroup.members[spicyNote.noteData.mustPress ? 0 : 1].addNote(spicyNote);
+					ChartParser.noteList.shift();
+				}
+
+				for (strum in strumsGroup) {
+					strum.allNotes.forEachAlive(function(note:Note) {
+						var babyStrum:Strum = note.noteData.mustPress ? playerStrum : strumsP2;
+
+						if (!babyStrum.autoplay && keysHeld.contains(true) && keysHeld[note.index] && note.noteData.canBeHit && note.noteData.mustPress
+							&& note.isSustain && !note.noteData.tooLate)
+							noteHit(note, babyStrum);
+
+						note.speed = songSpeed;
+
+						strum.updatePosition(note, babyStrum);
+
+						if (babyStrum.autoplay) {
+							// todo: accurate autoplay?
+							if (note.step < Conductor.songPosition)
+								noteHit(note, babyStrum);
+						}
+
+						var killRangeReached:Bool = babyStrum.downscroll ? note.y > FlxG.height : note.y < -note.height;
+
+						// kill offscreen notes and cause misses if needed
+						if (Conductor.songPosition > note.judgeData.missOffset + note.step) {
+							note.active = false;
+							note.visible = false;
+
+							if (killRangeReached)
+								strum.removeNote(note);
+
+							if (note.noteData.mustPress && !note.noteData.tooLate && !note.noteData.wasGoodHit) {
+								if (!note.isSustain) {
+									note.noteData.tooLate = true;
+
+									// declare children as late
+									for (hold in note.children)
+										hold.noteData.tooLate = true;
+
+									// ignore misses if it's a mine or ignore note
+									if (note.typeData.ignoreNote || note.typeData.isMine)
+										return;
+
+									noteMiss(note.index, babyStrum);
+								}
+							}
+						}
+					});
+				}
+			}
+			else {
+				/**
+					make sure notes can't be hit if the countdown didn't start
+					in which case, how did you get here?
+				**/
+				for (strum in strumsGroup) {
+					strum.allNotes.forEachAlive(function(note:Note) {
+						note.noteData.canBeHit = false;
+						note.noteData.wasGoodHit = false;
+					});
+				}
 			}
 		}
 
@@ -525,9 +514,12 @@ class PlayState extends MusicBeatState {
 	public function cameraPanChar(?force:Int):Void {
 		var index:Int = (force != null ? force : song.sectionNotes[curSection].hitIndex);
 		var char:Character = (index == 1 ? player : opponent);
-		var midpoint:FlxPoint = char.getMidpoint();
 
-		camFollow.setPosition(midpoint.x + char.camOffset.x + (index == 1 ? -100 : 100), midpoint.y - 100 + char.camOffset.y);
+		var midpoint:FlxPoint = char.getMidpoint();
+		var offset:Float = (index == 1 ? char.camOffset.x + -100 : char.camOffset.x + 100);
+
+		camFollow.x = midpoint.x + offset;
+		camFollow.y = midpoint.y - 100 + char.camOffset.y;
 	}
 
 	public function onKeyReleased(key:Int, action:String, isGamepad:Bool):Void {
@@ -552,7 +544,7 @@ class PlayState extends MusicBeatState {
 				var noteList:Array<Note> = [];
 				var notePresses:Array<Note> = [];
 
-				notesGroup.forEachAlive(function(note:Note) {
+				playerStrum.allNotes.forEachAlive(function(note:Note) {
 					if (note.index == idx && note.noteData.mustPress && note.noteData.canBeHit && !note.isSustain && !note.noteData.tooLate
 						&& !note.noteData.wasGoodHit)
 						noteList.push(note);
@@ -587,7 +579,7 @@ class PlayState extends MusicBeatState {
 				babyArrow.playAnim('static');
 
 			for (player in playerStrum.characters) {
-				if (player.timers.hold > Conductor.stepCrochet * (0.001 / Conductor.songRate) * player.timers.sing && !keysHeld.contains(true))
+				if (player.timers.hold > Conductor.stepCrochet * (0.001 * Conductor.songRate) * player.timers.sing && !keysHeld.contains(true))
 					if (player.animation.curAnim.name.startsWith('sing') && !player.animation.curAnim.name.endsWith('miss'))
 						player.dance();
 			}
@@ -663,7 +655,7 @@ class PlayState extends MusicBeatState {
 					popUpScore(PlayerInfo.judgeTable[babyStrum.autoplay ? 0 : ratingInteger].name, !babyStrum.autoplay);
 				}
 
-				notesGroup.removeNote(note, noteContainer);
+				note.destroy();
 			}
 		}
 	}
@@ -749,7 +741,8 @@ class PlayState extends MusicBeatState {
 
 		if (char != null) {
 			var animToPlay:String = stringSect + (sectSection != null ? sectSection : '');
-			char.playAnim(animToPlay, true);
+			if (char.animation.getByName(animToPlay) != null)
+				char.playAnim(animToPlay, true);
 		}
 	}
 
@@ -771,10 +764,8 @@ class PlayState extends MusicBeatState {
 
 		charDancing(curBeat);
 
-		if (!OptionsAPI.getPref("Reduce Motion")) {
-			FeatherUtils.cameraBumpReset(curBeat, camGame, bumpSpeed, 0.015);
-			FeatherUtils.cameraBumpReset(curBeat, camHUD, bumpSpeed, 0.03);
-		}
+		FeatherUtils.cameraBumpReset(curBeat, camGame, bumpSpeed, 0.015);
+		FeatherUtils.cameraBumpReset(curBeat, camHUD, bumpSpeed, 0.03);
 
 		ui.beatHit(curBeat);
 		gameStage.stageBeatHit(curBeat);
@@ -834,8 +825,8 @@ class PlayState extends MusicBeatState {
 		isEndingSong = true;
 		canPause = false;
 
-		Conductor.songPosition = Conductor.songMusic.length;
 		Conductor.pauseSong();
+		Conductor.songPosition = Conductor.songMusic.length;
 
 		var dataSave:SaveScoreData = {
 			score: PlayerInfo.stats.score,

@@ -14,6 +14,7 @@ import funkin.essentials.song.SongManager;
 import funkin.objects.ui.Icon;
 import funkin.objects.ui.fonts.Alphabet;
 import openfl.media.Sound;
+import openfl.system.System;
 
 /**
 	the Freeplay Menu, for selecting and playing songs!
@@ -170,6 +171,8 @@ class FreeplayMenu extends BaseMenu {
 			#if (flixel >= "5.0.0")
 			funkin.essentials.song.Conductor.songRate = songRating;
 			#end
+
+			System.gc();
 
 			MusicState.switchState(new PlayState());
 		}

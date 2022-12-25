@@ -18,13 +18,14 @@ class Icon extends FlxSprite {
 
 	public var shouldBop:Bool = true;
 
-	public var character:String = 'bf';
+	public var char:String = 'placeholder';
 	public var suffix:String = '';
 
-	public function new(character:String = 'bf', flip:Bool = false):Void {
+	public function new(char:String = 'placeholder', flip:Bool = false):Void {
 		super();
 
-		setIcon(character, flip);
+		this.char = char;
+		setIcon(char, flip);
 	}
 
 	var bopTween:FlxTween;
@@ -50,19 +51,22 @@ class Icon extends FlxSprite {
 		}
 	}
 
-	public function setIcon(char:String, beFlipped:Bool):Void {
+	public function setIcon(char:String = 'placeholder', beFlipped:Bool = false):Void {
 		var stringTrim:String = char;
 		if (stringTrim.contains('-'))
 			stringTrim = stringTrim.substring(0, stringTrim.indexOf('-'));
 
-		if (!FileSystem.exists(AssetHelper.grabAsset('$char/icon$suffix', IMAGE, 'data/characters'))) {
+		if (!FileSystem.exists(AssetHelper.grabAsset('icon-$char$suffix', IMAGE, 'data/characters/$char'))) {
 			if (char != stringTrim)
 				char = stringTrim;
 			else
 				char = 'placeholder';
 		}
 
-		var iconAsset:FlxGraphic = AssetHelper.grabAsset('$char/icon$suffix', IMAGE, 'data/characters');
+		var iconAsset:FlxGraphic = AssetHelper.grabAsset('icon-$char$suffix', IMAGE, 'data/characters/$char');
+
+		if (iconAsset == null)
+			return;
 
 		loadGraphic(iconAsset); // get file size
 

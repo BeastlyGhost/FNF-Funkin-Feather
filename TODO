@@ -1,13 +1,15 @@
 [PRIORITY: HIGH]
+- Camera Events.
 - Rewrite Options.
 - Rewrite the input system.
 - (Properly) implement characters.
 - Implement game weeks and finish the Story Mode menu.
 
 [PRIORITY: MEDIUM]
+- Remake the Asset Group System.
 - Use Scripts for Notetypes.
 - Work on the Chart Editor.
 
 [PRIORITY: LOW]
-...
-...
+- Quant Notes
+- Feather UI Misses Counter (as some kind of graphic).

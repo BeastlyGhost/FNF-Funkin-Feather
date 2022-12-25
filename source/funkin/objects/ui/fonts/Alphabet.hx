@@ -133,7 +133,7 @@ class Alphabet extends FlxTypedSpriteGroup<LetterSprite> {
 	Letter Offsets
 	Latin Support (maybe, just maybe)
 **/
-class LetterSprite extends FlxSprite {
+class LetterSprite extends PlumaSprite {
 	public var offsetIncrement:FlxPoint = new FlxPoint(0, 0);
 	public var texture(default, set):String = 'default/alphabet';
 	public var defaultFramerate:Int = 24;

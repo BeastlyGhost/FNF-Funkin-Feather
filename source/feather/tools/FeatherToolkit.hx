@@ -70,7 +70,7 @@ class ChildSprite extends PlumaSprite {
 			if (fileAnim != null) {
 				frames = AssetHelper.grabAsset(fileName, SPARROW, fileFolder);
 				animation.addByPrefix('static', fileAnim, 24, looped);
-				animation.play('static');
+				playAnim('static');
 			} else
 				loadGraphic(AssetHelper.grabAsset(fileName, IMAGE, fileFolder));
 			scrollFactor.set();

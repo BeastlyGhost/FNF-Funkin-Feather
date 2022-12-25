@@ -2,7 +2,7 @@ package funkin.essentials.song;
 
 import flixel.util.FlxSort;
 import funkin.essentials.song.SongFormat;
-import funkin.objects.ui.notes.Note;
+import funkin.objects.ui.Note;
 import haxe.Json;
 
 enum DataFormat {
@@ -158,6 +158,8 @@ class ChartParser {
 					var sustainNote:Note = new Note(note.time + (Conductor.stepCrochet * holdNote) + Conductor.stepCrochet, note.index, note.type, true,
 						oldNote);
 					sustainNote.scrollFactor.set();
+					if (holdNote == holdLength - 1)
+						sustainNote.isSustainEnd = true;
 					noteList.push(sustainNote);
 
 					sustainNote.noteData.mustPress = (note.hitIndex == 1);
@@ -168,6 +170,11 @@ class ChartParser {
 		}
 
 		noteList.sort(function(a:Note, b:Note):Int return FlxSort.byValues(FlxSort.ASCENDING, a.step, b.step));
+
+		/**
+			for (i in 0...noteList.length)
+				trace('ends: ' + noteList[i].isSustainEnd);
+		**/
 
 		// events
 		if (song.sectionEvents.length > 0) {
@@ -182,56 +189,6 @@ class ChartParser {
 			}
 		}
 
-		// TODO: Camera Events
 		return song;
-	}
-
-	public static function parseChartLegacy(dataSent:SwagSong):Array<Note> {
-		var arrayNotes:Array<Note> = [];
-
-		for (section in dataSent.notes) {
-			for (songNotes in section.sectionNotes) {
-				var daStrumTime:Float = songNotes[0];
-				var daNoteData:Int = Std.int(songNotes[1] % 4);
-
-				var gottaHitNote:Bool = section.mustHitSection;
-
-				if (songNotes[1] > 3)
-					gottaHitNote = !section.mustHitSection;
-
-				var oldNote:Note;
-				if (arrayNotes.length > 0)
-					oldNote = arrayNotes[Std.int(arrayNotes.length - 1)];
-				else
-					oldNote = null;
-
-				var swagNote:Note = new Note(daStrumTime, daNoteData, 'default', false, oldNote);
-				swagNote.speed = dataSent.speed;
-				swagNote.sustainLength = songNotes[2];
-				swagNote.typeData.type = songNotes[3];
-				swagNote.scrollFactor.set(0, 0);
-
-				var susLength:Float = swagNote.sustainLength;
-
-				susLength = susLength / Conductor.stepCrochet;
-				arrayNotes.push(swagNote);
-
-				for (susNote in 0...Math.floor(susLength)) {
-					oldNote = arrayNotes[Std.int(arrayNotes.length - 1)];
-
-					var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet, daNoteData, 'default', true,
-						oldNote);
-					sustainNote.scrollFactor.set();
-					arrayNotes.push(sustainNote);
-
-					sustainNote.noteData.mustPress = gottaHitNote;
-				}
-
-				swagNote.noteData.mustPress = gottaHitNote;
-			}
-		}
-
-		arrayNotes.sort(function(a:Note, b:Note):Int return FlxSort.byValues(FlxSort.ASCENDING, a.step, b.step));
-		return arrayNotes;
 	}
 }

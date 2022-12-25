@@ -85,7 +85,7 @@
 
 	<!-- ___________ Haxeflags ___________ -->
 
-	<haxeflag name="-dce no" />
+	<haxeflag name="--dce" value="no" />
 
 	<!-- ___________ Custom Nodes ___________ -->
 
