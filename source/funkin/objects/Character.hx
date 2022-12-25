@@ -185,7 +185,7 @@ class Character extends PlumaSprite {
 
 			for (i in characterScripts) {
 				if (i != null)
-					i.call('loadAanimtions', []);
+					i.call('update', [elapsed]);
 			}
 		}
 
