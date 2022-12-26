@@ -23,7 +23,7 @@ jobs:
         run: |
           haxelib setup ~/haxelib
           haxelib install hxcpp > /dev/null --quiet
-          haxelib install hmm -- quiet
+          haxelib install hmm --quiet
           haxelib run hmm install
 
       - name: Compile
@@ -49,7 +49,7 @@ jobs:
         run: |
           haxelib setup C:/haxelib
           haxelib install hxcpp > /dev/null --quiet
-          haxelib install hmm -- quiet
+          haxelib install hmm --quiet
           haxelib run hmm install
         shell: cmd
 
