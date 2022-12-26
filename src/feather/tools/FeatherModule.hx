@@ -42,26 +42,26 @@ class FeatherModule extends SScript {
 		set('FlxSound', flixel.system.FlxSound);
 
 		// CLASSES (FUNKIN);
-		set('Alphabet', funkin.objects.ui.fonts.Alphabet);
-		set('Character', funkin.objects.Character);
-		set('Conductor', funkin.essentials.song.Conductor);
-		set('Icon', funkin.objects.ui.Icon);
-		set('Strum', funkin.objects.ui.Strum);
-		set('Strumline', funkin.objects.ui.Strum);
-		set('BabyArrow', funkin.objects.ui.Note.BabyArrow);
-		set('Note', funkin.objects.ui.Note);
-		set('game', funkin.states.PlayState.main);
-		set('PlayState', funkin.states.PlayState);
+		set('Alphabet', fnf.objects.ui.Alphabet);
+		set('Character', fnf.objects.Character);
+		set('Conductor', fnf.song.Conductor);
+		set('Icon', fnf.objects.ui.Icon);
+		set('Strum', fnf.objects.ui.Strum);
+		set('Strumline', fnf.objects.ui.Strum);
+		set('BabyArrow', fnf.objects.ui.Note.BabyArrow);
+		set('Note', fnf.objects.ui.Note);
+		set('game', fnf.states.PlayState.main);
+		set('PlayState', fnf.states.PlayState);
 		if (scriptLibrary == null)
 			set('Paths', feather.assets.Paths);
 
 		// CLASSES (FEATHER);
-		set('Stage', funkin.objects.Stage);
+		set('Stage', fnf.objects.Stage);
 		set('OptionsAPI', feather.options.OptionsAPI);
 		set('FeatherUtils', feather.tools.FeatherUtils);
 		set('PlumaSprite', feather.tools.FeatherToolkit.PlumaSprite);
 		set('ChildSprite', feather.tools.FeatherToolkit.ChildSprite);
-		set('Controls', funkin.backend.Controls);
+		set('Controls', feather.tools.Controls);
 
 		#if windows
 		set('platform', 'windows');
@@ -84,7 +84,7 @@ class FeatherModule extends SScript {
 		// set up the modules folder
 		var dirs:Array<Array<String>> = [
 			FeatherUtils.readDirectory('scripts', MODULE),
-			FeatherUtils.readDirectory('data/songs/${funkin.states.PlayState.song.name.toLowerCase()}', MODULE)
+			FeatherUtils.readDirectory('data/songs/${fnf.states.PlayState.song.name.toLowerCase()}', MODULE)
 		];
 
 		var pushedModules:Array<String> = [];

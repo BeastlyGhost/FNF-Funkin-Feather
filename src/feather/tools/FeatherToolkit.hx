@@ -1,5 +1,6 @@
 package feather.tools;
 
+import feather.backend.Transition;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.transition.FlxTransitionableState;
@@ -7,7 +8,6 @@ import flixel.addons.ui.FlxUIState;
 import flixel.system.FlxSound;
 import flixel.tweens.FlxEase;
 import flixel.util.FlxSave;
-import funkin.backend.Transition;
 import sys.FileSystem;
 
 typedef SaveFile = {

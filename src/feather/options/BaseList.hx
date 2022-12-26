@@ -1,6 +1,7 @@
 package feather.options;
 
 import feather.BaseMenu;
+import feather.tools.Controls;
 import feather.tools.FeatherUtils;
 import flixel.FlxBasic;
 import flixel.FlxCamera;
@@ -8,9 +9,8 @@ import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.group.FlxGroup;
 import flixel.math.FlxMath;
-import funkin.backend.Controls;
-import funkin.objects.ui.fonts.Alphabet;
-import funkin.objects.ui.menus.OptionThingie;
+import fnf.objects.menus.OptionThingie;
+import fnf.objects.ui.Alphabet;
 
 /**
 	Base List for the Options Menu

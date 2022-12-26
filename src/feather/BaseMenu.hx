@@ -3,8 +3,8 @@ package feather;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
-import funkin.essentials.song.MusicState;
-import funkin.objects.ui.fonts.Alphabet;
+import fnf.objects.ui.Alphabet;
+import fnf.song.MusicState;
 
 class BaseMenu extends MusicBeatState {
 	var menuBG:FlxSprite;

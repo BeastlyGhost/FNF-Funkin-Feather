@@ -5,8 +5,8 @@ import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.math.FlxMath;
 import flixel.util.FlxAxes;
-import funkin.essentials.song.Conductor;
-import funkin.essentials.song.MusicState;
+import fnf.song.Conductor;
+import fnf.song.MusicState;
 import sys.FileSystem;
 
 /**
@@ -79,7 +79,7 @@ class FeatherUtils {
 	}
 
 	inline public static function getDifficulty(diff:Int = 0):String {
-		return funkin.essentials.song.SongManager.defaultDiffs[diff];
+		return fnf.song.SongManager.defaultDiffs[diff];
 	}
 
 	inline public static function getAxes(axe:String = 'xy'):FlxAxes {
