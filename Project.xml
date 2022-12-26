@@ -44,7 +44,7 @@
 	<set name="BUILD_DIR" value="export/debug-x86" if="HXCPP_M32 debug" />
 	<set name="BUILD_DIR" value="export/release-x86" if="HXCPP_M32 release" />
 
-	<source path="source" />
+	<source path="src" />
 	<assets path="assets" />
 
 	<!-- ___________ Libraries ___________ -->
@@ -56,6 +56,7 @@
 
 	<haxelib name="discord_rpc" if="RPC_ALLOWED" />
 	<haxelib name="SScript" if="HSCRIPT_ALLOWED" />
+	<haxelib name="CocoaSave" />
 
 	<haxelib name="hxcpp-debug-server" if="debug" />
 

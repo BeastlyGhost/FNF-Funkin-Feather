@@ -8,6 +8,13 @@
       "url": "https://github.com/AltronMaxX/SScript"
     },
     {
+      "name": "CocoaSave",
+      "type": "git",
+      "dir": null,
+      "ref": "main",
+      "url": "https://github.com/TheWorldMachinima/CocoaSave"
+    },
+    {
       "name": "haxe-files",
       "type": "git",
       "dir": null,
