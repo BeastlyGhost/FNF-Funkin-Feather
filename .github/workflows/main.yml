@@ -27,7 +27,7 @@ jobs:
           haxelib run hmm install
 
       - name: Compile
-        run: haxelib run lime build linux -release
+        run: haxelib run lime build Project.xml linux -release
 
       - name: Publish Artifact
         uses: actions/upload-artifact@main
