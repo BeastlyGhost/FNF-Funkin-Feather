@@ -284,14 +284,6 @@ class Splash extends PlumaSprite {
 			return;
 		}
 
-		loadGraphic(AssetHelper.grabAsset("splash_feather", IMAGE, "images/notes"), true, 500, 500);
-
-		for (i in 0...2)
-			animation.add('impact$i', [0, 1, 2, 3, 4, 5, 6, 7, 8], 20, false);
-		setGraphicSize(Std.int(width * 0.4));
-		offsetX = 170;
-		offsetY = 170;
-
 		shader = colorSwap;
 		setupNoteSplash(x, y, index);
 	}
