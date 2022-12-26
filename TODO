@@ -1,8 +1,6 @@
 [PRIORITY: HIGH]
 - Camera Events.
-- Rewrite Options.
 - Rewrite the input system.
-- (Properly) implement characters.
 - Implement game weeks and finish the Story Mode menu.
 
 [PRIORITY: MEDIUM]
@@ -12,4 +10,4 @@
 
 [PRIORITY: LOW]
 - Quant Notes
-- Feather UI Misses Counter (as some kind of graphic).
+- UI Misses Counter (as some kind of graphic).
