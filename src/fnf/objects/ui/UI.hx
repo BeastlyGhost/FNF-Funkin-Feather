@@ -15,12 +15,20 @@ import fnf.song.ChartParser;
 import fnf.song.Conductor;
 import fnf.states.PlayState;
 
+@:enum abstract CardShape(String) to String {
+	var CIRCULAR = 'circular';
+	var ROUNDED = 'rounded';
+	var DIAMOND = 'diamond';
+}
+
 /**
 	User Interface class so we don't have to create it on PlayState,
 	get as expressive as you can with this, create your own UI if you wish!
 **/
 class UI extends FlxSpriteGroup {
+	public var cardShape:String = DIAMOND;
 	public var scoreText:FlxText;
+	public var engineText:FlxText;
 
 	public var autoPlayText:FlxText;
 	public var autoPlaySine:Float = 0;
@@ -54,6 +62,11 @@ class UI extends FlxSpriteGroup {
 
 		scoreText = new UIText(healthBG.x + healthBG.width - 190, healthBG.y + 30, 0, SCORETEXT);
 		add(scoreText);
+
+		engineText = new UIText(0, 0, FlxG.width);
+		engineText.text = 'FEATHER ${Main.versionDisplay}';
+		engineText.setPosition(0, FlxG.width - engineText.width + 15);
+		add(engineText);
 
 		autoPlayText = new UIText(0, PlayState.playerStrum.downscroll ? FlxG.height - 80 : 80, FlxG.width - 800, AUTOPLAY);
 		autoPlayText.visible = PlayState.playerStrum.autoplay;
@@ -104,9 +117,8 @@ class UI extends FlxSpriteGroup {
 		switch (OptionsAPI.getPref("UI Style").toLowerCase()) {
 			case "feather":
 				tempScore = "Score: " + PlayerInfo.stats.score;
-				// tempScore += separator + "Misses: " + PlayerInfo.stats.misses;
-				tempScore += separator + "Accuracy: " + PlayerInfo.returnGradePercent();
-				tempScore += separator + "Grade: " + PlayerInfo.curGrade;
+				tempScore += separator + "Misses: " + PlayerInfo.stats.misses;
+				tempScore += separator + "Grade: " + PlayerInfo.curGrade + PlayerInfo.returnGradePercent();
 
 				centerText = true;
 
@@ -156,27 +168,29 @@ class UI extends FlxSpriteGroup {
 		if (!OptionsAPI.getPref("Show Info Card"))
 			return;
 
+		// var blackBy:FlxShape, byText:FlxText;
 		var blackBy:FlxSprite, byText:FlxText;
 		blackBy = new FlxSprite(0).loadGraphic(AssetHelper.grabAsset('default/infobox', IMAGE, 'images/ui'));
-		blackBy.screenCenter();
+		blackBy.alpha = 0.6;
+		blackBy.screenCenter(Y);
 		blackBy.x -= FlxG.width;
-		blackBy.y = FlxG.height - 120;
-		blackBy.alpha = 0.7;
+		// blackBy.y = FlxG.height - 120;
 
 		byText = new FlxText(0, 0, 425);
 		byText.setFormat(AssetHelper.grabAsset("vcr", FONT, "data/fonts"), 28, 0xFFFFFFFF, CENTER);
 		byText.screenCenter();
-		byText.x -= FlxG.width;
-		byText.y = FlxG.height - 80.5;
+		byText.x += blackBy.x;
+		byText.y = blackBy.y + 60;
 		byText.text = PlumaStrings.toTitle(PlayState.song.name);
 		byText.text += '\n By: ${PlayState.song.author}';
-		if (PlayState.song != null)
-			byText.text += '\n [${FlxStringUtil.formatTime(Conductor.songMusic.length)}]';
 
 		blackBy.setGraphicSize(Std.int(byText.width - 20), Std.int(byText.height + 105));
 		blackBy.updateHitbox();
+		blackBy.alpha = 0.6;
+
 		add(blackBy);
 		add(byText);
+
 		FlxTween.tween(blackBy, {x: 0}, 3, {ease: FlxEase.expoInOut});
 		FlxTween.tween(byText, {x: -40}, 3, {ease: FlxEase.expoInOut});
 		new FlxTimer().start(4.75, function(tmr:FlxTimer) {

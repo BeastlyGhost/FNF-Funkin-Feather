@@ -32,6 +32,7 @@ typedef FeatherSong = {
 	//
 	var sectionNotes:Array<SectionBody>;
 	var sectionEvents:Array<TimedEvent>;
+	var cameraEvents:Array<CameraEvent>;
 	//
 	var player:String;
 	var opponent:String;
@@ -49,6 +50,12 @@ typedef TimedEvent = {
 	var name:String;
 	var step:Float;
 	var values:Array<String>;
+}
+
+typedef CameraEvent = {
+	var name:String;
+	var step:Float;
+	var idx:Int;
 }
 
 /**

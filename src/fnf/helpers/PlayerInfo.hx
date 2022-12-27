@@ -2,16 +2,37 @@ package fnf.helpers;
 
 import flixel.FlxG;
 import fnf.states.PlayState;
+import fnf.song.Conductor;
+
+/**
+	Tiers, for FC Displaying (as of currently)
+
+	anyone got better names for these?
+	@since INFDEV
+**/
+@:enum abstract Tier(Int) to Int {
+	/** Nothing to Show **/
+	var UNJUDGED = 4;
+
+	/** Sick! Full Combo (SFC) **/
+	var GREAT = 0;
+
+	/** Good Full Combo (GFC) **/
+	var GOOD = 1;
+
+	/** Full Combo (FC) **/
+	var OKAY = 2;
+
+	/** Single Digit Combo Breaks (SDCB, less than 10 misses) **/
+	var BAD = 3;
+}
 
 typedef Judgement = {
 	var name:String;
 	var score:Int;
 	var health:Float;
-	var timingMod:Float;
 	var percentMod:Float;
 	var noteSplash:Bool;
-	var causesBreak:Bool;
-	var comboReturn:String;
 }
 
 typedef SaveScoreData = {
@@ -51,9 +72,14 @@ class PlayerInfo {
 	public static var curComboGrade:String;
 	public static var curGrade:String;
 
-	public static var greatestJudgement:Int = 0;
+	public static var bestTier:Int = 0;
+	public static var currentTier:Int = UNJUDGED;
 
 	public static var saveMap:Map<String, SaveScoreData> = [];
+
+	// BASED ON FNF BASE GAME TIMING WINDOWS!!! -- https://twitter.com/kade0912/status/1511477162469113859
+	public static var timingWindows:Array<Float> = [33.33, 91.67, 133.33, 166.67];
+	public static var comboTiers:Array<String> = ['SFC', 'GFC', 'FC', 'SDCB', ''];
 
 	public static var judgeTable:Array<Judgement> = [
 		{
@@ -61,40 +87,28 @@ class PlayerInfo {
 			score: 350,
 			health: 100,
 			percentMod: 100,
-			timingMod: 33.33, // BASED ON FNF BASE GAME TIMING WINDOWS!!! -- https://twitter.com/kade0912/status/1511477162469113859
 			noteSplash: true,
-			causesBreak: false,
-			comboReturn: "SFC"
 		},
 		{
 			name: "good",
 			score: 150,
 			health: 50,
 			percentMod: 85,
-			timingMod: 91.67,
 			noteSplash: false,
-			causesBreak: false,
-			comboReturn: "GFC"
 		},
 		{
 			name: "bad",
 			score: 50,
 			health: -50,
 			percentMod: 50,
-			timingMod: 133.33,
 			noteSplash: false,
-			causesBreak: false,
-			comboReturn: "FC"
 		},
 		{
 			name: "shit",
 			score: -50,
 			health: -100,
 			percentMod: 0,
-			timingMod: 166.67,
 			noteSplash: false,
-			causesBreak: true,
-			comboReturn: "FC"
 		}
 	];
 
@@ -124,7 +138,9 @@ class PlayerInfo {
 		totalNotesHit = 0;
 		totalMinesHit = 0;
 
-		greatestJudgement = 0;
+		bestTier = 0;
+		currentTier = UNJUDGED; // 4 would be unjudged
+
 		noteRatingMod = 0.0001;
 		accuracy = 0;
 
@@ -137,16 +153,37 @@ class PlayerInfo {
 		curGrade = "N/A";
 	}
 
+	public static function judge(a:Float, b:Float, ?type:String = 'default'):Void {
+		switch (type) {
+			default:
+				var lowestDiff:Float = Math.POSITIVE_INFINITY;
+				var currentDiff:Float = Math.abs(a - b);
+
+				for (i in 0...timingWindows.length) {
+					var timing:Float = timingWindows[i];
+					if (currentDiff <= timing && (timing < lowestDiff)) {
+						lowestDiff = timing;
+						currentTier = i;
+					}
+				}
+
+				/**
+					Possible Tiers should be: GREAT, GOOD, OKAY
+				**/
+				if (currentTier > bestTier)
+					bestTier = currentTier;
+		}
+	}
+
 	public static function returnGradePercent():String {
 		var floor = Math.floor(accuracy * 100) / 100;
 		var sep = fnf.objects.ui.UI.separator;
 
 		var finalPercent:String = '$floor%';
 		if (curComboGrade != null && curComboGrade != '')
-			finalPercent = '$floor% [$curComboGrade]';
-		// finalPercent = '$floor%' + sep + curComboGrade;
+			finalPercent = '$floor%' + sep + curComboGrade;
 
-		return ' $finalPercent';
+		return '  [$finalPercent]';
 	}
 
 	public static function updateGradePercent(id:Int):Void {
@@ -171,12 +208,13 @@ class PlayerInfo {
 
 		curComboGrade = "";
 
-		// Update FC Display;
-		if (judgeTable[greatestJudgement].comboReturn != null)
-			curComboGrade = judgeTable[greatestJudgement].comboReturn;
+		if (stats.misses > 0 && stats.misses < 10)
+			bestTier = BAD;
+		else if (stats.misses > 9)
+			bestTier = UNJUDGED;
 
-		if (stats.misses > 0)
-			curComboGrade = (stats.misses < 10 ? 'SDCB' : '');
+		// Update FC Display;
+		curComboGrade = comboTiers[bestTier];
 	}
 
 	public static function increaseScore(rating:Int):Void {
@@ -191,7 +229,7 @@ class PlayerInfo {
 		gottenJudges.set(judgeTable[rating].name, gottenJudges.get(judgeTable[rating].name) + 1);
 
 		// update combo breaks counter
-		if (judgeTable[rating].causesBreak)
+		if (judgeTable[rating].name == 'shit')
 			stats.breaks = stats.misses + gottenJudges.get(judgeTable[rating].name);
 
 		PlayerInfo.updateGradePercent(Std.int(judgeTable[rating].percentMod));
@@ -208,7 +246,7 @@ class PlayerInfo {
 		stats.combo = 0;
 
 		// update combo breaks counter
-		if (judgeTable[3].causesBreak)
+		if (judgeTable[3].name == 'shit')
 			stats.breaks = stats.misses + gottenJudges.get(judgeTable[3].name);
 
 		PlayerInfo.updateGradePercent(Std.int(judgeTable[3].percentMod));
@@ -218,7 +256,7 @@ class PlayerInfo {
 	}
 
 	/**
-		Functions for saving scores
+		Functions for saving song data
 	**/
 	//
 	public static function saveInfo(song:String, diff:Int = 0, data:SaveScoreData, mode:GameModes):Void {

@@ -16,15 +16,17 @@ class UIText extends FlxText {
 	var fontName:String = "vcr";
 	var textSize:Int = 20;
 
-	public override function new(X:Float = 0, Y:Float = 0, FieldWidth:Float = 0, TextType:TextType):Void {
+	public override function new(X:Float = 0, Y:Float = 0, FieldWidth:Float = 0, ?TextType:TextType):Void {
 		super(X, Y, FieldWidth, '', 8, true);
 
 		switch (TextType) {
 			case SCORETEXT:
 				textSize = (ui == "feather" ? 20 : 16);
 				align = (ui == "feather" ? CENTER : LEFT);
-			default:
+			case AUTOPLAY:
 				textSize = 32;
+			default:
+				textSize = 20;
 				align = CENTER;
 		}
 

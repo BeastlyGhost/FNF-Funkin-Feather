@@ -23,13 +23,19 @@ class MusicState {
 	public static function switchState(state:FlxState):Void {
 		if (!FlxTransitionableState.skipNextTransIn) {
 			Transition.start(0.3, true, Slide_UpDown, FlxEase.linear, function() {
-				FlxG.switchState(state);
+				if (state == FlxG.state)
+					FlxG.resetState();
+				else
+					FlxG.switchState(state);
 			});
 			return;
 		} else {
 			FlxTransitionableState.skipNextTransIn = false;
 			FlxTransitionableState.skipNextTransOut = false;
-			FlxG.switchState(state);
+			if (state == FlxG.state)
+				FlxG.resetState();
+			else
+				FlxG.switchState(state);
 		}
 	}
 

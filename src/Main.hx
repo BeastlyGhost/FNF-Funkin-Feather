@@ -4,6 +4,7 @@ import feather.backend.FPS;
 import flixel.FlxG;
 import flixel.FlxGame;
 import fnf.helpers.PlayerInfo;
+import fnf.helpers.AlphaLetters;
 import openfl.Lib;
 import openfl.display.Sprite;
 
@@ -24,6 +25,8 @@ class Main extends Sprite {
 	};
 
 	public static var __justcompiled:Bool = false;
+
+	public static var versionDisplay:String = 'v${game.version}';
 
 	public static function main():Void
 		Lib.current.addChild(new Main());

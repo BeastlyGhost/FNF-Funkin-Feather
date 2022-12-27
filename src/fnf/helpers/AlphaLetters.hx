@@ -89,4 +89,17 @@ class AlphaLetters {
 		">:(" => {anim: "angry faic"},
 		"<3" => {anim: "heart"},
 	];
+
+	public inline static function anyLetter():String {
+		return letterList.get(LETTER);
+	}
+
+	public inline static function anyNumber(?getAsNum:Bool = false):Any {
+		var returnList:Any = letterList.get(NUMBER);
+		return (getAsNum ? Std.int(returnList) : returnList);
+	}
+
+	public inline static function anySymbol():String {
+		return letterList.get(SYMBOL);
+	}
 }

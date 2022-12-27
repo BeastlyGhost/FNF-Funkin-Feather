@@ -41,6 +41,7 @@ class ChartParser {
 			featherSong.author = '???';
 
 		if (chartDataType != null && chartDataType == VANILLA) {
+			// convert psych engine girlfriend value
 			if (funkinSong.gfVersion == null) {
 				if (funkinSong.player3 != null)
 					funkinSong.gfVersion = funkinSong.player3;
@@ -60,6 +61,7 @@ class ChartParser {
 				bpm: funkinSong.bpm,
 				sectionNotes: [],
 				sectionEvents: [],
+				cameraEvents: [],
 				player: funkinSong.player1,
 				opponent: funkinSong.player2,
 				crowd: funkinSong.gfVersion, // while the original chart format didn't have it, most engines do.
@@ -68,6 +70,7 @@ class ChartParser {
 
 			// with that out of the way, let's convert the notes!
 			for (section in funkinSong.notes) {
+				// convert notes
 				for (songNotes in section.sectionNotes) {
 					var daStrumTime:Float = songNotes[0];
 					var daNoteData:Int = Std.int(songNotes[1] % 4);
@@ -102,6 +105,14 @@ class ChartParser {
 
 					if (section.altAnim)
 						songNotes[4] = '-alt';
+
+					// place the camera events where they should be
+					var createdCamera:CameraEvent = {
+						name: 'move-between-sections',
+						step: songNotes.length * 16, // wrong value?
+						idx: (section.mustHitSection ? 1 : section.gfSection ? 2 : 0),
+					}
+					featherSong.cameraEvents.push(createdCamera);
 
 					if (songNotes[1] >= 0) // if the note data is valid (AKA not a old psych event)
 					{

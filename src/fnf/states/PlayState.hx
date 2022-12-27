@@ -84,7 +84,7 @@ class PlayState extends MusicBeatState {
 	// User Interface
 	public static var strumsGroup:FlxTypedGroup<Strum>;
 
-	public static var ui:UI;
+	public static var mainHUD:UI;
 
 	public static var strumsP1:Strum;
 	public static var strumsP2:Strum;
@@ -110,8 +110,6 @@ class PlayState extends MusicBeatState {
 	public var camOther:FlxCamera;
 
 	private var camFollow:FlxObject;
-
-	private static var prevFollow:FlxObject;
 
 	public static var cameraSpeed:Float = 1;
 	public static var cameraZoom:Float = 1.05;
@@ -188,16 +186,11 @@ class PlayState extends MusicBeatState {
 			strumsP2.visible = false;
 		add(strumsGroup);
 
-		ui = new UI();
-		ui.cameras = [camHUD];
-		add(ui);
+		mainHUD = new UI();
+		mainHUD.cameras = [camHUD];
+		add(mainHUD);
 
 		camFollow = new FlxObject(0, 0, 1, 1);
-		if (prevFollow != null) {
-			camFollow = prevFollow;
-			prevFollow = null;
-		}
-
 		add(camFollow);
 
 		FlxG.camera.zoom = cameraZoom;
@@ -241,6 +234,8 @@ class PlayState extends MusicBeatState {
 
 	public function songCutscene():Void {
 		if (!isEndingSong) {
+			mainHUD.alpha = 0;
+
 			for (babyStrum in strumsGroup) {
 				babyStrum.babyArrows.forEachAlive(function(babyArrow:BabyArrow) {
 					babyArrow.alpha = 0;
@@ -323,8 +318,7 @@ class PlayState extends MusicBeatState {
 
 			callFunc('countdownTick', [posCount]);
 
-			if (posCount == 4) {
-				ui.showInfoCard();
+			if (posCount >= 4) {
 				countdownEnded = true;
 			}
 		}, 5);
@@ -337,6 +331,14 @@ class PlayState extends MusicBeatState {
 		callFunc('startSong', []);
 
 		AssetHelper.clear(true, false);
+
+		if (mainHUD.alpha < 1)
+			FlxTween.tween(mainHUD, {alpha: 1}, 0.6, {
+				ease: FlxEase.expoOut,
+				onComplete: f -> {
+					mainHUD.showInfoCard();
+				}
+			});
 
 		Conductor.playSong(song.name, Conductor.songMusic.playing);
 		isStartingSong = false;
@@ -363,16 +365,20 @@ class PlayState extends MusicBeatState {
 		}
 
 		if (song != null) {
-			if (song.sectionNotes != null && song.sectionNotes[curSection] != null)
+			if (song.sectionNotes != null && song.cameraEvents[curSection] != null) {
 				cameraPanChar();
+
+				// trace('step / 16: ' + song.cameraEvents[Std.int(curStep / 16)].idx);
+				// trace('section: ' + song.cameraEvents[curSection].idx);
+			}
 
 			if (!isPaused && !hasDied && !isEndingSong) {
 				if (gameplayMode != STORY) {
 					if (FlxG.keys.justPressed.SIX) {
 						PlayerInfo.validScore = false;
 						playerStrum.autoplay = !playerStrum.autoplay;
-						ui.autoPlayText.visible = playerStrum.autoplay;
-						ui.autoPlaySine = 1;
+						mainHUD.autoPlayText.visible = playerStrum.autoplay;
+						mainHUD.autoPlaySine = 1;
 					}
 
 					if (FlxG.keys.justPressed.SEVEN) {
@@ -522,14 +528,14 @@ class PlayState extends MusicBeatState {
 	}
 
 	public function cameraPanChar(?force:Int):Void {
-		var index:Int = (force != null ? force : song.sectionNotes[curSection].hitIndex);
+		var index:Int = (force != null ? force : song.cameraEvents[curSection].idx);
 		var char:Character = (index == 1 ? player : opponent);
 
 		var midpoint:FlxPoint = char.getMidpoint();
-		var offset:Float = (index == 1 ? char.camOffset.x + -100 : char.camOffset.x + 100);
+		var offset:Float = (index == 1 ? char.camOffset.x - 100 : char.camOffset.x + 100);
 
-		camFollow.x = midpoint.x + offset;
-		camFollow.y = midpoint.y - 100 + char.camOffset.y;
+		if (camFollow.x != midpoint.x)
+			camFollow.setPosition(midpoint.x + offset, midpoint.y - 100 + char.camOffset.y);
 	}
 
 	public function onKeyReleased(key:Int, action:String, isGamepad:Bool):Void {
@@ -630,39 +636,31 @@ class PlayState extends MusicBeatState {
 				Conductor.songVocals.volume = 1;
 			}
 
-			var lowestDiff:Float = Math.POSITIVE_INFINITY;
-			var noteDiff:Float = Math.abs(note.step - Conductor.songPosition);
-			var ratingInteger:Int = 3; // 3 is "Shit"
-
 			if (note.noteData.mustPress && !babyStrum.autoplay) // being hit by the player
 			{
-				for (i in 0...PlayerInfo.judgeTable.length) {
-					var timingMod:Float = PlayerInfo.judgeTable[i].timingMod;
-					if (noteDiff <= timingMod && (timingMod < lowestDiff)) {
-						ratingInteger = i;
-						lowestDiff = timingMod;
-					}
-				}
+				PlayerInfo.judge(note.step, Conductor.songPosition, note.typeData.type);
 
 				if (!note.isSustain) {
-					if (PlayerInfo.judgeTable[ratingInteger].causesBreak)
+					if (PlayerInfo.judgeTable[PlayerInfo.currentTier].name == 'shit')
 						PlayerInfo.stats.breaks += 1;
 
-					if (ratingInteger > PlayerInfo.greatestJudgement)
-						PlayerInfo.greatestJudgement = ratingInteger;
-
-					PlayerInfo.increaseScore(ratingInteger);
+					PlayerInfo.increaseScore(PlayerInfo.currentTier);
 
 					// update scoretext
-					ui.updateScoreText(OptionsAPI.getPref("Score Bopping"));
+					mainHUD.updateScoreText(OptionsAPI.getPref("Score Bopping"));
 				}
 			}
 
 			if (!note.isSustain) {
 				if (note.noteData.mustPress) {
-					if (PlayerInfo.judgeTable[ratingInteger].noteSplash || note.typeData.doSplash || babyStrum.autoplay)
+					// set to best on autoplay
+					if (babyStrum.autoplay) {
+						PlayerInfo.currentTier = GREAT;
+					}
+
+					if (PlayerInfo.judgeTable[PlayerInfo.currentTier].noteSplash || note.typeData.doSplash || babyStrum.autoplay)
 						babyStrum.popUpSplash(note.index, note.step, assetSkin);
-					popUpScore(PlayerInfo.judgeTable[babyStrum.autoplay ? 0 : ratingInteger].name, !babyStrum.autoplay);
+					popUpScore(PlayerInfo.judgeTable[PlayerInfo.currentTier].name, !babyStrum.autoplay);
 				}
 
 				note.destroy();
@@ -682,7 +680,7 @@ class PlayState extends MusicBeatState {
 		Conductor.songVocals.volume = 0;
 
 		PlayerInfo.decreaseScore();
-		ui.updateScoreText(false);
+		mainHUD.updateScoreText(false);
 	}
 
 	public function popUpScore(myRating:String = 'sick', combo:Bool = true, preload:Bool = false):Void {
@@ -777,7 +775,7 @@ class PlayState extends MusicBeatState {
 		FeatherUtils.cameraBumpReset(curBeat, camGame, bumpSpeed, 0.015);
 		FeatherUtils.cameraBumpReset(curBeat, camHUD, bumpSpeed, 0.03);
 
-		ui.beatHit(curBeat);
+		mainHUD.beatHit(curBeat);
 		gameStage.stageBeatHit(curBeat);
 		callFunc('beatHit', [curBeat]);
 	}
@@ -832,11 +830,12 @@ class PlayState extends MusicBeatState {
 
 		callFunc('endSong', []);
 
+		FlxTween.tween(mainHUD, {alpha: 0}, 0.6, {ease: FlxEase.sineOut});
 		isEndingSong = true;
 		canPause = false;
 
 		Conductor.pauseSong();
-		Conductor.songPosition = Conductor.songMusic.length;
+		// Conductor.songPosition = Conductor.songMusic.length;
 
 		var dataSave:SaveScoreData = {
 			score: PlayerInfo.stats.score,

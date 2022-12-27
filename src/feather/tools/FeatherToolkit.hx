@@ -7,13 +7,7 @@ import flixel.addons.transition.FlxTransitionableState;
 import flixel.addons.ui.FlxUIState;
 import flixel.system.FlxSound;
 import flixel.tweens.FlxEase;
-import flixel.util.FlxSave;
 import sys.FileSystem;
-
-typedef SaveFile = {
-	var fileName:String;
-	var fileData:Dynamic;
-}
 
 /**
 	Flixel Sprite Extension made for characters! 
@@ -158,9 +152,11 @@ class PlumaSound {
 	}
 
 	public static function update():Void {
-		if (createdSound != null)
+		if (createdSound != null) {
+			createdSound.volume = FlxG.sound.volume;
 			if (createdSound.time == createdSound.length)
 				createdSound.stop();
+		}
 	}
 
 	/**

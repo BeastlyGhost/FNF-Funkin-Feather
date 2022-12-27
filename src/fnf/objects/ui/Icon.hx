@@ -19,7 +19,6 @@ class Icon extends FlxSprite {
 	public var shouldBop:Bool = true;
 
 	public var char:String = 'placeholder';
-	public var suffix:String = '';
 
 	public function new(char:String = 'placeholder', flip:Bool = false):Void {
 		super();
@@ -56,14 +55,14 @@ class Icon extends FlxSprite {
 		if (stringTrim.contains('-'))
 			stringTrim = stringTrim.substring(0, stringTrim.indexOf('-'));
 
-		if (!FileSystem.exists(AssetHelper.grabAsset('icon-$char$suffix', IMAGE, 'data/characters/$char'))) {
+		if (!FileSystem.exists(AssetHelper.grabAsset('icon-$char', IMAGE, 'data/characters/$char'))) {
 			if (char != stringTrim)
 				char = stringTrim;
 			else
 				char = 'placeholder';
 		}
 
-		var iconAsset:FlxGraphic = AssetHelper.grabAsset('icon-$char$suffix', IMAGE, 'data/characters/$char');
+		var iconAsset:FlxGraphic = AssetHelper.grabAsset('icon-$char', IMAGE, 'data/characters/$char');
 
 		if (iconAsset == null)
 			return;
@@ -88,9 +87,7 @@ class Icon extends FlxSprite {
 	override function update(elapsed:Float):Void {
 		super.update(elapsed);
 
-		if (frames != null && parentSprite != null) {
+		if (frames != null && parentSprite != null)
 			setPosition(parentSprite.x + parentSprite.width + 10, parentSprite.y - 30);
-			scrollFactor.set(parentSprite.scrollFactor.x, parentSprite.scrollFactor.y);
-		}
 	}
 }
