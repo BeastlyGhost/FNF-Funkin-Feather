@@ -1,32 +1,14 @@
 {
   "dependencies": [
     {
-      "name": "SScript",
-      "type": "git",
-      "dir": null,
-      "ref": "testing",
-      "url": "https://github.com/AltronMaxX/SScript"
+      "name": "lime",
+      "type": "haxelib",
+      "version": null
     },
     {
-      "name": "CocoaSave",
-      "type": "git",
-      "dir": null,
-      "ref": "main",
-      "url": "https://github.com/TheWorldMachinima/CocoaSave"
-    },
-    {
-      "name": "haxe-files",
-      "type": "git",
-      "dir": null,
-      "ref": "main",
-      "url": "https://github.com/vegardit/haxe-files"
-    },
-    {
-      "name": "discord_rpc",
-      "type": "git",
-      "dir": null,
-      "ref": "master",
-      "url": "https://github.com/Aidan63/linc_discord-rpc"
+      "name": "openfl",
+      "type": "haxelib",
+      "version": null
     },
     {
       "name": "flixel",
@@ -44,17 +26,12 @@
       "version": null
     },
     {
-      "name": "format",
-      "type": "haxelib",
-      "version": null
-    },
-    {
       "name": "hxcpp",
       "type": "haxelib",
       "version": null
     },
     {
-      "name": "hxcpp-debug-server",
+      "name": "format",
       "type": "haxelib",
       "version": null
     },
@@ -64,19 +41,30 @@
       "version": null
     },
     {
-      "name": "lime",
+      "name": "hxcpp-debug-server",
       "type": "haxelib",
       "version": null
     },
     {
-      "name": "openfl",
-      "type": "haxelib",
-      "version": null
+      "name": "discord_rpc",
+      "type": "git",
+      "dir": null,
+      "ref": "master",
+      "url": "https://github.com/Aidan63/linc_discord-rpc"
     },
     {
-      "name": "yaml",
-      "type": "haxelib",
-      "version": null
+      "name": "haxe-files",
+      "type": "git",
+      "dir": null,
+      "ref": "main",
+      "url": "https://github.com/vegardit/haxe-files"
+    },
+    {
+      "name": "SScript",
+      "type": "git",
+      "dir": null,
+      "ref": "testing",
+      "url": "https://github.com/AltronMaxX/SScript"
     }
   ]
 }
