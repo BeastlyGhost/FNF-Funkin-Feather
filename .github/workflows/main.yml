@@ -35,6 +35,32 @@ jobs:
           name: linuxBuild
           path: "export/release/linux/bin"
 
+  buildMac:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@main
+
+      - uses: krdlab/setup-haxe@master
+        with:
+          haxe-version: 4.2.5
+
+      - name: Install Haxelib
+        run: |
+          haxelib setup ~/haxelib
+          haxelib install hxcpp > /dev/null --quiet
+          haxelib install hmm --quiet
+          haxelib run hmm install
+
+      - name: Compile
+        run: haxelib run lime build Project.xml mac -release
+
+      - name: Publish Artifact
+        uses: actions/upload-artifact@main
+        with:
+          name: macBuild
+          path: "export/release/macos/bin"
+
   buildWindows:
     runs-on: windows-latest
 
