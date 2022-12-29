@@ -44,7 +44,7 @@
       "name": "yaml",
       "type": "haxelib",
       "version": null
-    }
+    },
     {
       "name": "hxcpp-debug-server",
       "type": "haxelib",
