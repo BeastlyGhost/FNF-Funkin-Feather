@@ -7,7 +7,7 @@ body:
     attributes:
       label: "Is your feature request related to a problem? If so, link the issue(s) or describe it/them."
     validations:
-      required: true
+      required: false
 
   - type: textarea
     id: describe-feature
