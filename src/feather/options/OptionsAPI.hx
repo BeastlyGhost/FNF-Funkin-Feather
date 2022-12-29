@@ -41,12 +41,12 @@ class OptionsAPI {
 	**/
 	public static function savePrefs():Void {
 		bindSave("Settings");
-		/**
-			try
-				saveFile.set('preferences', myPreferences)
-			catch (e:Dynamic)
-				throw('Unexpected Error when saving preferences, Error: $e');
-		**/
+		try {
+			//saveFile.set('preferences', myPreferences)
+			FlxG.save.data.preferences = myPreferences;
+		}
+		catch (e:Dynamic)
+			throw('Unexpected Error when saving preferences, Error: $e');
 	}
 
 	/**
@@ -60,10 +60,10 @@ class OptionsAPI {
 			myPreferences.set(key, keys);
 		}
 
-		if (saveFile.get('preferences') != null) {
+		if (FlxG.save.data.preferences != null) {
 			// grab from your save file
 			try {
-				var savedPreferences:Map<String, Dynamic> = saveFile.get('preferences');
+				var savedPreferences:Map<String, Dynamic> = FlxG.save.data.preferences;
 				for (key => keys in savedPreferences) {
 					// this checks if the key exists on the DEFAULT preferences list
 					// if it does, then it sets your preferences to the save keys
@@ -178,14 +178,18 @@ class OptionsAPI {
 		FlxG.autoPause = autoPause;
 	}
 
-	static var saveFile:CocoaSave;
+	// public static var saveFile:CocoaSave;
 
 	public static function bindSave(name:String):Void {
 		try {
+			/**
 			if (saveFile == null)
 				saveFile = new CocoaSave(name, "pluma");
 			else if (saveFile.currentBind != name)
 				saveFile.bind(name);
+			**/
+			if (FlxG.save.name != name)
+				FlxG.save.bind(name);
 		}
 		catch (e:Dynamic)
 			trace('Unexpected Error when binding save, file name was "$name", Error: $e');

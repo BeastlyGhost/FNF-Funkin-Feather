@@ -1,5 +1,6 @@
 package;
 
+import feather.backend.DebugUI;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.tweens.FlxEase;
@@ -10,15 +11,17 @@ import flixel.tweens.FlxTween;
 	used to set up useful functions and variables for the main game!
 **/
 class Start extends FlxState {
+	public var consoleUI:DebugConsole;
+
 	public override function create():Void {
 		super.create();
+
+		if (FlxG.save.data != null)
+			OptionsAPI.updatePrefs();
 
 		FlxG.fixedTimestep = true;
 		FlxG.mouse.useSystemCursor = true;
 		FlxG.mouse.visible = false;
-
-		if (FlxG.save != null)
-			OptionsAPI.updatePrefs();
 
 		triggerSplash(Main.game.skipSplash);
 	}
@@ -41,10 +44,17 @@ class Start extends FlxState {
 
 		FlxTween.tween(bianca, {alpha: 0}, 2, {
 			onComplete: function(t:FlxTween) {
-				FlxG.save.data.seenSplash = true;
+				addCompilerObjects();
 				FlxG.switchState(cast Type.createInstance(Main.game.initialState, []));
 			},
 			ease: FlxEase.sineOut
 		});
+	}
+
+	public function addCompilerObjects():Void {
+		//#if INC_FEATHERDEBUG
+		consoleUI = new DebugConsole();
+		add(consoleUI);
+		//#end
 	}
 }

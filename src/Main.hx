@@ -4,7 +4,6 @@ import feather.backend.FPS;
 import flixel.FlxG;
 import flixel.FlxGame;
 import fnf.helpers.PlayerInfo;
-import fnf.helpers.AlphaLetters;
 import openfl.Lib;
 import openfl.display.Sprite;
 
@@ -27,6 +26,8 @@ class Main extends Sprite {
 	public static var __justcompiled:Bool = false;
 
 	public static var versionDisplay:String = 'v${game.version}';
+
+	public var fpsUI:FPS;
 
 	public static function main():Void
 		Lib.current.addChild(new Main());
@@ -53,7 +54,9 @@ class Main extends Sprite {
 		}
 
 		addChild(new FlxGame(game.width, game.height, Start, #if (flixel < "5.0.0") game.zoom, #end game.framerate, game.framerate, true, game.fullscreen));
-		addChild(new FPS(0, 0));
+
+		fpsUI = new FPS(0, 0);
+		addChild(fpsUI);
 
 		#if sys
 		if (Sys.args().contains("-livereload"))
