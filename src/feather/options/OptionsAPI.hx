@@ -42,7 +42,7 @@ class OptionsAPI {
 	public static function savePrefs():Void {
 		bindSave("Settings");
 		try {
-			//saveFile.set('preferences', myPreferences)
+			// saveFile.set('preferences', myPreferences)
 			FlxG.save.data.preferences = myPreferences;
 		}
 		catch (e:Dynamic)
@@ -183,10 +183,10 @@ class OptionsAPI {
 	public static function bindSave(name:String):Void {
 		try {
 			/**
-			if (saveFile == null)
-				saveFile = new CocoaSave(name, "pluma");
-			else if (saveFile.currentBind != name)
-				saveFile.bind(name);
+				if (saveFile == null)
+					saveFile = new CocoaSave(name, "pluma");
+				else if (saveFile.currentBind != name)
+					saveFile.bind(name);
 			**/
 			if (FlxG.save.name != name)
 				FlxG.save.bind(name);

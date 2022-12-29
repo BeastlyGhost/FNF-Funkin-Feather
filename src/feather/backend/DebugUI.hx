@@ -12,11 +12,10 @@ import openfl.display.Sprite;
 	var BOX = 'box';
 }
 
-class DebugUI
-{
+class DebugUI {
 	public var boxes:FlxTypedGroup<FlxShapeBox>;
 
-	public function new(x:Float=0,y:Float=0,w:Float=0,h:Float=0,type:String=BOX):Void {
+	public function new(x:Float = 0, y:Float = 0, w:Float = 0, h:Float = 0, type:String = BOX):Void {
 		boxes = new FlxTypedGroup<FlxShapeBox>();
 	}
 
@@ -48,7 +47,7 @@ class DebugConsole extends flixel.FlxObject {
 				curLine++;
 				if (!allLines.contains('$curLine => $output'))
 					allLines.push('$curLine => $output');
-				while(allLines.length > 500){
+				while (allLines.length > 500) {
 					allLines.shift();
 				}
 			}

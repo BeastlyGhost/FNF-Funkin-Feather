@@ -52,9 +52,9 @@ class Start extends FlxState {
 	}
 
 	public function addCompilerObjects():Void {
-		//#if INC_FEATHERDEBUG
+		// #if INC_FEATHERDEBUG
 		consoleUI = new DebugConsole();
 		add(consoleUI);
-		//#end
+		// #end
 	}
 }
