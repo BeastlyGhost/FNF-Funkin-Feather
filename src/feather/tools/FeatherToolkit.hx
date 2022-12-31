@@ -153,7 +153,6 @@ class PlumaSound {
 
 	public static function update():Void {
 		if (createdSound != null) {
-			createdSound.volume = FlxG.sound.volume;
 			if (createdSound.time == createdSound.length)
 				createdSound.stop();
 		}

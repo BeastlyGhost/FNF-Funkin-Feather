@@ -133,7 +133,6 @@ class Alphabet extends FlxTypedSpriteGroup<LetterSprite> {
 	Latin Support (maybe, just maybe)
 **/
 class LetterSprite extends PlumaSprite {
-	public var offsetIncrement:FlxPoint = new FlxPoint(0, 0);
 	public var texture(default, set):String = 'default/alphabet';
 	public var defaultFramerate:Int = 24;
 
@@ -166,7 +165,7 @@ class LetterSprite extends PlumaSprite {
 	public var row:Int = 0;
 
 	public function new(x:Float, y:Float):Void {
-		super(x + offsetIncrement.x, y + offsetIncrement.y);
+		super(x, y);
 
 		texture = 'default/alphabet';
 	}
@@ -225,8 +224,10 @@ class LetterSprite extends PlumaSprite {
 				// trace('added: ${thingies.anim} to Alphabet');
 
 				var chosenAdjustArray:Array<Float> = (isBold ? thingies.boldOffset : thingies.offset);
-				if (chosenAdjustArray != null)
-					offsetIncrement.set(chosenAdjustArray[0], chosenAdjustArray[1]);
+				if (chosenAdjustArray != null && letter == lettah) {
+					x += chosenAdjustArray[0];
+					y += chosenAdjustArray[1];
+				}
 			}
 		}
 

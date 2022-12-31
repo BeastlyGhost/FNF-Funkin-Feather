@@ -230,7 +230,7 @@ class AssetHelper {
 			case PACKER | TEXT:
 				extensions = ['.txt'];
 			case MODULE:
-				extensions = ['.hx', '.hxs', '.hxc', '.hscript'];
+				extensions = ['.hx', '.hxs'];
 			default:
 				extensions = null;
 		}
@@ -254,31 +254,36 @@ class AssetHelper {
 		if (clearMappedImages) {
 			@:privateAccess
 			for (asset in FlxG.bitmap._cache.keys()) {
-				var bitmap = FlxG.bitmap._cache.get(asset);
-				if (bitmap != null && !mappedAssets[IMAGE].exists(asset)) {
-					Assets.cache.removeBitmapData(asset);
-					FlxG.bitmap._cache.remove(asset);
-					bitmap.destroy();
+				if (!persistentAssets.contains(asset)) {
+					var bitmap = FlxG.bitmap._cache.get(asset);
+					if (bitmap != null && !mappedAssets[IMAGE].exists(asset)) {
+						Assets.cache.removeBitmapData(asset);
+						FlxG.bitmap._cache.remove(asset);
+						bitmap.destroy();
+					}
 				}
 			}
 		}
 
 		if (clearUnusedImages) {
 			for (asset in mappedAssets[IMAGE].keys()) {
-				if (!persistentAssets.contains(asset) && !trackedAssets.contains(asset)) {
-					// grab the image asset
-					var bitmap = mappedAssets[IMAGE].get(asset);
-					if (bitmap != null) {
-						@:privateAccess
-						if (Assets.cache.hasBitmapData(bitmap.data)) {
-							// remove it from the assets cache if it exists, then destroy it
-							Assets.cache.removeBitmapData(bitmap.data);
-							FlxG.bitmap._cache.remove(bitmap.data);
-							bitmap.data.destroy();
-						}
+				if (trackedAssets.contains(asset)) {
+					if (!persistentAssets.contains(asset)) {
+						// grab the image asset
+						var bitmap = mappedAssets[IMAGE].get(asset);
+						if (bitmap != null) {
+							@:privateAccess
+							if (Assets.cache.hasBitmapData(bitmap.data)) {
+								// remove it from the assets cache if it exists, then destroy it
+								Assets.cache.removeBitmapData(bitmap.data);
+								FlxG.bitmap._cache.remove(bitmap.data);
+								bitmap.data.destroy();
+							}
 
-						// and remove it from the mapped assets
-						mappedAssets[IMAGE].remove(asset);
+							// and remove it from the mapped assets
+							mappedAssets[IMAGE].remove(asset);
+							trackedAssets.remove(asset);
+						}
 					}
 				}
 			}

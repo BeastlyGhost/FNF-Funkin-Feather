@@ -185,6 +185,9 @@ class Note extends PlumaSprite {
 					FunkinAssets.generateNotes(this, index, isSustain);
 					shader = colorSwap;
 					FunkinAssets.setColorSwap(index, colorSwap);
+					var indexColor:FlxColor = 0xFFFFFFFF;
+					indexColor = BabyArrow.colorPresets.get('default')[index];
+					colorSwap.red = FlxColor.interpolate(indexColor, indexColor - 550, 1);
 				}
 				catch (e:Dynamic) {
 					this.destroy();

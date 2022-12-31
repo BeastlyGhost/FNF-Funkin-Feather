@@ -152,7 +152,7 @@ class MainMenu extends MusicBeatState {
 
 			if (Controls.isJustPressed("back")) {
 				persistentUpdate = false;
-				openSubState(new fnf.states.substates.WarningSubstate("Are you sure?", "Yes, close the game", "No, not now", function() {
+				openSubState(new fnf.states.substates.WarningSubstate("Are you sure?", "Yes. close the game", "No. not now", function() {
 					FlxG.sound.music.fadeOut(0.3);
 					FlxG.camera.fade(0xFF000000, 0.5, false, function() {
 						Sys.exit(0);
