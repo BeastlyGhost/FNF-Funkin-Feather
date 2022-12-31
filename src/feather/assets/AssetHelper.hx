@@ -13,18 +13,18 @@ import sys.io.File;
 	Enumerator for Asset Types, right now, there isn't much going on with this
 	it just defines what Asset Type we are dealing with, and gives extensions to said asset type
 **/
-enum AssetType {
-	DIRECTORY;
-	SPARROW;
-	PACKER;
-	VIDEO;
-	SOUND;
-	FONT;
-	MODULE;
-	IMAGE;
-	JSON;
-	TEXT;
-	YAML;
+@:enum abstract AssetType(String) to String {
+	var DIRECTORY = 'directory';
+	var SPARROW = 'sparrow';
+	var PACKER = 'packer';
+	var VIDEO = 'video';
+	var SOUND = 'sound';
+	var FONT = 'font';
+	var MODULE = 'module';
+	var IMAGE = 'image';
+	var JSON = 'json';
+	var TEXT = 'text';
+	var YAML = 'yaml';
 }
 
 /**
