@@ -32,7 +32,7 @@
 
 	<!-- ___________ Custom Defines ___________ -->
 
-	<define name="RPC_ALLOWED" if="desktop" />
+	<define name="RPC_ALLOWED" if="desktop" unless="neko" />
 	<define name="HSCRIPT_ALLOWED" if="desktop" />
 
 	<!-- ___________ Path Settings ___________ -->

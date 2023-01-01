@@ -7,9 +7,9 @@ import flixel.math.FlxPoint;
 import flixel.util.FlxColor;
 import fnf.helpers.AlphaLetters;
 
-enum AlphaDisplay {
-	BASE;
-	LIST;
+@:enum abstract AlphaDisplay(String) to String {
+	var BASE = 'base';
+	var LIST = 'list';
 }
 
 /**
@@ -46,7 +46,7 @@ class Alphabet extends FlxTypedSpriteGroup<LetterSprite> {
 			{
 				//
 				var myChar = cast(char, LetterSprite);
-				myChar.changeColor(color, isBold);
+				myChar.changeColor(color);
 			}
 		}
 
@@ -88,7 +88,7 @@ class Alphabet extends FlxTypedSpriteGroup<LetterSprite> {
 					xPos += 40 * sectionSpaces;
 				sectionSpaces = 0;
 
-				var letter:LetterSprite = new LetterSprite(xPos, 0);
+				var letter:LetterSprite = new LetterSprite(xPos, 0, isBold);
 				var type:LetterType = LETTER;
 
 				if (indexNumber)
@@ -98,7 +98,7 @@ class Alphabet extends FlxTypedSpriteGroup<LetterSprite> {
 				else
 					type = LETTER;
 
-				letter.createChar(character, type, isBold);
+				letter.createChar(character, type);
 				add(letter);
 
 				lastSprite = letter;
@@ -133,8 +133,10 @@ class Alphabet extends FlxTypedSpriteGroup<LetterSprite> {
 	Latin Support (maybe, just maybe)
 **/
 class LetterSprite extends PlumaSprite {
-	public var texture(default, set):String = 'default/alphabet';
+	public var texture(default, set):String = 'normal';
+
 	public var defaultFramerate:Int = 24;
+	public var isBold:Bool = false;
 
 	public static function getIndex(char:String, type:LetterType):Int {
 		var index:String = AlphaLetters.letterList.get(type);
@@ -149,7 +151,7 @@ class LetterSprite extends PlumaSprite {
 			pastAnim = animation.name;
 
 		texture = tex;
-		frames = AssetHelper.grabAsset(tex, SPARROW, "images/ui");
+		frames = AssetHelper.grabAsset(tex, SPARROW, "images/ui/default/letters");
 
 		// set the framerate
 		defaultFramerate = 24;
@@ -164,17 +166,19 @@ class LetterSprite extends PlumaSprite {
 
 	public var row:Int = 0;
 
-	public function new(x:Float, y:Float):Void {
+	public function new(x:Float, y:Float, isBold:Bool):Void {
 		super(x, y);
 
-		texture = 'default/alphabet';
+		this.isBold = isBold;
+
+		texture = (isBold ? 'bold' : 'normal');
 	}
 
-	public function changeColor(c:FlxColor, bold:Bool):Void {
+	public function changeColor(c:FlxColor):Void {
 		if (texture == null)
 			return;
 
-		if (bold) {
+		if (isBold) {
 			colorTransform.redMultiplier = c.redFloat;
 			colorTransform.greenMultiplier = c.greenFloat;
 			colorTransform.blueMultiplier = c.blueFloat;
@@ -188,7 +192,7 @@ class LetterSprite extends PlumaSprite {
 	/**
 		Combined all functions into one
 	**/
-	public function createChar(letter:String, type:LetterType, isBold:Bool = false):Void {
+	public function createChar(letter:String, type:LetterType):Void {
 		if (texture == null)
 			return;
 
