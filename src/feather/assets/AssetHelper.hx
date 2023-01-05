@@ -6,6 +6,7 @@ import flixel.graphics.frames.FlxAtlasFrames;
 import openfl.Assets;
 import openfl.media.Sound;
 import openfl.system.System;
+import openfl.display.BitmapData;
 import sys.FileSystem;
 import sys.io.File;
 
