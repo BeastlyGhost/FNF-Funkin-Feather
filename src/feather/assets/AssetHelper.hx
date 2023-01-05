@@ -135,11 +135,12 @@ class AssetHelper {
 	**/
 	public static function grabGraphic(outputDir:String):FlxGraphic {
 		if (!mappedAssets[IMAGE].exists(outputDir)) {
-			var myGraphic:FlxGraphic = FlxGraphic.fromAssetKey(outputDir, false, null, false);
-			myGraphic.persist = true;
+			var myBitmap:BitmapData = BitmapData.fromFile(outputDir);
+			var myGraphic:FlxGraphic = FlxGraphic.fromBitmapData(myBitmap, false, outputDir);
 
 			// safety check, to not set a null graphic to the map and return it
 			var dataGraphic:FlxGraphic = (myGraphic != null ? myGraphic : FlxGraphic.fromRectangle(100, 100, 0xFFAAAAAA));
+			dataGraphic.persist = true;
 
 			mappedAssets[IMAGE].set(outputDir, {type: IMAGE, data: dataGraphic});
 			trackedAssets.push(outputDir);
